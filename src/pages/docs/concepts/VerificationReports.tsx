@@ -33,17 +33,17 @@ const VerificationReports = () => (
 
     <h2 id="checks">Verification Checks</h2>
     <ol>
-      <li><strong>Bundle Integrity</strong> — Confirm that the CER bundle hashes are internally consistent and that the computed <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> matches the bundle contents.</li>
-      <li><strong>Node Signature</strong> — Verify that the receipt signature is valid using the attestation node's published Ed25519 public key.</li>
-      <li><strong>Receipt Consistency</strong> — Confirm that the receipt references the same <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> as the CER bundle.</li>
+      <li><strong>Bundle Integrity.</strong> Confirm that the CER bundle hashes are internally consistent and that the computed <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> matches the bundle contents.</li>
+      <li><strong>Node Signature.</strong> Verify that the receipt signature is valid using the attestation node's published Ed25519 public key.</li>
+      <li><strong>Receipt Consistency.</strong> Confirm that the receipt references the same <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> as the CER bundle.</li>
     </ol>
 
     <h2 id="outcomes">Outcomes</h2>
     <ul>
-      <li><strong>VERIFIED</strong> — All verification checks pass and the record has a valid signed receipt.</li>
-      <li><strong>PARTIAL</strong> — Some verification checks pass but the record does not contain a full attestation. This commonly occurs with hash-only timestamps or certain redacted exports.</li>
-      <li><strong>INVALID</strong> — One or more verification checks fail. This may indicate tampering, mismatched hashes, or an invalid signature.</li>
-      <li><strong>UNAVAILABLE</strong> — Verification cannot be performed because required data is missing, the node identity is unknown, or the record format is unsupported.</li>
+      <li><strong>VERIFIED.</strong> All verification checks pass and the record has a valid signed receipt.</li>
+      <li><strong>PARTIAL.</strong> Some verification checks pass but the record does not contain a full attestation. This commonly occurs with hash-only timestamps or certain redacted exports.</li>
+      <li><strong>INVALID.</strong> One or more verification checks fail. This may indicate tampering, mismatched hashes, or an invalid signature.</li>
+      <li><strong>UNAVAILABLE.</strong> Verification cannot be performed because required data is missing, the node identity is unknown, or the record format is unsupported.</li>
     </ul>
 
     <h2 id="example">Example Report</h2>
@@ -75,8 +75,8 @@ const VerificationReports = () => (
     <h2 id="partial">When You Get PARTIAL</h2>
     <p>A PARTIAL result is expected for certain bundle types. It does not necessarily mean something is wrong.</p>
     <ul>
-      <li><strong>Hash-only timestamps</strong> — The node signed the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> but did not attest the snapshot contents. Bundle integrity and node signature pass, but receipt consistency is limited in scope.</li>
-      <li><strong>Redacted reseals</strong> — Some fields were removed before resealing. The attestation covers the redacted version, which may limit the scope of what can be verified.</li>
+      <li><strong>Hash-only timestamps.</strong> The node signed the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> but did not attest the snapshot contents. Bundle integrity and node signature pass, but receipt consistency is limited in scope.</li>
+      <li><strong>Redacted reseals.</strong> Some fields were removed before resealing. The attestation covers the redacted version, which may limit the scope of what can be verified.</li>
     </ul>
 
     <h2 id="invalid">When You Get INVALID</h2>

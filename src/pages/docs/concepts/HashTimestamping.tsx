@@ -36,7 +36,7 @@ const HashTimestamping = () => (
     />
 
     <h2 id="what">What is Hash-Only Timestamping?</h2>
-    <p>Hash-only timestamping signs the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> of a CER. The node does <strong>not</strong> attest the snapshot contents. The receipt proves that the hash existed at a specific time — it does not prove what the hash represents or that the underlying execution data is complete.</p>
+    <p>Hash-only timestamping signs the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> of a CER. The node does <strong>not</strong> attest the snapshot contents. The receipt proves that the hash existed at a specific time. It does not prove what the hash represents or that the underlying execution data is complete.</p>
     <p>This mode is distinct from full signed receipts and from redacted reseals. It provides the narrowest form of attestation in NexArt.</p>
 
     <h2 id="how">How It Works</h2>
@@ -44,7 +44,7 @@ const HashTimestamping = () => (
       <li>A CER bundle is created with <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">bundleType: "hash-only-timestamp"</code></li>
       <li>The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> is present in the bundle</li>
       <li>The snapshot may be null, missing, or incomplete</li>
-      <li>The node signs a receipt binding the hash and timestamp — it does not recompute or verify snapshot contents</li>
+      <li>The node signs a receipt binding the hash and timestamp. It does not recompute or verify snapshot contents.</li>
     </ol>
 
     <h2 id="example">Example</h2>
@@ -62,22 +62,22 @@ const HashTimestamping = () => (
     <h2 id="when">When Is It Used?</h2>
     <p>Hash-only timestamping is not a common default. It applies in specific scenarios:</p>
     <ul>
-      <li><strong>Legacy records</strong> — Records where full execution snapshots were never captured</li>
-      <li><strong>Migration</strong> — Systems migrating to NexArt that only have hash references from a prior system</li>
-      <li><strong>Proof-of-existence</strong> — Workflows where the goal is to prove a hash existed at a specific time, without attesting the underlying content</li>
+      <li><strong>Legacy records.</strong> Records where full execution snapshots were never captured.</li>
+      <li><strong>Migration.</strong> Systems migrating to NexArt that only have hash references from a prior system.</li>
+      <li><strong>Proof-of-existence.</strong> Workflows where the goal is to prove a hash existed at a specific time, without attesting the underlying content.</li>
     </ul>
 
     <h2 id="verification">Verification</h2>
     <p>Hash-only timestamp records typically verify as <strong>PARTIAL</strong>. This is expected behavior:</p>
     <ul>
-      <li><strong>Bundle Integrity</strong> — Pass. The bundle structure and <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> are consistent.</li>
-      <li><strong>Node Signature</strong> — Pass. The receipt signature is valid against the node's public key.</li>
-      <li><strong>Receipt Consistency</strong> — Limited. The snapshot was not attested, so the receipt covers only the hash reference.</li>
+      <li><strong>Bundle Integrity</strong> passes. The bundle structure and <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> are consistent.</li>
+      <li><strong>Node Signature</strong> passes. The receipt signature is valid against the node's public key.</li>
+      <li><strong>Receipt Consistency</strong> is limited. The snapshot was not attested, so the receipt covers only the hash reference.</li>
     </ul>
     <p>A PARTIAL result for a hash-only timestamp does not indicate an error. It reflects the narrower scope of attestation.</p>
 
     <h2 id="vs-full">Compared to Full Signed Receipts</h2>
-    <p>A full signed receipt (<code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">bundleType: "signed-receipt"</code>) attests the entire CER bundle — including the snapshot. Only full signed receipts can verify as <strong>VERIFIED</strong>.</p>
+    <p>A full signed receipt (<code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">bundleType: "signed-receipt"</code>) attests the entire CER bundle, including the snapshot. Only full signed receipts can verify as <strong>VERIFIED</strong>.</p>
     <p>Hash-only timestamps attest only the hash reference. They verify as <strong>PARTIAL</strong> because the node never witnessed the snapshot contents.</p>
   </>
 );

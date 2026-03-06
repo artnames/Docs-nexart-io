@@ -45,14 +45,14 @@ const Apps = () => (
         </ul>
       </li>
     </ul>
-    <p>Apps are used for organization and filtering — they do not change the cryptographic structure of CERs.</p>
+    <p>Apps are used for organization and filtering. They do not change the cryptographic structure of CERs.</p>
 
     <h2 id="why">Why Use Apps</h2>
     <ul>
-      <li><strong>Organization</strong> — Separate CER records by application or microservice</li>
-      <li><strong>Filtering</strong> — Filter the dashboard view to show attestations for a specific app</li>
-      <li><strong>Audit Context</strong> — App identifiers are included in CER metadata and audit exports, helping auditors understand which system produced the execution</li>
-      <li><strong>Operational Visibility</strong> — Track which services generate attestations and monitor activity per app</li>
+      <li><strong>Organization.</strong> Separate CER records by application or microservice.</li>
+      <li><strong>Filtering.</strong> Filter the dashboard view to show attestations for a specific app.</li>
+      <li><strong>Audit Context.</strong> App identifiers are included in CER metadata and audit exports, helping auditors understand which system produced the execution.</li>
+      <li><strong>Operational Visibility.</strong> Track which services generate attestations and monitor activity per app.</li>
     </ul>
 
     <h2 id="create">Creating an App</h2>

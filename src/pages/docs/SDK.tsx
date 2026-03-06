@@ -49,15 +49,15 @@ const SDK = () => (
     />
 
     <h2 id="overview">Overview</h2>
-    <p>The AI Execution SDK helps produce <strong>Certified Execution Record (CER)</strong> bundles for AI executions and supports local verification-related workflows. It is not only a transport client to the attestation node — CER creation and node attestation are separate concepts.</p>
+    <p>The AI Execution SDK helps produce <strong>Certified Execution Record (CER)</strong> bundles for AI executions and supports local verification-related workflows. It is not only a transport client to the attestation node. CER creation and node attestation are separate concepts.</p>
 
     <h2 id="responsibilities">What the SDK Does</h2>
     <ul>
-      <li><strong>Structure execution data</strong> — Capture or structure AI execution metadata into a CER bundle</li>
-      <li><strong>Create a CER bundle</strong> — Produce a well-formed bundle with the correct fields and canonical structure</li>
-      <li><strong>Compute certificateHash</strong> — Derive a SHA-256 hash over the canonical bundle, binding all fields together</li>
-      <li><strong>Support attestation workflows</strong> — Facilitate submission of CERs for node attestation where applicable</li>
-      <li><strong>Verification helpers</strong> — Support local verification of bundles and receipts</li>
+      <li><strong>Structure execution data.</strong> Capture or structure AI execution metadata into a CER bundle.</li>
+      <li><strong>Create a CER bundle.</strong> Produce a well-formed bundle with the correct fields and canonical structure.</li>
+      <li><strong>Compute certificateHash.</strong> Derive a SHA-256 hash over the canonical bundle, binding all fields together.</li>
+      <li><strong>Support attestation workflows.</strong> Facilitate submission of CERs for node attestation where applicable.</li>
+      <li><strong>Verification helpers.</strong> Support local verification of bundles and receipts.</li>
     </ul>
 
     <h2 id="cer-shape">CER Bundle Shape</h2>
@@ -80,11 +80,11 @@ const SDK = () => (
 }`}
       title="CER Bundle"
     />
-    <p>The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">snapshot</code> contains the execution metadata. The specific fields within the snapshot reflect the AI execution context — model identifier, input and output hashes, and any associated metadata.</p>
+    <p>The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">snapshot</code> contains the execution metadata: model identifier, input and output hashes, and any associated metadata.</p>
 
     <h2 id="attestation">Attestation</h2>
     <p>CER creation and node attestation are separate steps. The SDK creates the bundle; attestation happens when the bundle is submitted to an attestation node. The node signs the record and returns a signed receipt.</p>
-    <p>The receipt is an attestation artifact from the node — the SDK does not generate it.</p>
+    <p>The receipt is an attestation artifact from the node. The SDK does not generate it.</p>
 
     <h2 id="receipt">Signed Receipt</h2>
     <p>After attestation, the node returns a signed receipt binding the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> to the node's identity and a timestamp:</p>
@@ -107,21 +107,21 @@ const SDK = () => (
     <p>During attestation, the node signs a receipt that references this <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>.</p>
 
     <h2 id="redacted-reseal">Redacted Reseal</h2>
-    <p>NexArt supports a redacted reseal flow as part of the record export and attestation workflow. A redacted export has sensitive fields removed and is then resealed — signed again by the attestation node — so it can be shared safely while preserving verifiability.</p>
+    <p>NexArt supports a redacted reseal flow as part of the record export and attestation workflow. A redacted export has sensitive fields removed and is then resealed (signed again by the attestation node) so it can be shared safely while preserving verifiability.</p>
     <p>This is a system-level workflow. The redacted reseal process involves the attestation node, not only the SDK.</p>
 
     <h2 id="verification">Verification</h2>
     <p>CERs produced by the SDK can be verified by checking:</p>
     <ul>
-      <li><strong>Bundle Integrity</strong> — The CER bundle hashes are internally consistent</li>
-      <li><strong>Node Signature</strong> — The receipt signature is valid against the node's published Ed25519 key</li>
-      <li><strong>Receipt Consistency</strong> — The receipt's <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> matches the CER bundle</li>
+      <li><strong>Bundle Integrity.</strong> The CER bundle hashes are internally consistent.</li>
+      <li><strong>Node Signature.</strong> The receipt signature is valid against the node's published Ed25519 key.</li>
+      <li><strong>Receipt Consistency.</strong> The receipt's <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> matches the CER bundle.</li>
     </ul>
     <p>Outcomes: <strong>VERIFIED</strong>, <strong>PARTIAL</strong>, <strong>INVALID</strong>, or <strong>UNAVAILABLE</strong>.</p>
     <p>Verification can be performed locally using the bundle and node keys from <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">node.nexart.io/.well-known/nexart-node.json</code>, or through the public verifier at <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a>.</p>
 
     <h2 id="scope">Scope of This Page</h2>
-    <p className="text-muted-foreground">This page focuses on the CER bundle model and attestation flow. The SDK API surface is still evolving — this documentation describes the current model rather than every helper function.</p>
+    <p className="text-muted-foreground">This page focuses on the CER bundle model and attestation flow. The SDK API surface is still evolving, so this documentation describes the current model rather than every helper function.</p>
   </>
 );
 

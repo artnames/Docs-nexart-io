@@ -37,15 +37,15 @@ const Projects = () => (
     <ul>
       <li><strong>Project</strong>
         <ul>
-          <li><strong>Apps</strong> — Applications registered under the project
+          <li><strong>Apps</strong> (applications registered under the project)
             <ul>
-              <li><strong>CER records</strong> — Attestation records associated with each app</li>
+              <li><strong>CER records</strong> (attestation records associated with each app)</li>
             </ul>
           </li>
         </ul>
       </li>
     </ul>
-    <p>A CER may belong to a specific app within a project, or remain unassigned. Projects are used for organization, filtering, and configuration — they do not affect the cryptographic structure of CERs.</p>
+    <p>A CER may belong to a specific app within a project, or remain unassigned. Projects are used for organization, filtering, and configuration. They do not affect the cryptographic structure of CERs.</p>
 
     <h2 id="create">Creating a Project</h2>
     <ol>
@@ -59,17 +59,17 @@ const Projects = () => (
 
     <h2 id="contains">What a Project Contains</h2>
     <ul>
-      <li><strong>Apps</strong> — Applications registered under the project. Apps help organize attestations by service or product component.</li>
-      <li><strong>CER Records</strong> — All attestation records associated with the project's apps appear in the project view.</li>
-      <li><strong>Project Configuration</strong> — Settings that affect how CERs are handled in the dashboard and ingestion pipeline.</li>
+      <li><strong>Apps.</strong> Applications registered under the project. Apps help organize attestations by service or product component.</li>
+      <li><strong>CER Records.</strong> All attestation records associated with the project's apps appear in the project view.</li>
+      <li><strong>Project Configuration.</strong> Settings that affect how CERs are handled in the dashboard and ingestion pipeline.</li>
     </ul>
 
     <h2 id="settings">Project Settings</h2>
     <h3>Auto-stamp</h3>
     <p>Controls whether CERs created within the project are automatically stamped during ingestion.</p>
     <ul>
-      <li><strong>Enabled</strong> — CERs are automatically submitted for attestation</li>
-      <li><strong>Disabled</strong> — Records are created but require manual stamping</li>
+      <li><strong>Enabled.</strong> CERs are automatically submitted for attestation.</li>
+      <li><strong>Disabled.</strong> Records are created but require manual stamping.</li>
     </ul>
     <p>See <a href="/docs/dashboard/auto-stamp">Auto-stamp</a> for details.</p>
 

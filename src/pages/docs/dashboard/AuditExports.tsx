@@ -36,12 +36,12 @@ const AuditExports = () => (
 
     <h2 id="types">Supported Export Types</h2>
     <ul>
-      <li><strong>Single-record audit export (JSON)</strong> — Export an audit summary for one CER from the record detail view or CER drawer</li>
-      <li><strong>Project-level export (CSV)</strong> — Export a CSV summary of records belonging to a project</li>
+      <li><strong>Single-record audit export (JSON).</strong> Export an audit summary for one CER from the record detail view or CER drawer.</li>
+      <li><strong>Project-level export (CSV).</strong> Export a CSV summary of records belonging to a project.</li>
     </ul>
 
     <h2 id="single">Single-Record Audit Export (JSON)</h2>
-    <p>The single-record export is an <strong>audit summary</strong> — it is not the raw CER bundle. It is designed for review and reporting rather than raw protocol transport.</p>
+    <p>The single-record export is an <strong>audit summary</strong>. It is not the raw CER bundle. It is designed for review and reporting rather than raw protocol transport.</p>
     <p>To export: open a CER in the dashboard and click <strong>Export audit report</strong>.</p>
     <p>The export includes fields such as:</p>
     <CodeBlock
@@ -74,16 +74,16 @@ const AuditExports = () => (
 
     <h2 id="single-fields">Single-Record Export Fields</h2>
     <ul>
-      <li><strong>execution_id</strong> — Unique identifier for the execution</li>
-      <li><strong>certificate_hash</strong> — SHA-256 hash of the CER bundle</li>
-      <li><strong>bundle_type</strong> — Record type (signed-receipt, hash-only-timestamp, etc.)</li>
-      <li><strong>surface</strong> — Where the record was created</li>
-      <li><strong>verification</strong> — Verification outcome and individual check results</li>
-      <li><strong>stamp_status / stamp_mode</strong> — Whether the record is stamped and how</li>
-      <li><strong>attestor_key_id / node_url</strong> — Attestation node information</li>
-      <li><strong>protocol_version / sdk_version</strong> — Version metadata</li>
-      <li><strong>execution_timestamp</strong> — When the execution occurred</li>
-      <li><strong>auto_stamp_status</strong> — Project auto-stamp setting at time of ingestion</li>
+      <li><strong>execution_id</strong> is the unique identifier for the execution.</li>
+      <li><strong>certificate_hash</strong> is the SHA-256 hash of the CER bundle.</li>
+      <li><strong>bundle_type</strong> indicates the record type (signed-receipt, hash-only-timestamp, etc.).</li>
+      <li><strong>surface</strong> shows where the record was created.</li>
+      <li><strong>verification</strong> contains the verification outcome and individual check results.</li>
+      <li><strong>stamp_status / stamp_mode</strong> indicate whether the record is stamped and how.</li>
+      <li><strong>attestor_key_id / node_url</strong> provide attestation node information.</li>
+      <li><strong>protocol_version / sdk_version</strong> capture version metadata.</li>
+      <li><strong>execution_timestamp</strong> records when the execution occurred.</li>
+      <li><strong>auto_stamp_status</strong> reflects the project auto-stamp setting at time of ingestion.</li>
     </ul>
 
     <h2 id="project">Project-Level Export (CSV)</h2>
@@ -107,8 +107,8 @@ const AuditExports = () => (
 
     <h2 id="vs-raw">Audit Export vs Raw CER Download</h2>
     <ul>
-      <li><strong>Audit Export</strong> — Summary and reporting format. Easier for auditors and operational workflows. Includes verification state, project context, and attestation metadata.</li>
-      <li><strong>Raw CER Download</strong> — Protocol-level bundle. Used for independent cryptographic verification and record portability. Available separately through the CER download flow.</li>
+      <li><strong>Audit Export.</strong> Summary and reporting format. Easier for auditors and operational workflows. Includes verification state, project context, and attestation metadata.</li>
+      <li><strong>Raw CER Download.</strong> Protocol-level bundle. Used for independent cryptographic verification and record portability. Available separately through the CER download flow.</li>
     </ul>
     <p>Both are available from the dashboard. They serve different purposes.</p>
   </>
