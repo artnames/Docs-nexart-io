@@ -25,6 +25,7 @@ import Retention from "./pages/docs/dashboard/Retention";
 import AuditExports from "./pages/docs/dashboard/AuditExports";
 import Examples from "./pages/docs/Examples";
 import FAQ from "./pages/docs/FAQ";
+import N8n from "./pages/docs/integrations/N8n";
 
 const queryClient = new QueryClient();
 
@@ -55,6 +56,7 @@ const App = () => (
             <Route path="dashboard/retention" element={<Retention />} />
             <Route path="dashboard/audit-exports" element={<AuditExports />} />
             <Route path="examples" element={<Examples />} />
+            <Route path="integrations/n8n" element={<N8n />} />
             <Route path="faq" element={<FAQ />} />
           </Route>
           <Route path="*" element={<NotFound />} />
