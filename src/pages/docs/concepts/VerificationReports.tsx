@@ -1,52 +1,50 @@
 import PageHeader from "@/components/docs/PageHeader";
 import CodeBlock from "@/components/docs/CodeBlock";
 
-const llmBlock = `# Verification Reports
-A verification report is the result of verifying a CER. It checks three things:
+const llmBlock = `# NexArt Verification Reports
+A verification report is the result of validating a CER bundle and its attestation data.
 
 ## Checks
-1. Bundle Integrity — Is the CER internally consistent and untampered?
-2. Node Signature — Was it signed by a known attestation node (Ed25519)?
-3. Receipt Consistency — Does the receipt match the CER?
+1. Bundle Integrity — computed certificateHash matches the bundle contents
+2. Node Signature — receipt signature is valid against the node's published Ed25519 key
+3. Receipt Consistency — receipt references the same certificateHash as the CER bundle
 
 ## Outcomes
-- VERIFIED — All checks pass. Full attestation intact.
-- PARTIAL — Some checks pass. Typical for hash-only timestamps.
-- INVALID — One or more checks fail. Record may be tampered.
-- UNAVAILABLE — Cannot perform verification (missing data, unknown node, etc.)
+VERIFIED — all checks pass and the record has a valid signed receipt
+PARTIAL — some checks pass but the record lacks full attestation (hash-only timestamps, redacted reseals)
+INVALID — one or more checks fail (tampering, mismatched hashes, invalid signature)
+UNAVAILABLE — required data is missing, node identity unknown, or format unsupported
 
-## Public verifier
-verify.nexart.io`;
+## How to verify
+Locally using the CER bundle and node keys from node.nexart.io/.well-known/nexart-node.json
+Or through the public verifier at verify.nexart.io`;
 
 const VerificationReports = () => (
   <>
     <PageHeader
       title="Verification Reports"
-      summary="The result of verifying a CER — what gets checked and what the outcomes mean."
+      summary="The result of validating a CER bundle and its attestation data."
       llmBlock={llmBlock}
     />
-    <h2 id="what">What is a Verification Report?</h2>
-    <p>A verification report is the result of verifying a CER. It tells you whether the record is authentic, intact, and properly attested. You can generate one at <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a>.</p>
 
-    <h2 id="checks">What Gets Checked</h2>
-    <p>Every verification runs three checks:</p>
-    <ul>
-      <li><strong>Bundle Integrity</strong> — Is the CER internally consistent? Does the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> match the actual contents?</li>
-      <li><strong>Node Signature</strong> — Was the receipt signed by a known attestation node using Ed25519? Is the key still valid?</li>
-      <li><strong>Receipt Consistency</strong> — Does the signed receipt correctly reference the CER? Do the hashes and timestamps align?</li>
-    </ul>
+    <h2 id="what">What is a Verification Report?</h2>
+    <p>A verification report summarizes the integrity and attestation state of a CER. It is the result of validating the bundle structure, the node signature, and the consistency between the receipt and the record.</p>
+    <p>Verification may be performed locally using the CER bundle and the node's published keys, or through the public verifier at <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a>.</p>
+
+    <h2 id="checks">Verification Checks</h2>
+    <ol>
+      <li><strong>Bundle Integrity</strong> — Confirm that the CER bundle hashes are internally consistent and that the computed <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> matches the bundle contents.</li>
+      <li><strong>Node Signature</strong> — Verify that the receipt signature is valid using the attestation node's published Ed25519 public key.</li>
+      <li><strong>Receipt Consistency</strong> — Confirm that the receipt references the same <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> as the CER bundle.</li>
+    </ol>
 
     <h2 id="outcomes">Outcomes</h2>
-    <CodeBlock
-      code={`VERIFIED     All checks pass. Full attestation is intact.
-PARTIAL      Some checks pass. Typical for hash-only timestamps
-             or redacted reseals where snapshot attestation is limited.
-INVALID      One or more checks fail. The record may be tampered
-             or the signature does not match.
-UNAVAILABLE  Verification cannot be performed. Missing data,
-             unknown node, or unsupported bundle type.`}
-      title="Verification Outcomes"
-    />
+    <ul>
+      <li><strong>VERIFIED</strong> — All verification checks pass and the record has a valid signed receipt.</li>
+      <li><strong>PARTIAL</strong> — Some verification checks pass but the record does not contain a full attestation. This commonly occurs with hash-only timestamps or certain redacted exports.</li>
+      <li><strong>INVALID</strong> — One or more verification checks fail. This may indicate tampering, mismatched hashes, or an invalid signature.</li>
+      <li><strong>UNAVAILABLE</strong> — Verification cannot be performed because required data is missing, the node identity is unknown, or the record format is unsupported.</li>
+    </ul>
 
     <h2 id="example">Example Report</h2>
     <CodeBlock
@@ -55,13 +53,13 @@ UNAVAILABLE  Verification cannot be performed. Missing data,
   "checks": {
     "bundleIntegrity": {
       "status": "pass",
-      "detail": "certificateHash matches bundle contents"
+      "detail": "Computed certificateHash matches bundle contents"
     },
     "nodeSignature": {
       "status": "pass",
-      "detail": "Ed25519 signature valid",
-      "attestorKeyId": "key_01HXYZ...",
-      "nodeId": "nexart-node-primary"
+      "detail": "Ed25519 signature valid against published key",
+      "nodeId": "nexart-node-primary",
+      "attestorKeyId": "key_01HXYZ..."
     },
     "receiptConsistency": {
       "status": "pass",
@@ -75,15 +73,19 @@ UNAVAILABLE  Verification cannot be performed. Missing data,
     />
 
     <h2 id="partial">When You Get PARTIAL</h2>
-    <p>A PARTIAL result is expected for certain record types. Hash-only timestamps, for example, only attest the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> — not the snapshot contents. The signature and hash are valid, but the attestation scope is limited.</p>
-    <p>Redacted reseals may also produce PARTIAL results depending on what was redacted.</p>
+    <p>A PARTIAL result is expected for certain bundle types. It does not necessarily mean something is wrong.</p>
+    <ul>
+      <li><strong>Hash-only timestamps</strong> — The node signed the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> but did not attest the snapshot contents. Bundle integrity and node signature pass, but receipt consistency is limited in scope.</li>
+      <li><strong>Redacted reseals</strong> — Some fields were removed before resealing. The attestation covers the redacted version, which may limit the scope of what can be verified.</li>
+    </ul>
 
     <h2 id="invalid">When You Get INVALID</h2>
-    <p>An INVALID result means something is wrong. Common causes:</p>
+    <p>An INVALID result means one or more checks failed. Common causes:</p>
     <ul>
-      <li>The CER contents have been modified after attestation</li>
-      <li>The signature does not match the node's published key</li>
-      <li>The receipt references a different <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> than the bundle</li>
+      <li>Bundle contents were modified after attestation</li>
+      <li>Signature does not match the node's published key</li>
+      <li>Receipt references a different <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> than the bundle</li>
+      <li>Corrupted or malformed bundle</li>
     </ul>
   </>
 );
