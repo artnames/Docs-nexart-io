@@ -13,7 +13,8 @@ export default {
       },
     },
     fontFamily: {
-      sans: ['IBM Plex Sans', 'system-ui', '-apple-system', 'sans-serif'],
+      sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+      serif: ['Source Serif 4', 'Georgia', 'serif'],
       mono: ['IBM Plex Mono', 'Menlo', 'Consolas', 'monospace'],
     },
     extend: {
