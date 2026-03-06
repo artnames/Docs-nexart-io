@@ -1,49 +1,43 @@
 import PageHeader from "@/components/docs/PageHeader";
-import CodeBlock from "@/components/docs/CodeBlock";
 
 const llmBlock = `# NexArt Auto-Stamp
-Auto-stamp automatically attests every AI execution in an app without manual attest() calls.
+Auto-stamp is a project-level setting that controls automatic stamping during CER ingestion.
 
-Setup:
-1. Enable in Dashboard → App Settings → Auto-stamp
-2. Configure which models to stamp
-3. SDK automatically stamps all matching executions
-
-Config shape:
-{ enabled: true, models: ["gpt-4", "claude-*"], exclude_metadata_keys: ["debug"] }`;
+## How it works
+- Enabled at the project level in the dashboard
+- When enabled: CERs are automatically stamped during ingestion
+- When disabled: manual stamping is still available
+- This is an ingestion-time behavior in nexart.io, not an SDK-side hook`;
 
 const AutoStamp = () => (
   <>
     <PageHeader
       title="Auto-stamp"
-      summary="Automatically attest every AI execution without code changes."
+      summary="Automatic stamping during CER ingestion, configurable per project."
       llmBlock={llmBlock}
     />
     <h2 id="what">What is Auto-stamp?</h2>
-    <p>Auto-stamp removes the need to manually call <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">nexart.attest()</code> for every execution. Once enabled, the SDK automatically stamps all matching AI calls.</p>
+    <p>Auto-stamp is a project-level setting that controls whether CERs are automatically stamped during ingestion. When enabled, records are stamped as they are ingested into nexart.io without requiring manual action.</p>
 
-    <h2 id="enable">Enabling Auto-stamp</h2>
+    <h2 id="how">How It Works</h2>
+    <ul>
+      <li><strong>Enabled</strong> — CERs are automatically stamped during ingestion</li>
+      <li><strong>Disabled</strong> — CERs are ingested but not automatically stamped. Manual stamping remains available.</li>
+    </ul>
+    <p>Auto-stamp is an ingestion-time behavior in nexart.io. It is not an SDK-side hook that intercepts model calls.</p>
+
+    <h2 id="configure">Configuring Auto-stamp</h2>
     <ol>
-      <li>Go to Dashboard → your App → Settings</li>
-      <li>Toggle <strong>Auto-stamp</strong> on</li>
-      <li>Select which models to include</li>
+      <li>Go to Dashboard → your Project → Settings</li>
+      <li>Toggle <strong>Auto-stamp</strong> on or off</li>
     </ol>
+    <p>The setting applies to all CERs ingested under that project.</p>
 
-    <h2 id="config">Configuration</h2>
-    <CodeBlock
-      code={`{
-  "auto_stamp": {
-    "enabled": true,
-    "models": ["gpt-4", "gpt-4-turbo", "claude-*"],
-    "exclude_metadata_keys": ["debug", "internal"],
-    "sample_rate": 1.0
-  }
-}`}
-      title="Auto-stamp Config"
-    />
-
-    <h2 id="sampling">Sampling</h2>
-    <p>For high-volume apps, set <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">sample_rate</code> below 1.0 to stamp a percentage of executions. For example, <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">0.1</code> stamps 10% of calls.</p>
+    <h2 id="when">When to Use It</h2>
+    <ul>
+      <li><strong>Enable</strong> when you want every ingested record to be stamped automatically</li>
+      <li><strong>Disable</strong> when you want to review records before stamping, or only stamp selectively</li>
+    </ul>
   </>
 );
 

@@ -1,129 +1,169 @@
 import PageHeader from "@/components/docs/PageHeader";
 import CodeBlock from "@/components/docs/CodeBlock";
 
-const llmBlock = `# NexArt Integration Examples
+const llmBlock = `# NexArt Examples
+Realistic data shapes for CERs, signed receipts, and verification reports.
 
-## Basic attestation (Node.js)
-import { NexArt, hashContent } from "@nexart/sdk";
-const nexart = new NexArt({ apiKey: process.env.NEXART_API_KEY });
+## CER bundle (signed-receipt)
+{ bundleType: "signed-receipt", version: "1.0", createdAt: ISO 8601, snapshot: { model, promptHash, outputHash, metadata }, certificateHash: "sha256:..." }
 
-const prompt = "Summarize this document";
-const output = await callOpenAI(prompt);
+## Signed receipt
+{ receipt: { certificateHash, timestamp, attestorKeyId, nodeId }, signature: Ed25519, signatureB64Url: base64url }
 
-const receipt = await nexart.attest({
-  model: "gpt-4",
-  prompt_hash: hashContent(prompt),
-  output_hash: hashContent(output),
-  metadata: { app_id: "doc-summarizer" }
-});
+## Verification outcomes
+VERIFIED | PARTIAL | INVALID | UNAVAILABLE
 
-## Verify
-const check = await nexart.verify(receipt.receipt_id);
-// check.valid === true`;
+## Public surfaces
+- verify.nexart.io — verify any CER
+- node.nexart.io/.well-known/nexart-node.json — node signing keys`;
 
 const Examples = () => (
   <>
     <PageHeader
       title="Examples"
-      summary="Practical integration examples for common use cases."
+      summary="Realistic data shapes and verification examples."
       llmBlock={llmBlock}
     />
 
-    <h2 id="basic">Basic Attestation</h2>
-    <p>The simplest integration: attest a single AI call.</p>
+    <h2 id="cer">CER Bundle</h2>
+    <p>A full CER with <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">bundleType: "signed-receipt"</code>:</p>
     <CodeBlock
-      code={`import { NexArt, hashContent } from "@nexart/sdk";
-
-const nexart = new NexArt({ apiKey: process.env.NEXART_API_KEY });
-
-async function summarize(document: string) {
-  const prompt = \`Summarize: \${document}\`;
-  const output = await openai.chat.completions.create({
-    model: "gpt-4",
-    messages: [{ role: "user", content: prompt }]
-  });
-
-  const response = output.choices[0].message.content;
-
-  // Attest the execution
-  const receipt = await nexart.attest({
-    model: "gpt-4",
-    prompt_hash: hashContent(prompt),
-    output_hash: hashContent(response),
-    metadata: { app_id: "doc-summarizer" }
-  });
-
-  return { summary: response, receipt_id: receipt.receipt_id };
+      code={`{
+  "bundleType": "signed-receipt",
+  "version": "1.0",
+  "createdAt": "2026-03-06T12:00:00.000Z",
+  "snapshot": {
+    "model": "gpt-4",
+    "promptHash": "sha256:a1b2c3d4e5f67890...",
+    "outputHash": "sha256:f6e5d4c3b2a10987...",
+    "metadata": {
+      "appId": "customer-chatbot",
+      "projectId": "proj_abc123"
+    }
+  },
+  "certificateHash": "sha256:9e8d7c6b5a4f3210..."
 }`}
-      title="basic-attest.ts"
+      title="CER Bundle (signed-receipt)"
     />
 
-    <h2 id="batch">Batch Attestation</h2>
-    <p>Attest multiple executions efficiently.</p>
+    <h2 id="receipt">Signed Receipt</h2>
+    <p>The receipt returned by the attestation node after signing:</p>
     <CodeBlock
-      code={`const results = await Promise.all(
-  executions.map(exec =>
-    nexart.attest({
-      model: exec.model,
-      prompt_hash: hashContent(exec.prompt),
-      output_hash: hashContent(exec.output),
-      metadata: { batch_id: "batch_001" }
-    })
-  )
-);
-
-console.log(\`Attested \${results.length} executions\`);`}
-      title="batch-attest.ts"
-    />
-
-    <h2 id="webhook">Webhook Integration</h2>
-    <p>Receive notifications when attestations are confirmed.</p>
-    <CodeBlock
-      code={`// Express webhook handler
-app.post("/webhook/nexart", (req, res) => {
-  const event = req.body;
-
-  if (event.type === "attestation.confirmed") {
-    console.log("CER confirmed:", event.cer_id);
-    console.log("Receipt:", event.receipt_id);
-    // Store receipt reference in your database
-  }
-
-  res.status(200).send("ok");
-});`}
-      title="webhook.ts"
-    />
-
-    <h2 id="verify-example">Verification Page</h2>
-    <p>Build a verification page where users can check a receipt.</p>
-    <CodeBlock
-      code={`// React component
-function VerifyPage() {
-  const [receiptId, setReceiptId] = useState("");
-  const [result, setResult] = useState(null);
-
-  const handleVerify = async () => {
-    const res = await fetch(
-      \`/api/v1/verify/\${receiptId}\`
-    );
-    setResult(await res.json());
-  };
-
-  return (
-    <div>
-      <input
-        value={receiptId}
-        onChange={e => setReceiptId(e.target.value)}
-        placeholder="Enter receipt ID"
-      />
-      <button onClick={handleVerify}>Verify</button>
-      {result && (
-        <pre>{JSON.stringify(result, null, 2)}</pre>
-      )}
-    </div>
-  );
+      code={`{
+  "receipt": {
+    "certificateHash": "sha256:9e8d7c6b5a4f3210...",
+    "timestamp": "2026-03-06T12:00:01.000Z",
+    "attestorKeyId": "key_01HXYZ...",
+    "nodeId": "nexart-node-primary"
+  },
+  "signature": "<Ed25519 signature bytes>",
+  "signatureB64Url": "MEUCIQD3a8b1c4d5e6f..."
 }`}
-      title="VerifyPage.tsx"
+      title="Signed Receipt"
+    />
+
+    <h2 id="redacted">Redacted Reseal</h2>
+    <p>A CER where sensitive fields have been redacted and the record re-signed:</p>
+    <CodeBlock
+      code={`{
+  "bundleType": "signed-redacted-reseal",
+  "version": "1.0",
+  "createdAt": "2026-03-06T12:00:00.000Z",
+  "snapshot": {
+    "model": "gpt-4",
+    "promptHash": "[REDACTED]",
+    "outputHash": "sha256:f6e5d4c3b2a10987...",
+    "metadata": {
+      "appId": "customer-chatbot"
+    }
+  },
+  "certificateHash": "sha256:1a2b3c4d5e6f7890..."
+}`}
+      title="Redacted Reseal"
+    />
+
+    <h2 id="hash-only">Hash-Only Timestamp</h2>
+    <p>A legacy record where only the certificate hash was attested:</p>
+    <CodeBlock
+      code={`{
+  "bundleType": "hash-only-timestamp",
+  "version": "1.0",
+  "createdAt": "2026-03-06T12:00:00.000Z",
+  "snapshot": null,
+  "certificateHash": "sha256:7f8e9d0c1b2a3456..."
+}`}
+      title="Hash-Only Timestamp"
+    />
+
+    <h2 id="verification-report">Verification Report</h2>
+    <p>The result of verifying a CER at <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a>:</p>
+    <CodeBlock
+      code={`{
+  "outcome": "VERIFIED",
+  "checks": {
+    "bundleIntegrity": {
+      "status": "pass",
+      "detail": "certificateHash matches bundle contents"
+    },
+    "nodeSignature": {
+      "status": "pass",
+      "detail": "Ed25519 signature valid",
+      "attestorKeyId": "key_01HXYZ...",
+      "nodeId": "nexart-node-primary"
+    },
+    "receiptConsistency": {
+      "status": "pass",
+      "detail": "Receipt references correct certificateHash"
+    }
+  },
+  "bundleType": "signed-receipt",
+  "verifiedAt": "2026-03-06T12:05:00.000Z"
+}`}
+      title="Verification Report (VERIFIED)"
+    />
+
+    <h2 id="partial-report">Partial Verification</h2>
+    <p>A hash-only timestamp verifies as PARTIAL:</p>
+    <CodeBlock
+      code={`{
+  "outcome": "PARTIAL",
+  "checks": {
+    "bundleIntegrity": {
+      "status": "pass",
+      "detail": "certificateHash is intact"
+    },
+    "nodeSignature": {
+      "status": "pass",
+      "detail": "Ed25519 signature valid"
+    },
+    "receiptConsistency": {
+      "status": "limited",
+      "detail": "No snapshot attested — hash-only timestamp"
+    }
+  },
+  "bundleType": "hash-only-timestamp",
+  "verifiedAt": "2026-03-06T12:05:00.000Z"
+}`}
+      title="Verification Report (PARTIAL)"
+    />
+
+    <h2 id="node-keys">Node Key Discovery</h2>
+    <p>Fetch the attestation node's public signing keys for independent verification:</p>
+    <CodeBlock
+      code={`GET node.nexart.io/.well-known/nexart-node.json
+
+{
+  "nodeId": "nexart-node-primary",
+  "keys": [
+    {
+      "keyId": "key_01HXYZ...",
+      "algorithm": "Ed25519",
+      "publicKey": "MCowBQYDK2VwAyEA...",
+      "status": "active"
+    }
+  ]
+}`}
+      title="Node Key Discovery"
     />
   </>
 );
