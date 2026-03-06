@@ -20,7 +20,15 @@ const navigation: NavItem[] = [
       { title: "Verification Reports", path: "/docs/concepts/verification-reports" },
     ],
   },
-  { title: "AI Execution SDK", path: "/docs/sdk" },
+  {
+    title: "Developer Tools",
+    children: [
+      { title: "AI Execution SDK", path: "/docs/sdk" },
+      { title: "NexArt CLI", path: "/docs/cli" },
+      { title: "CodeMode SDK", path: "/docs/codemode-sdk" },
+      { title: "UI Renderer SDK", path: "/docs/ui-renderer-sdk" },
+    ],
+  },
   { title: "Attestation Node", path: "/docs/attestation-node" },
   { title: "Verification", path: "/docs/verification" },
   {

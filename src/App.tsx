@@ -44,6 +44,9 @@ const App = () => (
             <Route path="concepts/hash-timestamping" element={<HashTimestamping />} />
             <Route path="concepts/verification-reports" element={<VerificationReports />} />
             <Route path="sdk" element={<SDK />} />
+            <Route path="cli" element={<NexArtCLI />} />
+            <Route path="codemode-sdk" element={<CodeModeSDK />} />
+            <Route path="ui-renderer-sdk" element={<UIRendererSDK />} />
             <Route path="attestation-node" element={<AttestationNode />} />
             <Route path="verification" element={<Verification />} />
             <Route path="dashboard/projects" element={<Projects />} />
