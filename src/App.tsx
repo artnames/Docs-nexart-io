@@ -13,6 +13,9 @@ import SignedReceipts from "./pages/docs/concepts/SignedReceipts";
 import HashTimestamping from "./pages/docs/concepts/HashTimestamping";
 import VerificationReports from "./pages/docs/concepts/VerificationReports";
 import SDK from "./pages/docs/SDK";
+import NexArtCLI from "./pages/docs/NexArtCLI";
+import CodeModeSDK from "./pages/docs/CodeModeSDK";
+import UIRendererSDK from "./pages/docs/UIRendererSDK";
 import AttestationNode from "./pages/docs/AttestationNode";
 import Verification from "./pages/docs/Verification";
 import Projects from "./pages/docs/dashboard/Projects";
@@ -41,6 +44,9 @@ const App = () => (
             <Route path="concepts/hash-timestamping" element={<HashTimestamping />} />
             <Route path="concepts/verification-reports" element={<VerificationReports />} />
             <Route path="sdk" element={<SDK />} />
+            <Route path="cli" element={<NexArtCLI />} />
+            <Route path="codemode-sdk" element={<CodeModeSDK />} />
+            <Route path="ui-renderer-sdk" element={<UIRendererSDK />} />
             <Route path="attestation-node" element={<AttestationNode />} />
             <Route path="verification" element={<Verification />} />
             <Route path="dashboard/projects" element={<Projects />} />
