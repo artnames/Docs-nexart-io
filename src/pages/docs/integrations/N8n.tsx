@@ -60,16 +60,16 @@ const N8n = () => {
       <h2>Configuration</h2>
       <p>The node requires an API key for authentication. Set this in the node credentials:</p>
 
-      <CodeBlock language="text">{`NEXART_API_KEY=your-api-key`}</CodeBlock>
+      <CodeBlock language="text" code="NEXART_API_KEY=your-api-key" />
 
       <h2>Example Output</h2>
       <p>After certification, the node returns a response containing the verification link:</p>
 
-      <CodeBlock language="json">{`{
+      <CodeBlock language="json" code={`{
   "verificationUrl": "https://verify.nexart.io/r/abc123",
   "certificateHash": "sha256:...",
   "status": "certified"
-}`}</CodeBlock>
+}`} />
 
       <h2>Use Cases</h2>
       <ul>

@@ -41,6 +41,12 @@ const navigation: NavItem[] = [
       { title: "Audit Exports", path: "/docs/dashboard/audit-exports" },
     ],
   },
+  {
+    title: "Integrations",
+    children: [
+      { title: "n8n", path: "/docs/integrations/n8n" },
+    ],
+  },
   { title: "Examples", path: "/docs/examples" },
   { title: "FAQ", path: "/docs/faq" },
 ];
