@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 0 0% 99%;
     --foreground: 0 0% 8%;
 
     --card: 0 0% 100%;
@@ -13,47 +13,47 @@
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 8%;
 
-    --primary: 174 62% 41%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 0 0% 8%;
+    --primary-foreground: 0 0% 99%;
 
     --secondary: 0 0% 96%;
     --secondary-foreground: 0 0% 8%;
 
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 45%;
+    --muted: 0 0% 94%;
+    --muted-foreground: 0 0% 40%;
 
-    --accent: 174 40% 95%;
-    --accent-foreground: 174 62% 28%;
+    --accent: 0 0% 94%;
+    --accent-foreground: 0 0% 8%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 90%;
-    --input: 0 0% 90%;
-    --ring: 174 62% 41%;
+    --border: 0 0% 88%;
+    --input: 0 0% 88%;
+    --ring: 0 0% 8%;
 
-    --radius: 0.375rem;
+    --radius: 0.25rem;
+
+    --text-body: 0 0% 20%;
+    --text-caption: 0 0% 50%;
+    --link: 220 70% 45%;
 
     --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 0 0% 30%;
-    --sidebar-primary: 174 62% 41%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 174 40% 95%;
-    --sidebar-accent-foreground: 174 62% 28%;
+    --sidebar-primary: 0 0% 8%;
+    --sidebar-primary-foreground: 0 0% 99%;
+    --sidebar-accent: 0 0% 94%;
+    --sidebar-accent-foreground: 0 0% 8%;
     --sidebar-border: 0 0% 92%;
-    --sidebar-ring: 174 62% 41%;
+    --sidebar-ring: 0 0% 8%;
 
+    --font-serif: 'Libre Baskerville', 'Georgia', serif;
     --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-    --font-serif: 'Source Serif 4', 'Georgia', serif;
-    --font-mono: 'IBM Plex Mono', 'Menlo', 'Consolas', monospace;
-
-    --code-bg: 0 0% 96%;
-    --code-foreground: 0 0% 15%;
-    --code-border: 0 0% 90%;
+    --font-mono: 'JetBrains Mono', 'Menlo', 'Consolas', monospace;
   }
 
   .dark {
-    --background: 0 0% 5%;
+    --background: 0 0% 6%;
     --foreground: 0 0% 92%;
 
     --card: 0 0% 8%;
@@ -62,37 +62,37 @@
     --popover: 0 0% 8%;
     --popover-foreground: 0 0% 92%;
 
-    --primary: 174 55% 48%;
-    --primary-foreground: 0 0% 5%;
+    --primary: 0 0% 92%;
+    --primary-foreground: 0 0% 6%;
 
     --secondary: 0 0% 12%;
     --secondary-foreground: 0 0% 92%;
 
-    --muted: 0 0% 12%;
-    --muted-foreground: 0 0% 55%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 60%;
 
-    --accent: 174 30% 12%;
-    --accent-foreground: 174 55% 70%;
+    --accent: 0 0% 15%;
+    --accent-foreground: 0 0% 92%;
 
     --destructive: 0 62% 30%;
     --destructive-foreground: 0 0% 92%;
 
-    --border: 0 0% 16%;
-    --input: 0 0% 16%;
-    --ring: 174 55% 48%;
+    --border: 0 0% 18%;
+    --input: 0 0% 18%;
+    --ring: 0 0% 92%;
 
-    --sidebar-background: 0 0% 6%;
-    --sidebar-foreground: 0 0% 65%;
-    --sidebar-primary: 174 55% 48%;
-    --sidebar-primary-foreground: 0 0% 5%;
-    --sidebar-accent: 174 30% 10%;
-    --sidebar-accent-foreground: 174 55% 70%;
-    --sidebar-border: 0 0% 14%;
-    --sidebar-ring: 174 55% 48%;
+    --text-body: 0 0% 80%;
+    --text-caption: 0 0% 55%;
+    --link: 220 60% 60%;
 
-    --code-bg: 0 0% 10%;
-    --code-foreground: 174 30% 75%;
-    --code-border: 0 0% 16%;
+    --sidebar-background: 0 0% 7%;
+    --sidebar-foreground: 0 0% 60%;
+    --sidebar-primary: 0 0% 92%;
+    --sidebar-primary-foreground: 0 0% 6%;
+    --sidebar-accent: 0 0% 12%;
+    --sidebar-accent-foreground: 0 0% 92%;
+    --sidebar-border: 0 0% 15%;
+    --sidebar-ring: 0 0% 92%;
   }
 }
 
@@ -104,6 +104,8 @@
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-sans);
+    font-size: 17px;
+    line-height: 1.7;
   }
 
   code, pre {
@@ -113,31 +115,44 @@
 
 @layer components {
   .docs-prose h1 {
-    @apply text-4xl font-bold tracking-tight mb-2;
     font-family: var(--font-serif);
+    @apply text-4xl mb-2 tracking-[-0.01em];
+    font-weight: 400;
+    line-height: 1.3;
   }
   .docs-prose h2 {
-    @apply text-xl font-semibold tracking-tight mt-10 mb-4 pb-2 border-b border-border scroll-mt-20;
     font-family: var(--font-serif);
+    @apply text-2xl mt-12 mb-4 pb-2 border-b border-border scroll-mt-20 tracking-[-0.01em];
+    font-weight: 400;
+    line-height: 1.3;
   }
   .docs-prose h3 {
-    @apply text-lg font-semibold mt-8 mb-3 scroll-mt-20;
     font-family: var(--font-serif);
+    @apply text-xl mt-8 mb-3 scroll-mt-20 tracking-[-0.01em];
+    font-weight: 400;
+    line-height: 1.3;
   }
   .docs-prose p {
-    @apply text-[15px] leading-relaxed mb-4 text-muted-foreground;
+    @apply mb-4;
+    color: hsl(var(--text-body));
   }
   .docs-prose ul {
-    @apply list-disc pl-6 mb-4 space-y-1 text-[15px] text-muted-foreground;
+    @apply list-disc pl-6 mb-4 space-y-1;
+    color: hsl(var(--text-body));
   }
   .docs-prose ol {
-    @apply list-decimal pl-6 mb-4 space-y-1 text-[15px] text-muted-foreground;
+    @apply list-decimal pl-6 mb-4 space-y-1;
+    color: hsl(var(--text-body));
   }
   .docs-prose li {
     @apply leading-relaxed;
   }
   .docs-prose a {
-    @apply text-primary underline underline-offset-2 hover:text-primary/80;
+    color: hsl(var(--link));
+    @apply underline underline-offset-2;
+  }
+  .docs-prose a:hover {
+    opacity: 0.8;
   }
   .docs-prose strong {
     @apply font-semibold text-foreground;

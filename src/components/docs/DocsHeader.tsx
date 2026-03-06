@@ -8,8 +8,8 @@ const DocsHeader = () => {
 
   return (
     <>
-      <header className="sticky top-0 z-50 bg-background">
-        <div className="flex h-14 items-center px-4 lg:px-8 border-b border-border">
+      <header className="sticky top-0 z-50 bg-background border-b border-border">
+        <div className="flex h-14 items-center px-4 lg:px-8">
           <button
             className="mr-3 lg:hidden text-muted-foreground hover:text-foreground"
             onClick={() => setMobileOpen(!mobileOpen)}
@@ -21,10 +21,9 @@ const DocsHeader = () => {
             <span className="text-muted-foreground text-sm font-normal ml-2">docs</span>
           </Link>
         </div>
-        <div className="h-[2px] bg-primary" />
       </header>
       {mobileOpen && (
-        <div className="fixed inset-0 top-[3.625rem] z-40 lg:hidden">
+        <div className="fixed inset-0 top-14 z-40 lg:hidden">
           <div className="absolute inset-0 bg-foreground/20" onClick={() => setMobileOpen(false)} />
           <div className="relative w-[280px] h-full bg-background border-r border-border overflow-y-auto">
             <DocsSidebar onNavigate={() => setMobileOpen(false)} />
