@@ -1,88 +1,84 @@
 import PageHeader from "@/components/docs/PageHeader";
 import CodeBlock from "@/components/docs/CodeBlock";
 
-const llmBlock = `# NexArt - Getting Started
+const llmBlock = `# NexArt — Getting Started
 
-NexArt provides AI execution attestation. It creates tamper-proof records (CERs) of AI operations.
+NexArt creates Certified Execution Records (CERs) for AI operations.
+CERs are portable, tamper-proof records that prove what ran, when, and that the record is intact.
 
-## Quick Integration
-1. Install SDK: npm install @nexart/sdk
-2. Initialize: const nexart = new NexArt({ apiKey: "your-key" })
-3. Wrap AI calls with nexart.attest() to get signed receipts
-4. Each receipt contains: hash, timestamp, signature, CER ID
+## Core flow
+1. AI execution happens in your system
+2. A CER is created capturing the execution (full, redacted, or hash-only)
+3. The CER is submitted to an attestation node for signing
+4. The node returns a signed receipt with an Ed25519 signature
+5. Anyone can verify the CER at verify.nexart.io
 
-## Key Endpoints
-- POST /api/v1/attest - Submit execution for attestation
-- GET /api/v1/verify/{id} - Verify a receipt
-- GET /api/v1/report/{id} - Get full verification report
+## Key surfaces
+- verify.nexart.io — public verification
+- node.nexart.io — attestation node identity
+- node.nexart.io/.well-known/nexart-node.json — node signing keys
 
-## Bundle Shape
-{ model, prompt_hash, output_hash, timestamp, metadata }`;
+## CER bundle types
+- Full signed receipt — complete execution record with attestation
+- Signed redacted reseal — redacted record re-signed for sharing
+- Hash-only timestamp — legacy/incomplete records, signs certificateHash only
+- Legacy record — older records, not fully verifiable
+
+## Verification outcomes
+VERIFIED | PARTIAL | INVALID | UNAVAILABLE`;
 
 const GettingStarted = () => {
   return (
     <>
       <PageHeader
         title="Getting Started"
-        summary="Set up NexArt attestation in your app in under 5 minutes."
+        summary="Understand the NexArt attestation flow and how CERs work."
         llmBlock={llmBlock}
       />
 
-      <h2 id="install">1. Install the SDK</h2>
-      <CodeBlock code="npm install @nexart/sdk" title="Terminal" />
+      <h2 id="what">What is NexArt?</h2>
+      <p>NexArt creates <strong>Certified Execution Records (CERs)</strong> — portable, tamper-proof records of AI executions. A CER captures what happened, when it happened, and provides cryptographic proof that the record has not been altered.</p>
 
-      <h2 id="initialize">2. Initialize</h2>
-      <p>Create a NexArt client with your API key from the dashboard.</p>
-      <CodeBlock
-        code={`import { NexArt } from "@nexart/sdk";
+      <h2 id="flow">How It Works</h2>
+      <ol>
+        <li><strong>Execution</strong> — An AI operation runs in your system</li>
+        <li><strong>CER creation</strong> — A CER is created capturing the execution details</li>
+        <li><strong>Attestation</strong> — The CER is submitted to an attestation node, which signs it with Ed25519</li>
+        <li><strong>Receipt</strong> — The node returns a signed receipt proving attestation</li>
+        <li><strong>Verification</strong> — Anyone can verify the CER independently</li>
+      </ol>
 
-const nexart = new NexArt({
-  apiKey: process.env.NEXART_API_KEY,
-  environment: "production" // or "sandbox"
-});`}
-        title="init.ts"
-      />
+      <h2 id="record-types">Record Types</h2>
+      <p>NexArt supports several record types depending on the use case and export path:</p>
+      <ul>
+        <li><strong>Full signed receipt</strong> — Complete execution record with full attestation</li>
+        <li><strong>Signed redacted reseal</strong> — A redacted version of a record, re-signed for safe sharing</li>
+        <li><strong>Hash-only timestamp</strong> — Signs only the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>, used for legacy or incomplete records</li>
+        <li><strong>Legacy record</strong> — Older records that may not be fully verifiable</li>
+      </ul>
 
-      <h2 id="first-attestation">3. Create Your First Attestation</h2>
-      <p>Wrap any AI execution with <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">nexart.attest()</code> to get a signed receipt.</p>
-      <CodeBlock
-        code={`const result = await nexart.attest({
-  model: "gpt-4",
-  prompt_hash: "sha256:abc123...",
-  output_hash: "sha256:def456...",
-  metadata: {
-    app_id: "my-app",
-    user_id: "user-123"
-  }
-});
+      <h2 id="surfaces">Key Surfaces</h2>
+      <ul>
+        <li><a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a> — Public verification portal. Anyone with a CER can verify it here.</li>
+        <li><a href="https://node.nexart.io" target="_blank" rel="noopener noreferrer">node.nexart.io</a> — Attestation node identity and status</li>
+        <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">node.nexart.io/.well-known/nexart-node.json</code> — Published signing keys for independent verification</li>
+      </ul>
 
-console.log(result.receipt_id);  // "cer_8x7k2m..."
-console.log(result.signature);   // "0x3f2a..."
-console.log(result.timestamp);   // "2026-03-06T12:00:00Z"`}
-        title="attest.ts"
-      />
-
-      <h2 id="verify">4. Verify a Receipt</h2>
-      <p>Anyone with a receipt ID can independently verify it.</p>
-      <CodeBlock
-        code={`const verification = await nexart.verify("cer_8x7k2m...");
-
-// Returns:
-{
-  "valid": true,
-  "receipt_id": "cer_8x7k2m...",
-  "timestamp": "2026-03-06T12:00:00Z",
-  "integrity": "intact",
-  "signer": "nexart-node-us-east-1"
-}`}
-        title="verify.ts"
-      />
+      <h2 id="verification">Verification</h2>
+      <p>Verification checks three things:</p>
+      <ul>
+        <li><strong>Bundle Integrity</strong> — Is the CER internally consistent and untampered?</li>
+        <li><strong>Node Signature</strong> — Was it signed by a known attestation node?</li>
+        <li><strong>Receipt Consistency</strong> — Does the receipt match the CER?</li>
+      </ul>
+      <p>Outcomes: <strong>VERIFIED</strong>, <strong>PARTIAL</strong>, <strong>INVALID</strong>, or <strong>UNAVAILABLE</strong>.</p>
 
       <h2 id="next-steps">Next Steps</h2>
       <ul>
-        <li>Learn about <a href="/docs/concepts/cer">Certified Execution Records (CERs)</a></li>
-        <li>Explore the <a href="/docs/sdk">full SDK reference</a></li>
-        <li>Set up <a href="/docs/dashboard/auto-stamp">auto-stamping</a> for continuous attestation</li>
+        <li>Learn about <a href="/docs/concepts/cer">Certified Execution Records</a></li>
+        <li>Understand <a href="/docs/concepts/signed-receipts">Signed Receipts</a></li>
+        <li>Explore the <a href="/docs/sdk">AI Execution SDK</a></li>
+        <li>Try verifying a CER at <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a></li>
       </ul>
     </>
   );

@@ -2,23 +2,25 @@ import PageHeader from "@/components/docs/PageHeader";
 import CodeBlock from "@/components/docs/CodeBlock";
 
 const llmBlock = `# NexArt Verification
-Verify any CER or receipt independently.
+Verify any CER independently.
 
-## SDK
-const result = await nexart.verify("rcpt_id");
-// { valid: true, integrity: "intact" }
+## Public verifier
+verify.nexart.io
 
-## REST API
-GET /api/v1/verify/{receipt_id}
+## What gets checked
+1. Bundle Integrity — certificateHash matches bundle contents
+2. Node Signature — Ed25519 signature is valid against published key
+3. Receipt Consistency — receipt correctly references the CER
 
-## Full Report
-GET /api/v1/report/{cer_id}
+## Outcomes
+VERIFIED — all checks pass, full attestation intact
+PARTIAL — some checks pass (hash-only timestamps, redacted reseals)
+INVALID — one or more checks fail, possible tampering
+UNAVAILABLE — cannot verify (missing data, unknown node)
 
-## What gets checked:
-- Hash integrity (prompt_hash + output_hash unchanged)
-- Signature validity (node's ECDSA signature)
-- Timestamp consistency
-- Node identity authentication`;
+## Independent verification
+Fetch node keys from node.nexart.io/.well-known/nexart-node.json
+Verify Ed25519 signature over the receipt payload`;
 
 const Verification = () => (
   <>
@@ -29,57 +31,45 @@ const Verification = () => (
     />
 
     <h2 id="overview">Overview</h2>
-    <p>Verification is the other side of attestation. Anyone with a receipt ID can independently verify that an AI execution record is authentic and unmodified.</p>
+    <p>Any CER can be verified independently. Verification confirms that the record is authentic, intact, and properly attested by a known node.</p>
 
-    <h2 id="sdk-verify">SDK Verification</h2>
+    <h2 id="public-verifier">Public Verifier</h2>
+    <p>The easiest way to verify a CER is at <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a>. Upload or paste a CER and get a verification report.</p>
+
+    <h2 id="checks">What Gets Checked</h2>
+    <ol>
+      <li><strong>Bundle Integrity</strong> — Does the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> match the actual bundle contents? Any modification to the CER after attestation will cause this check to fail.</li>
+      <li><strong>Node Signature</strong> — Is the Ed25519 signature valid? Is it signed by a key published at <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">node.nexart.io/.well-known/nexart-node.json</code>?</li>
+      <li><strong>Receipt Consistency</strong> — Does the signed receipt reference the correct <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>? Do the timestamps and node IDs align?</li>
+    </ol>
+
+    <h2 id="outcomes">Outcomes</h2>
     <CodeBlock
-      code={`const result = await nexart.verify("rcpt_2k8m4x9n");
-
-console.log(result);
-// {
-//   valid: true,
-//   receipt_id: "rcpt_2k8m4x9n",
-//   cer_id: "cer_8x7k2m4n9p",
-//   integrity: "intact",
-//   signature_valid: true,
-//   timestamp: "2026-03-06T12:00:00Z"
-// }`}
-      title="SDK Verification"
+      code={`VERIFIED      All checks pass. Full attestation is intact.
+PARTIAL       Some checks pass. Expected for hash-only timestamps
+              and redacted reseals.
+INVALID       One or more checks fail. Record may be tampered.
+UNAVAILABLE   Cannot perform verification. Missing data or
+              unknown node.`}
+      title="Verification Outcomes"
     />
 
-    <h2 id="api">REST API</h2>
-    <CodeBlock
-      code={`GET /api/v1/verify/rcpt_2k8m4x9n
+    <h2 id="independent">Independent Verification</h2>
+    <p>You can verify a CER without using verify.nexart.io:</p>
+    <ol>
+      <li>Recompute the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> from the bundle contents (SHA-256)</li>
+      <li>Compare it to the hash in the signed receipt</li>
+      <li>Fetch the node's public key from <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">node.nexart.io/.well-known/nexart-node.json</code></li>
+      <li>Verify the Ed25519 signature over the receipt payload</li>
+    </ol>
 
-Response:
-{
-  "valid": true,
-  "integrity": "intact",
-  "checks": {
-    "hash_integrity": "pass",
-    "signature": "pass",
-    "timestamp": "pass",
-    "node_identity": "pass"
-  }
-}`}
-      title="REST API"
-    />
-
-    <h2 id="content-verify">Content Verification</h2>
-    <p>To verify that specific content matches a CER, re-hash it and compare:</p>
-    <CodeBlock
-      code={`import { hashContent } from "@nexart/sdk";
-
-const originalPrompt = "What is the capital of France?";
-const currentHash = hashContent(originalPrompt);
-
-const cer = await nexart.getCER("cer_8x7k2m4n9p");
-
-if (currentHash === cer.prompt_hash) {
-  console.log("Content matches the attested record");
-}`}
-      title="Content Verification"
-    />
+    <h2 id="by-bundle-type">Verification by Bundle Type</h2>
+    <ul>
+      <li><strong>signed-receipt</strong> — Full verification. Expects VERIFIED.</li>
+      <li><strong>signed-redacted-reseal</strong> — Redacted fields cannot be verified. Expects PARTIAL or VERIFIED depending on what was redacted.</li>
+      <li><strong>hash-only-timestamp</strong> — Only the hash is attested, not snapshot contents. Expects PARTIAL.</li>
+      <li><strong>legacy</strong> — Older records with limited verification coverage. May return PARTIAL or UNAVAILABLE.</li>
+    </ul>
   </>
 );
 
