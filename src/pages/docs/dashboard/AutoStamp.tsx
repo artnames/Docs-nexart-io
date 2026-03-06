@@ -37,10 +37,10 @@ const AutoStamp = () => (
 
     <h2 id="how">How It Works</h2>
     <ul>
-      <li><strong>Enabled</strong> — CERs ingested under the project are automatically sent through the stamping flow during ingestion. Records receive a signed receipt without manual intervention.</li>
-      <li><strong>Disabled</strong> — CERs are still ingested and stored, but no automatic stamp is requested. Manual stamping remains available later.</li>
+      <li><strong>Enabled.</strong> CERs ingested under the project are automatically sent through the stamping flow during ingestion. Records receive a signed receipt without manual intervention.</li>
+      <li><strong>Disabled.</strong> CERs are still ingested and stored, but no automatic stamp is requested. Manual stamping remains available later.</li>
     </ul>
-    <p>Auto-stamp behavior is evaluated during ingestion. It does not change the CER structure itself — it only affects whether an attestation receipt is added automatically.</p>
+    <p>Auto-stamp behavior is evaluated during ingestion. It does not change the CER structure itself. It only affects whether an attestation receipt is added automatically.</p>
 
     <h2 id="configure">Configuring Auto-stamp</h2>
     <ol>
@@ -55,9 +55,9 @@ const AutoStamp = () => (
     <h2 id="manual">Manual Stamping Still Works</h2>
     <p>Even when auto-stamp is disabled, records are still created normally. Users can manually stamp a record later. Available stamping actions include:</p>
     <ul>
-      <li>Full attestation — produces a signed receipt</li>
-      <li>Redacted reseal — where applicable</li>
-      <li>Hash-only timestamp — for legacy or incomplete records</li>
+      <li>Full attestation, which produces a signed receipt</li>
+      <li>Redacted reseal, where applicable</li>
+      <li>Hash-only timestamp, for legacy or incomplete records</li>
     </ul>
 
     <h2 id="when">When to Use It</h2>
@@ -74,7 +74,7 @@ const AutoStamp = () => (
     </ul>
 
     <h2 id="verification">Relationship to Verification</h2>
-    <p>Auto-stamp affects whether a record receives a signed receipt automatically. Signed receipts improve verification coverage — a stamped record can verify as <strong>VERIFIED</strong>.</p>
+    <p>Auto-stamp affects whether a record receives a signed receipt automatically. Signed receipts improve verification coverage, so a stamped record can verify as <strong>VERIFIED</strong>.</p>
     <p>If a record is not stamped automatically, verification may remain <strong>PARTIAL</strong> until a manual stamp is added.</p>
   </>
 );

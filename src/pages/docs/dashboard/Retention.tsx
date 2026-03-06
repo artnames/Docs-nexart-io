@@ -39,10 +39,10 @@ const Retention = () => (
 
     <h2 id="options">Available Options</h2>
     <ul>
-      <li><strong>30 days</strong> — Short-term storage suitable for development environments or temporary workflows</li>
-      <li><strong>90 days</strong> — Medium-term storage for operational monitoring and short audit windows</li>
-      <li><strong>1 year</strong> — Typical operational retention period for many production systems</li>
-      <li><strong>Forever</strong> — Records are retained indefinitely unless manually deleted or exported</li>
+      <li><strong>30 days.</strong> Short-term storage suitable for development environments or temporary workflows.</li>
+      <li><strong>90 days.</strong> Medium-term storage for operational monitoring and short audit windows.</li>
+      <li><strong>1 year.</strong> Typical operational retention period for many production systems.</li>
+      <li><strong>Forever.</strong> Records are retained indefinitely unless manually deleted or exported.</li>
     </ul>
     <p>These are project-level defaults applied to new records ingested under the project.</p>
 

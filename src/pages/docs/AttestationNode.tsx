@@ -46,8 +46,8 @@ const AttestationNode = () => (
     <h2 id="modes">Attestation Modes</h2>
     <p>The node supports two attestation modes:</p>
     <ul>
-      <li><strong>Full signed receipt</strong> — The node attests the complete CER including snapshot contents. Produces a <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">signed-receipt</code> bundle.</li>
-      <li><strong>Hash-only timestamp</strong> — The node signs only the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>. Used for legacy or incomplete records. Produces a <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">hash-only-timestamp</code> bundle.</li>
+      <li><strong>Full signed receipt.</strong> The node attests the complete CER including snapshot contents. Produces a <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">signed-receipt</code> bundle.</li>
+      <li><strong>Hash-only timestamp.</strong> The node signs only the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>. Used for legacy or incomplete records. Produces a <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">hash-only-timestamp</code> bundle.</li>
     </ul>
 
     <h2 id="identity">Node Identity</h2>
@@ -72,9 +72,9 @@ const AttestationNode = () => (
 
     <h2 id="signing">Signing Details</h2>
     <ul>
-      <li><strong>Algorithm</strong> — Ed25519</li>
-      <li><strong>Key rotation</strong> — The node may rotate keys over time. Each receipt includes an <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">attestorKeyId</code> that identifies which key was used.</li>
-      <li><strong>Key discovery</strong> — All active and historical keys are published at the well-known endpoint so past receipts remain verifiable.</li>
+      <li><strong>Algorithm.</strong> Ed25519.</li>
+      <li><strong>Key rotation.</strong> The node may rotate keys over time. Each receipt includes an <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">attestorKeyId</code> that identifies which key was used.</li>
+      <li><strong>Key discovery.</strong> All active and historical keys are published at the well-known endpoint so past receipts remain verifiable.</li>
     </ul>
 
     <h2 id="verification">Verifying Against the Node</h2>

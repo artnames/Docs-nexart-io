@@ -62,9 +62,9 @@ const Verification = () => (
 
     <h2 id="checks">What Gets Checked</h2>
     <ol>
-      <li><strong>Bundle Integrity</strong> — Recompute the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> from the bundle contents and confirm it matches the stored hash. Any modification to the bundle produces a different hash.</li>
-      <li><strong>Node Signature</strong> — Validate the Ed25519 signature using the public key published at <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">node.nexart.io/.well-known/nexart-node.json</code>.</li>
-      <li><strong>Receipt Consistency</strong> — Confirm the receipt references the same <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> as the bundle and that the node identity matches the published metadata.</li>
+      <li><strong>Bundle Integrity.</strong> Recompute the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> from the bundle contents and confirm it matches the stored hash. Any modification to the bundle produces a different hash.</li>
+      <li><strong>Node Signature.</strong> Validate the Ed25519 signature using the public key published at <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">node.nexart.io/.well-known/nexart-node.json</code>.</li>
+      <li><strong>Receipt Consistency.</strong> Confirm the receipt references the same <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> as the bundle and that the node identity matches the published metadata.</li>
     </ol>
 
     <h2 id="outcomes">Outcomes</h2>
@@ -98,10 +98,10 @@ UNAVAILABLE   Verification cannot be completed due to missing data,
 
     <h2 id="by-bundle-type">Verification by Bundle Type</h2>
     <ul>
-      <li><strong>signed-receipt</strong> — Full verification. All checks should pass → <strong>VERIFIED</strong>.</li>
-      <li><strong>signed-redacted-reseal</strong> — Some snapshot fields may be removed. Verification may return <strong>VERIFIED</strong> or <strong>PARTIAL</strong> depending on the redaction scope.</li>
-      <li><strong>hash-only-timestamp</strong> — Only the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> is attested. Snapshot integrity is not covered → <strong>PARTIAL</strong> expected.</li>
-      <li><strong>legacy</strong> — Older record formats. Verification coverage may be incomplete → <strong>PARTIAL</strong> or <strong>UNAVAILABLE</strong>.</li>
+      <li><strong>signed-receipt.</strong> Full verification. All checks should pass, resulting in <strong>VERIFIED</strong>.</li>
+      <li><strong>signed-redacted-reseal.</strong> Some snapshot fields may be removed. Verification may return <strong>VERIFIED</strong> or <strong>PARTIAL</strong> depending on the redaction scope.</li>
+      <li><strong>hash-only-timestamp.</strong> Only the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> is attested. Snapshot integrity is not covered. Expect <strong>PARTIAL</strong>.</li>
+      <li><strong>legacy.</strong> Older record formats. Verification coverage may be incomplete. Expect <strong>PARTIAL</strong> or <strong>UNAVAILABLE</strong>.</li>
     </ul>
   </>
 );
