@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import DocsLayout from "./components/docs/DocsLayout";
 import GettingStarted from "./pages/docs/GettingStarted";
+import ProtocolOverview from "./pages/docs/ProtocolOverview";
 import CER from "./pages/docs/concepts/CER";
 import SignedReceipts from "./pages/docs/concepts/SignedReceipts";
 import HashTimestamping from "./pages/docs/concepts/HashTimestamping";
