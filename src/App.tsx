@@ -25,6 +25,7 @@ import Retention from "./pages/docs/dashboard/Retention";
 import AuditExports from "./pages/docs/dashboard/AuditExports";
 import Examples from "./pages/docs/Examples";
 import FAQ from "./pages/docs/FAQ";
+import N8n from "./pages/docs/integrations/N8n";
 
 const queryClient = new QueryClient();
 
