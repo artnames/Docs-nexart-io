@@ -2,26 +2,38 @@ import PageHeader from "@/components/docs/PageHeader";
 import CodeBlock from "@/components/docs/CodeBlock";
 
 const llmBlock = `# CER (Certified Execution Record)
-A CER is a portable, tamper-proof record of an AI execution.
+A CER is a portable, tamper-evident record of an execution. CERs may represent AI or deterministic system executions.
 
-## Protected structure
+## Structure
 {
   bundleType: "signed-receipt" | "signed-redacted-reseal" | "hash-only-timestamp" | "legacy",
   version: "1.0",
-  createdAt: ISO 8601 timestamp,
-  snapshot: { ... execution data ... },
+  createdAt: ISO 8601,
+  snapshot: { ... execution metadata ... },
   certificateHash: "sha256:..."
 }
 
-## Bundle types
-- signed-receipt: full execution record with attestation
-- signed-redacted-reseal: redacted record re-signed for sharing
-- hash-only-timestamp: signs certificateHash only (legacy/incomplete)
-- legacy: older records, not fully verifiable
+## certificateHash
+- SHA-256 hash derived from the canonical bundle structure
+- Uniquely identifies the record
+- What the attestation node signs
+- Any modification changes the hash
 
-## Exports
-CERs can be exported as full, redacted, or legacy depending on the system and export path.
-Verification at verify.nexart.io checks bundle integrity, node signature, and receipt consistency.`;
+## Bundle types
+- signed-receipt — CER with a signed node receipt. Fully verifiable.
+- signed-redacted-reseal — redacted export, resealed and signed for safe sharing.
+- hash-only-timestamp — signs only certificateHash when full snapshot attestation is not possible.
+- legacy — historical records that may lack full attestation or verification data.
+
+## Export paths
+- Full export — complete CER with all snapshot data
+- Redacted export — sensitive fields removed, resealed to preserve verifiability
+- Legacy export — older records with limited verification coverage
+
+## Verification
+Checks: bundle integrity, node signature, receipt consistency.
+Outcomes: VERIFIED | PARTIAL | INVALID | UNAVAILABLE
+Verify locally with bundle + node keys, or at verify.nexart.io.`;
 
 const CER = () => (
   <>
@@ -30,11 +42,22 @@ const CER = () => (
       summary="Certified Execution Records are the core unit of proof in NexArt."
       llmBlock={llmBlock}
     />
+
     <h2 id="overview">Overview</h2>
-    <p>A <strong>Certified Execution Record (CER)</strong> is a portable, tamper-proof record of an AI execution. It captures what ran, when it ran, and provides cryptographic proof that the record has not been altered since attestation.</p>
+    <p>A <strong>Certified Execution Record (CER)</strong> is a portable, tamper-evident record of an execution. CERs may represent AI or deterministic system executions — NexArt is not limited to AI.</p>
+    <p>A CER binds execution metadata to a <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>. The bundle structure is deterministic: given the same inputs, the same hash is produced. Verification relies on this hash. Attestation adds a signed receipt, but the CER itself is the base record.</p>
 
     <h2 id="structure">Protected Structure</h2>
-    <p>Every CER follows a protected structure with these top-level fields:</p>
+    <p>Every CER has these top-level fields:</p>
+    <ul>
+      <li><strong>bundleType</strong> — The type of record and attestation (see below)</li>
+      <li><strong>version</strong> — Protocol version</li>
+      <li><strong>createdAt</strong> — When the record was created (ISO 8601)</li>
+      <li><strong>snapshot</strong> — The execution metadata captured in the record</li>
+      <li><strong>certificateHash</strong> — A SHA-256 hash derived from the canonical bundle structure</li>
+    </ul>
+
+    <h2 id="example">Example</h2>
     <CodeBlock
       code={`{
   "bundleType": "signed-receipt",
@@ -51,26 +74,38 @@ const CER = () => (
   },
   "certificateHash": "sha256:9e8d7c6b5a4f..."
 }`}
-      title="CER Example (signed-receipt)"
+      title="CER Example"
     />
 
     <h2 id="bundle-types">Bundle Types</h2>
-    <p>CERs are not one-size-fits-all. The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">bundleType</code> field indicates what kind of record this is:</p>
+    <p>The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">bundleType</code> field describes the export or attestation condition of the record:</p>
     <ul>
-      <li><strong>signed-receipt</strong> — Full execution record with complete attestation. The snapshot contains all execution data, and the record is fully verifiable.</li>
-      <li><strong>signed-redacted-reseal</strong> — A redacted version of a record that has been re-signed by the attestation node. Used when sharing records externally while protecting sensitive fields.</li>
-      <li><strong>hash-only-timestamp</strong> — Signs only the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>. Does not attest snapshot contents. Used for legacy or incomplete records.</li>
-      <li><strong>legacy</strong> — Older records from earlier versions of the system. May not be fully verifiable.</li>
+      <li><strong>signed-receipt</strong> — A CER bundle that includes a signed node receipt. Fully verifiable.</li>
+      <li><strong>signed-redacted-reseal</strong> — A redacted export that has been resealed and signed again so it can be shared safely while preserving verifiability.</li>
+      <li><strong>hash-only-timestamp</strong> — A receipt that signs only the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> when full snapshot attestation is not possible.</li>
+      <li><strong>legacy</strong> — Historical records that may lack full attestation or verification data.</li>
     </ul>
 
     <h2 id="certificate-hash">Certificate Hash</h2>
-    <p>The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> is a SHA-256 hash that uniquely identifies the CER's contents. It serves as the fingerprint used during attestation and verification. Any change to the record produces a different hash, making tampering detectable.</p>
+    <p>The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> is a SHA-256 hash derived from the canonical bundle structure. It uniquely identifies the record and is what the attestation node signs. Any modification to the CER — even a single character — produces a different hash, making tampering evident.</p>
 
     <h2 id="exports">Exports</h2>
-    <p>CERs can be exported in different forms depending on the system configuration and export path. A full export includes all snapshot data. A redacted export omits sensitive fields while preserving verifiability through the reseal process. Legacy exports may have limited verification coverage.</p>
+    <p>CERs can be exported through different paths:</p>
+    <ul>
+      <li><strong>Full export</strong> — The complete CER with all snapshot data intact</li>
+      <li><strong>Redacted export</strong> — Sensitive fields are removed. The record is resealed and signed again so that verification still works against the redacted version.</li>
+      <li><strong>Legacy export</strong> — Older records with limited verification coverage</li>
+    </ul>
 
     <h2 id="verification">Verification</h2>
-    <p>Any CER can be verified at <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a>. Verification checks bundle integrity, node signature, and receipt consistency. Results are one of: <strong>VERIFIED</strong>, <strong>PARTIAL</strong>, <strong>INVALID</strong>, or <strong>UNAVAILABLE</strong>.</p>
+    <p>Any CER can be verified by checking:</p>
+    <ul>
+      <li><strong>Bundle Integrity</strong> — The CER bundle hashes are internally consistent</li>
+      <li><strong>Node Signature</strong> — The receipt signature is valid against a published node key</li>
+      <li><strong>Receipt Consistency</strong> — The receipt's <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> matches the CER bundle</li>
+    </ul>
+    <p>Outcomes: <strong>VERIFIED</strong>, <strong>PARTIAL</strong>, <strong>INVALID</strong>, or <strong>UNAVAILABLE</strong>.</p>
+    <p>Verification can be performed locally using the bundle and node keys, or through the public verifier at <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a>.</p>
   </>
 );
 
