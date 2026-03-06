@@ -35,6 +35,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/docs" element={<DocsLayout />}>
             <Route path="getting-started" element={<GettingStarted />} />
+            <Route path="protocol-overview" element={<ProtocolOverview />} />
             <Route path="concepts/cer" element={<CER />} />
             <Route path="concepts/signed-receipts" element={<SignedReceipts />} />
             <Route path="concepts/hash-timestamping" element={<HashTimestamping />} />
