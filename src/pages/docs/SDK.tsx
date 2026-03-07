@@ -2,13 +2,20 @@ import PageHeader from "@/components/docs/PageHeader";
 import CodeBlock from "@/components/docs/CodeBlock";
 
 const llmBlock = `# NexArt AI Execution SDK
-The SDK helps produce CER bundles for AI executions and supports verification-related workflows.
 
-## SDK responsibilities
-- Structure AI execution data into a CER bundle
-- Compute certificateHash (SHA-256) over the canonical bundle
-- Support attestation-related workflows (CER creation is separate from node attestation)
-- Provide verification helpers
+## API Endpoints
+
+POST /v1/cer/ai/certify — recommended
+Creates a CER, attests it via the node, and returns certificateHash, receipt, signatureB64Url, and verificationUrl.
+
+POST /v1/cer/ai/create
+Creates a CER bundle without attestation. Returns the bundle and certificateHash but no receipt or verificationUrl.
+
+## Recommended path
+Use POST /v1/cer/ai/certify for most integrations. It handles CER creation, attestation, and receipt generation in one request.
+
+## Authentication
+API key via NEXART_API_KEY header.
 
 ## CER bundle shape
 {
@@ -24,14 +31,12 @@ The SDK helps produce CER bundles for AI executions and supports verification-re
   certificateHash: "sha256:..."
 }
 
-## Attestation
-CER creation and node attestation are separate steps.
-The node returns a signed receipt binding certificateHash to the node's identity.
-
-## Signed receipt (from the node)
+## Certify response
 {
+  verificationUrl: "https://verify.nexart.io/e/exec_abc123",
+  certificateHash: "sha256:...",
   receipt: { certificateHash, timestamp, nodeId, attestorKeyId },
-  signatureB64Url: base64url Ed25519 signature
+  signatureB64Url: "MEUCIQD..."
 }
 
 ## Verification
@@ -44,24 +49,88 @@ const SDK = () => (
   <>
     <PageHeader
       title="AI Execution SDK"
-      summary="Produces CER bundles for AI executions and supports verification workflows."
+      summary="API reference for certifying AI executions and creating CER bundles."
       llmBlock={llmBlock}
     />
 
     <h2 id="overview">Overview</h2>
-    <p>The AI Execution SDK helps produce <strong>Certified Execution Record (CER)</strong> bundles for AI executions and supports local verification-related workflows. It is not only a transport client to the attestation node. CER creation and node attestation are separate concepts.</p>
+    <p>The AI Execution SDK provides two endpoints for working with Certified Execution Records. Most builders should use the <strong>certify</strong> endpoint, which handles everything in a single request.</p>
 
-    <h2 id="responsibilities">What the SDK Does</h2>
+    <div className="not-prose my-6 rounded-lg border border-primary/30 bg-primary/5 p-4">
+      <div className="text-sm font-medium text-primary mb-1">Recommended for most integrations</div>
+      <div className="text-sm text-foreground">
+        Use <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">POST /v1/cer/ai/certify</code> to create a CER, get node attestation, and receive a verification URL in one call.
+      </div>
+    </div>
+
+    <h2 id="endpoints">API Endpoints</h2>
+
+    <h3 id="certify">POST /v1/cer/ai/certify</h3>
+    <p>Creates a Certified Execution Record, attests it through the node, and returns a signed receipt with a verification URL. This is the simplest way to get a verifiable proof of an AI execution.</p>
+    <p><strong>What it does:</strong></p>
     <ul>
-      <li><strong>Structure execution data.</strong> Capture or structure AI execution metadata into a CER bundle.</li>
-      <li><strong>Create a CER bundle.</strong> Produce a well-formed bundle with the correct fields and canonical structure.</li>
-      <li><strong>Compute certificateHash.</strong> Derive a SHA-256 hash over the canonical bundle, binding all fields together.</li>
-      <li><strong>Support attestation workflows.</strong> Facilitate submission of CERs for node attestation where applicable.</li>
-      <li><strong>Verification helpers.</strong> Support local verification of bundles and receipts.</li>
+      <li>Creates a CER bundle with execution metadata</li>
+      <li>Computes the certificateHash (SHA-256)</li>
+      <li>Submits the bundle to the attestation node</li>
+      <li>Returns the signed receipt, signature, and a public verification URL</li>
     </ul>
 
-    <h2 id="cer-shape">CER Bundle Shape</h2>
-    <p>The SDK produces CER bundles in this structure:</p>
+    <CodeBlock
+      code={`POST /v1/cer/ai/certify
+Authorization: Bearer NEXART_API_KEY
+
+{
+  "model": "gpt-4",
+  "input": "Summarize this contract...",
+  "output": "The contract states that...",
+  "metadata": {
+    "appId": "my-app",
+    "projectId": "proj_abc123"
+  }
+}`}
+      title="Certify Request"
+    />
+
+    <CodeBlock
+      code={`{
+  "verificationUrl": "https://verify.nexart.io/e/exec_abc123",
+  "certificateHash": "sha256:9e8d7c6b5a4f3210...",
+  "receipt": {
+    "certificateHash": "sha256:9e8d7c6b5a4f3210...",
+    "timestamp": "2026-03-06T12:00:01.000Z",
+    "nodeId": "nexart-node-primary",
+    "attestorKeyId": "key_01HXYZ..."
+  },
+  "signatureB64Url": "MEUCIQD3a8b1c4d5e6f..."
+}`}
+      title="Certify Response"
+    />
+
+    <h3 id="create">POST /v1/cer/ai/create</h3>
+    <p>Creates a CER bundle without attestation. The bundle is returned with a certificateHash, but no receipt or verification URL is generated.</p>
+    <p><strong>When to use this:</strong></p>
+    <ul>
+      <li>You want to generate the CER bundle for your own records</li>
+      <li>You plan to submit the bundle for attestation separately</li>
+      <li>You need the bundle structure but do not need node signing right now</li>
+    </ul>
+
+    <CodeBlock
+      code={`POST /v1/cer/ai/create
+Authorization: Bearer NEXART_API_KEY
+
+{
+  "model": "gpt-4",
+  "input": "Summarize this contract...",
+  "output": "The contract states that...",
+  "metadata": {
+    "appId": "my-app",
+    "projectId": "proj_abc123"
+  }
+}`}
+      title="Create Request"
+    />
+
     <CodeBlock
       code={`{
   "bundleType": "ai-execution",
@@ -69,59 +138,64 @@ const SDK = () => (
   "createdAt": "2026-03-06T12:00:00.000Z",
   "snapshot": {
     "model": "gpt-4",
-    "inputHash": "sha256:a1b2c3d4e5f6...",
-    "outputHash": "sha256:f6e5d4c3b2a1...",
+    "inputHash": "sha256:a1b2c3d4e5f67890...",
+    "outputHash": "sha256:f6e5d4c3b2a10987...",
     "metadata": {
       "appId": "my-app",
       "projectId": "proj_abc123"
     }
   },
-  "certificateHash": "sha256:9e8d7c6b5a4f..."
+  "certificateHash": "sha256:9e8d7c6b5a4f3210..."
+}`}
+      title="Create Response"
+    />
+    <p>Note: the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">create</code> response returns the CER bundle directly. There is no receipt, signature, or verification URL. To get those, use <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">/certify</code> instead.</p>
+
+    <h2 id="authentication">Authentication</h2>
+    <p>Both endpoints require an API key passed as a Bearer token:</p>
+    <CodeBlock code="Authorization: Bearer NEXART_API_KEY" language="text" />
+
+    <h2 id="cer-shape">CER Bundle Shape</h2>
+    <p>The CER bundle produced by either endpoint follows this structure:</p>
+    <CodeBlock
+      code={`{
+  "bundleType": "ai-execution",
+  "version": "1.0",
+  "createdAt": "2026-03-06T12:00:00.000Z",
+  "snapshot": {
+    "model": "gpt-4",
+    "inputHash": "sha256:a1b2c3d4e5f67890...",
+    "outputHash": "sha256:f6e5d4c3b2a10987...",
+    "metadata": {
+      "appId": "my-app",
+      "projectId": "proj_abc123"
+    }
+  },
+  "certificateHash": "sha256:9e8d7c6b5a4f3210..."
 }`}
       title="CER Bundle"
     />
-    <p>The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">snapshot</code> contains the execution metadata: model identifier, input and output hashes, and any associated metadata.</p>
+    <p>The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">snapshot</code> contains execution metadata. Input and output content is hashed (SHA-256) rather than stored directly.</p>
 
-    <h2 id="attestation">Attestation</h2>
-    <p>CER creation and node attestation are separate steps. The SDK creates the bundle; attestation happens when the bundle is submitted to an attestation node. The node signs the record and returns a signed receipt.</p>
-    <p>The receipt is an attestation artifact from the node. The SDK does not generate it.</p>
-
-    <h2 id="receipt">Signed Receipt</h2>
-    <p>After attestation, the node returns a signed receipt binding the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> to the node's identity and a timestamp:</p>
-    <CodeBlock
-      code={`{
-  "receipt": {
-    "certificateHash": "sha256:9e8d7c6b5a4f...",
-    "timestamp": "2026-03-06T12:00:01.000Z",
-    "nodeId": "nexart-node-primary",
-    "attestorKeyId": "key_01HXYZ..."
-  },
-  "signatureB64Url": "MEUCIQD3a8b1c4d5e6f..."
-}`}
-      title="Signed Receipt (from the node)"
-    />
-    <p>The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">signatureB64Url</code> is a base64url-encoded Ed25519 signature over the canonical receipt payload.</p>
-
-    <h2 id="hashing">Hash Computation</h2>
-    <p>The SDK hashes input and output content (SHA-256) and includes the resulting hashes in the CER snapshot. The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> is then computed over the entire canonical bundle structure, creating a single fingerprint that binds all fields together.</p>
-    <p>During attestation, the node signs a receipt that references this <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>.</p>
-
-    <h2 id="redacted-reseal">Redacted Reseal</h2>
-    <p>NexArt supports a redacted reseal flow as part of the record export and attestation workflow. A redacted export has sensitive fields removed and is then resealed (signed again by the attestation node) so it can be shared safely while preserving verifiability.</p>
-    <p>This is a system-level workflow. The redacted reseal process involves the attestation node, not only the SDK.</p>
+    <h2 id="key-terms">Key Terms</h2>
+    <ul>
+      <li><strong>create vs certify.</strong> <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">create</code> produces a CER bundle. <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certify</code> produces a CER bundle and gets it attested by the node in one step.</li>
+      <li><strong>Attestation vs verification.</strong> Attestation is when the node signs a record. Verification is when anyone checks that the signature and bundle are valid.</li>
+      <li><strong>Signed receipt vs hash-only timestamp.</strong> A signed receipt attests the full CER bundle. A hash-only timestamp attests only the certificateHash, without the snapshot contents.</li>
+    </ul>
 
     <h2 id="verification">Verification</h2>
-    <p>CERs produced by the SDK can be verified by checking:</p>
+    <p>CERs produced by the certify endpoint can be verified by checking:</p>
     <ul>
       <li><strong>Bundle Integrity.</strong> The CER bundle hashes are internally consistent.</li>
       <li><strong>Node Signature.</strong> The receipt signature is valid against the node's published Ed25519 key.</li>
       <li><strong>Receipt Consistency.</strong> The receipt's <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> matches the CER bundle.</li>
     </ul>
     <p>Outcomes: <strong>VERIFIED</strong>, <strong>PARTIAL</strong>, <strong>INVALID</strong>, or <strong>UNAVAILABLE</strong>.</p>
-    <p>Verification can be performed locally using the bundle and node keys from <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">node.nexart.io/.well-known/nexart-node.json</code>, or through the public verifier at <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a>.</p>
+    <p>Verify at <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a> or locally using the bundle and node keys from <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">node.nexart.io/.well-known/nexart-node.json</code>.</p>
 
-    <h2 id="scope">Scope of This Page</h2>
-    <p className="text-muted-foreground">This page focuses on the CER bundle model and attestation flow. The SDK API surface is still evolving, so this documentation describes the current model rather than every helper function.</p>
+    <h2 id="scope">Scope</h2>
+    <p className="text-muted-foreground">The SDK API surface is still evolving. This page documents the current endpoints and data model. Check back for updates as new capabilities are added.</p>
   </>
 );
 

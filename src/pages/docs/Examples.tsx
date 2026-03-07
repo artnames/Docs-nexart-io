@@ -1,41 +1,124 @@
 import PageHeader from "@/components/docs/PageHeader";
 import CodeBlock from "@/components/docs/CodeBlock";
 
-const llmBlock = `# NexArt Example Data Structures
+const llmBlock = `# NexArt Examples
+
+## Example A: Certify request
+POST /v1/cer/ai/certify with model, input, output, metadata.
+Returns verificationUrl, certificateHash, receipt, signatureB64Url.
+
+## Example B: Certify response
+{ verificationUrl, certificateHash, receipt: { certificateHash, timestamp, nodeId, attestorKeyId }, signatureB64Url }
+
+## Example C: Verification URLs
+https://verify.nexart.io/e/exec_abc123
+https://verify.nexart.io/c/sha256%3A...
+
+## Example D: n8n flow
+AI Step → NexArt Certify AI Execution → verificationUrl + receipt
 
 ## CER bundle (ai-execution)
 { bundleType: "ai-execution", version: "1.0", createdAt: ISO 8601,
-  snapshot: { model, inputHash: "sha256:...", outputHash: "sha256:...", metadata: { appId, projectId } },
-  certificateHash: "sha256:..." }
+  snapshot: { model, inputHash, outputHash, metadata }, certificateHash }
 
-## Signed receipt (from attestation node)
-{ receipt: { certificateHash: "sha256:...", timestamp: ISO 8601, nodeId, attestorKeyId },
-  signatureB64Url: base64url Ed25519 signature }
+## Create-only response (no attestation)
+Returns CER bundle with certificateHash but no receipt or verificationUrl.
 
-## Redacted reseal
-{ bundleType: "signed-redacted-reseal", snapshot with redacted fields, new certificateHash, new receipt }
-
-## Hash-only timestamp
-{ bundleType: "hash-only-timestamp", snapshot: null, certificateHash: "sha256:..." }
+## Signed receipt
+{ receipt: { certificateHash, timestamp, nodeId, attestorKeyId }, signatureB64Url }
 
 ## Verification report
 { outcome: "VERIFIED" | "PARTIAL" | "INVALID" | "UNAVAILABLE",
   checks: { bundleIntegrity, nodeSignature, receiptConsistency } }
 
 ## Node key discovery
-GET node.nexart.io/.well-known/nexart-node.json
-{ nodeId, activeKid, keys: [{ kid, algorithm: "Ed25519", publicKey }] }`;
+GET node.nexart.io/.well-known/nexart-node.json`;
 
 const Examples = () => (
   <>
     <PageHeader
       title="Examples"
-      summary="Reference data structures used in the NexArt system."
+      summary="Copy-ready examples for API requests, responses, verification URLs, and data structures."
       llmBlock={llmBlock}
     />
 
-    <h2 id="intro">About These Examples</h2>
-    <p>This page shows example data structures used in the NexArt system: CER bundles, signed receipts, redacted reseals, hash-only timestamps, verification reports, and node key discovery. These examples are illustrative but follow the real structure used by the system.</p>
+    <h2 id="certify-request">Example A: Certify an AI Execution</h2>
+    <p>The most common integration. Send execution data to the certify endpoint and receive a verifiable record.</p>
+    <CodeBlock
+      code={`POST /v1/cer/ai/certify
+Authorization: Bearer NEXART_API_KEY
+
+{
+  "model": "gpt-4",
+  "input": "Summarize this contract and highlight key obligations.",
+  "output": "The contract requires monthly reporting and a 30-day notice period for termination.",
+  "metadata": {
+    "appId": "contract-assistant",
+    "projectId": "proj_abc123"
+  }
+}`}
+      title="Certify Request"
+    />
+
+    <h2 id="certify-response">Example B: Certify Response</h2>
+    <p>The response includes everything needed to share and verify the record.</p>
+    <CodeBlock
+      code={`{
+  "verificationUrl": "https://verify.nexart.io/e/exec_abc123",
+  "certificateHash": "sha256:9e8d7c6b5a4f3210...",
+  "receipt": {
+    "certificateHash": "sha256:9e8d7c6b5a4f3210...",
+    "timestamp": "2026-03-06T12:00:01.000Z",
+    "nodeId": "nexart-node-primary",
+    "attestorKeyId": "key_01HXYZ..."
+  },
+  "signatureB64Url": "MEUCIQD3a8b1c4d5e6f..."
+}`}
+      title="Certify Response"
+    />
+
+    <h2 id="verification-urls">Example C: Verification URLs</h2>
+    <p>Records can be verified publicly using either format:</p>
+    <CodeBlock
+      code={`# By execution ID
+https://verify.nexart.io/e/exec_abc123
+
+# By certificate hash
+https://verify.nexart.io/c/sha256%3A9e8d7c6b5a4f3210...`}
+      title="Verification URL Formats"
+    />
+    <p>Share these URLs with anyone. The public verifier shows the verification status without exposing raw inputs or outputs.</p>
+
+    <h2 id="n8n-flow">Example D: n8n Flow</h2>
+    <p>Certify AI results inside an n8n workflow using the NexArt community node.</p>
+    <div className="not-prose my-6 flex flex-col items-center gap-2 text-sm font-mono">
+      <div className="px-4 py-2 rounded-md border border-border bg-card text-foreground">AI Step (e.g. OpenAI, Claude)</div>
+      <div className="text-muted-foreground">↓</div>
+      <div className="px-4 py-2 rounded-md border border-primary/40 bg-primary/10 text-primary font-medium">NexArt Certify AI Execution</div>
+      <div className="text-muted-foreground">↓</div>
+      <div className="px-4 py-2 rounded-md border border-border bg-card text-foreground">verificationUrl + receipt</div>
+    </div>
+
+    <h2 id="create-only">Create-Only Response (No Attestation)</h2>
+    <p>If you use <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">POST /v1/cer/ai/create</code>, you get the CER bundle but no receipt or verification URL.</p>
+    <CodeBlock
+      code={`{
+  "bundleType": "ai-execution",
+  "version": "1.0",
+  "createdAt": "2026-03-06T12:00:00.000Z",
+  "snapshot": {
+    "model": "gpt-4",
+    "inputHash": "sha256:a1b2c3d4e5f67890...",
+    "outputHash": "sha256:f6e5d4c3b2a10987...",
+    "metadata": {
+      "appId": "contract-assistant",
+      "projectId": "proj_abc123"
+    }
+  },
+  "certificateHash": "sha256:9e8d7c6b5a4f3210..."
+}`}
+      title="Create Response (No Attestation)"
+    />
 
     <h2 id="cer">CER Bundle</h2>
     <p>A CER bundle representing a full attested execution record:</p>
@@ -59,7 +142,7 @@ const Examples = () => (
     />
 
     <h2 id="receipt">Signed Receipt</h2>
-    <p>The signed receipt is produced by the attestation node after it attests a CER. The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">signatureB64Url</code> field is the base64url-encoded Ed25519 signature used for transport.</p>
+    <p>The signed receipt is produced by the attestation node. The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">signatureB64Url</code> is the base64url-encoded Ed25519 signature.</p>
     <CodeBlock
       code={`{
   "receipt": {
@@ -74,7 +157,7 @@ const Examples = () => (
     />
 
     <h2 id="redacted">Redacted Reseal</h2>
-    <p>A redacted reseal is produced when sensitive fields are removed from a CER. The redacted bundle is re-signed by the attestation node, allowing safe sharing while preserving verification. The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> is recomputed over the redacted contents.</p>
+    <p>A redacted reseal has sensitive fields removed and is re-signed for safe sharing. The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> is recomputed over the redacted contents.</p>
     <CodeBlock
       code={`{
   "bundleType": "signed-redacted-reseal",
@@ -94,7 +177,7 @@ const Examples = () => (
     />
 
     <h2 id="hash-only">Hash-Only Timestamp</h2>
-    <p>A hash-only timestamp attests only the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>. The snapshot is not included. Verification will normally return <strong>PARTIAL</strong>.</p>
+    <p>Attests only the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>. Snapshot is not included. Verifies as <strong>PARTIAL</strong>.</p>
     <CodeBlock
       code={`{
   "bundleType": "hash-only-timestamp",
@@ -106,8 +189,8 @@ const Examples = () => (
       title="Hash-Only Timestamp"
     />
 
-    <h2 id="verification-report">Verification Report (VERIFIED)</h2>
-    <p>A verification report summarizes the result of validating a CER. It shows the outcome of three checks: bundle integrity, node signature, and receipt consistency.</p>
+    <h2 id="verification-report">Verification Report</h2>
+    <p>Summarizes the result of validating a CER.</p>
     <CodeBlock
       code={`{
   "outcome": "VERIFIED",
@@ -133,33 +216,8 @@ const Examples = () => (
       title="Verification Report (VERIFIED)"
     />
 
-    <h2 id="partial-report">Verification Report (PARTIAL)</h2>
-    <p>A hash-only timestamp verifies as PARTIAL because the snapshot was not attested:</p>
-    <CodeBlock
-      code={`{
-  "outcome": "PARTIAL",
-  "checks": {
-    "bundleIntegrity": {
-      "status": "pass",
-      "detail": "certificateHash is intact"
-    },
-    "nodeSignature": {
-      "status": "pass",
-      "detail": "Ed25519 signature valid against published key"
-    },
-    "receiptConsistency": {
-      "status": "limited",
-      "detail": "Snapshot was not attested — hash-only timestamp"
-    }
-  },
-  "bundleType": "hash-only-timestamp",
-  "verifiedAt": "2026-03-06T12:05:00.000Z"
-}`}
-      title="Verification Report (PARTIAL)"
-    />
-
     <h2 id="node-keys">Node Key Discovery</h2>
-    <p>Attestation nodes publish their public keys at a well-known endpoint. Verifiers fetch these keys to validate Ed25519 signatures on signed receipts.</p>
+    <p>Nodes publish their public keys at a well-known endpoint for independent signature verification.</p>
     <CodeBlock
       code={`GET node.nexart.io/.well-known/nexart-node.json
 

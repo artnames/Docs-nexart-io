@@ -26,6 +26,7 @@ import AuditExports from "./pages/docs/dashboard/AuditExports";
 import Examples from "./pages/docs/Examples";
 import FAQ from "./pages/docs/FAQ";
 import N8n from "./pages/docs/integrations/N8n";
+import IntegrationSurfaces from "./pages/docs/IntegrationSurfaces";
 
 const queryClient = new QueryClient();
 
@@ -50,6 +51,7 @@ const App = () => (
             <Route path="ui-renderer-sdk" element={<UIRendererSDK />} />
             <Route path="attestation-node" element={<AttestationNode />} />
             <Route path="verification" element={<Verification />} />
+            <Route path="integration-surfaces" element={<IntegrationSurfaces />} />
             <Route path="dashboard/projects" element={<Projects />} />
             <Route path="dashboard/apps" element={<Apps />} />
             <Route path="dashboard/auto-stamp" element={<AutoStamp />} />
