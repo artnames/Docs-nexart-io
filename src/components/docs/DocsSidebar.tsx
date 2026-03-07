@@ -31,6 +31,7 @@ const navigation: NavItem[] = [
   },
   { title: "Attestation Node", path: "/docs/attestation-node" },
   { title: "Verification", path: "/docs/verification" },
+  { title: "Integration Surfaces", path: "/docs/integration-surfaces" },
   {
     title: "Dashboard",
     children: [
