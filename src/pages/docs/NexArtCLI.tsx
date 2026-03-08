@@ -72,7 +72,7 @@ const NexArtCLI = () => (
     <h2 id="verification">Verification</h2>
     <p>Use the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verify</code> command to verify a snapshot. Verification re-runs the execution using the same inputs and confirms the output hash matches.</p>
     <CodeBlock
-      code={`npx @nexart/cli@0.3.3 verify out.snapshot.json`}
+      code={`npx @nexart/cli verify out.snapshot.json`}
       title="Verify a Snapshot"
     />
 
