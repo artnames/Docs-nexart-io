@@ -18,6 +18,7 @@ import CodeModeSDK from "./pages/docs/CodeModeSDK";
 import UIRendererSDK from "./pages/docs/UIRendererSDK";
 import AttestationNode from "./pages/docs/AttestationNode";
 import Verification from "./pages/docs/Verification";
+import TrustModel from "./pages/docs/TrustModel";
 import Projects from "./pages/docs/dashboard/Projects";
 import Apps from "./pages/docs/dashboard/Apps";
 import AutoStamp from "./pages/docs/dashboard/AutoStamp";
@@ -52,6 +53,7 @@ const App = () => (
             <Route path="ui-renderer-sdk" element={<UIRendererSDK />} />
             <Route path="attestation-node" element={<AttestationNode />} />
             <Route path="verification" element={<Verification />} />
+            <Route path="trust-model" element={<TrustModel />} />
             <Route path="integration-surfaces" element={<IntegrationSurfaces />} />
             <Route path="dashboard/projects" element={<Projects />} />
             <Route path="dashboard/apps" element={<Apps />} />

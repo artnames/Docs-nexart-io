@@ -16,6 +16,7 @@ const navigation: NavItem[] = [
     children: [
       { title: "What is a CER?", path: "/docs/concepts/cer" },
       { title: "Signed Receipts", path: "/docs/concepts/signed-receipts" },
+      { title: "Trust Model", path: "/docs/trust-model" },
       { title: "Hash-Only Timestamping", path: "/docs/concepts/hash-timestamping" },
       { title: "Verification Reports", path: "/docs/concepts/verification-reports" },
     ],
