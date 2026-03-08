@@ -61,7 +61,7 @@ const NexArtCLI = () => (
     <h2 id="running">Running a Render</h2>
     <p>Use the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">run</code> command to execute a render with a specific seed and parameters.</p>
     <CodeBlock
-      code={`npx @nexart/cli@0.3.3 run ./examples/sketch.js \\
+      code={`npx @nexart/cli run ./examples/sketch.js \\
   --seed 12345 \\
   --vars "50,50,50,0,0,0,0,0,0,0" \\
   --include-code \\
