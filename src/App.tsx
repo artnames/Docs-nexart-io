@@ -27,6 +27,7 @@ import Examples from "./pages/docs/Examples";
 import FAQ from "./pages/docs/FAQ";
 import N8n from "./pages/docs/integrations/N8n";
 import IntegrationSurfaces from "./pages/docs/IntegrationSurfaces";
+import PrivacyDataHandling from "./pages/docs/PrivacyDataHandling";
 
 const queryClient = new QueryClient();
 
