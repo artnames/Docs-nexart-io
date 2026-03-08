@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import DocsLayout from "./components/docs/DocsLayout";
 import GettingStarted from "./pages/docs/GettingStarted";
+import Quickstart from "./pages/docs/Quickstart";
 import ProtocolOverview from "./pages/docs/ProtocolOverview";
 import CER from "./pages/docs/concepts/CER";
 import SignedReceipts from "./pages/docs/concepts/SignedReceipts";
@@ -42,6 +43,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/docs" element={<DocsLayout />}>
             <Route path="getting-started" element={<GettingStarted />} />
+            <Route path="quickstart" element={<Quickstart />} />
             <Route path="protocol-overview" element={<ProtocolOverview />} />
             <Route path="concepts/cer" element={<CER />} />
             <Route path="concepts/signed-receipts" element={<SignedReceipts />} />

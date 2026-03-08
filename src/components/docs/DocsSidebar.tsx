@@ -10,6 +10,7 @@ interface NavItem {
 
 const navigation: NavItem[] = [
   { title: "Getting Started", path: "/docs/getting-started" },
+  { title: "Quickstart", path: "/docs/quickstart" },
   { title: "Protocol Overview", path: "/docs/protocol-overview" },
   {
     title: "Core Concepts",
