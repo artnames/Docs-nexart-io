@@ -58,6 +58,7 @@ const App = () => (
             <Route path="dashboard/auto-stamp" element={<AutoStamp />} />
             <Route path="dashboard/retention" element={<Retention />} />
             <Route path="dashboard/audit-exports" element={<AuditExports />} />
+            <Route path="privacy" element={<PrivacyDataHandling />} />
             <Route path="examples" element={<Examples />} />
             <Route path="integrations/n8n" element={<N8n />} />
             <Route path="faq" element={<FAQ />} />
