@@ -12,7 +12,7 @@ The NexArt CLI is a command-line tool for deterministic execution, verification,
 - Verify outputs locally
 
 ## Installation
-npx --yes @nexart/cli@0.2.3 --help
+npx @nexart/cli --help
 
 ## Environment Variables
 - NEXART_RENDERER_ENDPOINT: URL of the canonical renderer service
