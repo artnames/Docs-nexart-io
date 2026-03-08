@@ -48,7 +48,7 @@ const NexArtCLI = () => (
     <h2 id="installation">Installation</h2>
     <p>The CLI can be run directly with npx. No global install is required.</p>
     <CodeBlock
-      code={`npx --yes @nexart/cli@0.2.3 --help`}
+      code={`npx @nexart/cli --help`}
       title="Install / Help"
     />
 
