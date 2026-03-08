@@ -19,10 +19,10 @@ npx @nexart/cli --help
 - NEXART_API_KEY: API key for authenticated renders
 
 ## Running a Render
-npx @nexart/cli@0.3.3 run ./examples/sketch.js --seed 12345 --vars "50,50,50,0,0,0,0,0,0,0" --include-code --out out.png
+npx @nexart/cli run ./examples/sketch.js --seed 12345 --vars "50,50,50,0,0,0,0,0,0,0" --include-code --out out.png
 
 ## Verification
-npx @nexart/cli@0.3.3 verify out.snapshot.json
+npx @nexart/cli verify out.snapshot.json
 
 ## AI Execution Certification
 Commands: nexart ai create, nexart ai certify, nexart ai verify
@@ -61,7 +61,7 @@ const NexArtCLI = () => (
     <h2 id="running">Running a Render</h2>
     <p>Use the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">run</code> command to execute a render with a specific seed and parameters.</p>
     <CodeBlock
-      code={`npx @nexart/cli@0.3.3 run ./examples/sketch.js \\
+      code={`npx @nexart/cli run ./examples/sketch.js \\
   --seed 12345 \\
   --vars "50,50,50,0,0,0,0,0,0,0" \\
   --include-code \\
@@ -72,7 +72,7 @@ const NexArtCLI = () => (
     <h2 id="verification">Verification</h2>
     <p>Use the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verify</code> command to verify a snapshot. Verification re-runs the execution using the same inputs and confirms the output hash matches.</p>
     <CodeBlock
-      code={`npx @nexart/cli@0.3.3 verify out.snapshot.json`}
+      code={`npx @nexart/cli verify out.snapshot.json`}
       title="Verify a Snapshot"
     />
 
