@@ -19,7 +19,7 @@ npx @nexart/cli --help
 - NEXART_API_KEY: API key for authenticated renders
 
 ## Running a Render
-npx --yes @nexart/cli@0.2.3 run ./examples/sketch.js --seed 12345 --vars "50,50,50,0,0,0,0,0,0,0" --include-code --out out.png
+npx @nexart/cli@0.3.3 run ./examples/sketch.js --seed 12345 --vars "50,50,50,0,0,0,0,0,0,0" --include-code --out out.png
 
 ## Verification
 npx --yes @nexart/cli@0.2.3 verify out.snapshot.json
