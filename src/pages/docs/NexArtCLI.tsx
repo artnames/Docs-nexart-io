@@ -43,6 +43,7 @@ const NexArtCLI = () => (
       <li><strong>Deterministic rendering workflows</strong> — run canonical renders, generate execution snapshots, and verify deterministic outputs.</li>
       <li><strong>AI execution certification</strong> — create, certify, and verify Certified Execution Records (CERs) from JSON execution inputs.</li>
     </ol>
+    <p>NexArt CLI is commonly used in local development environments, CI pipelines, and automation systems where executions must be certified or verified without building custom API integrations.</p>
 
     <h2 id="installation">Installation</h2>
     <p>The CLI can be run directly with npx. No global install is required.</p>
