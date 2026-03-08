@@ -84,7 +84,11 @@ const NexArtCLI = () => (
       code={`nexart ai create\nnexart ai certify\nnexart ai verify`}
       title="AI Commands"
     />
-    <p>These commands operate on JSON execution inputs.</p>
+    <CodeBlock
+      code={`nexart ai\n\nCommands:\n  nexart ai create [file]   Create a Certified Execution Record (CER) bundle\n  nexart ai certify [file]  Certify an execution and request node attestation\n  nexart ai verify [file]   Verify a CER bundle locally`}
+      title="CLI Help"
+    />
+    <p>These commands operate on execution JSON files that describe the AI input, output, and metadata for the run.</p>
 
     <h3 id="ai-create">Create a CER Bundle</h3>
     <p>Create a Certified Execution Record locally.</p>
