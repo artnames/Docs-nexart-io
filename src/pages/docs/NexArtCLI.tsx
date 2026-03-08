@@ -12,7 +12,7 @@ The NexArt CLI is a command-line tool for deterministic execution, verification,
 - Verify outputs locally
 
 ## Installation
-npx --yes @nexart/cli@0.2.3 --help
+npx @nexart/cli --help
 
 ## Environment Variables
 - NEXART_RENDERER_ENDPOINT: URL of the canonical renderer service
@@ -43,11 +43,12 @@ const NexArtCLI = () => (
       <li><strong>Deterministic rendering workflows</strong> — run canonical renders, generate execution snapshots, and verify deterministic outputs.</li>
       <li><strong>AI execution certification</strong> — create, certify, and verify Certified Execution Records (CERs) from JSON execution inputs.</li>
     </ol>
+    <p>NexArt CLI is commonly used in local development environments, CI pipelines, and automation systems where executions must be certified or verified without building custom API integrations.</p>
 
     <h2 id="installation">Installation</h2>
     <p>The CLI can be run directly with npx. No global install is required.</p>
     <CodeBlock
-      code={`npx --yes @nexart/cli@0.2.3 --help`}
+      code={`npx @nexart/cli --help`}
       title="Install / Help"
     />
 
@@ -83,7 +84,11 @@ const NexArtCLI = () => (
       code={`nexart ai create\nnexart ai certify\nnexart ai verify`}
       title="AI Commands"
     />
-    <p>These commands operate on JSON execution inputs.</p>
+    <CodeBlock
+      code={`nexart ai\n\nCommands:\n  nexart ai create [file]   Create a Certified Execution Record (CER) bundle\n  nexart ai certify [file]  Certify an execution and request node attestation\n  nexart ai verify [file]   Verify a CER bundle locally`}
+      title="CLI Help"
+    />
+    <p>These commands operate on execution JSON files that describe the AI input, output, and metadata for the run.</p>
 
     <h3 id="ai-create">Create a CER Bundle</h3>
     <p>Create a Certified Execution Record locally.</p>
