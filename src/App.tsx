@@ -18,6 +18,7 @@ import CodeModeSDK from "./pages/docs/CodeModeSDK";
 import UIRendererSDK from "./pages/docs/UIRendererSDK";
 import AttestationNode from "./pages/docs/AttestationNode";
 import Verification from "./pages/docs/Verification";
+import TrustModel from "./pages/docs/TrustModel";
 import Projects from "./pages/docs/dashboard/Projects";
 import Apps from "./pages/docs/dashboard/Apps";
 import AutoStamp from "./pages/docs/dashboard/AutoStamp";
