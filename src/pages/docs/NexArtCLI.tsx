@@ -22,7 +22,7 @@ npx @nexart/cli --help
 npx @nexart/cli run ./examples/sketch.js --seed 12345 --vars "50,50,50,0,0,0,0,0,0,0" --include-code --out out.png
 
 ## Verification
-npx @nexart/cli@0.3.3 verify out.snapshot.json
+npx @nexart/cli verify out.snapshot.json
 
 ## AI Execution Certification
 Commands: nexart ai create, nexart ai certify, nexart ai verify
