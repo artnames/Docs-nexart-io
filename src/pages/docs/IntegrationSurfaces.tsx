@@ -22,7 +22,7 @@ Calls POST /v1/cer/ai/certify and returns verificationUrl.
 
 ## NexArt CLI
 Command-line tool for deterministic rendering and verification.
-npx --yes @nexart/cli@0.2.3
+npx @nexart/cli@0.3.3
 Currently supports CodeMode (deterministic generative rendering).
 
 ## SDKs
