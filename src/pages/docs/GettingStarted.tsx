@@ -20,12 +20,15 @@ POST /v1/cer/ai/certify creates a CER, attests it, and returns a verificationUrl
 1. Execution — a system or AI process runs
 2. CER creation — a CER bundle is produced with execution metadata and a certificateHash
 3. Attestation — a node signs the CER using Ed25519
-4. Receipt — the node returns a signed receipt
+4. Receipt — the node returns a signed receipt stored at bundle.meta.attestation
 5. Verification — anyone can verify the bundle and receipt independently
 
 ## API endpoints
 POST /v1/cer/ai/certify — create and certify in one request (recommended)
 POST /v1/cer/ai/create — create a CER bundle without attestation
+
+## CER bundle type
+bundleType: "cer.ai.execution.v1"
 
 ## Verification
 verify.nexart.io is the public verifier.
@@ -35,7 +38,7 @@ The verifier uses a redacted/public-safe representation. Raw inputs/outputs are 
 ## Key surfaces
 - verify.nexart.io — public verification portal
 - node.nexart.io — attestation node identity
-- node.nexart.io/.well-known/nexart-node.json — published signing keys`;
+- node.nexart.io/.well-known/nexart-node.json — published signing keys (kid, activeKid)`;
 
 const GettingStarted = () => {
   return (
@@ -96,13 +99,14 @@ const GettingStarted = () => {
     "certificateHash": "sha256:9e8d7c6b5a4f3210...",
     "timestamp": "2026-03-06T12:00:01.000Z",
     "nodeId": "nexart-node-primary",
-    "attestorKeyId": "key_01HXYZ..."
+    "kid": "key_01HXYZ..."
   },
   "signatureB64Url": "MEUCIQD3a8b1c4d5e6f..."
 }`}
         title="Certify Response"
       />
       <p>Share the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verificationUrl</code> with anyone. They can verify the record at <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a> without needing access to your system.</p>
+      <p className="text-sm text-muted-foreground">The API response includes receipt and signature for convenience. In the CER bundle, attestation data lives at <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">meta.attestation</code>.</p>
 
       <h2 id="create-vs-certify">create vs certify</h2>
       <p>NexArt exposes two endpoints for creating records:</p>
@@ -115,9 +119,9 @@ const GettingStarted = () => {
       <h2 id="flow">How It Works</h2>
       <ol>
         <li><strong>Execution.</strong> Your system or AI process runs and produces output.</li>
-        <li><strong>CER creation.</strong> A CER bundle is produced with execution metadata and a <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> (SHA-256).</li>
+        <li><strong>CER creation.</strong> A CER bundle is produced with <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">bundleType: "cer.ai.execution.v1"</code>, execution metadata, and a <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> (SHA-256).</li>
         <li><strong>Attestation.</strong> The node signs the CER using Ed25519.</li>
-        <li><strong>Receipt.</strong> You receive a signed receipt binding the record to the node's identity and a timestamp.</li>
+        <li><strong>Receipt.</strong> You receive a signed receipt binding the record to the node's identity and a timestamp. This is stored at <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation</code> in the bundle.</li>
         <li><strong>Verification.</strong> Anyone can verify the bundle and receipt independently, locally or through verify.nexart.io.</li>
       </ol>
 

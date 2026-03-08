@@ -8,7 +8,7 @@ POST /v1/cer/ai/certify with model, input, output, metadata.
 Returns verificationUrl, certificateHash, receipt, signatureB64Url.
 
 ## Example B: Certify response
-{ verificationUrl, certificateHash, receipt: { certificateHash, timestamp, nodeId, attestorKeyId }, signatureB64Url }
+{ verificationUrl, certificateHash, receipt: { certificateHash, timestamp, nodeId, kid }, signatureB64Url }
 
 ## Example C: Verification URLs
 https://verify.nexart.io/e/exec_abc123
@@ -17,22 +17,24 @@ https://verify.nexart.io/c/sha256%3A...
 ## Example D: n8n flow
 AI Step → NexArt Certify AI Execution → verificationUrl + receipt
 
-## CER bundle (ai-execution)
-{ bundleType: "ai-execution", version: "1.0", createdAt: ISO 8601,
-  snapshot: { model, inputHash, outputHash, metadata }, certificateHash }
+## CER bundle (cer.ai.execution.v1)
+{ bundleType: "cer.ai.execution.v1", version: "1.0", createdAt: ISO 8601,
+  snapshot: { model, inputHash, outputHash, metadata }, certificateHash,
+  meta: { attestation: { receipt, signature, kid } } }
 
 ## Create-only response (no attestation)
-Returns CER bundle with certificateHash but no receipt or verificationUrl.
+Returns CER bundle with certificateHash but no meta.attestation.
 
 ## Signed receipt
-{ receipt: { certificateHash, timestamp, nodeId, attestorKeyId }, signatureB64Url }
+{ receipt: { certificateHash, timestamp, nodeId, kid }, signature, kid }
 
 ## Verification report
 { outcome: "VERIFIED" | "PARTIAL" | "INVALID" | "UNAVAILABLE",
   checks: { bundleIntegrity, nodeSignature, receiptConsistency } }
 
 ## Node key discovery
-GET node.nexart.io/.well-known/nexart-node.json`;
+GET node.nexart.io/.well-known/nexart-node.json
+Fields: nodeId, activeKid, keys[] (kid, algorithm, publicKey)`;
 
 const Examples = () => (
   <>
@@ -70,12 +72,13 @@ Authorization: Bearer NEXART_API_KEY
     "certificateHash": "sha256:9e8d7c6b5a4f3210...",
     "timestamp": "2026-03-06T12:00:01.000Z",
     "nodeId": "nexart-node-primary",
-    "attestorKeyId": "key_01HXYZ..."
+    "kid": "key_01HXYZ..."
   },
   "signatureB64Url": "MEUCIQD3a8b1c4d5e6f..."
 }`}
       title="Certify Response"
     />
+    <p className="text-sm text-muted-foreground">The API response includes receipt and signature at the top level for convenience. In the CER bundle, this data lives at <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">meta.attestation</code>.</p>
 
     <h2 id="verification-urls">Example C: Verification URLs</h2>
     <p>Records can be verified publicly using either format:</p>
@@ -99,11 +102,44 @@ https://verify.nexart.io/c/sha256%3A9e8d7c6b5a4f3210...`}
       <div className="px-4 py-2 rounded-md border border-border bg-card text-foreground">verificationUrl + receipt</div>
     </div>
 
-    <h2 id="create-only">Create-Only Response (No Attestation)</h2>
-    <p>If you use <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">POST /v1/cer/ai/create</code>, you get the CER bundle but no receipt or verification URL.</p>
+    <h2 id="cer-bundle">CER Bundle (Certified)</h2>
+    <p>A fully certified CER bundle with attestation data:</p>
     <CodeBlock
       code={`{
-  "bundleType": "ai-execution",
+  "bundleType": "cer.ai.execution.v1",
+  "version": "1.0",
+  "createdAt": "2026-03-06T12:00:00.000Z",
+  "snapshot": {
+    "model": "gpt-4",
+    "inputHash": "sha256:a1b2c3d4e5f67890...",
+    "outputHash": "sha256:f6e5d4c3b2a10987...",
+    "metadata": {
+      "appId": "customer-chatbot",
+      "projectId": "proj_abc123"
+    }
+  },
+  "certificateHash": "sha256:9e8d7c6b5a4f3210...",
+  "meta": {
+    "attestation": {
+      "receipt": {
+        "certificateHash": "sha256:9e8d7c6b5a4f3210...",
+        "timestamp": "2026-03-06T12:00:01.000Z",
+        "nodeId": "nexart-node-primary",
+        "kid": "key_01HXYZ..."
+      },
+      "signature": "<raw Ed25519 signature bytes>",
+      "kid": "key_01HXYZ..."
+    }
+  }
+}`}
+      title="CER Bundle (Certified)"
+    />
+
+    <h2 id="create-only">Create-Only Response (No Attestation)</h2>
+    <p>If you use <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">POST /v1/cer/ai/create</code>, you get the CER bundle but no attestation, receipt, or verification URL.</p>
+    <CodeBlock
+      code={`{
+  "bundleType": "cer.ai.execution.v1",
   "version": "1.0",
   "createdAt": "2026-03-06T12:00:00.000Z",
   "snapshot": {
@@ -120,40 +156,21 @@ https://verify.nexart.io/c/sha256%3A9e8d7c6b5a4f3210...`}
       title="Create Response (No Attestation)"
     />
 
-    <h2 id="cer">CER Bundle</h2>
-    <p>A CER bundle representing a full attested execution record:</p>
-    <CodeBlock
-      code={`{
-  "bundleType": "ai-execution",
-  "version": "1.0",
-  "createdAt": "2026-03-06T12:00:00.000Z",
-  "snapshot": {
-    "model": "gpt-4",
-    "inputHash": "sha256:a1b2c3d4e5f67890...",
-    "outputHash": "sha256:f6e5d4c3b2a10987...",
-    "metadata": {
-      "appId": "customer-chatbot",
-      "projectId": "proj_abc123"
-    }
-  },
-  "certificateHash": "sha256:9e8d7c6b5a4f3210..."
-}`}
-      title="CER Bundle"
-    />
-
     <h2 id="receipt">Signed Receipt</h2>
-    <p>The signed receipt is produced by the attestation node. The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">signatureB64Url</code> is the base64url-encoded Ed25519 signature.</p>
+    <p>The signed receipt is produced by the attestation node and stored at <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation</code> in the CER bundle.</p>
     <CodeBlock
-      code={`{
+      code={`// meta.attestation:
+{
   "receipt": {
     "certificateHash": "sha256:9e8d7c6b5a4f3210...",
     "timestamp": "2026-03-06T12:00:01.000Z",
     "nodeId": "nexart-node-primary",
-    "attestorKeyId": "key_01HXYZ..."
+    "kid": "key_01HXYZ..."
   },
-  "signatureB64Url": "MEUCIQD3a8b1c4d5e6f..."
+  "signature": "<raw Ed25519 signature bytes>",
+  "kid": "key_01HXYZ..."
 }`}
-      title="Signed Receipt"
+      title="Signed Receipt (meta.attestation)"
     />
 
     <h2 id="redacted">Redacted Reseal</h2>
@@ -203,14 +220,14 @@ https://verify.nexart.io/c/sha256%3A9e8d7c6b5a4f3210...`}
       "status": "pass",
       "detail": "Ed25519 signature valid against published key",
       "nodeId": "nexart-node-primary",
-      "attestorKeyId": "key_01HXYZ..."
+      "kid": "key_01HXYZ..."
     },
     "receiptConsistency": {
       "status": "pass",
       "detail": "Receipt references correct certificateHash"
     }
   },
-  "bundleType": "ai-execution",
+  "bundleType": "cer.ai.execution.v1",
   "verifiedAt": "2026-03-06T12:05:00.000Z"
 }`}
       title="Verification Report (VERIFIED)"

@@ -8,14 +8,15 @@ NexArt provides an n8n community node that certifies AI execution results inside
 Flow:
 1. An AI step produces output (text, image, structured data).
 2. The NexArt Certify AI Execution node sends the execution data to POST /v1/cer/ai/certify.
-3. NexArt creates a Certified Execution Record (CER), signs it via the attestation node, and returns a verificationUrl.
+3. NexArt creates a CER (bundleType: cer.ai.execution.v1), signs it via the attestation node, and returns a verificationUrl.
 
 The verificationUrl can be stored, shared, or passed to downstream workflow steps.
 
 Endpoint: POST /v1/cer/ai/certify
 Authentication: API key via NEXART_API_KEY.
 
-Response includes: verificationUrl, certificateHash, receipt, signatureB64Url.
+Response includes: verificationUrl, certificateHash, receipt (with kid), signatureB64Url.
+Attestation data in the CER bundle lives at meta.attestation.
 `;
 
 const N8n = () => {
@@ -55,7 +56,7 @@ const N8n = () => {
 
       <ol>
         <li>An AI step in your workflow produces output (text, image, or structured data).</li>
-        <li>The NexArt node sends the execution data to the NexArt API (<code>POST /v1/cer/ai/certify</code>). NexArt creates a Certified Execution Record (CER), signs it using the attestation node, and returns a <code>verificationUrl</code> that can be opened in the public verification portal.</li>
+        <li>The NexArt node sends the execution data to the NexArt API (<code>POST /v1/cer/ai/certify</code>). NexArt creates a Certified Execution Record (<code>bundleType: "cer.ai.execution.v1"</code>), signs it using the attestation node, and returns a <code>verificationUrl</code> that can be opened in the public verification portal.</li>
         <li>The <code>verificationUrl</code> can be stored, shared, or passed to downstream steps.</li>
       </ol>
 
@@ -75,12 +76,20 @@ const N8n = () => {
       <CodeBlock language="json" code={`{
   "verificationUrl": "https://verify.nexart.io/e/exec_abc123",
   "certificateHash": "sha256:7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069",
-  "receipt": { "..." },
+  "receipt": {
+    "certificateHash": "sha256:7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069",
+    "timestamp": "2026-03-06T12:00:01.000Z",
+    "nodeId": "nexart-node-primary",
+    "kid": "key_01HXYZ..."
+  },
   "signatureB64Url": "MEUCIQD..."
 }`} />
 
       <p>
         The <code>verificationUrl</code> can also use the certificate hash format, for example: <code>https://verify.nexart.io/c/sha256%3A7f83...</code>
+      </p>
+      <p className="text-sm text-muted-foreground">
+        In the CER bundle, attestation data is stored at <code>meta.attestation</code>. The API response duplicates receipt and signature at the top level for convenience.
       </p>
 
       <h2>Use Cases</h2>

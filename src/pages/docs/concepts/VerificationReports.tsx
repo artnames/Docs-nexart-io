@@ -6,8 +6,8 @@ A verification report is the result of validating a CER bundle and its attestati
 
 ## Checks
 1. Bundle Integrity — computed certificateHash matches the bundle contents
-2. Node Signature — receipt signature is valid against the node's published Ed25519 key
-3. Receipt Consistency — receipt references the same certificateHash as the CER bundle
+2. Node Signature — receipt signature is valid against the node's published Ed25519 key (matched by kid)
+3. Receipt Consistency — receipt (at meta.attestation.receipt) references the same certificateHash as the CER bundle
 
 ## Outcomes
 VERIFIED — all checks pass and the record has a valid signed receipt
@@ -34,8 +34,8 @@ const VerificationReports = () => (
     <h2 id="checks">Verification Checks</h2>
     <ol>
       <li><strong>Bundle Integrity.</strong> Confirm that the CER bundle hashes are internally consistent and that the computed <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> matches the bundle contents.</li>
-      <li><strong>Node Signature.</strong> Verify that the receipt signature is valid using the attestation node's published Ed25519 public key.</li>
-      <li><strong>Receipt Consistency.</strong> Confirm that the receipt references the same <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> as the CER bundle.</li>
+      <li><strong>Node Signature.</strong> Verify that the receipt signature is valid using the attestation node's published Ed25519 public key, matched by the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">kid</code> in the receipt.</li>
+      <li><strong>Receipt Consistency.</strong> Confirm that the receipt at <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation.receipt</code> references the same <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> as the CER bundle.</li>
     </ol>
 
     <h2 id="outcomes">Outcomes</h2>
@@ -59,14 +59,14 @@ const VerificationReports = () => (
       "status": "pass",
       "detail": "Ed25519 signature valid against published key",
       "nodeId": "nexart-node-primary",
-      "attestorKeyId": "key_01HXYZ..."
+      "kid": "key_01HXYZ..."
     },
     "receiptConsistency": {
       "status": "pass",
       "detail": "Receipt references correct certificateHash"
     }
   },
-  "bundleType": "signed-receipt",
+  "bundleType": "cer.ai.execution.v1",
   "verifiedAt": "2026-03-06T12:05:00.000Z"
 }`}
       title="Verification Report (VERIFIED)"

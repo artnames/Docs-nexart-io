@@ -19,7 +19,7 @@ API key via NEXART_API_KEY header.
 
 ## CER bundle shape
 {
-  bundleType: "ai-execution",
+  bundleType: "cer.ai.execution.v1",
   version: "1.0",
   createdAt: ISO 8601,
   snapshot: {
@@ -28,16 +28,26 @@ API key via NEXART_API_KEY header.
     outputHash: "sha256:...",
     metadata: { appId, projectId }
   },
-  certificateHash: "sha256:..."
+  certificateHash: "sha256:...",
+  meta: {
+    attestation: {
+      receipt: { certificateHash, timestamp, nodeId, kid },
+      signature: <raw Ed25519 bytes>,
+      kid: "key_01HXYZ..."
+    }
+  }
 }
 
 ## Certify response
 {
   verificationUrl: "https://verify.nexart.io/e/exec_abc123",
   certificateHash: "sha256:...",
-  receipt: { certificateHash, timestamp, nodeId, attestorKeyId },
+  receipt: { certificateHash, timestamp, nodeId, kid },
   signatureB64Url: "MEUCIQD..."
 }
+
+The canonical location for attestation data is bundle.meta.attestation.
+The API response duplicates receipt and signature fields for convenience.
 
 ## Verification
 Locally using bundle + node keys from node.nexart.io/.well-known/nexart-node.json
@@ -99,12 +109,13 @@ Authorization: Bearer NEXART_API_KEY
     "certificateHash": "sha256:9e8d7c6b5a4f3210...",
     "timestamp": "2026-03-06T12:00:01.000Z",
     "nodeId": "nexart-node-primary",
-    "attestorKeyId": "key_01HXYZ..."
+    "kid": "key_01HXYZ..."
   },
   "signatureB64Url": "MEUCIQD3a8b1c4d5e6f..."
 }`}
       title="Certify Response"
     />
+    <p className="text-sm text-muted-foreground">The API response includes receipt and signature fields for convenience. The canonical location for attestation data within the CER bundle is <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">bundle.meta.attestation</code>.</p>
 
     <h3 id="create">POST /v1/cer/ai/create</h3>
     <p>Creates a CER bundle without attestation. The bundle is returned with a certificateHash, but no receipt or verification URL is generated.</p>
@@ -133,7 +144,7 @@ Authorization: Bearer NEXART_API_KEY
 
     <CodeBlock
       code={`{
-  "bundleType": "ai-execution",
+  "bundleType": "cer.ai.execution.v1",
   "version": "1.0",
   "createdAt": "2026-03-06T12:00:00.000Z",
   "snapshot": {
@@ -149,17 +160,17 @@ Authorization: Bearer NEXART_API_KEY
 }`}
       title="Create Response"
     />
-    <p>Note: the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">create</code> response returns the CER bundle directly. There is no receipt, signature, or verification URL. To get those, use <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">/certify</code> instead.</p>
+    <p>Note: the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">create</code> response returns the CER bundle directly. There is no receipt, signature, or verification URL. The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation</code> field is absent. To get attestation, use <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">/certify</code> instead.</p>
 
     <h2 id="authentication">Authentication</h2>
     <p>Both endpoints require an API key passed as a Bearer token:</p>
     <CodeBlock code="Authorization: Bearer NEXART_API_KEY" language="text" />
 
     <h2 id="cer-shape">CER Bundle Shape</h2>
-    <p>The CER bundle produced by either endpoint follows this structure:</p>
+    <p>A fully certified CER bundle follows this structure:</p>
     <CodeBlock
       code={`{
-  "bundleType": "ai-execution",
+  "bundleType": "cer.ai.execution.v1",
   "version": "1.0",
   "createdAt": "2026-03-06T12:00:00.000Z",
   "snapshot": {
@@ -171,11 +182,23 @@ Authorization: Bearer NEXART_API_KEY
       "projectId": "proj_abc123"
     }
   },
-  "certificateHash": "sha256:9e8d7c6b5a4f3210..."
+  "certificateHash": "sha256:9e8d7c6b5a4f3210...",
+  "meta": {
+    "attestation": {
+      "receipt": {
+        "certificateHash": "sha256:9e8d7c6b5a4f3210...",
+        "timestamp": "2026-03-06T12:00:01.000Z",
+        "nodeId": "nexart-node-primary",
+        "kid": "key_01HXYZ..."
+      },
+      "signature": "<raw Ed25519 signature bytes>",
+      "kid": "key_01HXYZ..."
+    }
+  }
 }`}
-      title="CER Bundle"
+      title="CER Bundle (Certified)"
     />
-    <p>The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">snapshot</code> contains execution metadata. Input and output content is hashed (SHA-256) rather than stored directly.</p>
+    <p>The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">snapshot</code> contains execution metadata. Input and output content is hashed (SHA-256) rather than stored directly. Attestation data lives under <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation</code>.</p>
 
     <h2 id="key-terms">Key Terms</h2>
     <ul>
