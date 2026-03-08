@@ -15,6 +15,8 @@ The verificationUrl can be stored, shared, or passed to downstream workflow step
 Endpoint: POST /v1/cer/ai/certify
 Authentication: API key via NEXART_API_KEY.
 
+Quick demo: npx n8n → Manual Trigger → HTTP Request (POST /v1/cer/ai/certify) → verify at verify.nexart.io.
+
 Response includes: verificationUrl, certificateHash, receipt (with kid), signatureB64Url.
 Attestation data in the CER bundle lives at meta.attestation.
 `;
@@ -69,6 +71,102 @@ const N8n = () => {
       <p>The node requires an API key for authentication. Set this in the node credentials:</p>
 
       <CodeBlock language="text" code="NEXART_API_KEY=your-api-key" />
+
+      <h2>Quick Demo (2 minutes)</h2>
+      <p>
+        This example shows how to generate a Certified Execution Record (CER) from an n8n workflow
+        using the NexArt certification API.
+      </p>
+
+      <h3>1. Start n8n</h3>
+      <CodeBlock language="bash" code="npx n8n" />
+      <p>Open the editor:</p>
+      <CodeBlock language="text" code="http://localhost:5678" />
+
+      <h3>2. Create a workflow</h3>
+      <p>Add the following nodes:</p>
+      <div className="not-prose my-6 flex flex-col items-center gap-2 text-sm font-mono">
+        <div className="px-4 py-2 rounded-md border border-border bg-card text-foreground">Manual Trigger</div>
+        <div className="text-muted-foreground">↓</div>
+        <div className="px-4 py-2 rounded-md border border-primary/40 bg-primary/10 text-primary font-medium">HTTP Request</div>
+      </div>
+      <p>Configure the HTTP Request node:</p>
+      <div className="not-prose my-4 overflow-x-auto">
+        <table className="w-full text-sm border border-border rounded-md">
+          <tbody>
+            <tr className="border-b border-border">
+              <td className="px-4 py-2 font-medium text-foreground bg-muted/30">Method</td>
+              <td className="px-4 py-2 font-mono text-foreground/90">POST</td>
+            </tr>
+            <tr className="border-b border-border">
+              <td className="px-4 py-2 font-medium text-foreground bg-muted/30">URL</td>
+              <td className="px-4 py-2 font-mono text-foreground/90">https://node.nexart.io/v1/cer/ai/certify</td>
+            </tr>
+            <tr className="border-b border-border">
+              <td className="px-4 py-2 font-medium text-foreground bg-muted/30">Authentication</td>
+              <td className="px-4 py-2 font-mono text-foreground/90">Bearer Auth</td>
+            </tr>
+            <tr className="border-b border-border">
+              <td className="px-4 py-2 font-medium text-foreground bg-muted/30">Header</td>
+              <td className="px-4 py-2 font-mono text-foreground/90">Content-Type: application/json</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Set the request body:</p>
+      <CodeBlock language="json" code={`{
+  "executionId": "n8n-demo-001",
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "input": {
+    "messages": [
+      {
+        "role": "user",
+        "content": "Should this automated report be approved?"
+      }
+    ]
+  },
+  "output": {
+    "decision": "approve",
+    "reason": "policy_passed"
+  },
+  "metadata": {
+    "projectId": "demo",
+    "appId": "n8n-demo"
+  }
+}`} title="Request Body" />
+
+      <h3>3. Execute the workflow</h3>
+      <p>Run the node. The NexArt API will return a Certified Execution Record and a verification link.</p>
+      <p>Example response:</p>
+      <CodeBlock language="json" code={`{
+  "verificationUrl": "https://verify.nexart.io/e/n8n-demo-001",
+  "certificateHash": "sha256:...",
+  "receipt": { ... },
+  "signatureB64Url": "..."
+}`} title="Certify Response" />
+      <p className="text-sm text-muted-foreground">
+        The API response includes receipt and signature at the top level for convenience. In the CER bundle, attestation data lives at <code>meta.attestation</code>.
+      </p>
+
+      <h3>4. Verify the execution record</h3>
+      <p>Open the returned verification link:</p>
+      <CodeBlock language="text" code="https://verify.nexart.io/e/n8n-demo-001" />
+      <p>The verification portal confirms:</p>
+      <CodeBlock language="text" code={`Bundle Integrity:      PASS
+Node Signature:        PASS
+Receipt Consistency:   PASS`} title="Verification Result" />
+
+      <h2>Minimal Workflow Structure</h2>
+      <div className="not-prose my-6 flex flex-col items-center gap-2 text-sm font-mono">
+        <div className="px-4 py-2 rounded-md border border-border bg-card text-foreground">Manual Trigger</div>
+        <div className="text-muted-foreground">↓</div>
+        <div className="px-4 py-2 rounded-md border border-primary/40 bg-primary/10 text-primary font-medium">HTTP Request (POST /v1/cer/ai/certify)</div>
+      </div>
+      <p>
+        This minimal workflow demonstrates how an automation pipeline can certify AI execution results
+        and return a publicly verifiable execution record.
+      </p>
 
       <h2>Example Output</h2>
       <p>After certification, the node returns a response containing the verification link, certificate hash, receipt, and signature:</p>
