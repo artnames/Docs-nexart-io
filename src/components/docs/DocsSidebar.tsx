@@ -48,6 +48,7 @@ const navigation: NavItem[] = [
       { title: "n8n", path: "/docs/integrations/n8n" },
     ],
   },
+  { title: "Privacy & Data Handling", path: "/docs/privacy" },
   { title: "Examples", path: "/docs/examples" },
   { title: "FAQ", path: "/docs/faq" },
 ];
