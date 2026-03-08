@@ -1,11 +1,12 @@
 import PageHeader from "@/components/docs/PageHeader";
 import CodeBlock from "@/components/docs/CodeBlock";
+import { Link } from "react-router-dom";
 
 const llmBlock = `# NexArt CLI
 
-The NexArt CLI is a command-line tool for deterministic execution and verification.
+The NexArt CLI is a command-line tool for deterministic execution, verification, and AI execution certification.
 
-## Purpose
+## Deterministic Rendering
 - Run deterministic renders using canonical renderer rules
 - Generate execution snapshots
 - Verify outputs locally
@@ -18,35 +19,30 @@ npx --yes @nexart/cli@0.2.3 --help
 - NEXART_API_KEY: API key for authenticated renders
 
 ## Running a Render
-npx --yes @nexart/cli@0.2.3 run ./examples/sketch.js \\
-  --seed 12345 \\
-  --vars "50,50,50,0,0,0,0,0,0,0" \\
-  --include-code \\
-  --out out.png
+npx --yes @nexart/cli@0.2.3 run ./examples/sketch.js --seed 12345 --vars "50,50,50,0,0,0,0,0,0,0" --include-code --out out.png
 
 ## Verification
 npx --yes @nexart/cli@0.2.3 verify out.snapshot.json
 
-Verification re-runs the execution using the same inputs and confirms the output hash matches.`;
+## AI Execution Certification
+Commands: nexart ai create, nexart ai certify, nexart ai verify
+These commands create, certify, and verify Certified Execution Records (CERs) from JSON execution inputs.`;
 
 const NexArtCLI = () => (
   <>
     <PageHeader
       title="NexArt CLI"
-      summary="Command-line interface for deterministic rendering and verification workflows."
+      summary="Command-line interface for deterministic rendering, verification, and AI execution certification."
       llmBlock={llmBlock}
     />
 
     <h2 id="overview">Overview</h2>
-    <p>The NexArt CLI is a command-line interface for deterministic rendering and verification workflows.</p>
-    <p>It allows developers to run canonical renders, generate execution snapshots, and verify deterministic outputs without building custom tooling.</p>
-    <p>The CLI is typically used for:</p>
-    <ul>
-      <li>Deterministic generative rendering</li>
-      <li>Snapshot generation</li>
-      <li>Local verification</li>
-      <li>Reproducible builds</li>
-    </ul>
+    <p>The NexArt CLI is a command-line interface for deterministic rendering, verification, and AI execution certification.</p>
+    <p>It supports two primary capabilities:</p>
+    <ol>
+      <li><strong>Deterministic rendering workflows</strong> — run canonical renders, generate execution snapshots, and verify deterministic outputs.</li>
+      <li><strong>AI execution certification</strong> — create, certify, and verify Certified Execution Records (CERs) from JSON execution inputs.</li>
+    </ol>
 
     <h2 id="installation">Installation</h2>
     <p>The CLI can be run directly with npx. No global install is required.</p>
@@ -78,6 +74,79 @@ const NexArtCLI = () => (
       code={`npx --yes @nexart/cli@0.2.3 verify out.snapshot.json`}
       title="Verify a Snapshot"
     />
+
+    <h2 id="ai-certification">AI Execution Certification</h2>
+    <p>The NexArt CLI also supports creating and certifying AI execution records.</p>
+    <p>These commands generate Certified Execution Records (CERs) that can be verified publicly or offline.</p>
+    <p>The AI command group:</p>
+    <CodeBlock
+      code={`nexart ai create\nnexart ai certify\nnexart ai verify`}
+      title="AI Commands"
+    />
+    <p>These commands operate on JSON execution inputs.</p>
+
+    <h3 id="ai-create">Create a CER Bundle</h3>
+    <p>Create a Certified Execution Record locally.</p>
+    <CodeBlock code={`npx @nexart/cli ai create execution.json`} title="Create a CER" />
+    <p>Example execution input:</p>
+    <CodeBlock
+      language="json"
+      title="execution.json"
+      code={`{
+  "executionId": "demo-001",
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "input": {
+    "messages": [
+      {
+        "role": "user",
+        "content": "Should this automated report be approved?"
+      }
+    ]
+  },
+  "output": {
+    "decision": "approve",
+    "reason": "policy_passed"
+  }
+}`}
+    />
+    <p>Save the generated CER bundle:</p>
+    <CodeBlock code={`npx @nexart/cli ai create execution.json --out cer.json`} title="Save CER Bundle" />
+    <p>This command:</p>
+    <ul>
+      <li>Builds the canonical CER bundle</li>
+      <li>Computes the certificate hash</li>
+      <li>Prepares the record for certification</li>
+    </ul>
+
+    <h3 id="ai-certify">Certify an Execution</h3>
+    <p>Request certification and node attestation.</p>
+    <CodeBlock code={`npx @nexart/cli ai certify execution.json`} title="Certify" />
+    <p>Example output:</p>
+    <CodeBlock
+      code={`CER certified\ncertificateHash: sha256:...\nverificationUrl: https://verify.nexart.io/e/demo-001`}
+      title="Certify Result"
+    />
+    <p>This command sends the execution to the NexArt node for certification.</p>
+
+    <h3 id="ai-verify">Verify a CER Bundle</h3>
+    <p>Verify a Certified Execution Record locally.</p>
+    <CodeBlock code={`npx @nexart/cli ai verify cer.json`} title="Verify CER" />
+    <p>Example result:</p>
+    <CodeBlock
+      code={`Verification result: PASS\nbundleIntegrity: PASS\nnodeAttestation: PRESENT`}
+      title="Verification Result"
+    />
+    <p>Local verification confirms that the bundle contents match the certificate hash.</p>
+
+    <h2 id="related">Related Guides</h2>
+    <ul>
+      <li><Link to="/docs/quickstart" className="text-primary hover:underline">Quickstart</Link></li>
+      <li><Link to="/docs/integrations/n8n" className="text-primary hover:underline">n8n Integration</Link></li>
+      <li><Link to="/docs/verification" className="text-primary hover:underline">Verification</Link></li>
+      <li><Link to="/docs/concepts/cer" className="text-primary hover:underline">CER Anatomy</Link></li>
+      <li><Link to="/docs/concepts/signed-receipts" className="text-primary hover:underline">Signed Receipts</Link></li>
+    </ul>
   </>
 );
 
