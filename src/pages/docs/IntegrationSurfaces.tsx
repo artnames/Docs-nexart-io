@@ -22,7 +22,7 @@ Calls POST /v1/cer/ai/certify and returns verificationUrl.
 
 ## NexArt CLI
 Command-line tool for deterministic rendering and verification.
-npx --yes @nexart/cli@0.2.3
+npx @nexart/cli@0.3.3
 Currently supports CodeMode (deterministic generative rendering).
 
 ## SDKs
@@ -74,7 +74,7 @@ const IntegrationSurfaces = () => (
     <h2 id="cli">NexArt CLI</h2>
     <p>The command-line interface for deterministic rendering and verification. Currently supports CodeMode (deterministic generative rendering) with expanding AI CLI support planned.</p>
     <p>Install and run with:</p>
-    <code className="block bg-muted px-3 py-2 rounded text-sm font-mono my-2">npx --yes @nexart/cli@0.2.3 --help</code>
+    <code className="block bg-muted px-3 py-2 rounded text-sm font-mono my-2">npx @nexart/cli@0.3.3 --help</code>
     <p><Link to="/docs/cli" className="text-primary hover:underline">See the CLI docs</Link></p>
 
     <h2 id="sdks">SDKs</h2>
