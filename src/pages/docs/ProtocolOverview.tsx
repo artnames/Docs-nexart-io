@@ -6,14 +6,14 @@ NexArt is a protocol for producing verifiable execution records. It separates ex
 
 ## Flow
 1. Execution: an AI or deterministic system performs an operation.
-2. CER Creation: a Certified Execution Record bundle is created with execution metadata and hashes.
+2. CER Creation: a Certified Execution Record bundle is created (bundleType: cer.ai.execution.v1) with execution metadata and hashes.
 3. certificateHash: a SHA-256 hash of the CER bundle is computed. This is the record's fingerprint.
 4. Attestation: the CER or its certificateHash is sent to an attestation node. The node signs it using Ed25519.
-5. Signed Receipt: the node returns a signed receipt containing the certificateHash, timestamp, nodeId, and attestorKeyId.
+5. Signed Receipt: the node returns a signed receipt stored at meta.attestation containing certificateHash, timestamp, nodeId, and kid.
 6. Verification: anyone can verify the record by checking bundle integrity, node signature, and receipt consistency.
 
 ## Record types
-- signed-receipt: full attestation of a CER bundle.
+- cer.ai.execution.v1: AI execution record. Fully verifiable when attested.
 - signed-redacted-reseal: redacted CER re-signed for safe sharing.
 - hash-only-timestamp: attestation of only the certificateHash. Typically verifies as PARTIAL.
 - legacy: older records that may lack full attestation data.
@@ -24,10 +24,10 @@ VERIFIED | PARTIAL | INVALID | UNAVAILABLE
 ## Public surfaces
 - verify.nexart.io: public verification portal.
 - node.nexart.io: attestation node identity.
-- node.nexart.io/.well-known/nexart-node.json: published node signing keys.
+- node.nexart.io/.well-known/nexart-node.json: published node signing keys (kid, activeKid).
 
 ## Key discovery
-Verifiers fetch node keys from node.nexart.io/.well-known/nexart-node.json and match the attestorKeyId from the receipt to select the correct public key.`;
+Verifiers fetch node keys from node.nexart.io/.well-known/nexart-node.json and match the kid from the receipt to select the correct public key.`;
 
 const ProtocolOverview = () => (
   <>
@@ -73,7 +73,7 @@ const ProtocolOverview = () => (
     <p>An AI or deterministic system performs an operation. The system records inputs, outputs, and relevant metadata.</p>
 
     <h3>CER Creation</h3>
-    <p>A Certified Execution Record (CER) bundle is created. The bundle contains execution metadata and hashes of inputs and outputs. It follows a deterministic structure so that the same data always produces the same hash.</p>
+    <p>A Certified Execution Record (CER) bundle is created with <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">bundleType: "cer.ai.execution.v1"</code>. The bundle contains execution metadata and hashes of inputs and outputs. It follows a deterministic structure so that the same data always produces the same hash.</p>
 
     <h3>certificateHash</h3>
     <p>A SHA-256 hash of the CER bundle is computed. This becomes the record's fingerprint. Any modification to the bundle produces a different hash, making tampering evident.</p>
@@ -82,7 +82,7 @@ const ProtocolOverview = () => (
     <p>The CER (or its certificateHash alone) is sent to an attestation node. The node timestamps the record and signs it using Ed25519. This creates a binding between the node's identity, the timestamp, and the record.</p>
 
     <h3>Signed Receipt</h3>
-    <p>The node returns a signed receipt containing the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>, timestamp, <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">nodeId</code>, and <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">attestorKeyId</code>. The signature is encoded as base64url for transport.</p>
+    <p>The node returns a signed receipt stored at <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation</code> in the CER bundle. The receipt contains the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>, timestamp, <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">nodeId</code>, and <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">kid</code> (the signing key identifier).</p>
 
     <h3>Verification</h3>
     <p>Anyone can verify the record by checking three things: bundle integrity, node signature, and receipt consistency. Verification can be performed locally or through <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a>.</p>
@@ -93,7 +93,7 @@ const ProtocolOverview = () => (
     <p>A structured record that captures execution metadata and hashes of inputs and outputs. The CER is the base unit of proof in NexArt. It is portable, self-contained, and deterministic.</p>
 
     <h3>Attestation Node</h3>
-    <p>A service that signs CERs and produces receipts. Nodes publish their public keys at <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">node.nexart.io/.well-known/nexart-node.json</code> so verifiers can independently retrieve them.</p>
+    <p>A service that signs CERs and produces receipts. Nodes publish their public keys at <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">node.nexart.io/.well-known/nexart-node.json</code> using <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">kid</code> and <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">activeKid</code> fields so verifiers can independently retrieve them.</p>
 
     <h3>Signed Receipt</h3>
     <p>A cryptographic proof returned by the node. It proves that the node witnessed the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> at a specific time. The receipt does not imply the node stores or owns the execution data.</p>
@@ -104,7 +104,7 @@ const ProtocolOverview = () => (
     <h2 id="record-types">Record Types</h2>
     <p>NexArt supports several record types depending on the attestation scope and export path:</p>
     <ul>
-      <li><strong>signed-receipt.</strong> Full attestation of a CER bundle. Supports full verification.</li>
+      <li><strong>cer.ai.execution.v1.</strong> AI execution record. Fully verifiable when attested with a signed receipt.</li>
       <li><strong>signed-redacted-reseal.</strong> A redacted version of a CER that has been re-signed by the node for safe sharing.</li>
       <li><strong>hash-only-timestamp.</strong> Attestation of only the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>. Snapshot contents are not attested. Typically verifies as PARTIAL.</li>
       <li><strong>legacy.</strong> Older records from previous system versions. May lack full attestation data.</li>

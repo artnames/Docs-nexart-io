@@ -19,8 +19,8 @@ The verifier uses a redacted/public-safe representation. Raw inputs/outputs are 
 
 ## Checks
 1. Bundle Integrity — recompute certificateHash from bundle contents, confirm it matches
-2. Node Signature — validate Ed25519 signature using key from node.nexart.io/.well-known/nexart-node.json
-3. Receipt Consistency — receipt references same certificateHash as bundle, node identity matches
+2. Node Signature — validate Ed25519 signature using key from node.nexart.io/.well-known/nexart-node.json (matched by kid)
+3. Receipt Consistency — receipt (at meta.attestation.receipt) references same certificateHash as bundle
 
 ## What is publicly visible
 - certificateHash, timestamp, node identity, verification status
@@ -34,7 +34,7 @@ INVALID — one or more checks fail (modified record, bad signature)
 UNAVAILABLE — missing data, unsupported format, unknown node
 
 ## Independent verification
-Verification can be performed without NexArt API access using the CER bundle and the node's published public keys.`;
+Verification can be performed without NexArt API access using the CER bundle (including meta.attestation) and the node's published public keys.`;
 
 const Verification = () => (
   <>
@@ -86,7 +86,7 @@ const Verification = () => (
     <h2 id="what-gets-stored">What Gets Stored for Public Verification?</h2>
     <p>When a record is certified:</p>
     <ul>
-      <li>The attestation node returns a <strong>signed receipt</strong> containing the certificateHash, timestamp, node identity, and Ed25519 signature.</li>
+      <li>The attestation node returns a <strong>signed receipt</strong> containing the certificateHash, timestamp, node identity, and Ed25519 signature. This is stored at <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation</code> in the CER bundle.</li>
       <li>A <strong>redacted, public-safe version</strong> of the record is persisted for verification.</li>
       <li>Input and output content is hashed (SHA-256). The hashes appear in the record, but the original content is not stored by the node or verifier.</li>
       <li>You control which metadata fields are included when you create the record.</li>
@@ -95,8 +95,8 @@ const Verification = () => (
     <h2 id="checks">Verification Checks</h2>
     <ol>
       <li><strong>Bundle Integrity.</strong> Recompute the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> from the bundle contents. If the hash differs, the bundle has been modified.</li>
-      <li><strong>Node Signature.</strong> Validate the Ed25519 signature using the public key published at <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">node.nexart.io/.well-known/nexart-node.json</code>.</li>
-      <li><strong>Receipt Consistency.</strong> Confirm the receipt references the same <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> as the bundle and that the node identity matches.</li>
+      <li><strong>Node Signature.</strong> Validate the Ed25519 signature using the public key published at <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">node.nexart.io/.well-known/nexart-node.json</code>, matched by the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">kid</code> in the receipt.</li>
+      <li><strong>Receipt Consistency.</strong> Confirm the receipt at <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation.receipt</code> references the same <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> as the bundle and that the node identity matches.</li>
     </ol>
 
     <h2 id="outcomes">Verification Outcomes</h2>
@@ -116,19 +116,19 @@ UNAVAILABLE   Verification cannot be completed. Missing data,
 
     <h2 id="by-bundle-type">Expected Outcomes by Bundle Type</h2>
     <ul>
-      <li><strong>signed-receipt</strong> — all checks should pass → <strong>VERIFIED</strong></li>
+      <li><strong>cer.ai.execution.v1</strong> (with attestation) — all checks should pass → <strong>VERIFIED</strong></li>
       <li><strong>signed-redacted-reseal</strong> — some snapshot fields removed → <strong>VERIFIED</strong> or <strong>PARTIAL</strong></li>
       <li><strong>hash-only-timestamp</strong> — only certificateHash is attested → <strong>PARTIAL</strong></li>
       <li><strong>legacy</strong> — older format, limited coverage → <strong>PARTIAL</strong> or <strong>UNAVAILABLE</strong></li>
     </ul>
 
     <h2 id="independent">Independent Verification (No API Required)</h2>
-    <p>You can verify a CER without calling any NexArt API. All you need is the CER bundle and access to the node's published keys:</p>
+    <p>You can verify a CER without calling any NexArt API. All you need is the CER bundle (including <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation</code>) and access to the node's published keys:</p>
     <ol>
       <li>Recompute the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> from the CER bundle (SHA-256)</li>
-      <li>Compare it with the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> in the signed receipt</li>
+      <li>Compare it with the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> in <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation.receipt</code></li>
       <li>Fetch the node's public key from <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">node.nexart.io/.well-known/nexart-node.json</code></li>
-      <li>Find the key matching the receipt's <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">attestorKeyId</code></li>
+      <li>Find the key matching the receipt's <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">kid</code></li>
       <li>Verify the Ed25519 signature over the receipt payload</li>
     </ol>
     <p>If all steps pass, you can trust the attestation independently of NexArt infrastructure. No account, API key, or network call to NexArt is required beyond fetching the node's public key.</p>

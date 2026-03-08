@@ -4,7 +4,7 @@ import PageHeader from "@/components/docs/PageHeader";
 const llmBlock = `# NexArt Integration Surfaces
 
 ## API
-POST /v1/cer/ai/certify — create and certify a CER in one request (recommended)
+POST /v1/cer/ai/certify — create and certify a CER (bundleType: cer.ai.execution.v1) in one request (recommended)
 POST /v1/cer/ai/create — create a CER bundle without attestation
 Authentication: Bearer NEXART_API_KEY
 
@@ -14,7 +14,7 @@ Uses redacted/public-safe representation. Raw inputs/outputs not exposed.
 
 ## Attestation Node
 node.nexart.io — node identity and status
-node.nexart.io/.well-known/nexart-node.json — published Ed25519 signing keys
+node.nexart.io/.well-known/nexart-node.json — published Ed25519 signing keys (kid, activeKid)
 
 ## n8n
 Community node for certifying AI executions inside n8n workflows.
@@ -44,7 +44,7 @@ const IntegrationSurfaces = () => (
     <h2 id="api">Node API</h2>
     <p>The primary integration point for most builders. Two endpoints are available:</p>
     <ul>
-      <li><strong>POST /v1/cer/ai/certify</strong> creates a CER, attests it, and returns a signed receipt with a verification URL. Recommended for most integrations.</li>
+      <li><strong>POST /v1/cer/ai/certify</strong> creates a CER (<code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">bundleType: "cer.ai.execution.v1"</code>), attests it, and returns a signed receipt with a verification URL. Recommended for most integrations.</li>
       <li><strong>POST /v1/cer/ai/create</strong> creates a CER bundle without attestation. Useful if you want the bundle for your own records or plan to attest it separately.</li>
     </ul>
     <p>Authentication uses an API key passed as a Bearer token (<code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">NEXART_API_KEY</code>).</p>
@@ -63,7 +63,7 @@ const IntegrationSurfaces = () => (
     <p>The attestation node signs CERs and issues receipts. Its public surfaces are:</p>
     <ul>
       <li><a href="https://node.nexart.io" target="_blank" rel="noopener noreferrer">node.nexart.io</a> shows the node's identity and status.</li>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">node.nexart.io/.well-known/nexart-node.json</code> publishes Ed25519 signing keys for independent verification.</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">node.nexart.io/.well-known/nexart-node.json</code> publishes Ed25519 signing keys (using <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">kid</code> and <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">activeKid</code> fields) for independent verification.</li>
     </ul>
     <p><Link to="/docs/attestation-node" className="text-primary hover:underline">See the attestation node docs</Link></p>
 

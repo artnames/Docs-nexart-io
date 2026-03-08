@@ -5,9 +5,9 @@ const llmBlock = `# NexArt Attestation Node
 The attestation node signs CERs and returns signed receipts.
 
 ## What it does
-- Receives CER bundles from the SDK
+- Receives CER bundles from the API
 - Signs them with Ed25519
-- Returns signed receipts (signature, signatureB64Url, attestorKeyId, nodeId)
+- Returns signed receipts stored at bundle.meta.attestation
 - Supports full signed receipts and hash-only timestamps
 
 ## Public surfaces
@@ -17,7 +17,8 @@ The attestation node signs CERs and returns signed receipts.
 ## Key format
 {
   "nodeId": "nexart-node-primary",
-  "keys": [{ "keyId": "key_01HXYZ...", "algorithm": "Ed25519", "publicKey": "MCowBQ...", "status": "active" }]
+  "activeKid": "key_01HXYZ...",
+  "keys": [{ "kid": "key_01HXYZ...", "algorithm": "Ed25519", "publicKey": "MCowBQ...", "status": "active" }]
 }
 
 ## Signing algorithm
@@ -35,18 +36,18 @@ const AttestationNode = () => (
     />
 
     <h2 id="role">What Does the Node Do?</h2>
-    <p>The attestation node is the signing authority in the NexArt system. When the SDK submits a CER bundle, the node:</p>
+    <p>The attestation node is the signing authority in the NexArt system. When the API submits a CER bundle, the node:</p>
     <ol>
       <li>Validates the bundle structure</li>
       <li>Records a precise timestamp</li>
       <li>Signs the CER using Ed25519</li>
-      <li>Returns a signed receipt</li>
+      <li>Returns a signed receipt (stored at <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation</code> in the CER bundle)</li>
     </ol>
 
     <h2 id="modes">Attestation Modes</h2>
     <p>The node supports two attestation modes:</p>
     <ul>
-      <li><strong>Full signed receipt.</strong> The node attests the complete CER including snapshot contents. Produces a <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">signed-receipt</code> bundle.</li>
+      <li><strong>Full signed receipt.</strong> The node attests the complete CER including snapshot contents. The default for <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer.ai.execution.v1</code> bundles.</li>
       <li><strong>Hash-only timestamp.</strong> The node signs only the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>. Used for legacy or incomplete records. Produces a <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">hash-only-timestamp</code> bundle.</li>
     </ul>
 
@@ -58,9 +59,10 @@ const AttestationNode = () => (
 
 {
   "nodeId": "nexart-node-primary",
+  "activeKid": "key_01HXYZ...",
   "keys": [
     {
-      "keyId": "key_01HXYZ...",
+      "kid": "key_01HXYZ...",
       "algorithm": "Ed25519",
       "publicKey": "MCowBQYDK2VwAyEA...",
       "status": "active"
@@ -73,7 +75,7 @@ const AttestationNode = () => (
     <h2 id="signing">Signing Details</h2>
     <ul>
       <li><strong>Algorithm.</strong> Ed25519.</li>
-      <li><strong>Key rotation.</strong> The node may rotate keys over time. Each receipt includes an <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">attestorKeyId</code> that identifies which key was used.</li>
+      <li><strong>Key rotation.</strong> The node may rotate keys over time. Each receipt includes a <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">kid</code> that identifies which key was used. The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">activeKid</code> field indicates the current primary signing key.</li>
       <li><strong>Key discovery.</strong> All active and historical keys are published at the well-known endpoint so past receipts remain verifiable.</li>
     </ul>
 
@@ -81,7 +83,7 @@ const AttestationNode = () => (
     <p>To independently verify a signed receipt:</p>
     <ol>
       <li>Fetch the node's keys from <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">node.nexart.io/.well-known/nexart-node.json</code></li>
-      <li>Find the key matching the receipt's <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">attestorKeyId</code></li>
+      <li>Find the key matching the receipt's <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">kid</code></li>
       <li>Verify the Ed25519 signature over the receipt payload</li>
     </ol>
     <p>Or use the public verifier at <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a>.</p>
