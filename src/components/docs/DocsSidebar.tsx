@@ -9,17 +9,36 @@ interface NavItem {
 }
 
 const navigation: NavItem[] = [
-  { title: "Getting Started", path: "/docs/getting-started" },
-  { title: "Quickstart", path: "/docs/quickstart" },
-  { title: "Protocol Overview", path: "/docs/protocol-overview" },
+  {
+    title: "Getting Started",
+    children: [
+      { title: "Introduction", path: "/docs/getting-started" },
+      { title: "Quickstart", path: "/docs/quickstart" },
+    ],
+  },
   {
     title: "Core Concepts",
     children: [
-      { title: "What is a CER?", path: "/docs/concepts/cer" },
+      { title: "Verification", path: "/docs/verification" },
+      { title: "CER Anatomy", path: "/docs/concepts/cer" },
       { title: "Signed Receipts", path: "/docs/concepts/signed-receipts" },
       { title: "Trust Model", path: "/docs/trust-model" },
       { title: "Hash-Only Timestamping", path: "/docs/concepts/hash-timestamping" },
       { title: "Verification Reports", path: "/docs/concepts/verification-reports" },
+    ],
+  },
+  {
+    title: "Integrations",
+    children: [
+      { title: "n8n", path: "/docs/integrations/n8n" },
+    ],
+  },
+  {
+    title: "Protocol",
+    children: [
+      { title: "Protocol Overview", path: "/docs/protocol-overview" },
+      { title: "Attestation Node", path: "/docs/attestation-node" },
+      { title: "Integration Surfaces", path: "/docs/integration-surfaces" },
     ],
   },
   {
@@ -31,9 +50,6 @@ const navigation: NavItem[] = [
       { title: "UI Renderer SDK", path: "/docs/ui-renderer-sdk" },
     ],
   },
-  { title: "Attestation Node", path: "/docs/attestation-node" },
-  { title: "Verification", path: "/docs/verification" },
-  { title: "Integration Surfaces", path: "/docs/integration-surfaces" },
   {
     title: "Dashboard",
     children: [
@@ -42,12 +58,6 @@ const navigation: NavItem[] = [
       { title: "Auto-stamp", path: "/docs/dashboard/auto-stamp" },
       { title: "Retention Policy", path: "/docs/dashboard/retention" },
       { title: "Audit Exports", path: "/docs/dashboard/audit-exports" },
-    ],
-  },
-  {
-    title: "Integrations",
-    children: [
-      { title: "n8n", path: "/docs/integrations/n8n" },
     ],
   },
   { title: "Privacy & Data Handling", path: "/docs/privacy" },

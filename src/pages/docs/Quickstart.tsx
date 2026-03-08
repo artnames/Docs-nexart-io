@@ -29,8 +29,9 @@ const Quickstart = () => (
 
     <p>
       NexArt creates Certified Execution Records (CERs) that allow AI or deterministic executions
-      to be independently verified. Each CER contains a certificate hash, node attestation, and a
-      public verification link. This guide shows how to create and verify a CER in under a minute.
+      to be independently verified. A CER contains a certificate hash, node attestation, and a
+      public verification link. This quickstart shows how to create and verify your first CER in
+      under a minute.
     </p>
 
     <h2>Create a Certified Execution Record</h2>
@@ -68,7 +69,10 @@ const Quickstart = () => (
     </p>
 
     <h2>API Response</h2>
-    <p>The API returns the certified record with a verification link:</p>
+    <p>
+      The API returns the certificate hash, node attestation receipt, and a verification link that
+      can be opened in the public verification portal.
+    </p>
     <CodeBlock
       language="json"
       title="Certify Response"
@@ -84,10 +88,6 @@ const Quickstart = () => (
   "signatureB64Url": "MEUCIQD..."
 }`}
     />
-    <p>
-      The <code>verificationUrl</code> links to the public verification portal where the execution
-      record can be independently verified.
-    </p>
     <p className="text-sm text-muted-foreground">
       The API response includes receipt and signature at the top level for convenience. In the CER
       bundle, attestation data lives at <code>meta.attestation</code>.
@@ -98,15 +98,17 @@ const Quickstart = () => (
     <CodeBlock language="text" code="https://verify.nexart.io/e/demo-001" />
     <p>The verifier checks:</p>
     <ul>
-      <li><strong>Bundle Integrity</strong> — the certificate hash matches the bundle contents</li>
-      <li><strong>Node Signature</strong> — the attestation signature is valid</li>
-      <li><strong>Receipt Consistency</strong> — the receipt matches the certified record</li>
+      <li><strong>Bundle Integrity</strong>: the certificate hash matches the bundle contents</li>
+      <li><strong>Node Signature</strong>: the attestation signature is valid</li>
+      <li><strong>Receipt Consistency</strong>: the receipt matches the certified record</li>
     </ul>
+    <p>Anyone can independently verify the execution record using the public verifier.</p>
 
     <h2>Export Evidence</h2>
     <p>
-      Certified records can also be exported from the NexArt dashboard as an audit package. The
-      package contains:
+      Certified records can also be exported from the NexArt dashboard as an audit package.
+      This package allows independent verification and review of the certified execution without
+      requiring API access.
     </p>
     <CodeBlock
       language="text"
@@ -118,10 +120,6 @@ node-metadata.json
 evidence-summary.html
 README.txt`}
     />
-    <p>
-      The audit package allows offline verification and independent review without requiring API
-      access.
-    </p>
 
     <h2>Next Steps</h2>
     <ul>
