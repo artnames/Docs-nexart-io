@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import DocsSidebar from "./DocsSidebar";
+import DocsSearch from "./DocsSearch";
 
 const DocsHeader = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
