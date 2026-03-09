@@ -89,6 +89,7 @@ console.log(certificateHash);`} />
       <p>
         When a node URL is provided, the record is attested by the NexArt node and includes a signed
         receipt. This step is optional — local CER creation is sufficient for many use cases.
+        The node URL should point to a NexArt certification node that supports the CER protocol.
       </p>
       <CodeBlock language="typescript" title="Node Attestation" code={`import { certifyLangChainRun } from "@nexart/ai-execution";
 
