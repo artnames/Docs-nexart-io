@@ -128,6 +128,21 @@ const CERProtocol = () => (
     <h3>Attestation</h3>
     <p>An optional node receipt and signature confirming observation of the execution.</p>
 
+    <h2 id="canonical-hash">Canonical Hash Computation</h2>
+    <p>The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> is computed by hashing the canonicalized CER bundle.</p>
+    <p>Canonicalization ensures that equivalent bundles produce identical hashes regardless of JSON formatting.</p>
+    <p>The canonicalization process:</p>
+    <ul>
+      <li>Removes non-deterministic fields</li>
+      <li>Sorts object keys deterministically</li>
+      <li>Serializes the bundle using canonical JSON encoding</li>
+    </ul>
+    <p>The hash algorithm used by the protocol is:</p>
+    <CodeBlock code={`SHA-256`} language="text" />
+    <p>The resulting certificate hash is formatted as:</p>
+    <CodeBlock code={`sha256:<hex digest>`} language="text" />
+    <p>All NexArt-compatible verifiers must compute the certificate hash using this canonicalization process.</p>
+
     <h2 id="verification-semantics">Verification Semantics</h2>
     <p>Verification confirms that a CER bundle is internally consistent and optionally attested by a NexArt node.</p>
     <p>Verification consists of three checks:</p>
