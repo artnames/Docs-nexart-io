@@ -40,8 +40,23 @@ const LangChain = () => {
         <li>Verify the execution independently using the NexArt verifier</li>
       </ul>
       <p>
+        A <strong>Certified Execution Record (CER)</strong> is a cryptographically bound record of an AI execution, including inputs, outputs, and execution metadata. The record produces a deterministic certificate hash and can optionally be attested by a NexArt node.
+      </p>
+      <p>
         The integration uses the <code>@nexart/ai-execution</code> package.
       </p>
+
+      <div className="not-prose my-6 flex flex-col items-center gap-2 text-sm font-mono">
+        <div className="px-4 py-2 rounded-md border border-border bg-card text-foreground">LangChain workflow</div>
+        <div className="text-muted-foreground">↓</div>
+        <div className="px-4 py-2 rounded-md border border-primary/40 bg-primary/10 text-primary font-medium">createLangChainCer()</div>
+        <div className="text-muted-foreground">↓</div>
+        <div className="px-4 py-2 rounded-md border border-border bg-card text-foreground">CER bundle + certificate hash</div>
+        <div className="text-muted-foreground">↓ (optional)</div>
+        <div className="px-4 py-2 rounded-md border border-primary/40 bg-primary/10 text-primary font-medium">NexArt node attestation</div>
+        <div className="text-muted-foreground">↓</div>
+        <div className="px-4 py-2 rounded-md border border-border bg-card text-foreground">verify.nexart.io</div>
+      </div>
 
       <h2>Installation</h2>
       <CodeBlock language="bash" code="npm install @nexart/ai-execution" />
