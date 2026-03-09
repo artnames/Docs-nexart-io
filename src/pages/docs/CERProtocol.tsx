@@ -17,10 +17,13 @@ Governs: CER bundle structure, verification semantics, schema versioning, compat
 Three logical layers: Snapshot (execution data), Certificate Hash (deterministic hash of canonicalized bundle), Attestation (optional node receipt and signature).
 
 ## Canonical Hash Computation
-certificateHash = SHA-256 of canonicalized bundle. Canonicalization: remove non-deterministic fields, sort keys, serialize as canonical JSON. Format: sha256:<hex digest>.
+certificateHash = SHA-256 of canonicalized bundle. Canonicalization: remove non-deterministic fields, sort keys, serialize as canonical JSON. Format: sha256:<hex digest>. Hash comparison is case-insensitive, whitespace-normalized. Excluded from hash: meta.attestation, meta.attestation.receipt, meta.attestation.signature (produced after hash).
 
 ## Verification Semantics
-Three checks: Bundle Integrity, Node Signature, Receipt Consistency. Node attestation is optional — unattested CERs can still be verified for bundle integrity.
+Three checks: Bundle Integrity, Node Signature, Receipt Consistency. Each check returns PASS, FAIL, or SKIPPED. Node attestation is optional — unattested CERs can still be verified for bundle integrity (signature/receipt checks are SKIPPED).
+
+## Schema Versioning
+Namespace identifies execution surface (cer.ai.execution, cer.codemode.render) allowing independent schema evolution. Minor updates (v1.0→v1.1) add optional fields. Breaking changes require new major version (v2).
 
 ## Verification Status Values
 VERIFIED — all checks passed
