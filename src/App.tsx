@@ -68,6 +68,7 @@ const App = () => (
             <Route path="privacy" element={<PrivacyDataHandling />} />
             <Route path="examples" element={<Examples />} />
             <Route path="integrations/n8n" element={<N8n />} />
+            <Route path="integrations/langchain" element={<LangChain />} />
             <Route path="faq" element={<FAQ />} />
           </Route>
           <Route path="*" element={<NotFound />} />

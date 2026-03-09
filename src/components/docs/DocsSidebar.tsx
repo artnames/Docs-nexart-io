@@ -29,6 +29,7 @@ const navigation: NavItem[] = [
     title: "Integrations",
     children: [
       { title: "n8n", path: "/docs/integrations/n8n" },
+      { title: "LangChain", path: "/docs/integrations/langchain" },
     ],
   },
   {
