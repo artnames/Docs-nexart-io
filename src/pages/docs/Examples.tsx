@@ -210,25 +210,17 @@ https://verify.nexart.io/c/sha256%3A9e8d7c6b5a4f3210...`}
     <p>Summarizes the result of validating a CER.</p>
     <CodeBlock
       code={`{
-  "outcome": "VERIFIED",
+  "status": "VERIFIED",
   "checks": {
-    "bundleIntegrity": {
-      "status": "pass",
-      "detail": "Computed certificateHash matches bundle contents"
-    },
-    "nodeSignature": {
-      "status": "pass",
-      "detail": "Ed25519 signature valid against published key",
-      "nodeId": "nexart-node-primary",
-      "kid": "key_01HXYZ..."
-    },
-    "receiptConsistency": {
-      "status": "pass",
-      "detail": "Receipt references correct certificateHash"
-    }
+    "bundleIntegrity": "PASS",
+    "nodeSignature": "PASS",
+    "receiptConsistency": "PASS"
   },
+  "reasonCodes": [],
+  "certificateHash": "sha256:...",
   "bundleType": "cer.ai.execution.v1",
-  "verifiedAt": "2026-03-06T12:05:00.000Z"
+  "verifiedAt": "2026-03-06T12:05:00.000Z",
+  "verifier": "nexart-verifier/1.0.0"
 }`}
       title="Verification Report (VERIFIED)"
     />
