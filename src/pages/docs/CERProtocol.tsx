@@ -178,7 +178,25 @@ const CERProtocol = () => (
   "verifiedAt": "2026-03-08T20:40:00Z",
   "verifier": "nexart-verifier/1.0.0"
 }`}
-      title="Verification Result"
+      title="Verification Result (with attestation)"
+    />
+    <p>Each check value must be one of:</p>
+    <CodeBlock code={`PASS\nFAIL\nSKIPPED`} language="text" />
+    <ul>
+      <li><strong>PASS</strong> — check succeeded</li>
+      <li><strong>FAIL</strong> — check failed</li>
+      <li><strong>SKIPPED</strong> — check not applicable (e.g. no attestation present)</li>
+    </ul>
+    <p>Example verification result without attestation:</p>
+    <CodeBlock
+      code={`{
+  "checks": {
+    "bundleIntegrity": "PASS",
+    "nodeSignature": "SKIPPED",
+    "receiptConsistency": "SKIPPED"
+  }
+}`}
+      title="Verification Result (without attestation)"
     />
     <p>This structure allows verification results to be consumed consistently across:</p>
     <ul>
