@@ -8,6 +8,7 @@ import NotFound from "./pages/NotFound";
 import DocsLayout from "./components/docs/DocsLayout";
 import GettingStarted from "./pages/docs/GettingStarted";
 import Quickstart from "./pages/docs/Quickstart";
+import Integrations from "./pages/docs/Integrations";
 import ProtocolOverview from "./pages/docs/ProtocolOverview";
 import CERProtocol from "./pages/docs/CERProtocol";
 import CER from "./pages/docs/concepts/CER";
