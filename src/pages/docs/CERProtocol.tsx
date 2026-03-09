@@ -265,6 +265,19 @@ const CERProtocol = () => (
       </table>
     </div>
     <p>This alignment allows CERs to serve as verifiable execution artifacts within AIEF-compliant systems.</p>
+
+    <h2 id="protocol-surfaces">Protocol Surfaces</h2>
+    <p>The CER protocol is implemented across several NexArt system surfaces.</p>
+    <p>These surfaces share the same schema and verification semantics.</p>
+    <p>Current protocol implementations include:</p>
+    <ul>
+      <li><strong>NexArt Node</strong> — produces CER bundles and node attestations</li>
+      <li><strong>NexArt CLI</strong> — local creation and verification of CER bundles</li>
+      <li><strong>NexArt Verifier</strong> — public verification interface</li>
+      <li><strong>NexArt Dashboard</strong> — storage, export, and audit reports</li>
+      <li><strong>NexArt SDKs</strong> — developer libraries for generating and verifying CERs</li>
+    </ul>
+    <p>All implementations must follow the verification semantics defined in this specification.</p>
   </>
 );
 
