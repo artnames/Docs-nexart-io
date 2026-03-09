@@ -24,6 +24,7 @@ const searchIndex: SearchEntry[] = [
   { title: "Signed Receipts", path: "/docs/concepts/signed-receipts", section: "Core Concepts", keywords: "signed receipts attestation node signature Ed25519 receipt kid timestamp" },
   { title: "Hash-Only Timestamping", path: "/docs/concepts/hash-timestamping", section: "Core Concepts", keywords: "hash timestamping SHA-256 certificate hash privacy data handling zero knowledge" },
   { title: "Verification Reports", path: "/docs/concepts/verification-reports", section: "Core Concepts", keywords: "verification reports bundle integrity node signature receipt consistency PASS FAIL SKIPPED VERIFIED FAILED" },
+  { title: "Integrations", path: "/docs/integrations", section: "Integrations", keywords: "integrations overview API CLI n8n LangChain" },
   { title: "n8n Integration", path: "/docs/integrations/n8n", section: "Integrations", keywords: "n8n integration automation workflow community node certify verify" },
   { title: "LangChain Integration", path: "/docs/integrations/langchain", section: "Integrations", keywords: "langchain integration AI agent moderation pipeline workflow approval SDK certify verify CER" },
   { title: "CER Protocol", path: "/docs/cer-protocol", section: "Protocol", keywords: "CER protocol specification canonical hash computation verification semantics schema versioning AIEF conformance" },

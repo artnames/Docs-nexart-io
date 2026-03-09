@@ -2,138 +2,89 @@ import PageHeader from "@/components/docs/PageHeader";
 import CodeBlock from "@/components/docs/CodeBlock";
 import { Link } from "react-router-dom";
 
-const llmBlock = `# Quickstart: Create and Verify Your First Certified Execution Record
+const llmBlock = `# Quickstart
 
-NexArt creates Certified Execution Records (CERs) that allow AI or deterministic executions to be independently verified.
-Each CER contains a certificate hash, node attestation, and a public verification link.
+Install SDK, create a CER, verify.
 
-## Create a CER
-POST /v1/cer/ai/certify with executionId, provider, model, input, output.
-Returns verificationUrl, certificateHash, receipt (with kid), signatureB64Url.
+npm install @nexart/ai-execution
 
-## Verify
-Open verificationUrl. Checks: bundleIntegrity, nodeSignature, receiptConsistency.
+Create:
+import { createLangChainCer } from "@nexart/ai-execution";
+const { certificateHash } = createLangChainCer({ provider, model, input, output });
 
-## Export
-Audit package: cer.json, receipt.json, verification-report.json, node-metadata.json, evidence-summary.html, README.txt.
-
-Attestation data in the CER bundle lives at meta.attestation.`;
+Verify:
+Open verify.nexart.io and paste the certificate hash.`;
 
 const Quickstart = () => (
   <div className="prose prose-invert max-w-none">
     <PageHeader
-      title="Quickstart: Create and Verify Your First Certified Execution Record"
-      summary="Generate a CER in under one minute using a single API request and the public verifier."
+      title="Quickstart"
+      summary="Install, create a CER, and verify — in three steps."
       llmBlock={llmBlock}
     />
 
     <p>
-      NexArt creates Certified Execution Records (CERs) that allow AI or deterministic executions
-      to be independently verified. A CER contains a certificate hash, node attestation, and a
-      public verification link. This quickstart shows how to create and verify your first CER in
-      under a minute.
+      For a broader overview, see the{" "}
+      <Link to="/docs/getting-started" className="text-primary hover:underline">
+        Getting Started
+      </Link>{" "}
+      guide.
     </p>
 
-    <h2>Create a Certified Execution Record</h2>
-    <p>
-      The NexArt API can create and certify a CER in a single request. Run the following command to
-      certify an execution:
-    </p>
-    <CodeBlock
-      language="bash"
-      title="Create and certify a CER"
-      code={`curl https://node.nexart.io/v1/cer/ai/certify \\
-  -H "Authorization: Bearer YOUR_API_KEY" \\
-  -H "Content-Type: application/json" \\
-  -d '{
-    "executionId": "demo-001",
-    "provider": "openai",
-    "model": "gpt-4o-mini",
-    "input": {
-      "messages": [
-        {
-          "role": "user",
-          "content": "Should this automated report be approved?"
-        }
-      ]
-    },
-    "output": {
-      "decision": "approve",
-      "reason": "policy_passed"
-    }
-  }'`}
-    />
-    <p>
-      The API computes the certificate hash, creates the CER bundle, and requests a signed
-      attestation from the NexArt node.
-    </p>
+    <h2>1. Install the SDK</h2>
+    <CodeBlock language="bash" code="npm install @nexart/ai-execution" />
 
-    <h2>API Response</h2>
-    <p>
-      The API returns the certificate hash, node attestation receipt, and a verification link that
-      can be opened in the public verification portal.
-    </p>
+    <h2>2. Create a CER</h2>
     <CodeBlock
-      language="json"
-      title="Certify Response"
-      code={`{
-  "verificationUrl": "https://verify.nexart.io/e/demo-001",
-  "certificateHash": "sha256:7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069",
-  "receipt": {
-    "certificateHash": "sha256:7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069",
-    "timestamp": "2026-03-06T12:00:01.000Z",
-    "nodeId": "nexart-node-primary",
-    "kid": "k1"
+      language="typescript"
+      title="Create a CER"
+      code={`import { createLangChainCer } from "@nexart/ai-execution";
+
+const { bundle, certificateHash } = createLangChainCer({
+  provider: "openai",
+  model: "gpt-4o-mini",
+  input: {
+    messages: [{ role: "user", content: "Should this report be approved?" }]
   },
-  "signatureB64Url": "MEUCIQD..."
-}`}
+  output: {
+    decision: "approve",
+    reason: "policy_passed"
+  }
+});
+
+console.log(certificateHash);`}
     />
-    <p className="text-sm text-muted-foreground">
-      The API response includes receipt and signature at the top level for convenience. In the CER
-      bundle, attestation data lives at <code>meta.attestation</code>.
-    </p>
+    <p>This produces a Certified Execution Record locally and returns a deterministic certificate hash.</p>
 
-    <h2>Verify the Execution Record</h2>
-    <p>The record can be verified publicly. Open the verification link returned by the API:</p>
-    <CodeBlock language="text" code="https://verify.nexart.io/e/demo-001" />
-    <p>The verifier checks:</p>
-    <ul>
-      <li><strong>Bundle Integrity</strong>: the certificate hash matches the bundle contents</li>
-      <li><strong>Node Signature</strong>: the attestation signature is valid</li>
-      <li><strong>Receipt Consistency</strong>: the receipt matches the certified record</li>
-    </ul>
-    <p>Anyone can independently verify the execution record using the public verifier.</p>
-
-    <h2>Export Evidence</h2>
+    <h2>3. Verify the Record</h2>
     <p>
-      Certified records can also be exported from the NexArt dashboard as an audit package.
-      This package allows independent verification and review of the certified execution without
-      requiring API access.
+      Open{" "}
+      <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">
+        verify.nexart.io
+      </a>{" "}
+      and paste the certificate hash. The verifier checks:
     </p>
-    <CodeBlock
-      language="text"
-      title="Audit Package Contents"
-      code={`cer.json
-receipt.json
-verification-report.json
-node-metadata.json
-evidence-summary.html
-README.txt`}
-    />
+    <ul>
+      <li><strong>Bundle Integrity</strong> — the certificate hash matches the bundle contents</li>
+      <li><strong>Node Signature</strong> — the attestation signature is valid (if attested)</li>
+      <li><strong>Receipt Consistency</strong> — the receipt matches the certified record</li>
+    </ul>
 
     <h2>Next Steps</h2>
     <ul>
-      <li><Link to="/docs/verification" className="text-primary hover:underline">Verification</Link></li>
-      <li><Link to="/docs/cer-protocol" className="text-primary hover:underline">CER Protocol</Link></li>
-      <li><Link to="/docs/concepts/cer" className="text-primary hover:underline">CER Anatomy</Link></li>
-      <li><Link to="/docs/concepts/signed-receipts" className="text-primary hover:underline">Signed Receipts</Link></li>
-      <li><Link to="/docs/integrations/n8n" className="text-primary hover:underline">n8n Integration</Link></li>
-      <li><Link to="/docs/protocol-overview" className="text-primary hover:underline">Protocol Overview</Link></li>
+      <li>
+        <Link to="/docs/integrations" className="text-primary hover:underline">Integrations</Link>{" "}
+        — connect to LangChain, n8n, or the CLI
+      </li>
+      <li>
+        <Link to="/docs/concepts/cer" className="text-primary hover:underline">CER Anatomy</Link>{" "}
+        — understand the record structure
+      </li>
+      <li>
+        <Link to="/docs/verification" className="text-primary hover:underline">Verification</Link>{" "}
+        — deep dive into verification semantics
+      </li>
     </ul>
-    <p>
-      These guides explain the CER structure, verification process, and integration options for
-      automation platforms and AI systems.
-    </p>
   </div>
 );
 

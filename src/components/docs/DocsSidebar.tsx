@@ -9,17 +9,12 @@ interface NavItem {
 }
 
 const navigation: NavItem[] = [
+  { title: "Getting Started", path: "/docs/getting-started" },
+  { title: "Quickstart", path: "/docs/quickstart" },
   {
-    title: "Getting Started",
+    title: "Concepts",
     children: [
-      { title: "Introduction", path: "/docs/getting-started" },
-      { title: "Quickstart", path: "/docs/quickstart" },
-    ],
-  },
-  {
-    title: "Core Concepts",
-    children: [
-      { title: "CER Anatomy", path: "/docs/concepts/cer" },
+      { title: "Certified Execution Records", path: "/docs/concepts/cer" },
       { title: "Signed Receipts", path: "/docs/concepts/signed-receipts" },
       { title: "Hash-Only Timestamping", path: "/docs/concepts/hash-timestamping" },
       { title: "Verification Reports", path: "/docs/concepts/verification-reports" },
@@ -28,8 +23,18 @@ const navigation: NavItem[] = [
   {
     title: "Integrations",
     children: [
+      { title: "Overview", path: "/docs/integrations" },
       { title: "n8n", path: "/docs/integrations/n8n" },
       { title: "LangChain", path: "/docs/integrations/langchain" },
+    ],
+  },
+  {
+    title: "Builders",
+    children: [
+      { title: "AI Execution SDK", path: "/docs/sdk" },
+      { title: "NexArt CLI", path: "/docs/cli" },
+      { title: "CodeMode SDK", path: "/docs/codemode-sdk" },
+      { title: "UI Renderer SDK", path: "/docs/ui-renderer-sdk" },
     ],
   },
   {
@@ -41,15 +46,6 @@ const navigation: NavItem[] = [
       { title: "Verification", path: "/docs/verification" },
       { title: "Attestation Node", path: "/docs/attestation-node" },
       { title: "Integration Surfaces", path: "/docs/integration-surfaces" },
-    ],
-  },
-  {
-    title: "Developer Tools",
-    children: [
-      { title: "AI Execution SDK", path: "/docs/sdk" },
-      { title: "NexArt CLI", path: "/docs/cli" },
-      { title: "CodeMode SDK", path: "/docs/codemode-sdk" },
-      { title: "UI Renderer SDK", path: "/docs/ui-renderer-sdk" },
     ],
   },
   {
