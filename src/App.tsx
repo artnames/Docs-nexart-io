@@ -9,6 +9,7 @@ import DocsLayout from "./components/docs/DocsLayout";
 import GettingStarted from "./pages/docs/GettingStarted";
 import Quickstart from "./pages/docs/Quickstart";
 import ProtocolOverview from "./pages/docs/ProtocolOverview";
+import CERProtocol from "./pages/docs/CERProtocol";
 import CER from "./pages/docs/concepts/CER";
 import SignedReceipts from "./pages/docs/concepts/SignedReceipts";
 import HashTimestamping from "./pages/docs/concepts/HashTimestamping";
