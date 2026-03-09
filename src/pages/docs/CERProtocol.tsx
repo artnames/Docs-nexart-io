@@ -17,10 +17,13 @@ Governs: CER bundle structure, verification semantics, schema versioning, compat
 Three logical layers: Snapshot (execution data), Certificate Hash (deterministic hash of canonicalized bundle), Attestation (optional node receipt and signature).
 
 ## Canonical Hash Computation
-certificateHash = SHA-256 of canonicalized bundle. Canonicalization: remove non-deterministic fields, sort keys, serialize as canonical JSON. Format: sha256:<hex digest>.
+certificateHash = SHA-256 of canonicalized bundle. Canonicalization: remove non-deterministic fields, sort keys, serialize as canonical JSON. Format: sha256:<hex digest>. Hash comparison is case-insensitive, whitespace-normalized. Excluded from hash: meta.attestation, meta.attestation.receipt, meta.attestation.signature (produced after hash).
 
 ## Verification Semantics
-Three checks: Bundle Integrity, Node Signature, Receipt Consistency. Node attestation is optional — unattested CERs can still be verified for bundle integrity.
+Three checks: Bundle Integrity, Node Signature, Receipt Consistency. Each check returns PASS, FAIL, or SKIPPED. Node attestation is optional — unattested CERs can still be verified for bundle integrity (signature/receipt checks are SKIPPED).
+
+## Schema Versioning
+Namespace identifies execution surface (cer.ai.execution, cer.codemode.render) allowing independent schema evolution. Minor updates (v1.0→v1.1) add optional fields. Breaking changes require new major version (v2).
 
 ## Verification Status Values
 VERIFIED — all checks passed
@@ -141,7 +144,15 @@ const CERProtocol = () => (
     <CodeBlock code={`SHA-256`} language="text" />
     <p>The resulting certificate hash is formatted as:</p>
     <CodeBlock code={`sha256:<hex digest>`} language="text" />
+    <p>Hash comparison must be performed on the normalized hexadecimal digest without whitespace or case differences.</p>
     <p>All NexArt-compatible verifiers must compute the certificate hash using this canonicalization process.</p>
+
+    <h3>Hash Scope</h3>
+    <p>The certificate hash is computed from the canonicalized CER bundle excluding attestation metadata.</p>
+    <p>Fields under the following paths are excluded from the hash computation:</p>
+    <CodeBlock code={`meta.attestation\nmeta.attestation.receipt\nmeta.attestation.signature`} language="text" />
+    <p>These fields are excluded because they are produced after the certificate hash is computed.</p>
+    <p>This ensures the bundle hash remains stable before and after node attestation.</p>
 
     <h2 id="verification-semantics">Verification Semantics</h2>
     <p>Verification confirms that a CER bundle is internally consistent and optionally attested by a NexArt node.</p>
@@ -170,7 +181,25 @@ const CERProtocol = () => (
   "verifiedAt": "2026-03-08T20:40:00Z",
   "verifier": "nexart-verifier/1.0.0"
 }`}
-      title="Verification Result"
+      title="Verification Result (with attestation)"
+    />
+    <p>Each check value must be one of:</p>
+    <CodeBlock code={`PASS\nFAIL\nSKIPPED`} language="text" />
+    <ul>
+      <li><strong>PASS</strong> — check succeeded</li>
+      <li><strong>FAIL</strong> — check failed</li>
+      <li><strong>SKIPPED</strong> — check not applicable (e.g. no attestation present)</li>
+    </ul>
+    <p>Example verification result without attestation:</p>
+    <CodeBlock
+      code={`{
+  "checks": {
+    "bundleIntegrity": "PASS",
+    "nodeSignature": "SKIPPED",
+    "receiptConsistency": "SKIPPED"
+  }
+}`}
+      title="Verification Result (without attestation)"
     />
     <p>This structure allows verification results to be consumed consistently across:</p>
     <ul>
@@ -202,6 +231,7 @@ const CERProtocol = () => (
     <h2 id="schema-versioning">Schema Versioning</h2>
     <p>CER bundles include a namespace and schema version. Example:</p>
     <CodeBlock code={`cer.ai.execution.v1`} language="text" />
+    <p>The namespace (<code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer.ai.execution</code>, <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer.codemode.render</code>) identifies the execution surface and ensures schema evolution can occur independently across surfaces.</p>
     <p>Minor schema updates may introduce new optional fields without breaking compatibility.</p>
     <p>Example: <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">v1.0 → v1.1</code></p>
     <p>Breaking changes require a new namespace version.</p>
