@@ -152,6 +152,7 @@ const CERProtocol = () => (
     <p>If a node attestation exists, the signature must validate against the node's public keys.</p>
     <h3>Receipt Consistency</h3>
     <p>The receipt <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> must match the bundle <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>.</p>
+    <p>Node attestation is optional. A CER bundle without attestation can still be verified for bundle integrity, but cannot prove that a NexArt node observed the execution.</p>
 
     <h2 id="result-schema">Verification Result Schema</h2>
     <p>All NexArt-compatible verifiers should produce a standardized verification result.</p>
