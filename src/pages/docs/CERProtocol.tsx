@@ -141,7 +141,15 @@ const CERProtocol = () => (
     <CodeBlock code={`SHA-256`} language="text" />
     <p>The resulting certificate hash is formatted as:</p>
     <CodeBlock code={`sha256:<hex digest>`} language="text" />
+    <p>Hash comparison must be performed on the normalized hexadecimal digest without whitespace or case differences.</p>
     <p>All NexArt-compatible verifiers must compute the certificate hash using this canonicalization process.</p>
+
+    <h3>Hash Scope</h3>
+    <p>The certificate hash is computed from the canonicalized CER bundle excluding attestation metadata.</p>
+    <p>Fields under the following paths are excluded from the hash computation:</p>
+    <CodeBlock code={`meta.attestation\nmeta.attestation.receipt\nmeta.attestation.signature`} language="text" />
+    <p>These fields are excluded because they are produced after the certificate hash is computed.</p>
+    <p>This ensures the bundle hash remains stable before and after node attestation.</p>
 
     <h2 id="verification-semantics">Verification Semantics</h2>
     <p>Verification confirms that a CER bundle is internally consistent and optionally attested by a NexArt node.</p>
