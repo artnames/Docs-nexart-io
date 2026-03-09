@@ -18,8 +18,8 @@ NexArt is a protocol for producing verifiable execution records. It separates ex
 - hash-only-timestamp: attestation of only the certificateHash. Typically verifies as PARTIAL.
 - legacy: older records that may lack full attestation data.
 
-## Verification outcomes
-VERIFIED | PARTIAL | INVALID | UNAVAILABLE
+## Verification statuses (per CER Protocol)
+VERIFIED | FAILED | NOT_FOUND
 
 ## Public surfaces
 - verify.nexart.io: public verification portal.
