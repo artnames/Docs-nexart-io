@@ -20,8 +20,8 @@ Even with auto-stamp disabled, records can be manually stamped later:
 - Hash-only timestamp for legacy or incomplete records
 
 ## Relationship to verification
-- Stamped records receive signed receipts → can verify as VERIFIED
-- Unstamped records may verify as PARTIAL until a manual stamp is added`;
+- Stamped records receive signed receipts → all checks PASS → status VERIFIED
+- Unstamped records can still verify as VERIFIED for bundle integrity, but attestation checks are SKIPPED`;
 
 const AutoStamp = () => (
   <>
