@@ -29,7 +29,7 @@ Returns CER bundle with certificateHash but no meta.attestation.
 { receipt: { certificateHash, timestamp, nodeId, kid }, signature, kid }
 
 ## Verification report
-{ outcome: "VERIFIED" | "PARTIAL" | "INVALID" | "UNAVAILABLE",
+{ status: "VERIFIED" | "FAILED" | "NOT_FOUND",
   checks: { bundleIntegrity, nodeSignature, receiptConsistency } }
 
 ## Node key discovery
