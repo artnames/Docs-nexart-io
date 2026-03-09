@@ -149,6 +149,7 @@ const NexArtCLI = () => (
       <li><Link to="/docs/quickstart" className="text-primary hover:underline">Quickstart</Link></li>
       <li><Link to="/docs/integrations/n8n" className="text-primary hover:underline">n8n Integration</Link></li>
       <li><Link to="/docs/verification" className="text-primary hover:underline">Verification</Link></li>
+      <li><Link to="/docs/cer-protocol" className="text-primary hover:underline">CER Protocol</Link></li>
       <li><Link to="/docs/concepts/cer" className="text-primary hover:underline">CER Anatomy</Link></li>
       <li><Link to="/docs/concepts/signed-receipts" className="text-primary hover:underline">Signed Receipts</Link></li>
     </ul>

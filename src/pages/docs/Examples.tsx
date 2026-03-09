@@ -194,7 +194,7 @@ https://verify.nexart.io/c/sha256%3A9e8d7c6b5a4f3210...`}
     />
 
     <h2 id="hash-only">Hash-Only Timestamp</h2>
-    <p>Attests only the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>. Snapshot is not included. Verifies as <strong>PARTIAL</strong>.</p>
+    <p>Attests only the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>. Snapshot is not included. Verifies as <strong>VERIFIED</strong> when all applicable checks pass.</p>
     <CodeBlock
       code={`{
   "bundleType": "hash-only-timestamp",

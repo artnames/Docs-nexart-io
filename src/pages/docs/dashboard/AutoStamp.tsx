@@ -74,8 +74,8 @@ const AutoStamp = () => (
     </ul>
 
     <h2 id="verification">Relationship to Verification</h2>
-    <p>Auto-stamp affects whether a record receives a signed receipt automatically. Signed receipts improve verification coverage, so a stamped record can verify as <strong>VERIFIED</strong>.</p>
-    <p>If a record is not stamped automatically, verification may remain <strong>PARTIAL</strong> until a manual stamp is added.</p>
+    <p>Auto-stamp affects whether a record receives a signed receipt automatically. Signed receipts allow all verification checks to return <strong>PASS</strong>, producing a <strong>VERIFIED</strong> status with full attestation coverage.</p>
+    <p>If a record is not stamped, it can still verify as <strong>VERIFIED</strong> for bundle integrity, but the Node Signature and Receipt Consistency checks will be <strong>SKIPPED</strong> until a stamp is added.</p>
   </>
 );
 

@@ -1,5 +1,6 @@
 import PageHeader from "@/components/docs/PageHeader";
 import CodeBlock from "@/components/docs/CodeBlock";
+import { Link } from "react-router-dom";
 
 const llmBlock = `# NexArt Verification
 Verification confirms three things about a CER:
@@ -18,20 +19,20 @@ verify.nexart.io is the public verification portal.
 The verifier uses a redacted/public-safe representation. Raw inputs/outputs are not exposed.
 
 ## Checks
+Each check returns PASS, FAIL, or SKIPPED.
 1. Bundle Integrity — recompute certificateHash from bundle contents, confirm it matches
-2. Node Signature — validate Ed25519 signature using key from node.nexart.io/.well-known/nexart-node.json (matched by kid)
-3. Receipt Consistency — receipt (at meta.attestation.receipt) references same certificateHash as bundle
+2. Node Signature — validate Ed25519 signature using key from node.nexart.io/.well-known/nexart-node.json (matched by kid). SKIPPED if no attestation.
+3. Receipt Consistency — receipt (at meta.attestation.receipt) references same certificateHash as bundle. SKIPPED if no attestation.
 
 ## What is publicly visible
 - certificateHash, timestamp, node identity, verification status
 - Input/output content is hashed (SHA-256), not stored or displayed
 - Metadata fields may be included or redacted based on export settings
 
-## Outcomes
-VERIFIED — all checks pass, valid signed receipt
-PARTIAL — some checks pass, no full attestation (hash-only timestamps, redacted exports)
-INVALID — one or more checks fail (modified record, bad signature)
-UNAVAILABLE — missing data, unsupported format, unknown node
+## Verification statuses (per CER Protocol)
+VERIFIED — all applicable checks pass
+FAILED — one or more checks fail
+NOT_FOUND — record not located
 
 ## Independent verification
 Verification can be performed without NexArt API access using the CER bundle (including meta.attestation) and the node's published public keys.`;
@@ -51,7 +52,7 @@ const Verification = () => (
       <li>Was the receipt signed by a valid NexArt attestation node?</li>
       <li>Does the receipt reference the correct <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>?</li>
     </ol>
-    <p>If all three checks pass, the record is intact and its attestation is trustworthy.</p>
+    <p>If all applicable checks pass, the record is intact and its attestation is trustworthy.</p>
 
     <h2 id="how-to-verify">How to Verify a Record</h2>
     <p>There are three ways to verify a CER through the public verifier at <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a>:</p>
@@ -93,33 +94,33 @@ const Verification = () => (
     </ul>
 
     <h2 id="checks">Verification Checks</h2>
+    <p>Each check returns <strong>PASS</strong>, <strong>FAIL</strong>, or <strong>SKIPPED</strong>:</p>
     <ol>
       <li><strong>Bundle Integrity.</strong> Recompute the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> from the bundle contents. If the hash differs, the bundle has been modified.</li>
-      <li><strong>Node Signature.</strong> Validate the Ed25519 signature using the public key published at <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">node.nexart.io/.well-known/nexart-node.json</code>, matched by the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">kid</code> in the receipt.</li>
-      <li><strong>Receipt Consistency.</strong> Confirm the receipt at <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation.receipt</code> references the same <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> as the bundle and that the node identity matches.</li>
+      <li><strong>Node Signature.</strong> Validate the Ed25519 signature using the public key published at <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">node.nexart.io/.well-known/nexart-node.json</code>, matched by the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">kid</code> in the receipt. <strong>SKIPPED</strong> if no attestation is present.</li>
+      <li><strong>Receipt Consistency.</strong> Confirm the receipt at <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation.receipt</code> references the same <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> as the bundle and that the node identity matches. <strong>SKIPPED</strong> if no attestation is present.</li>
     </ol>
 
-    <h2 id="outcomes">Verification Outcomes</h2>
+    <h2 id="outcomes">Verification Statuses</h2>
+    <p>The verification status reflects the overall outcome, as defined by the <Link to="/docs/cer-protocol" className="text-primary hover:underline">CER Protocol</Link>:</p>
     <CodeBlock
-      code={`VERIFIED      All checks pass. The CER has a valid signed receipt.
+      code={`VERIFIED      All applicable checks pass. The CER is intact and,
+              if attested, has a valid signed receipt.
 
-PARTIAL       Some checks pass, but the record lacks full attestation.
-              Common for hash-only timestamps or redacted exports.
-
-INVALID       One or more checks fail. The record may have been
+FAILED        One or more checks fail. The record may have been
               modified or the signature does not match.
 
-UNAVAILABLE   Verification cannot be completed. Missing data,
-              unsupported format, or unknown node identity.`}
-      title="Verification Outcomes"
+NOT_FOUND     The requested execution record was not located.`}
+      title="Verification Statuses"
     />
 
     <h2 id="by-bundle-type">Expected Outcomes by Bundle Type</h2>
     <ul>
-      <li><strong>cer.ai.execution.v1</strong> (with attestation) — all checks should pass → <strong>VERIFIED</strong></li>
-      <li><strong>signed-redacted-reseal</strong> — some snapshot fields removed → <strong>VERIFIED</strong> or <strong>PARTIAL</strong></li>
-      <li><strong>hash-only-timestamp</strong> — only certificateHash is attested → <strong>PARTIAL</strong></li>
-      <li><strong>legacy</strong> — older format, limited coverage → <strong>PARTIAL</strong> or <strong>UNAVAILABLE</strong></li>
+      <li><strong>cer.ai.execution.v1</strong> (with attestation) — all checks PASS → <strong>VERIFIED</strong></li>
+      <li><strong>cer.ai.execution.v1</strong> (without attestation) — bundleIntegrity PASS, attestation checks SKIPPED → <strong>VERIFIED</strong></li>
+      <li><strong>signed-redacted-reseal</strong> — some snapshot fields removed, re-signed → <strong>VERIFIED</strong></li>
+      <li><strong>hash-only-timestamp</strong> — only certificateHash is attested → <strong>VERIFIED</strong></li>
+      <li><strong>legacy</strong> — older format, limited coverage → <strong>VERIFIED</strong> or <strong>FAILED</strong> depending on data</li>
     </ul>
 
     <h2 id="independent">Independent Verification (No API Required)</h2>
@@ -132,6 +133,7 @@ UNAVAILABLE   Verification cannot be completed. Missing data,
       <li>Verify the Ed25519 signature over the receipt payload</li>
     </ol>
     <p>If all steps pass, you can trust the attestation independently of NexArt infrastructure. No account, API key, or network call to NexArt is required beyond fetching the node's public key.</p>
+    <p>For the full verification contract, see the <Link to="/docs/cer-protocol" className="text-primary hover:underline">CER Protocol specification</Link>.</p>
   </>
 );
 

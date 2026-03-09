@@ -99,7 +99,7 @@ const ProtocolOverview = () => (
     <p>A cryptographic proof returned by the node. It proves that the node witnessed the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> at a specific time. The receipt does not imply the node stores or owns the execution data.</p>
 
     <h3>Verification</h3>
-    <p>Verification confirms that the CER has not been modified and that the receipt signature is valid. Results are one of: <strong>VERIFIED</strong>, <strong>PARTIAL</strong>, <strong>INVALID</strong>, or <strong>UNAVAILABLE</strong>.</p>
+    <p>Verification confirms that the CER has not been modified and that the receipt signature is valid. Verification statuses are <strong>VERIFIED</strong>, <strong>FAILED</strong>, or <strong>NOT_FOUND</strong>. Each check returns <strong>PASS</strong>, <strong>FAIL</strong>, or <strong>SKIPPED</strong>.</p>
 
     <h2 id="record-types">Record Types</h2>
     <p>NexArt supports several record types depending on the attestation scope and export path:</p>
