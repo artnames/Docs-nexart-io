@@ -40,7 +40,7 @@ A CER is a portable, tamper-evident record of an execution. CERs may represent A
 
 ## Verification
 Checks: bundle integrity, node signature, receipt consistency.
-Outcomes: VERIFIED | PARTIAL | INVALID | UNAVAILABLE`;
+Verification statuses: VERIFIED | FAILED | NOT_FOUND. Check statuses: PASS | FAIL | SKIPPED.`;
 
 const CER = () => (
   <>
