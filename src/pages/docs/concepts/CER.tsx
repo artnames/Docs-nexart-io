@@ -40,7 +40,7 @@ A CER is a portable, tamper-evident record of an execution. CERs may represent A
 
 ## Verification
 Checks: bundle integrity, node signature, receipt consistency.
-Outcomes: VERIFIED | PARTIAL | INVALID | UNAVAILABLE`;
+Verification statuses: VERIFIED | FAILED | NOT_FOUND. Check statuses: PASS | FAIL | SKIPPED.`;
 
 const CER = () => (
   <>
@@ -146,8 +146,8 @@ const CER = () => (
       <li><strong>Node Signature</strong> — the receipt signature is valid against a published node key.</li>
       <li><strong>Receipt Consistency</strong> — the receipt's certificateHash matches the CER bundle.</li>
     </ul>
-    <p>Outcomes: <strong>VERIFIED</strong>, <strong>PARTIAL</strong>, <strong>INVALID</strong>, or <strong>UNAVAILABLE</strong>.</p>
-    <p>See the <a href="/docs/verification">Verification</a> page for full details, including how to verify without API access.</p>
+    <p>Verification statuses: <strong>VERIFIED</strong>, <strong>FAILED</strong>, or <strong>NOT_FOUND</strong>. Each check returns <strong>PASS</strong>, <strong>FAIL</strong>, or <strong>SKIPPED</strong>.</p>
+    <p>See the <a href="/docs/verification">Verification</a> page and the <a href="/docs/cer-protocol">CER Protocol</a> for full details, including how to verify without API access.</p>
   </>
 );
 

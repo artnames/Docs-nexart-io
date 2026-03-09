@@ -29,7 +29,7 @@ Returns CER bundle with certificateHash but no meta.attestation.
 { receipt: { certificateHash, timestamp, nodeId, kid }, signature, kid }
 
 ## Verification report
-{ outcome: "VERIFIED" | "PARTIAL" | "INVALID" | "UNAVAILABLE",
+{ status: "VERIFIED" | "FAILED" | "NOT_FOUND",
   checks: { bundleIntegrity, nodeSignature, receiptConsistency } }
 
 ## Node key discovery
@@ -194,7 +194,7 @@ https://verify.nexart.io/c/sha256%3A9e8d7c6b5a4f3210...`}
     />
 
     <h2 id="hash-only">Hash-Only Timestamp</h2>
-    <p>Attests only the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>. Snapshot is not included. Verifies as <strong>PARTIAL</strong>.</p>
+    <p>Attests only the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>. Snapshot is not included. Verifies as <strong>VERIFIED</strong> when all applicable checks pass.</p>
     <CodeBlock
       code={`{
   "bundleType": "hash-only-timestamp",
@@ -210,25 +210,17 @@ https://verify.nexart.io/c/sha256%3A9e8d7c6b5a4f3210...`}
     <p>Summarizes the result of validating a CER.</p>
     <CodeBlock
       code={`{
-  "outcome": "VERIFIED",
+  "status": "VERIFIED",
   "checks": {
-    "bundleIntegrity": {
-      "status": "pass",
-      "detail": "Computed certificateHash matches bundle contents"
-    },
-    "nodeSignature": {
-      "status": "pass",
-      "detail": "Ed25519 signature valid against published key",
-      "nodeId": "nexart-node-primary",
-      "kid": "key_01HXYZ..."
-    },
-    "receiptConsistency": {
-      "status": "pass",
-      "detail": "Receipt references correct certificateHash"
-    }
+    "bundleIntegrity": "PASS",
+    "nodeSignature": "PASS",
+    "receiptConsistency": "PASS"
   },
+  "reasonCodes": [],
+  "certificateHash": "sha256:...",
   "bundleType": "cer.ai.execution.v1",
-  "verifiedAt": "2026-03-06T12:05:00.000Z"
+  "verifiedAt": "2026-03-06T12:05:00.000Z",
+  "verifier": "nexart-verifier/1.0.0"
 }`}
       title="Verification Report (VERIFIED)"
     />

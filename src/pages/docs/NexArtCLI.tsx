@@ -139,7 +139,7 @@ const NexArtCLI = () => (
     <CodeBlock code={`npx @nexart/cli ai verify cer.json`} title="Verify CER" />
     <p>Example result:</p>
     <CodeBlock
-      code={`Verification result: PASS\nbundleIntegrity: PASS\nnodeAttestation: PRESENT`}
+      code={`status: VERIFIED\nbundleIntegrity: PASS\nnodeSignature: PASS\nreceiptConsistency: PASS`}
       title="Verification Result"
     />
     <p>Local verification confirms that the bundle contents match the certificate hash.</p>
@@ -149,6 +149,7 @@ const NexArtCLI = () => (
       <li><Link to="/docs/quickstart" className="text-primary hover:underline">Quickstart</Link></li>
       <li><Link to="/docs/integrations/n8n" className="text-primary hover:underline">n8n Integration</Link></li>
       <li><Link to="/docs/verification" className="text-primary hover:underline">Verification</Link></li>
+      <li><Link to="/docs/cer-protocol" className="text-primary hover:underline">CER Protocol</Link></li>
       <li><Link to="/docs/concepts/cer" className="text-primary hover:underline">CER Anatomy</Link></li>
       <li><Link to="/docs/concepts/signed-receipts" className="text-primary hover:underline">Signed Receipts</Link></li>
     </ul>

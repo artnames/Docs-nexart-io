@@ -55,10 +55,10 @@ const AuditExports = () => (
   "project": "my-project",
   "app": "customer-chatbot",
   "verification": {
-    "outcome": "VERIFIED",
-    "bundleIntegrity": "pass",
-    "nodeSignature": "pass",
-    "receiptConsistency": "pass"
+    "status": "VERIFIED",
+    "bundleIntegrity": "PASS",
+    "nodeSignature": "PASS",
+    "receiptConsistency": "PASS"
   },
   "stamp_status": "stamped",
   "stamp_mode": "auto",
