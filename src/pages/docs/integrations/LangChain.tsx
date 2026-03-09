@@ -102,7 +102,7 @@ const result = await certifyLangChainRun({
   output: {
     text: "4"
   },
-  nodeUrl: "https://nexart-node.example",
+  nodeUrl: "https://your-nexart-node.example",
   apiKey: process.env.NEXART_API_KEY
 });
 
