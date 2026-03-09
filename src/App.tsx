@@ -8,6 +8,7 @@ import NotFound from "./pages/NotFound";
 import DocsLayout from "./components/docs/DocsLayout";
 import GettingStarted from "./pages/docs/GettingStarted";
 import Quickstart from "./pages/docs/Quickstart";
+import Integrations from "./pages/docs/Integrations";
 import ProtocolOverview from "./pages/docs/ProtocolOverview";
 import CERProtocol from "./pages/docs/CERProtocol";
 import CER from "./pages/docs/concepts/CER";
@@ -60,6 +61,7 @@ const App = () => (
             <Route path="verification" element={<Verification />} />
             <Route path="trust-model" element={<TrustModel />} />
             <Route path="integration-surfaces" element={<IntegrationSurfaces />} />
+            <Route path="integrations" element={<Integrations />} />
             <Route path="dashboard/projects" element={<Projects />} />
             <Route path="dashboard/apps" element={<Apps />} />
             <Route path="dashboard/auto-stamp" element={<AutoStamp />} />
