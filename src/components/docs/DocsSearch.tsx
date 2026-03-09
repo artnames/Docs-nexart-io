@@ -18,7 +18,7 @@ interface SearchEntry {
 }
 
 const searchIndex: SearchEntry[] = [
-  { title: "Introduction", path: "/docs/getting-started", section: "Getting Started", keywords: "getting started introduction overview CER certified execution record API certify verify attestation node receipt" },
+  { title: "Getting Started", path: "/docs/getting-started", section: "Getting Started", keywords: "getting started introduction overview install SDK CER certified execution record verify" },
   { title: "Quickstart", path: "/docs/quickstart", section: "Getting Started", keywords: "quickstart create verify first CER certificate hash API curl POST certify audit export evidence" },
   { title: "CER Anatomy", path: "/docs/concepts/cer", section: "Core Concepts", keywords: "CER anatomy structure bundle schema type namespace version metadata certificate hash execution" },
   { title: "Signed Receipts", path: "/docs/concepts/signed-receipts", section: "Core Concepts", keywords: "signed receipts attestation node signature Ed25519 receipt kid timestamp" },
