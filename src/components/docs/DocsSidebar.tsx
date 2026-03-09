@@ -19,10 +19,8 @@ const navigation: NavItem[] = [
   {
     title: "Core Concepts",
     children: [
-      { title: "Verification", path: "/docs/verification" },
       { title: "CER Anatomy", path: "/docs/concepts/cer" },
       { title: "Signed Receipts", path: "/docs/concepts/signed-receipts" },
-      { title: "Trust Model", path: "/docs/trust-model" },
       { title: "Hash-Only Timestamping", path: "/docs/concepts/hash-timestamping" },
       { title: "Verification Reports", path: "/docs/concepts/verification-reports" },
     ],
@@ -36,7 +34,10 @@ const navigation: NavItem[] = [
   {
     title: "Protocol",
     children: [
+      { title: "CER Protocol", path: "/docs/cer-protocol" },
       { title: "Protocol Overview", path: "/docs/protocol-overview" },
+      { title: "Trust Model", path: "/docs/trust-model" },
+      { title: "Verification", path: "/docs/verification" },
       { title: "Attestation Node", path: "/docs/attestation-node" },
       { title: "Integration Surfaces", path: "/docs/integration-surfaces" },
     ],
