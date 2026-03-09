@@ -53,7 +53,7 @@ The API response duplicates receipt and signature fields for convenience.
 Locally using bundle + node keys from node.nexart.io/.well-known/nexart-node.json
 Or through verify.nexart.io
 Checks: Bundle Integrity, Node Signature, Receipt Consistency
-Outcomes: VERIFIED | PARTIAL | INVALID | UNAVAILABLE`;
+Verification statuses: VERIFIED | FAILED | NOT_FOUND (per CER Protocol). Check statuses: PASS | FAIL | SKIPPED.`;
 
 const SDK = () => (
   <>
