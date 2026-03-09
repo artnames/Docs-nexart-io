@@ -6,9 +6,12 @@ const llmBlock = `NexArt LangChain Integration
 LangChain workflows can produce Certified Execution Records (CERs) using the NexArt AI Execution SDK (@nexart/ai-execution).
 
 Installation: npm install @nexart/ai-execution
+Subpath import: import { createLangChainCer } from "@nexart/ai-execution/langchain";
+
+A CER is a cryptographically bound record of an AI execution, including inputs, outputs, and execution metadata.
 
 Local CER creation:
-import { createLangChainCer } from "@nexart/ai-execution";
+import { createLangChainCer } from "@nexart/ai-execution/langchain";
 const { bundle, certificateHash } = createLangChainCer({ provider, model, input, output });
 
 Node attestation:
