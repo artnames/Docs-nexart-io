@@ -6,9 +6,12 @@ const llmBlock = `NexArt LangChain Integration
 LangChain workflows can produce Certified Execution Records (CERs) using the NexArt AI Execution SDK (@nexart/ai-execution).
 
 Installation: npm install @nexart/ai-execution
+Subpath import: import { createLangChainCer } from "@nexart/ai-execution/langchain";
+
+A CER is a cryptographically bound record of an AI execution, including inputs, outputs, and execution metadata.
 
 Local CER creation:
-import { createLangChainCer } from "@nexart/ai-execution";
+import { createLangChainCer } from "@nexart/ai-execution/langchain";
 const { bundle, certificateHash } = createLangChainCer({ provider, model, input, output });
 
 Node attestation:
@@ -40,11 +43,30 @@ const LangChain = () => {
         <li>Verify the execution independently using the NexArt verifier</li>
       </ul>
       <p>
+        A <strong>Certified Execution Record (CER)</strong> is a cryptographically bound record of an AI execution, including inputs, outputs, and execution metadata. The record produces a deterministic certificate hash and can optionally be attested by a NexArt node.
+      </p>
+      <p>
         The integration uses the <code>@nexart/ai-execution</code> package.
       </p>
 
+      <div className="not-prose my-6 flex flex-col items-center gap-2 text-sm font-mono">
+        <div className="px-4 py-2 rounded-md border border-border bg-card text-foreground">LangChain workflow</div>
+        <div className="text-muted-foreground">↓</div>
+        <div className="px-4 py-2 rounded-md border border-primary/40 bg-primary/10 text-primary font-medium">createLangChainCer()</div>
+        <div className="text-muted-foreground">↓</div>
+        <div className="px-4 py-2 rounded-md border border-border bg-card text-foreground">CER bundle + certificate hash</div>
+        <div className="text-muted-foreground">↓ (optional)</div>
+        <div className="px-4 py-2 rounded-md border border-primary/40 bg-primary/10 text-primary font-medium">NexArt node attestation</div>
+        <div className="text-muted-foreground">↓</div>
+        <div className="px-4 py-2 rounded-md border border-border bg-card text-foreground">verify.nexart.io</div>
+      </div>
+
       <h2>Installation</h2>
       <CodeBlock language="bash" code="npm install @nexart/ai-execution" />
+      <p>
+        The LangChain integration is available as a subpath import for developers who prefer importing only the integration they need:
+      </p>
+      <CodeBlock language="typescript" code={`import { createLangChainCer } from "@nexart/ai-execution/langchain";`} />
 
       <h2>Create a CER Locally</h2>
       <p>
@@ -70,6 +92,7 @@ console.log(certificateHash);`} />
       <p>
         When a node URL is provided, the record is attested by the NexArt node and includes a signed
         receipt. This step is optional — local CER creation is sufficient for many use cases.
+        The node URL should point to a NexArt certification node that supports the CER protocol.
       </p>
       <CodeBlock language="typescript" title="Node Attestation" code={`import { certifyLangChainRun } from "@nexart/ai-execution";
 
@@ -82,7 +105,7 @@ const result = await certifyLangChainRun({
   output: {
     text: "4"
   },
-  nodeUrl: "https://nexart-node.example",
+  nodeUrl: "https://your-nexart-node.example",
   apiKey: process.env.NEXART_API_KEY
 });
 
@@ -90,17 +113,20 @@ console.log(result.receipt.attestationId);`} />
 
       <h2>Verification</h2>
       <p>
-        Generated CERs can be verified independently at{" "}
+        Records can be verified at{" "}
         <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-          verify.nexart.io
+          https://verify.nexart.io
         </a>
-        . Records can be verified using:
+        {" "}using:
       </p>
       <ul>
         <li>Execution ID</li>
         <li>Certificate hash</li>
         <li>Uploaded CER bundle</li>
       </ul>
+      <p>
+        Verification confirms that the record's hashes, metadata, and certificate identity are internally consistent.
+      </p>
 
       <h2>Use Cases</h2>
       <ul>
