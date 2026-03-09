@@ -45,6 +45,7 @@ const App = () => (
           <Route path="/docs" element={<DocsLayout />}>
             <Route path="getting-started" element={<GettingStarted />} />
             <Route path="quickstart" element={<Quickstart />} />
+            <Route path="cer-protocol" element={<CERProtocol />} />
             <Route path="protocol-overview" element={<ProtocolOverview />} />
             <Route path="concepts/cer" element={<CER />} />
             <Route path="concepts/signed-receipts" element={<SignedReceipts />} />
