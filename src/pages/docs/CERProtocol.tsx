@@ -228,6 +228,7 @@ const CERProtocol = () => (
     <h2 id="schema-versioning">Schema Versioning</h2>
     <p>CER bundles include a namespace and schema version. Example:</p>
     <CodeBlock code={`cer.ai.execution.v1`} language="text" />
+    <p>The namespace (<code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer.ai.execution</code>, <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer.codemode.render</code>) identifies the execution surface and ensures schema evolution can occur independently across surfaces.</p>
     <p>Minor schema updates may introduce new optional fields without breaking compatibility.</p>
     <p>Example: <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">v1.0 → v1.1</code></p>
     <p>Breaking changes require a new namespace version.</p>
