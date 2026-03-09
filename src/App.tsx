@@ -29,6 +29,7 @@ import AuditExports from "./pages/docs/dashboard/AuditExports";
 import Examples from "./pages/docs/Examples";
 import FAQ from "./pages/docs/FAQ";
 import N8n from "./pages/docs/integrations/N8n";
+import LangChain from "./pages/docs/integrations/LangChain";
 import IntegrationSurfaces from "./pages/docs/IntegrationSurfaces";
 import PrivacyDataHandling from "./pages/docs/PrivacyDataHandling";
 
@@ -67,6 +68,7 @@ const App = () => (
             <Route path="privacy" element={<PrivacyDataHandling />} />
             <Route path="examples" element={<Examples />} />
             <Route path="integrations/n8n" element={<N8n />} />
+            <Route path="integrations/langchain" element={<LangChain />} />
             <Route path="faq" element={<FAQ />} />
           </Route>
           <Route path="*" element={<NotFound />} />
