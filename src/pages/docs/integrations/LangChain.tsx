@@ -60,6 +60,10 @@ const LangChain = () => {
 
       <h2>Installation</h2>
       <CodeBlock language="bash" code="npm install @nexart/ai-execution" />
+      <p>
+        The LangChain integration is available as a subpath import for developers who prefer importing only the integration they need:
+      </p>
+      <CodeBlock language="typescript" code={`import { createLangChainCer } from "@nexart/ai-execution/langchain";`} />
 
       <h2>Create a CER Locally</h2>
       <p>
