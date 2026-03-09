@@ -110,17 +110,20 @@ console.log(result.receipt.attestationId);`} />
 
       <h2>Verification</h2>
       <p>
-        Generated CERs can be verified independently at{" "}
+        Records can be verified at{" "}
         <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-          verify.nexart.io
+          https://verify.nexart.io
         </a>
-        . Records can be verified using:
+        {" "}using:
       </p>
       <ul>
         <li>Execution ID</li>
         <li>Certificate hash</li>
         <li>Uploaded CER bundle</li>
       </ul>
+      <p>
+        Verification confirms that the record's hashes, metadata, and certificate identity are internally consistent.
+      </p>
 
       <h2>Use Cases</h2>
       <ul>
