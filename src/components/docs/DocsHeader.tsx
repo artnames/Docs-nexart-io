@@ -21,6 +21,9 @@ const DocsHeader = () => {
             <span className="font-mono text-sm font-medium tracking-tight">nexart.io</span>
             <span className="text-muted-foreground text-sm font-normal ml-2">docs</span>
           </Link>
+          <div className="ml-auto">
+            <DocsSearch />
+          </div>
         </div>
       </header>
       {mobileOpen && (
