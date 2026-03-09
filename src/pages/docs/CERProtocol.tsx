@@ -16,8 +16,11 @@ Governs: CER bundle structure, verification semantics, schema versioning, compat
 ## Canonical CER Structure
 Three logical layers: Snapshot (execution data), Certificate Hash (deterministic hash of canonicalized bundle), Attestation (optional node receipt and signature).
 
+## Canonical Hash Computation
+certificateHash = SHA-256 of canonicalized bundle. Canonicalization: remove non-deterministic fields, sort keys, serialize as canonical JSON. Format: sha256:<hex digest>.
+
 ## Verification Semantics
-Three checks: Bundle Integrity, Node Signature, Receipt Consistency.
+Three checks: Bundle Integrity, Node Signature, Receipt Consistency. Node attestation is optional — unattested CERs can still be verified for bundle integrity.
 
 ## Verification Status Values
 VERIFIED — all checks passed
@@ -38,6 +41,9 @@ Deprecated fields remain readable ≥12 months, must be documented, removal requ
 
 ## Conformance
 A compliant verifier must: compute canonical bundle hash, validate node attestation signatures, confirm receipt consistency, produce standardized verification result.
+
+## Protocol Surfaces
+NexArt Node, NexArt CLI, NexArt Verifier, NexArt Dashboard, NexArt SDKs. All must follow verification semantics defined in this specification.
 
 ## AIEF Alignment
 CER Snapshot → AIEF Execution Artifact, certificateHash → Execution Fingerprint, Node Attestation Receipt → Integrity Proof, Verification Report → Audit Evidence.`;
@@ -122,6 +128,21 @@ const CERProtocol = () => (
     <h3>Attestation</h3>
     <p>An optional node receipt and signature confirming observation of the execution.</p>
 
+    <h2 id="canonical-hash">Canonical Hash Computation</h2>
+    <p>The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> is computed by hashing the canonicalized CER bundle.</p>
+    <p>Canonicalization ensures that equivalent bundles produce identical hashes regardless of JSON formatting.</p>
+    <p>The canonicalization process:</p>
+    <ul>
+      <li>Removes non-deterministic fields</li>
+      <li>Sorts object keys deterministically</li>
+      <li>Serializes the bundle using canonical JSON encoding</li>
+    </ul>
+    <p>The hash algorithm used by the protocol is:</p>
+    <CodeBlock code={`SHA-256`} language="text" />
+    <p>The resulting certificate hash is formatted as:</p>
+    <CodeBlock code={`sha256:<hex digest>`} language="text" />
+    <p>All NexArt-compatible verifiers must compute the certificate hash using this canonicalization process.</p>
+
     <h2 id="verification-semantics">Verification Semantics</h2>
     <p>Verification confirms that a CER bundle is internally consistent and optionally attested by a NexArt node.</p>
     <p>Verification consists of three checks:</p>
@@ -131,6 +152,7 @@ const CERProtocol = () => (
     <p>If a node attestation exists, the signature must validate against the node's public keys.</p>
     <h3>Receipt Consistency</h3>
     <p>The receipt <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> must match the bundle <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>.</p>
+    <p>Node attestation is optional. A CER bundle without attestation can still be verified for bundle integrity, but cannot prove that a NexArt node observed the execution.</p>
 
     <h2 id="result-schema">Verification Result Schema</h2>
     <p>All NexArt-compatible verifiers should produce a standardized verification result.</p>
@@ -243,6 +265,19 @@ const CERProtocol = () => (
       </table>
     </div>
     <p>This alignment allows CERs to serve as verifiable execution artifacts within AIEF-compliant systems.</p>
+
+    <h2 id="protocol-surfaces">Protocol Surfaces</h2>
+    <p>The CER protocol is implemented across several NexArt system surfaces.</p>
+    <p>These surfaces share the same schema and verification semantics.</p>
+    <p>Current protocol implementations include:</p>
+    <ul>
+      <li><strong>NexArt Node</strong> — produces CER bundles and node attestations</li>
+      <li><strong>NexArt CLI</strong> — local creation and verification of CER bundles</li>
+      <li><strong>NexArt Verifier</strong> — public verification interface</li>
+      <li><strong>NexArt Dashboard</strong> — storage, export, and audit reports</li>
+      <li><strong>NexArt SDKs</strong> — developer libraries for generating and verifying CERs</li>
+    </ul>
+    <p>All implementations must follow the verification semantics defined in this specification.</p>
   </>
 );
 
