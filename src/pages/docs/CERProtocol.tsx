@@ -16,8 +16,11 @@ Governs: CER bundle structure, verification semantics, schema versioning, compat
 ## Canonical CER Structure
 Three logical layers: Snapshot (execution data), Certificate Hash (deterministic hash of canonicalized bundle), Attestation (optional node receipt and signature).
 
+## Canonical Hash Computation
+certificateHash = SHA-256 of canonicalized bundle. Canonicalization: remove non-deterministic fields, sort keys, serialize as canonical JSON. Format: sha256:<hex digest>.
+
 ## Verification Semantics
-Three checks: Bundle Integrity, Node Signature, Receipt Consistency.
+Three checks: Bundle Integrity, Node Signature, Receipt Consistency. Node attestation is optional — unattested CERs can still be verified for bundle integrity.
 
 ## Verification Status Values
 VERIFIED — all checks passed
@@ -38,6 +41,9 @@ Deprecated fields remain readable ≥12 months, must be documented, removal requ
 
 ## Conformance
 A compliant verifier must: compute canonical bundle hash, validate node attestation signatures, confirm receipt consistency, produce standardized verification result.
+
+## Protocol Surfaces
+NexArt Node, NexArt CLI, NexArt Verifier, NexArt Dashboard, NexArt SDKs. All must follow verification semantics defined in this specification.
 
 ## AIEF Alignment
 CER Snapshot → AIEF Execution Artifact, certificateHash → Execution Fingerprint, Node Attestation Receipt → Integrity Proof, Verification Report → Audit Evidence.`;
