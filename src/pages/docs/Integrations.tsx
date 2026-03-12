@@ -1,5 +1,13 @@
 import { Link } from "react-router-dom";
 import PageHeader from "@/components/docs/PageHeader";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableHead,
+  TableRow,
+  TableCell,
+} from "@/components/ui/table";
 
 const llmBlock = `# Integrations
 
@@ -34,6 +42,33 @@ const integrations = [
   },
 ];
 
+const comparisonRows = [
+  {
+    integration: "API",
+    bestFor: "Server-side certification",
+    attestation: "Yes",
+    user: "Backend developers",
+  },
+  {
+    integration: "CLI",
+    bestFor: "Local dev & offline verification",
+    attestation: "Optional",
+    user: "DevOps, CLI-first developers",
+  },
+  {
+    integration: "n8n",
+    bestFor: "Workflow automation",
+    attestation: "Yes",
+    user: "Automation engineers",
+  },
+  {
+    integration: "LangChain",
+    bestFor: "AI chains, agents, app logic",
+    attestation: "Optional",
+    user: "AI/ML engineers",
+  },
+];
+
 const Integrations = () => (
   <>
     <PageHeader
@@ -42,10 +77,41 @@ const Integrations = () => (
       llmBlock={llmBlock}
     />
 
+    <h2>Choose the Best Integration Path</h2>
+    <ul>
+      <li>Use the <strong>API</strong> if you want direct server-side certification</li>
+      <li>Use the <strong>CLI</strong> if you want local development and offline verification</li>
+      <li>Use <strong>n8n</strong> if you want workflow automation with minimal custom code</li>
+      <li>Use <strong>LangChain</strong> if you are building AI chains, agents, or application logic in code</li>
+    </ul>
+
+    <div className="not-prose my-6">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Integration</TableHead>
+            <TableHead>Best for</TableHead>
+            <TableHead>Node attestation</TableHead>
+            <TableHead>Typical user</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {comparisonRows.map((row) => (
+            <TableRow key={row.integration}>
+              <TableCell className="font-medium">{row.integration}</TableCell>
+              <TableCell>{row.bestFor}</TableCell>
+              <TableCell>{row.attestation}</TableCell>
+              <TableCell>{row.user}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+
+    <h2>Available Integrations</h2>
     <p>
-      NexArt can integrate with several execution environments. Developers can generate Certified
-      Execution Records through direct API calls, CLI workflows, n8n automation pipelines, and
-      LangChain AI workflows.
+      Developers can generate Certified Execution Records through direct API calls, CLI workflows,
+      n8n automation pipelines, and LangChain AI workflows.
     </p>
 
     <div className="not-prose my-6 grid grid-cols-1 sm:grid-cols-2 gap-3">

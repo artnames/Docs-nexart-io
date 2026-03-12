@@ -24,20 +24,27 @@ const Quickstart = () => (
     />
 
     <p>
-      For a broader overview, see the{" "}
+      This is the fastest path from zero to a verified execution record. For a broader overview, see the{" "}
       <Link to="/docs/getting-started" className="text-primary hover:underline">
         Getting Started
       </Link>{" "}
       guide.
     </p>
 
+    <h2>What You Will Do</h2>
+    <ul>
+      <li>Send one certification request</li>
+      <li>Receive a certificate hash and verification URL</li>
+      <li>Verify the record publicly</li>
+    </ul>
+
     <h2>1. Install the SDK</h2>
     <CodeBlock language="bash" code="npm install @nexart/ai-execution" />
 
-    <h2>2. Create a CER</h2>
+    <h2>2. Create and Certify a CER</h2>
     <CodeBlock
       language="typescript"
-      title="Create a CER"
+      title="Certify an AI Execution"
       code={`import { createLangChainCer } from "@nexart/ai-execution";
 
 const { bundle, certificateHash } = createLangChainCer({
@@ -70,19 +77,34 @@ console.log(certificateHash);`}
       <li><strong>Receipt Consistency</strong> — the receipt matches the certified record</li>
     </ul>
 
+    <p className="font-medium">You now have a verifiable execution record.</p>
+
+    <h2>Optional: Export Evidence</h2>
+    <p>
+      Once verified, you can export the CER bundle or share the verification URL for external audit or compliance workflows.
+    </p>
+
     <h2>Next Steps</h2>
     <ul>
       <li>
-        <Link to="/docs/integrations" className="text-primary hover:underline">Integrations</Link>{" "}
-        — connect to LangChain, n8n, or the CLI
+        <Link to="/docs/integrations/langchain" className="text-primary hover:underline">LangChain Integration</Link>{" "}
+        — certify AI chain and agent executions
       </li>
       <li>
-        <Link to="/docs/concepts/cer" className="text-primary hover:underline">CER Anatomy</Link>{" "}
-        — understand the record structure
+        <Link to="/docs/integrations/n8n" className="text-primary hover:underline">n8n Integration</Link>{" "}
+        — certify workflow automation results
+      </li>
+      <li>
+        <Link to="/docs/cli" className="text-primary hover:underline">CLI</Link>{" "}
+        — create and verify CERs from the command line
       </li>
       <li>
         <Link to="/docs/verification" className="text-primary hover:underline">Verification</Link>{" "}
         — deep dive into verification semantics
+      </li>
+      <li>
+        <Link to="/docs/cer-protocol" className="text-primary hover:underline">CER Protocol</Link>{" "}
+        — understand the protocol specification
       </li>
     </ul>
   </div>
