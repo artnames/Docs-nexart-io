@@ -45,6 +45,22 @@ Deprecated fields remain readable ≥12 months, must be documented, removal requ
 ## Conformance
 A compliant verifier must: compute canonical bundle hash, validate node attestation signatures, confirm receipt consistency, produce standardized verification result.
 
+## CER Lifecycle Model
+Lifecycle states describe how records are managed, stored, or presented — not how the CER bundle behaves cryptographically. CER bundles are immutable protocol artifacts. Lifecycle states apply to record management systems.
+
+States:
+- Active — stored and available for normal operations, resolvable by execution ID or certificate hash
+- Exported — included in an audit package or evidence bundle; export does not modify the CER
+- Archived — moved to long-term storage; remains cryptographically verifiable; may be excluded from dashboard queries
+- Hidden — stored and verifiable but not publicly resolvable; accessible to authorized organizational users
+- Deleted — removed from NexArt storage per retention policy; does not invalidate cryptographic provenance; previously exported bundles remain verifiable
+
+Transitions: Active → Archived, Active → Hidden, Archived → Active (restore), Active → Deleted. Transitions affect storage and visibility, not bundle contents.
+
+Audit visibility: lifecycle states influence operational interfaces but must not alter verification integrity. Verification tools evaluate CER bundles independently of lifecycle state.
+
+Immutability guarantee: lifecycle management never modifies the CER bundle, certificateHash, or attestation receipt. All lifecycle operations occur at the record management layer.
+
 ## Protocol Surfaces
 NexArt Node, NexArt CLI, NexArt Verifier, NexArt Dashboard, NexArt SDKs. All must follow verification semantics defined in this specification.
 
@@ -295,6 +311,45 @@ const CERProtocol = () => (
       </table>
     </div>
     <p>This alignment allows CERs to serve as verifiable execution artifacts within AIEF-compliant systems.</p>
+
+    <h2 id="lifecycle">CER Lifecycle Model</h2>
+    <p>This section defines the operational lifecycle of a Certified Execution Record as a managed record inside the NexArt system.</p>
+    <p>Lifecycle states describe how records are managed, stored, or presented — <strong>not</strong> how the CER bundle itself behaves cryptographically.</p>
+    <p>CER bundles are immutable protocol artifacts. Lifecycle states apply to record management systems such as dashboards, storage layers, and audit workflows.</p>
+
+    <h3>Lifecycle States</h3>
+
+    <h4>Active</h4>
+    <p>The CER is stored and available for normal operations. It can be resolved by execution ID or certificate hash and may appear in dashboard queries and exports.</p>
+
+    <h4>Exported</h4>
+    <p>The CER has been exported as part of an audit package or external evidence bundle. Export does not modify the CER or change its verification status.</p>
+
+    <h4>Archived</h4>
+    <p>The CER has been moved to long-term storage for retention purposes. Archived records remain cryptographically verifiable and may still be resolved through the verification system. Archived records may be excluded from normal dashboard queries but remain accessible through audit workflows.</p>
+
+    <h4>Hidden</h4>
+    <p>The CER remains stored and verifiable but is no longer publicly resolvable through public endpoints. Hidden records remain accessible to authorized organizational users and retain full verification capability.</p>
+
+    <h4>Deleted (storage-level deletion)</h4>
+    <p>The stored bundle may be removed from the NexArt storage layer according to retention policies. However, deletion does not invalidate the underlying cryptographic provenance of the CER. Any previously exported bundles or receipts remain independently verifiable.</p>
+
+    <h3 id="lifecycle-transitions">Lifecycle Transitions</h3>
+    <p>Lifecycle states may transition through operational actions:</p>
+    <ul>
+      <li>Active → Archived</li>
+      <li>Active → Hidden</li>
+      <li>Archived → Active (restore)</li>
+      <li>Active → Deleted (storage-level removal)</li>
+    </ul>
+    <p>Transitions affect storage and visibility behavior, not the CER bundle contents.</p>
+
+    <h3 id="audit-visibility">Audit Visibility</h3>
+    <p>Lifecycle states influence how records appear in operational interfaces but must not alter their verification integrity.</p>
+    <p>Verification tools must evaluate CER bundles independently of lifecycle state. Audit workflows must preserve historical visibility of lifecycle actions.</p>
+
+    <h3 id="lifecycle-immutability">Interaction with Protocol Immutability</h3>
+    <p>Lifecycle management never modifies the CER bundle, <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>, or attestation receipt. All lifecycle operations occur at the record management layer and do not affect the cryptographic validity of the record.</p>
 
     <h2 id="protocol-surfaces">Protocol Surfaces</h2>
     <p>The CER protocol is implemented across several NexArt system surfaces.</p>
