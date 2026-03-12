@@ -1,5 +1,6 @@
 import PageHeader from "@/components/docs/PageHeader";
 import CodeBlock from "@/components/docs/CodeBlock";
+import { Link } from "react-router-dom";
 
 const llmBlock = `NexArt n8n Integration
 
@@ -34,20 +35,26 @@ const N8n = () => {
         Early integration
       </div>
 
+      <h2>Best For</h2>
+      <ul>
+        <li>Workflow automation with minimal custom code</li>
+        <li>No-code / low-code certification pipelines</li>
+        <li>Automated reports with verifiable AI outputs</li>
+        <li>Customer-facing workflows requiring audit trails</li>
+        <li>Compliance pipelines that need tamper-evident records</li>
+      </ul>
+
       <h2>Overview</h2>
       <p>
-        NexArt can be used inside n8n workflows to certify AI execution results using the NexArt
-        certification API. When an AI step produces output, the HTTP Request node sends the execution
-        data to the NexArt API and returns a <code>verificationUrl</code> that links to the public
-        verification portal.
+        NexArt integrates with n8n workflows via the standard HTTP Request node. When an AI step
+        produces output, the HTTP Request node sends the execution data to the NexArt API and
+        returns a <code>verificationUrl</code> linking to the public verification portal.
       </p>
       <p>
-        This makes it easy to add verifiable execution records to any automated workflow without
-        writing custom integration code.
+        This is the recommended path if your AI logic already runs inside n8n workflows.
       </p>
 
       <h2>How It Works</h2>
-      <p>The integration follows a simple three-step flow:</p>
 
       <div className="not-prose my-6 flex flex-col items-center gap-2 text-sm font-mono">
         <div className="px-4 py-2 rounded-md border border-border bg-card text-foreground">AI Step (e.g. OpenAI, Claude)</div>
@@ -58,38 +65,23 @@ const N8n = () => {
       </div>
 
       <ol>
-        <li>An AI step in your workflow produces output (text, image, or structured data).</li>
-        <li>The HTTP Request node sends the execution data to <code>POST /v1/cer/ai/certify</code>. NexArt creates a Certified Execution Record (<code>bundleType: "cer.ai.execution.v1"</code>), signs it using the attestation node, and returns a <code>verificationUrl</code>.</li>
-        <li>The <code>verificationUrl</code> can be stored, shared, or passed to downstream steps.</li>
+        <li>An AI step produces output (text, image, or structured data).</li>
+        <li>The HTTP Request node sends it to <code>POST /v1/cer/ai/certify</code>. NexArt creates a CER, signs it via the attestation node, and returns a <code>verificationUrl</code>.</li>
+        <li>Store, share, or pass the <code>verificationUrl</code> to downstream steps.</li>
       </ol>
 
-      <h2>Endpoint</h2>
-      <p>
-        The workflow calls <code>POST /v1/cer/ai/certify</code>. This endpoint creates and certifies a CER in a single request. It handles bundle creation, hash computation, attestation node signing, and receipt generation.
-      </p>
-
       <h2>Configuration</h2>
-      <p>The HTTP Request node requires an API key for authentication. Set this as a Bearer token credential:</p>
-
+      <p>Set your API key as a Bearer token credential in the HTTP Request node:</p>
       <CodeBlock language="text" code="NEXART_API_KEY=your-api-key" />
 
-      <h2>Quick Demo (2 minutes)</h2>
-      <p>
-        This example shows how to generate a Certified Execution Record (CER) from an n8n workflow
-        using the NexArt certification API.
-      </p>
+      <h2>Quick Demo</h2>
 
       <h3>1. Start n8n</h3>
       <CodeBlock language="bash" code="npx n8n" />
-      <p>Open the editor:</p>
-      <CodeBlock language="text" code="http://localhost:5678" />
+      <p>Open the editor at <code>http://localhost:5678</code>.</p>
 
       <h3>2. Create a workflow</h3>
-      <p>Add the following nodes:</p>
-      <CodeBlock language="text" title="Workflow Structure" code={`Manual Trigger
-      ↓
-HTTP Request (POST /v1/cer/ai/certify)`} />
-      <p>Configure the HTTP Request node:</p>
+      <p>Add a Manual Trigger followed by an HTTP Request node:</p>
       <div className="not-prose my-4 overflow-x-auto">
         <table className="w-full text-sm border border-border rounded-md">
           <tbody>
@@ -112,7 +104,7 @@ HTTP Request (POST /v1/cer/ai/certify)`} />
           </tbody>
         </table>
       </div>
-      <p>Set the request body:</p>
+      <p>Request body:</p>
       <CodeBlock language="json" code={`{
   "executionId": "n8n-demo-001",
   "provider": "openai",
@@ -135,9 +127,8 @@ HTTP Request (POST /v1/cer/ai/certify)`} />
   }
 }`} title="Request Body" />
 
-      <h3>3. Execute the workflow</h3>
-      <p>Run the node. The NexArt API will return a Certified Execution Record and a verification link.</p>
-      <p>Example response:</p>
+      <h3>3. Execute and verify</h3>
+      <p>Run the workflow. The API returns a CER with a verification link:</p>
       <CodeBlock language="json" code={`{
   "verificationUrl": "https://verify.nexart.io/e/n8n-demo-001",
   "certificateHash": "sha256:...",
@@ -145,25 +136,13 @@ HTTP Request (POST /v1/cer/ai/certify)`} />
   "signatureB64Url": "..."
 }`} title="Certify Response" />
       <p className="text-sm text-muted-foreground">
-        The API response includes receipt and signature at the top level for convenience. In the CER bundle, attestation data lives at <code>meta.attestation</code>.
+        Attestation data lives at <code>meta.attestation</code> in the CER bundle.
       </p>
-
-      <h3>4. Verify the execution record</h3>
-      <p>Open the returned verification link:</p>
-      <CodeBlock language="text" code="https://verify.nexart.io/e/n8n-demo-001" />
-      <p>The verification portal confirms:</p>
-      <CodeBlock language="text" code={`Bundle Integrity:      PASS
-Node Signature:        PASS
-Receipt Consistency:   PASS`} title="Verification Result" />
-      <p>Anyone can independently verify the execution record using verify.nexart.io.</p>
-
-      <h2>Minimal Workflow Structure</h2>
-      <CodeBlock language="text" title="Minimal Workflow" code={`Manual Trigger
-      ↓
-HTTP Request (POST /v1/cer/ai/certify)`} />
       <p>
-        This minimal workflow demonstrates how an automation pipeline can certify AI execution results
-        and return a publicly verifiable execution record.
+        Open the <code>verificationUrl</code> to confirm the record at{" "}
+        <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+          verify.nexart.io
+        </a>.
       </p>
 
       <h2>Use Cases</h2>
@@ -172,6 +151,22 @@ HTTP Request (POST /v1/cer/ai/certify)`} />
         <li>Attach verification links to customer-facing reports</li>
         <li>Create audit trails for AI decisions in compliance workflows</li>
         <li>Store verifiable records alongside workflow outputs</li>
+      </ul>
+
+      <h2>Next Steps</h2>
+      <ul>
+        <li>
+          <Link to="/docs/verification" className="text-primary hover:underline">Verification</Link>{" "}
+          — understand how CER verification works
+        </li>
+        <li>
+          <Link to="/docs/examples" className="text-primary hover:underline">Examples</Link>{" "}
+          — copy-ready API requests and response shapes
+        </li>
+        <li>
+          <Link to="/docs/integrations/langchain" className="text-primary hover:underline">LangChain</Link>{" "}
+          — for teams moving from workflow automation into code
+        </li>
       </ul>
     </div>
   );
