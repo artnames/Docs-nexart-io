@@ -38,8 +38,9 @@ A valid signed receipt must satisfy ALL of:
 4. Node metadata confirms the signing key exists and was published by the declared nodeId
 
 ## Protocol version binding
-Receipts attest a CER under the protocol version semantics in use at certification time.
-Future protocol revisions must preserve verifiability of historical receipts.
+Receipts are bound to the CER protocol version used by the bundle they attest.
+Verification tools must interpret receipts according to the applicable protocol rules.
+Future protocol revisions may extend receipt structures while preserving backward verification compatibility.
 
 ## Key discovery
 node.nexart.io/.well-known/nexart-node.json
