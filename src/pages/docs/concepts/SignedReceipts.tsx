@@ -32,10 +32,10 @@ If the underlying CER changes, a new CER bundle and new signed receipt must be g
 
 ## Verification rules
 A valid signed receipt must satisfy ALL of:
-1. Ed25519 signature verifies against the canonical receipt payload
-2. kid exists in the node's published key set
-3. certificateHash matches the CER bundle
-4. nodeId matches the node publishing the signing key
+1. certificateHash matches the CER bundle being verified
+2. Ed25519 signature is valid for the canonical receipt payload
+3. kid resolves to a public key published by the node metadata endpoint
+4. Node metadata confirms the signing key exists and was published by the declared nodeId
 
 ## Protocol version binding
 Receipts attest a CER under the protocol version semantics in use at certification time.
