@@ -1,7 +1,7 @@
 import PageHeader from "@/components/docs/PageHeader";
 import CodeBlock from "@/components/docs/CodeBlock";
 
-const llmBlock = `# NexArt Signed Receipts
+const llmBlock = `# NexArt Signed Receipts (Attestation Receipt Protocol)
 A signed receipt is the canonical trust artifact in NexArt. It is the attestation proof returned by a node after it certifies a CER.
 
 ## What it proves
@@ -15,24 +15,36 @@ Attestation data lives at bundle.meta.attestation:
 - meta.attestation.signature — raw Ed25519 bytes
 - meta.attestation.kid — signing key identifier
 
-The API response may duplicate receipt and signatureB64Url at the top level for convenience.
-
 ## Trust hierarchy
 1. Signed receipt (cer.ai.execution.v1 with attestation) — full attestation, fully verifiable
 2. hash-only-timestamp — only certificateHash is signed, no snapshot attestation
 3. legacy — older records, may lack attestation data
 
-## Verification
-1. Fetch node keys from node.nexart.io/.well-known/nexart-node.json
-2. Select the key matching kid
-3. Verify Ed25519 signature over the canonical receipt payload
-4. Confirm receipt's certificateHash matches the CER bundle
+## Canonical signing payload
+The signature is computed over the deterministically serialized canonical receipt payload.
+Fields: certificateHash, timestamp, nodeId, kid.
+Stable canonical JSON ordering is required for independent verification.
 
-Or verify through verify.nexart.io.
+## Receipt immutability
+A signed receipt is immutable. If any field changes, the signature becomes invalid.
+
+## Verification rules
+A valid signed receipt must satisfy ALL of:
+1. Ed25519 signature verifies against the canonical receipt payload
+2. kid exists in the node's published key set
+3. certificateHash matches the CER bundle
+4. nodeId matches the node publishing the signing key
+
+## Protocol version binding
+Receipts attest a CER under the protocol version semantics in use at certification time.
+Future protocol revisions must preserve verifiability of historical receipts.
 
 ## Key discovery
 node.nexart.io/.well-known/nexart-node.json
-Fields: nodeId, activeKid, keys[] (kid, algorithm, publicKey)`;
+Fields: nodeId, activeKid, keys[] (kid, algorithm, publicKey)
+
+## Scope
+Current trust model is centered on a canonical attestation node. The receipt protocol is designed for future independent node interoperability.`;
 
 const SignedReceipts = () => (
   <>
@@ -129,6 +141,38 @@ https://verify.nexart.io/c/sha256%3A7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d6
       title="Node Key Discovery"
     />
 
+    <h2 id="canonical-signing-payload">Canonical Signing Payload</h2>
+    <p>The signature is computed over the <strong>canonical receipt payload</strong>. This payload must be serialized deterministically before signing.</p>
+    <p>The canonical payload consists of the following fields only:</p>
+    <ul>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code></li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">timestamp</code></li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">nodeId</code></li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">kid</code></li>
+    </ul>
+    <p>Stable canonical JSON ordering is required so that independent verifiers produce identical byte sequences and therefore identical verification results.</p>
+
+    <h2 id="receipt-immutability">Receipt Immutability</h2>
+    <p>A signed receipt is <strong>immutable</strong>. If any field in the receipt is modified after signing, the Ed25519 signature becomes invalid.</p>
+    <p>The receipt binds together:</p>
+    <ul>
+      <li>The CER's <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code></li>
+      <li>The node identity (<code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">nodeId</code>)</li>
+      <li>The attestation timestamp</li>
+      <li>The signing key identifier (<code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">kid</code>)</li>
+    </ul>
+    <p>This immutability is a protocol guarantee. Any mutation to a signed receipt renders the attestation unverifiable.</p>
+
+    <h2 id="verification-rules">Verification Rules</h2>
+    <p>A valid signed receipt must satisfy <strong>all</strong> of the following conditions:</p>
+    <ol>
+      <li>The Ed25519 signature verifies against the canonical receipt payload.</li>
+      <li>The receipt's <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">kid</code> exists in the node's published key set at the well-known endpoint.</li>
+      <li>The receipt's <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> matches the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> of the CER bundle being verified.</li>
+      <li>The receipt's <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">nodeId</code> matches the node identity publishing the signing key.</li>
+    </ol>
+    <p>If any condition fails, the receipt is invalid and the attestation cannot be trusted.</p>
+
     <h2 id="verification">Verifying a Receipt</h2>
     <ol>
       <li>Retrieve the node's public keys from <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">node.nexart.io/.well-known/nexart-node.json</code></li>
@@ -138,6 +182,13 @@ https://verify.nexart.io/c/sha256%3A7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d6
     </ol>
     <p>This process requires no API access to NexArt. You only need the CER bundle and the node's published public key.</p>
     <p>You can also verify through the public verifier at <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a>.</p>
+
+    <h2 id="protocol-version-binding">Protocol Version Binding</h2>
+    <p>Signed receipts attest a CER under the semantics of the NexArt protocol version in use at the time of certification. The receipt proves that the node witnessed the record according to the protocol rules applicable at that time.</p>
+    <p>Future protocol revisions should preserve verifiability of historical receipts. A receipt signed under an earlier protocol version remains valid when verified against the rules of that version.</p>
+
+    <h2 id="scope">Scope</h2>
+    <p>The current NexArt trust model is centered on a canonical attestation node. The receipt protocol is designed so that independent node implementations can verify and interoperate against the same receipt structure in the future, but this page describes the current canonical trust model only.</p>
   </>
 );
 
