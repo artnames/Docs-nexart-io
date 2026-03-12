@@ -142,15 +142,15 @@ https://verify.nexart.io/c/sha256%3A7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d6
     />
 
     <h2 id="canonical-signing-payload">Canonical Signing Payload</h2>
-    <p>The signature is computed over the <strong>canonical receipt payload</strong>. This payload must be serialized deterministically before signing.</p>
-    <p>The canonical payload consists of the following fields only:</p>
+    <p>The signed payload is exactly the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">receipt</code> object. The node signs the canonical JSON representation of this payload using Ed25519. The resulting signature is stored at <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation.signature</code>.</p>
+    <p>Verification must be performed against this exact payload. The canonical payload consists of the following fields only:</p>
     <ul>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code></li>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">timestamp</code></li>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">nodeId</code></li>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">kid</code></li>
     </ul>
-    <p>Stable canonical JSON ordering is required so that independent verifiers produce identical byte sequences and therefore identical verification results.</p>
+    <p>Stable canonical JSON ordering is required so that independent verifiers produce identical byte sequences and therefore identical verification results. No additional fields may be included in the signing payload.</p>
 
     <h2 id="receipt-immutability">Receipt Immutability</h2>
     <p>A signed receipt is <strong>immutable</strong>. If any field in the receipt is modified after signing, the Ed25519 signature becomes invalid.</p>
