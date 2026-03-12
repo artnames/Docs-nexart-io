@@ -64,6 +64,9 @@ console.log(certificateHash);`}
       <p>
         This produces a Certified Execution Record and returns a deterministic certificate hash.
       </p>
+      <p>
+        Raw input and output fields are optional in CERs — hashes are the core integrity mechanism.
+      </p>
 
       <h2 id="verify">Verify the Record</h2>
       <p>
