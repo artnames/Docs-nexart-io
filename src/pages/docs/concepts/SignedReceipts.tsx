@@ -24,7 +24,8 @@ Attestation data lives at bundle.meta.attestation:
 The signed payload is exactly the receipt object. The node signs its canonical JSON representation using Ed25519.
 The resulting signature is stored at meta.attestation.signature. Verification must be performed against this exact payload.
 Fields: certificateHash, timestamp, nodeId, kid. No additional fields may be included.
-Stable canonical JSON ordering is required for independent verification.
+Canonical JSON serialization must be deterministic: UTF-8 encoding with stable lexicographic key ordering. This ensures independent verifiers produce identical byte sequences.
+
 
 ## Receipt immutability
 A signed receipt is immutable. If any field changes, the signature becomes invalid.
