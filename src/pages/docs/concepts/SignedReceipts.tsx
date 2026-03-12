@@ -1,7 +1,7 @@
 import PageHeader from "@/components/docs/PageHeader";
 import CodeBlock from "@/components/docs/CodeBlock";
 
-const llmBlock = `# NexArt Signed Receipts
+const llmBlock = `# NexArt Signed Receipts (Attestation Receipt Protocol)
 A signed receipt is the canonical trust artifact in NexArt. It is the attestation proof returned by a node after it certifies a CER.
 
 ## What it proves
@@ -15,24 +15,36 @@ Attestation data lives at bundle.meta.attestation:
 - meta.attestation.signature — raw Ed25519 bytes
 - meta.attestation.kid — signing key identifier
 
-The API response may duplicate receipt and signatureB64Url at the top level for convenience.
-
 ## Trust hierarchy
 1. Signed receipt (cer.ai.execution.v1 with attestation) — full attestation, fully verifiable
 2. hash-only-timestamp — only certificateHash is signed, no snapshot attestation
 3. legacy — older records, may lack attestation data
 
-## Verification
-1. Fetch node keys from node.nexart.io/.well-known/nexart-node.json
-2. Select the key matching kid
-3. Verify Ed25519 signature over the canonical receipt payload
-4. Confirm receipt's certificateHash matches the CER bundle
+## Canonical signing payload
+The signature is computed over the deterministically serialized canonical receipt payload.
+Fields: certificateHash, timestamp, nodeId, kid.
+Stable canonical JSON ordering is required for independent verification.
 
-Or verify through verify.nexart.io.
+## Receipt immutability
+A signed receipt is immutable. If any field changes, the signature becomes invalid.
+
+## Verification rules
+A valid signed receipt must satisfy ALL of:
+1. Ed25519 signature verifies against the canonical receipt payload
+2. kid exists in the node's published key set
+3. certificateHash matches the CER bundle
+4. nodeId matches the node publishing the signing key
+
+## Protocol version binding
+Receipts attest a CER under the protocol version semantics in use at certification time.
+Future protocol revisions must preserve verifiability of historical receipts.
 
 ## Key discovery
 node.nexart.io/.well-known/nexart-node.json
-Fields: nodeId, activeKid, keys[] (kid, algorithm, publicKey)`;
+Fields: nodeId, activeKid, keys[] (kid, algorithm, publicKey)
+
+## Scope
+Current trust model is centered on a canonical attestation node. The receipt protocol is designed for future independent node interoperability.`;
 
 const SignedReceipts = () => (
   <>
