@@ -185,8 +185,9 @@ https://verify.nexart.io/c/sha256%3A7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d6
     <p>You can also verify through the public verifier at <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a>.</p>
 
     <h2 id="protocol-version-binding">Protocol Version Binding</h2>
-    <p>Signed receipts attest a CER under the semantics of the NexArt protocol version in use at the time of certification. The receipt proves that the node witnessed the record according to the protocol rules applicable at that time.</p>
-    <p>Future protocol revisions should preserve verifiability of historical receipts. A receipt signed under an earlier protocol version remains valid when verified against the rules of that version.</p>
+    <p>Receipts are bound to the CER protocol version used by the bundle they attest. The receipt proves that the node witnessed the record according to the protocol rules applicable at that time.</p>
+    <p>Verification tools must interpret the receipt according to the CER Protocol rules applicable to the attested bundle. A receipt signed under an earlier protocol version remains valid when verified against the rules of that version.</p>
+    <p>Future protocol revisions may extend receipt structures while preserving backward verification compatibility. Historical receipts must remain independently verifiable under their original protocol semantics.</p>
 
     <h2 id="scope">Scope</h2>
     <p>The current NexArt trust model is centered on a canonical attestation node. The receipt protocol is designed so that independent node implementations can verify and interoperate against the same receipt structure in the future, but this page describes the current canonical trust model only.</p>
