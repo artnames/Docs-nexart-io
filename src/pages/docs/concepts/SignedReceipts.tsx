@@ -153,7 +153,7 @@ https://verify.nexart.io/c/sha256%3A7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d6
     <p>Stable canonical JSON ordering is required so that independent verifiers produce identical byte sequences and therefore identical verification results. No additional fields may be included in the signing payload.</p>
 
     <h2 id="receipt-immutability">Receipt Immutability</h2>
-    <p>A signed receipt is <strong>immutable</strong>. If any field in the receipt is modified after signing, the Ed25519 signature becomes invalid.</p>
+    <p>A signed receipt is <strong>immutable</strong>. If any field in the receipt payload is modified after signing, the Ed25519 signature becomes invalid and the attestation cannot be verified.</p>
     <p>The receipt binds together:</p>
     <ul>
       <li>The CER's <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code></li>
@@ -161,6 +161,7 @@ https://verify.nexart.io/c/sha256%3A7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d6
       <li>The attestation timestamp</li>
       <li>The signing key identifier (<code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">kid</code>)</li>
     </ul>
+    <p>If the underlying CER changes, a new CER bundle and a new signed receipt must be generated. There is no mechanism to re-sign or amend an existing receipt.</p>
     <p>This immutability is a protocol guarantee. Any mutation to a signed receipt renders the attestation unverifiable.</p>
 
     <h2 id="verification-rules">Verification Rules</h2>
