@@ -24,7 +24,8 @@ Attestation data lives at bundle.meta.attestation:
 The signed payload is exactly the receipt object. The node signs its canonical JSON representation using Ed25519.
 The resulting signature is stored at meta.attestation.signature. Verification must be performed against this exact payload.
 Fields: certificateHash, timestamp, nodeId, kid. No additional fields may be included.
-Stable canonical JSON ordering is required for independent verification.
+Canonical JSON serialization must be deterministic: UTF-8 encoding with stable lexicographic key ordering. This ensures independent verifiers produce identical byte sequences.
+
 
 ## Receipt immutability
 A signed receipt is immutable. If any field changes, the signature becomes invalid.
@@ -35,7 +36,7 @@ A valid signed receipt must satisfy ALL of:
 1. certificateHash matches the CER bundle being verified
 2. Ed25519 signature is valid for the canonical receipt payload
 3. kid resolves to a public key published by the node metadata endpoint
-4. Node metadata confirms the signing key exists and was published by the declared nodeId
+4. The nodeId in the node metadata document matches the nodeId in the receipt, confirming the signing key was published by the declared node
 
 ## Protocol version binding
 Receipts are bound to the CER protocol version used by the bundle they attest.
@@ -153,7 +154,7 @@ https://verify.nexart.io/c/sha256%3A7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d6
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">nodeId</code></li>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">kid</code></li>
     </ul>
-    <p>Stable canonical JSON ordering is required so that independent verifiers produce identical byte sequences and therefore identical verification results. No additional fields may be included in the signing payload.</p>
+    <p>Canonical JSON serialization must be deterministic: the payload is encoded as UTF-8 with stable lexicographic key ordering. This ensures that independent verifiers produce identical byte sequences and therefore identical verification results. No additional fields may be included in the signing payload.</p>
 
     <h2 id="receipt-immutability">Receipt Immutability</h2>
     <p>A signed receipt is <strong>immutable</strong>. If any field in the receipt payload is modified after signing, the Ed25519 signature becomes invalid and the attestation cannot be verified.</p>
@@ -173,7 +174,7 @@ https://verify.nexart.io/c/sha256%3A7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d6
       <li>The receipt's <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> matches the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> of the CER bundle being verified.</li>
       <li>The Ed25519 signature is valid for the canonical receipt payload.</li>
       <li>The receipt's <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">kid</code> resolves to a public key published by the node at <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">/.well-known/nexart-node.json</code>.</li>
-      <li>The node metadata document confirms that the signing key exists and was published by the node identified by <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">nodeId</code>.</li>
+        <li>The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">nodeId</code> in the node metadata document matches the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">nodeId</code> in the receipt, confirming that the signing key was published by the declared node.</li>
     </ol>
     <p>If any condition fails, the receipt is invalid and the attestation cannot be trusted. These rules apply uniformly to all compliant verification implementations.</p>
 
