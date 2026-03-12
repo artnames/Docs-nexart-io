@@ -112,13 +112,31 @@ console.log(certificateHash);`}
           <Link to="/docs/quickstart" className="text-primary hover:underline">
             Quickstart
           </Link>{" "}
-          — create and verify a CER with a single API call
+          — create and verify a CER in three steps
         </li>
         <li>
-          <Link to="/docs/integrations" className="text-primary hover:underline">
-            Integrations
+          <Link to="/docs/integrations/langchain" className="text-primary hover:underline">
+            LangChain
           </Link>{" "}
-          — connect NexArt to LangChain, n8n, CLI, and more
+          — generate CERs from LangChain AI workflows
+        </li>
+        <li>
+          <Link to="/docs/integrations/n8n" className="text-primary hover:underline">
+            n8n
+          </Link>{" "}
+          — certify execution inside n8n automation pipelines
+        </li>
+        <li>
+          <Link to="/docs/cli" className="text-primary hover:underline">
+            CLI
+          </Link>{" "}
+          — create and verify CERs from the command line
+        </li>
+        <li>
+          <Link to="/docs/sdk" className="text-primary hover:underline">
+            SDK &amp; Protocol
+          </Link>{" "}
+          — full API reference and protocol details
         </li>
       </ul>
     </>
