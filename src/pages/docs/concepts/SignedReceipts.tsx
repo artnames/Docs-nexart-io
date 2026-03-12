@@ -154,7 +154,7 @@ https://verify.nexart.io/c/sha256%3A7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d6
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">nodeId</code></li>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">kid</code></li>
     </ul>
-    <p>Stable canonical JSON ordering is required so that independent verifiers produce identical byte sequences and therefore identical verification results. No additional fields may be included in the signing payload.</p>
+    <p>Canonical JSON serialization must be deterministic: the payload is encoded as UTF-8 with stable lexicographic key ordering. This ensures that independent verifiers produce identical byte sequences and therefore identical verification results. No additional fields may be included in the signing payload.</p>
 
     <h2 id="receipt-immutability">Receipt Immutability</h2>
     <p>A signed receipt is <strong>immutable</strong>. If any field in the receipt payload is modified after signing, the Ed25519 signature becomes invalid and the attestation cannot be verified.</p>
