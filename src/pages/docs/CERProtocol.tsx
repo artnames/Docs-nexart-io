@@ -61,6 +61,25 @@ Audit visibility: lifecycle states influence operational interfaces but must not
 
 Immutability guarantee: lifecycle management never modifies the CER bundle, certificateHash, or attestation receipt. All lifecycle operations occur at the record management layer.
 
+## Record Action Semantics
+Management actions (hide, delete, revoke, export) operate at the storage, visibility, and governance layer. They do not modify the CER bundle, certificateHash, or signed receipt.
+
+Actions:
+- Hide — record remains stored and verifiable but no longer publicly resolvable; accessible to authorized organizational users
+- Delete — removes stored bundle from NexArt storage per retention/governance rules; does not invalidate cryptographic provenance; prior exports and receipts remain verifiable
+- Revoke — governance action indicating record should no longer be treated as operationally valid; does not alter or delete the original CER; preserves historical audit trace
+- Export — creates external evidence package; does not modify the CER or change verification status
+
+Revocation semantics: revocation must not mutate the original CER. The original record remains historically valid as evidence of what was certified. Revocation applies to operational trust, not historical existence. Future protocol revisions may represent revocation as a separate linked artifact.
+
+Deletion semantics: deletion refers only to removal from managed storage. It does not erase prior exports, independently held bundles, signed receipts, or historical evidence. Deletion affects availability, not cryptographic history.
+
+Public visibility semantics: hiding removes public resolution (verification URLs, certificate-hash lookup) but does not change the CER, certificateHash, or signed receipt. Authorized users may still access hidden records through internal control surfaces.
+
+Audit trace preservation: all hide, revoke, delete, and export actions must preserve an audit trail at the management layer. Actions remain visible to authorized audit workflows even when the underlying record is hidden or removed.
+
+Lifecycle interaction: these actions interact with lifecycle states defined in the CER Lifecycle Model. Hide may move a record into the Hidden state. Delete may move a record into Deleted. Export may record an Exported lifecycle event. Revoke may affect operational validity without mutating the CER.
+
 ## Protocol Surfaces
 NexArt Node, NexArt CLI, NexArt Verifier, NexArt Dashboard, NexArt SDKs. All must follow verification semantics defined in this specification.
 
