@@ -72,7 +72,7 @@ console.log(certificateHash);`}
       <p>
         Verification can be performed independently. Open{" "}
         <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">
-          verify.nexart.io
+          https://verify.nexart.io
         </a>{" "}
         and paste the certificate hash to verify the record.
       </p>
