@@ -45,6 +45,22 @@ Deprecated fields remain readable ≥12 months, must be documented, removal requ
 ## Conformance
 A compliant verifier must: compute canonical bundle hash, validate node attestation signatures, confirm receipt consistency, produce standardized verification result.
 
+## CER Lifecycle Model
+Lifecycle states describe how records are managed, stored, or presented — not how the CER bundle behaves cryptographically. CER bundles are immutable protocol artifacts. Lifecycle states apply to record management systems.
+
+States:
+- Active — stored and available for normal operations, resolvable by execution ID or certificate hash
+- Exported — included in an audit package or evidence bundle; export does not modify the CER
+- Archived — moved to long-term storage; remains cryptographically verifiable; may be excluded from dashboard queries
+- Hidden — stored and verifiable but not publicly resolvable; accessible to authorized organizational users
+- Deleted — removed from NexArt storage per retention policy; does not invalidate cryptographic provenance; previously exported bundles remain verifiable
+
+Transitions: Active → Archived, Active → Hidden, Archived → Active (restore), Active → Deleted. Transitions affect storage and visibility, not bundle contents.
+
+Audit visibility: lifecycle states influence operational interfaces but must not alter verification integrity. Verification tools evaluate CER bundles independently of lifecycle state.
+
+Immutability guarantee: lifecycle management never modifies the CER bundle, certificateHash, or attestation receipt. All lifecycle operations occur at the record management layer.
+
 ## Protocol Surfaces
 NexArt Node, NexArt CLI, NexArt Verifier, NexArt Dashboard, NexArt SDKs. All must follow verification semantics defined in this specification.
 
