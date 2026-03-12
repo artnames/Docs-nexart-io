@@ -28,6 +28,7 @@ Stable canonical JSON ordering is required for independent verification.
 
 ## Receipt immutability
 A signed receipt is immutable. If any field changes, the signature becomes invalid.
+If the underlying CER changes, a new CER bundle and new signed receipt must be generated.
 
 ## Verification rules
 A valid signed receipt must satisfy ALL of:
