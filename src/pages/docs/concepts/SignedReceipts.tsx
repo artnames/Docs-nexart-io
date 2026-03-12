@@ -167,12 +167,12 @@ https://verify.nexart.io/c/sha256%3A7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d6
     <h2 id="verification-rules">Verification Rules</h2>
     <p>A valid signed receipt must satisfy <strong>all</strong> of the following conditions:</p>
     <ol>
-      <li>The Ed25519 signature verifies against the canonical receipt payload.</li>
-      <li>The receipt's <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">kid</code> exists in the node's published key set at the well-known endpoint.</li>
       <li>The receipt's <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> matches the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> of the CER bundle being verified.</li>
-      <li>The receipt's <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">nodeId</code> matches the node identity publishing the signing key.</li>
+      <li>The Ed25519 signature is valid for the canonical receipt payload.</li>
+      <li>The receipt's <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">kid</code> resolves to a public key published by the node at <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">/.well-known/nexart-node.json</code>.</li>
+      <li>The node metadata document confirms that the signing key exists and was published by the node identified by <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">nodeId</code>.</li>
     </ol>
-    <p>If any condition fails, the receipt is invalid and the attestation cannot be trusted.</p>
+    <p>If any condition fails, the receipt is invalid and the attestation cannot be trusted. These rules apply uniformly to all compliant verification implementations.</p>
 
     <h2 id="verification">Verifying a Receipt</h2>
     <ol>
