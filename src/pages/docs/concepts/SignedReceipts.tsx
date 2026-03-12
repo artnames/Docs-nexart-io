@@ -36,7 +36,7 @@ A valid signed receipt must satisfy ALL of:
 1. certificateHash matches the CER bundle being verified
 2. Ed25519 signature is valid for the canonical receipt payload
 3. kid resolves to a public key published by the node metadata endpoint
-4. Node metadata confirms the signing key exists and was published by the declared nodeId
+4. The nodeId in the node metadata document matches the nodeId in the receipt, confirming the signing key was published by the declared node
 
 ## Protocol version binding
 Receipts are bound to the CER protocol version used by the bundle they attest.
