@@ -21,8 +21,9 @@ Attestation data lives at bundle.meta.attestation:
 3. legacy — older records, may lack attestation data
 
 ## Canonical signing payload
-The signature is computed over the deterministically serialized canonical receipt payload.
-Fields: certificateHash, timestamp, nodeId, kid.
+The signed payload is exactly the receipt object. The node signs its canonical JSON representation using Ed25519.
+The resulting signature is stored at meta.attestation.signature. Verification must be performed against this exact payload.
+Fields: certificateHash, timestamp, nodeId, kid. No additional fields may be included.
 Stable canonical JSON ordering is required for independent verification.
 
 ## Receipt immutability
