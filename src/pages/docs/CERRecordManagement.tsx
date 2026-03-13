@@ -69,6 +69,13 @@ Lifecycle interaction: retention policies influence transitions such as Active �
 
 Record action interaction: retention policies interact with hide, delete, archive, and export actions but must not remove historical audit traces.
 
+## Evidence and Auditability Guarantees
+Certified Execution Records are designed to function as durable execution evidence. A CER captures a verifiable record of a computation or AI execution and binds it to a deterministic certificate hash. When node attestation is present, the record also includes a signed receipt proving that the record existed at a specific point in time.
+
+Evidence guarantees: Immutability — CER bundles and certificate hashes cannot be modified after creation without invalidating verification. Independent verification — verification does not require access to NexArt infrastructure; anyone with the CER bundle and the node's public keys can verify the record. Historical verifiability — records remain verifiable even if archived, hidden, or deleted from NexArt-managed storage. Audit trace preservation — management-layer actions (archive, hide, revoke, delete, export) must preserve an audit trail visible to authorized workflows. Protocol stability — verification semantics are versioned and must remain compatible with earlier protocol versions.
+
+Scope of evidence: CERs provide cryptographic evidence of execution records and attestations. They do not prove that an execution result was correct or desirable. They prove that a specific execution artifact existed and can be verified. This distinction is important for audit clarity.
+
 ## Operational and Sensitive Actions
 Record-management actions do not all have the same governance significance. Some affect normal storage and operational workflows. Others affect visibility, trust posture, or governance and require stronger controls. This classification operates only at the management layer — it does not modify the CER bundle, certificateHash, or signed receipt.
 
