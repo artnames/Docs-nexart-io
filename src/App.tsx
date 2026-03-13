@@ -34,6 +34,7 @@ import N8n from "./pages/docs/integrations/N8n";
 import LangChain from "./pages/docs/integrations/LangChain";
 import IntegrationSurfaces from "./pages/docs/IntegrationSurfaces";
 import PrivacyDataHandling from "./pages/docs/PrivacyDataHandling";
+import CERAuditWorkflows from "./pages/docs/CERAuditWorkflows";
 
 const queryClient = new QueryClient();
 
@@ -63,6 +64,7 @@ const App = () => (
             <Route path="verification" element={<Verification />} />
             <Route path="trust-model" element={<TrustModel />} />
             <Route path="integration-surfaces" element={<IntegrationSurfaces />} />
+            <Route path="cer-audit-workflows" element={<CERAuditWorkflows />} />
             <Route path="integrations" element={<Integrations />} />
             <Route path="dashboard/projects" element={<Projects />} />
             <Route path="dashboard/apps" element={<Apps />} />
