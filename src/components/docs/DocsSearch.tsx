@@ -28,7 +28,7 @@ const searchIndex: SearchEntry[] = [
   { title: "n8n Integration", path: "/docs/integrations/n8n", section: "Integrations", keywords: "n8n integration automation workflow community node certify verify" },
   { title: "LangChain Integration", path: "/docs/integrations/langchain", section: "Integrations", keywords: "langchain integration AI agent moderation pipeline workflow approval SDK certify verify CER" },
   { title: "CER Protocol", path: "/docs/cer-protocol", section: "Protocol", keywords: "CER protocol specification canonical hash computation verification semantics schema versioning AIEF conformance" },
-  { title: "CER Record Management", path: "/docs/cer-record-management", section: "Protocol", keywords: "CER record management lifecycle active archived hidden deleted revoke export hide audit retention governance" },
+  { title: "CER Record Management", path: "/docs/cer-record-management", section: "Protocol", keywords: "CER record management lifecycle active archived hidden deleted revoke export hide audit retention policy retention classes legal hold expiry governance" },
   { title: "Protocol Overview", path: "/docs/protocol-overview", section: "Protocol", keywords: "protocol overview architecture flow execution attestation verification trust" },
   { title: "Trust Model", path: "/docs/trust-model", section: "Protocol", keywords: "trust model node attestation independent verification transparency public key" },
   { title: "Verification", path: "/docs/verification", section: "Protocol", keywords: "verification verify bundle integrity node signature receipt consistency VERIFIED FAILED NOT_FOUND PASS FAIL SKIPPED" },
