@@ -386,6 +386,7 @@ const CERRecordManagement = () => (
       <li>Apply or release legal/audit hold</li>
     </ul>
     <p>These actions require stronger governance controls because they affect how records are relied upon, discovered, or preserved.</p>
+    <p>Some organizations may choose not to expose revocation or deletion as direct user-facing actions. In such cases, these actions are handled through governance review workflows rather than normal self-service UI controls.</p>
     <p>This section defines the classification only. It does not introduce formal permissions, roles, or approval workflows.</p>
 
     <h3 id="why-distinction-matters">Why the Distinction Matters</h3>
