@@ -447,7 +447,7 @@ const CERRecordManagement = () => (
     <p>Archive, restore, or hide records.</p>
 
     <h4>Sensitive Permissions</h4>
-    <p>Delete records, revoke operational validity, or change retention behavior.</p>
+    <p>Delete records, revoke operational validity, or change retention behavior. These permissions may not be exposed through standard self-service interfaces — organizations may require governance review processes before these actions can be executed.</p>
 
     <h4>Policy Permissions</h4>
     <p>Modify retention policies or apply legal/audit holds.</p>
