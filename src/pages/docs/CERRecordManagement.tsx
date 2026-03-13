@@ -502,6 +502,104 @@ const CERRecordManagement = () => (
     <h3 id="permissions-immutability">Interaction with Protocol Immutability</h3>
     <p>Access control and permissions never modify the CER bundle or its cryptographic evidence.</p>
     <p>Permissions govern operational access and management actions only. CER bundles, <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> values, signed receipts, and verification rules remain independent of organizational access control.</p>
+
+    {/* ── Policy Control Layer ── */}
+    <h2 id="policy-control-layer">Policy Control Layer</h2>
+    <p>Organizations may require formal governance rules for how CER records are stored, surfaced, retained, exported, and controlled over time.</p>
+    <p>The policy control layer provides a way to define those rules without modifying the CER protocol itself. Policies apply only to management-layer behavior such as lifecycle transitions, archival, export, retention, visibility, and record actions.</p>
+    <p>Policies do not alter the CER artifact, <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>, signed receipt, or verification semantics.</p>
+
+    <h3 id="policy-categories">Policy Categories</h3>
+    <p>Organizations may apply policies across the following governance categories:</p>
+
+    <h4>Retention Policies</h4>
+    <p>Control how long records remain stored and when they transition to archival or deletion. Retention policies interact with the <a href="#retention-policy" className="text-primary hover:underline">Retention Policy Model</a> defined earlier on this page.</p>
+
+    <h4>Visibility Policies</h4>
+    <p>Control whether records are publicly resolvable, hidden from external access, or restricted to internal organizational users. Visibility policies may set default visibility for new records or enforce hiding based on record class.</p>
+
+    <h4>Export Policies</h4>
+    <p>Control when evidence packs should be generated, what export scope is allowed, and whether exports are required before archival or deletion. Export policies support audit readiness by ensuring evidence is preserved before lifecycle transitions.</p>
+
+    <h4>Action Policies</h4>
+    <p>Control whether specific management actions — such as delete, hide, revoke, or restore — are allowed under normal operation. Action policies may block or constrain actions that would otherwise be permitted by role-based permissions.</p>
+
+    <h4>Audit Policies</h4>
+    <p>Control requirements for audit trace preservation, export logging, and evidence retention. Audit policies help organizations maintain accountability and traceability across record management operations.</p>
+
+    <h4>Sensitive Action Policies</h4>
+    <p>Define additional controls around actions classified as <a href="#operational-sensitive-actions" className="text-primary hover:underline">governance-sensitive</a>. These policies may require additional review, approval, or documentation before sensitive actions are executed.</p>
+
+    <h3 id="policy-scope">Policy Scope</h3>
+    <p>Policies may apply at multiple organizational scopes:</p>
+    <ul>
+      <li><strong>Organization-wide</strong> — default governance rules for all records</li>
+      <li><strong>Project</strong> — override for a specific project</li>
+      <li><strong>Application</strong> — override for a specific app within a project</li>
+      <li><strong>Execution surface</strong> — override based on bundle type</li>
+      <li><strong>Record class or workflow type</strong> — override based on record classification</li>
+    </ul>
+    <p>Lower-level scopes may override higher-level defaults, consistent with the <a href="#retention-scope" className="text-primary hover:underline">retention policy scope model</a>.</p>
+    <p>For example:</p>
+    <ul>
+      <li><strong>Organization default:</strong> archive after 90 days</li>
+      <li><strong>Project override:</strong> retain active for 1 year</li>
+    </ul>
+
+    <h3 id="policy-expressions">Example Policy Expressions</h3>
+    <p>Policies may be represented in implementation-specific ways. The governance model typically includes:</p>
+    <ul>
+      <li>Policy name</li>
+      <li>Scope</li>
+      <li>Trigger condition</li>
+      <li>Resulting action</li>
+      <li>Exceptions or overrides</li>
+    </ul>
+    <p>This section does not introduce a formal policy schema. These are conceptual examples of how governance rules may be expressed.</p>
+
+    <h4>Example 1</h4>
+    <p className="text-muted-foreground italic">Archive all AI execution CERs after 90 days and retain them for 5 years.</p>
+
+    <h4>Example 2</h4>
+    <p className="text-muted-foreground italic">Require evidence export before deleting records classified as long-term or permanent.</p>
+
+    <h3 id="policy-lifecycle">Interaction with Lifecycle and Record Actions</h3>
+    <p>Policies may trigger lifecycle transitions such as:</p>
+    <ul>
+      <li>Active → Archived</li>
+      <li>Archived → Deleted</li>
+    </ul>
+    <p>Policies may also constrain or require management actions such as:</p>
+    <ul>
+      <li>Export before deletion</li>
+      <li>Hide by default</li>
+      <li>Prevent deletion when legal hold exists</li>
+      <li>Prevent revoke except by authorized governance workflows</li>
+    </ul>
+    <p>Policies govern <em>how</em> actions are applied, not <em>what</em> the CER artifact is.</p>
+
+    <h3 id="policy-permissions">Interaction with Roles and Permissions</h3>
+    <p>Policies and permissions are related but not identical:</p>
+    <ul>
+      <li><strong>Permissions</strong> define <em>who</em> is allowed to attempt an action.</li>
+      <li><strong>Policies</strong> define <em>whether</em> the action is allowed or required under governance rules.</li>
+    </ul>
+    <p>For example, an administrator may have permission to delete a record, but policy may still require export and hold checks before deletion is allowed.</p>
+    <p>This distinction is important for enterprise governance where role-based access alone is not sufficient to enforce organizational rules.</p>
+
+    <h3 id="policy-audit">Interaction with Audit Workflows</h3>
+    <p>Policies may require that certain records:</p>
+    <ul>
+      <li>Remain exportable</li>
+      <li>Preserve audit trace</li>
+      <li>Trigger evidence pack creation</li>
+      <li>Remain retained for a specified period</li>
+    </ul>
+    <p>Audit workflows must continue to operate within policy constraints while preserving independent verification. Policies support audit readiness but do not override the ability to verify CER artifacts independently.</p>
+
+    <h3 id="policy-immutability">Interaction with Protocol Immutability</h3>
+    <p>Policies do not mutate the CER bundle, <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>, signed receipt, or verification result semantics.</p>
+    <p>Policy controls only govern management-layer operations applied to stored records. The CER protocol remains stable and independently verifiable regardless of policy configuration.</p>
   </>
 );
 
