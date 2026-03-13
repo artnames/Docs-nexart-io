@@ -429,6 +429,54 @@ const CERProtocol = () => (
     <h3 id="action-lifecycle-interaction">Interaction with Lifecycle Model</h3>
     <p>Record actions interact with lifecycle states defined in the <a href="#lifecycle" className="text-primary hover:underline">CER Lifecycle Model</a>. Hide may move a record into the Hidden state. Delete may move a record into Deleted (storage-level deletion). Export may record an Exported lifecycle event. Revoke may affect operational validity without mutating the CER or its lifecycle state.</p>
 
+    <h2 id="archival-behavior">Archival Behavior Model</h2>
+    <p>This section defines what it means for a Certified Execution Record to be archived inside the NexArt system.</p>
+    <p>Archival is a record-management behavior, not a change to the CER bundle itself. Archiving must not modify the CER, <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>, attestation receipt, or verification semantics.</p>
+
+    <h3 id="archival-storage">Storage Behavior</h3>
+    <p>An archived CER is moved from active operational storage into long-term managed storage.</p>
+    <p>Archived records may be excluded from normal dashboard lists, high-frequency operational queries, or default application views.</p>
+    <p>However, archival must preserve the ability to retrieve the record for audit, restore, or verification purposes according to organizational policy.</p>
+
+    <h3 id="archival-resolvability">Public Resolvability</h3>
+    <p>Archival does not automatically remove a record from public verification surfaces unless separate visibility rules (such as Hidden) apply.</p>
+    <p>An archived record may remain publicly resolvable by execution ID or certificate hash if public visibility is still allowed by policy.</p>
+    <p>If a record is both archived and hidden, public resolution may be disabled while internal audit access remains preserved.</p>
+
+    <h3 id="archival-verification">Verification Persistence</h3>
+    <p>Archived records remain cryptographically verifiable. Archival does not affect:</p>
+    <ul>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> validity</li>
+      <li>Signed receipt validity</li>
+      <li>Independent verification of previously exported bundles</li>
+      <li>Verifier interpretation of the record</li>
+    </ul>
+    <p>Verification depends on the CER artifact and receipt, not on whether the record is active or archived.</p>
+
+    <h3 id="archival-metadata">Searchable Metadata</h3>
+    <p>Archived records may be excluded from default operational search results.</p>
+    <p>However, core metadata may remain searchable for authorized users, such as:</p>
+    <ul>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">executionId</code></li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code></li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">bundleType</code></li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">createdAt</code></li>
+      <li>Project and app identifiers where applicable</li>
+    </ul>
+    <p>This allows organizations to locate archived records without restoring them to active state.</p>
+
+    <h3 id="archival-restore">Restore Behavior</h3>
+    <p>Archived records may be restored to the Active state through management-layer actions.</p>
+    <p>Restoration affects storage and operational visibility only. It does not modify the CER bundle, <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>, or signed receipt.</p>
+    <p>Archived → Active is a lifecycle management transition, not a new certification event.</p>
+
+    <h3 id="archival-immutability">Interaction with Protocol Immutability</h3>
+    <p>Archival never mutates the CER bundle or its cryptographic evidence. The same CER must remain verifiable before, during, and after archival.</p>
+    <p>Archival changes how the record is stored and surfaced, not what the record is.</p>
+
+    <h3 id="archival-lifecycle">Relationship to Lifecycle and Actions</h3>
+    <p>Archival is one lifecycle state within the <a href="#lifecycle" className="text-primary hover:underline">CER Lifecycle Model</a>. It is distinct from Hide (which affects public resolvability) and Delete (which removes the stored bundle). Archival preserves audit trace and verification continuity as defined in the <a href="#record-action-semantics" className="text-primary hover:underline">Record Action Semantics</a>.</p>
+
     <h2 id="protocol-surfaces">Protocol Surfaces</h2>
     <p>The CER protocol is implemented across several NexArt system surfaces.</p>
     <p>These surfaces share the same schema and verification semantics.</p>
