@@ -212,6 +212,69 @@ const CERRecordManagement = () => (
 
     <h3 id="archival-lifecycle">Relationship to Lifecycle and Actions</h3>
     <p>Archival is one lifecycle state within the <a href="#lifecycle" className="text-primary hover:underline">CER Lifecycle Model</a>. It is distinct from Hide (which affects public resolvability) and Delete (which removes the stored bundle). Archival preserves audit trace and verification continuity as defined in the <a href="#record-action-semantics" className="text-primary hover:underline">Record Action Semantics</a>.</p>
+
+    {/* ── Retention Policy Model ── */}
+    <h2 id="retention-policy">Retention Policy Model</h2>
+    <p>Retention policies define how long CER records remain stored and accessible inside NexArt-managed systems.</p>
+    <p>Retention policies affect storage behavior but never modify CER artifacts, <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>, or verification semantics.</p>
+
+    <h3 id="retention-classes">Retention Classes</h3>
+    <p>Organizations may define retention classes to categorize how long records are kept:</p>
+
+    <h4>Short-term</h4>
+    <p>Used for temporary operational logs or transient execution records that do not require long-term preservation.</p>
+
+    <h4>Standard</h4>
+    <p>The default retention period for most CER records. Suitable for general operational use.</p>
+
+    <h4>Long-term</h4>
+    <p>Used for regulated workflows or compliance-sensitive systems where extended retention is required.</p>
+
+    <h4>Permanent</h4>
+    <p>Records intended to remain stored indefinitely. Suitable for critical audit evidence or records subject to permanent regulatory requirements.</p>
+
+    <p>Retention class definitions may vary by organization. The classes listed here are examples — organizations may define custom classes aligned with their governance requirements.</p>
+
+    <h3 id="retention-scope">Policy Scope</h3>
+    <p>Retention policies may apply at multiple levels:</p>
+    <ul>
+      <li><strong>Organization</strong> — default retention for all records</li>
+      <li><strong>Project</strong> — override for a specific project</li>
+      <li><strong>Application</strong> — override for a specific app within a project</li>
+      <li><strong>Execution surface</strong> — override based on bundle type (e.g. AI execution vs. Code Mode)</li>
+    </ul>
+    <p>Lower-level scopes may override higher-level defaults. For example, an organization default of 5 years may be overridden by a project-level policy of 1 year.</p>
+
+    <h3 id="retention-expiry">Expiry Behavior</h3>
+    <p>When a retention period expires, the system may take one or more of the following actions:</p>
+    <ul>
+      <li>Archive the record</li>
+      <li>Delete the stored bundle</li>
+      <li>Require manual review before deletion</li>
+      <li>Trigger an export before deletion</li>
+    </ul>
+    <p>Retention expiry must not invalidate cryptographic evidence. Previously exported bundles and signed receipts remain independently verifiable regardless of whether the stored record has been removed.</p>
+
+    <h3 id="retention-hold">Legal Hold and Audit Hold</h3>
+    <p>Retention policies must support suspension of scheduled deletion when records are subject to:</p>
+    <ul>
+      <li>Legal investigation</li>
+      <li>Regulatory review</li>
+      <li>Internal audit</li>
+    </ul>
+    <p>When a record is under hold, deletion must be blocked. Archival may still occur during a hold period, but storage-level removal must be prevented until the hold is released.</p>
+
+    <h3 id="retention-lifecycle">Interaction with Lifecycle States</h3>
+    <p>Retention policies influence lifecycle transitions such as:</p>
+    <ul>
+      <li>Active → Archived (when a retention period triggers archival)</li>
+      <li>Archived → Deleted (when a retention period expires for archived records)</li>
+    </ul>
+    <p>Retention policies never mutate the CER bundle, <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>, or attestation receipt. They govern <em>when</em> lifecycle transitions occur, not <em>what</em> happens to the CER artifact itself.</p>
+
+    <h3 id="retention-actions">Interaction with Record Actions</h3>
+    <p>Retention policies interact with record actions including hide, delete, archive, and export. For example, a policy may trigger an automatic export before a scheduled deletion.</p>
+    <p>However, retention rules must not remove historical audit traces. All retention-driven actions must be logged and remain visible to authorized audit workflows.</p>
   </>
 );
 
