@@ -102,7 +102,24 @@ Interaction with lifecycle and retention: permissions determine who can trigger 
 
 Interaction with audit workflows: auditors may require controlled export permissions to generate evidence packs, verification snapshots, and export manifests. Audit workflows must not require modification of CER bundles or attestation artifacts.
 
-Interaction with protocol immutability: access control and permissions never modify the CER bundle or its cryptographic evidence. Permissions govern operational access and management actions only. CER bundles, certificateHash values, signed receipts, and verification rules remain independent of organizational access control.`;
+Interaction with protocol immutability: access control and permissions never modify the CER bundle or its cryptographic evidence. Permissions govern operational access and management actions only. CER bundles, certificateHash values, signed receipts, and verification rules remain independent of organizational access control.
+
+## Policy Control Layer
+Organizations may require formal governance rules for how CER records are stored, surfaced, retained, exported, and controlled over time. The policy control layer provides a way to define those rules without modifying the CER protocol itself. Policies apply only to management-layer behavior such as lifecycle transitions, archival, export, retention, visibility, and record actions. Policies do not alter the CER artifact, certificateHash, signed receipt, or verification semantics.
+
+Policy categories: Retention Policies (control how long records remain stored and when they transition to archival or deletion), Visibility Policies (control whether records are publicly resolvable, hidden, or restricted to internal access), Export Policies (control when evidence packs should be generated, what scope is allowed, and whether exports are required before archival or deletion), Action Policies (control whether actions such as delete, hide, revoke, or restore are allowed under normal operation), Audit Policies (control requirements for audit trace preservation, export logging, and evidence retention), Sensitive Action Policies (define additional controls around actions classified as governance-sensitive).
+
+Policy scope: policies may apply at organization, project, application, execution surface, or record class level. Lower-level scopes may override higher-level defaults. Example: organization default archives after 90 days; project override retains active for 1 year.
+
+Example policy expressions: policies may be represented in implementation-specific ways, but the governance model typically includes policy name, scope, trigger condition, resulting action, and exceptions or overrides. Example 1: archive all AI execution CERs after 90 days and retain them for 5 years. Example 2: require evidence export before deleting records classified as long-term or permanent.
+
+Interaction with lifecycle and record actions: policies may trigger lifecycle transitions (Active → Archived, Archived → Deleted) and may constrain or require management actions (export before deletion, hide by default, prevent deletion when legal hold exists, prevent revoke except by authorized governance workflows). Policies govern how actions are applied, not what the CER artifact is.
+
+Interaction with roles and permissions: policies and permissions are related but not identical. Permissions define who is allowed to attempt an action. Policies define whether the action is allowed or required under governance rules. An administrator may have permission to delete a record, but policy may still require export and hold checks before deletion is allowed.
+
+Interaction with audit workflows: policies may require that certain records remain exportable, preserve audit trace, trigger evidence pack creation, or remain retained for a specified period. Audit workflows must continue to operate within policy constraints while preserving independent verification.
+
+Interaction with protocol immutability: policies do not mutate the CER bundle, certificateHash, signed receipt, or verification result semantics. Policy controls only govern management-layer operations applied to stored records. The CER protocol remains stable and independently verifiable regardless of policy configuration.`;
 
 
 const CERRecordManagement = () => (
