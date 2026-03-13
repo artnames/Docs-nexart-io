@@ -87,7 +87,22 @@ Why the distinction matters: separating operational from sensitive actions helps
 
 Lifecycle and retention interaction: operational and sensitive actions interact with lifecycle states and retention policies. Archive is generally operational. Delete is sensitive. Hide is sensitive. Export is operational. Retention expiry may trigger operational or sensitive actions depending on policy. The classification helps determine how actions should later be controlled, reviewed, and audited.
 
-Protocol immutability: neither operational nor sensitive actions mutate the CER bundle or its cryptographic evidence. The distinction concerns governance significance, not protocol behavior.`;
+Protocol immutability: neither operational nor sensitive actions mutate the CER bundle or its cryptographic evidence. The distinction concerns governance significance, not protocol behavior.
+
+## Roles and Permissions Model
+Organizations using NexArt may need to control who can view, manage, export, or modify the operational state of CER records. Roles and permissions apply only to management-layer operations such as lifecycle transitions, export actions, and governance controls. Access control does not modify the CER artifact itself. Verification and cryptographic integrity remain independent of access permissions.
+
+Common role categories: Viewer (read-only access to CER records and verification results), Operator (operational access for day-to-day record management tasks), Auditor (read and export access for compliance and review workflows), Administrator (full management access including lifecycle, policy, and governance controls). Organizations may implement custom roles; these categories represent typical governance structures.
+
+Permission categories: Read Permissions (view CER metadata, verification results, and record details), Export Permissions (generate evidence packs or export verification artifacts), Lifecycle Permissions (archive, restore, or hide records), Sensitive Permissions (delete records, revoke operational validity, or change retention behavior), Policy Permissions (modify retention policies or apply legal/audit holds). Permissions apply only to record management behavior.
+
+Example permission matrix: Viewer — Read ✓, Export ✗, Archive ✗, Hide ✗, Revoke ✗, Delete ✗, Policy ✗. Operator — Read ✓, Export ✓, Archive ✓, Hide ✓, Revoke ✗, Delete ✗, Policy ✗. Auditor — Read ✓, Export ✓, Archive ✗, Hide ✗, Revoke ✗, Delete ✗, Policy ✗. Administrator — Read ✓, Export ✓, Archive ✓, Hide ✓, Revoke ✓, Delete ✓, Policy ✓. This is an example governance model; organizations may customize their permission structure.
+
+Interaction with lifecycle and retention: permissions determine who can trigger lifecycle transitions (Active → Archived, Active → Hidden, Archived → Active, Archived → Deleted) and policy actions (define retention classes, apply retention overrides, place records under legal or audit hold).
+
+Interaction with audit workflows: auditors may require controlled export permissions to generate evidence packs, verification snapshots, and export manifests. Audit workflows must not require modification of CER bundles or attestation artifacts.
+
+Interaction with protocol immutability: access control and permissions never modify the CER bundle or its cryptographic evidence. Permissions govern operational access and management actions only. CER bundles, certificateHash values, signed receipts, and verification rules remain independent of organizational access control.`;
 
 
 const CERRecordManagement = () => (
@@ -378,6 +393,98 @@ const CERRecordManagement = () => (
     <h3 id="action-split-immutability">Interaction with Protocol Immutability</h3>
     <p>Neither operational nor sensitive actions mutate the CER bundle or its cryptographic evidence.</p>
     <p>The distinction concerns governance significance, not protocol behavior. The CER bundle, <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>, and signed receipt remain immutable regardless of how an action is classified.</p>
+
+    {/* ── Roles and Permissions Model ── */}
+    <h2 id="roles-permissions">Roles and Permissions Model</h2>
+    <p>Organizations using NexArt may need to control who can view, manage, export, or modify the operational state of CER records.</p>
+    <p>Roles and permissions apply only to management-layer operations such as lifecycle transitions, export actions, and governance controls. Access control does not modify the CER artifact itself. Verification and cryptographic integrity remain independent of access permissions.</p>
+
+    <h3 id="common-roles">Common Role Categories</h3>
+    <p>The following role categories represent typical organizational governance structures for CER management. Organizations may implement custom roles aligned with their own requirements.</p>
+
+    <h4>Viewer</h4>
+    <p>Read-only access to CER records and verification results. Viewers can browse record metadata and view verification outcomes but cannot modify records or trigger management actions.</p>
+
+    <h4>Operator</h4>
+    <p>Operational access for day-to-day record management tasks. Operators can perform routine lifecycle actions such as archiving, restoring, and exporting records.</p>
+
+    <h4>Auditor</h4>
+    <p>Read and export access intended for compliance and review workflows. Auditors can view records and generate evidence packs but cannot modify lifecycle state or governance controls.</p>
+
+    <h4>Administrator</h4>
+    <p>Full management access including lifecycle transitions, policy configuration, and governance controls such as hide, revoke, and delete.</p>
+
+    <h3 id="permission-categories">Permission Categories</h3>
+    <p>The following categories define the main types of actions that may require permission controls. These permissions apply only to record management behavior.</p>
+
+    <h4>Read Permissions</h4>
+    <p>View CER metadata, verification results, and record details.</p>
+
+    <h4>Export Permissions</h4>
+    <p>Generate evidence packs or export verification artifacts.</p>
+
+    <h4>Lifecycle Permissions</h4>
+    <p>Archive, restore, or hide records.</p>
+
+    <h4>Sensitive Permissions</h4>
+    <p>Delete records, revoke operational validity, or change retention behavior.</p>
+
+    <h4>Policy Permissions</h4>
+    <p>Modify retention policies or apply legal/audit holds.</p>
+
+    <h3 id="permission-matrix">Example Permission Matrix</h3>
+    <p>The following table illustrates how roles may map to permission categories. This is an example governance model — organizations may customize their permission structure.</p>
+
+    <div className="relative w-full overflow-auto my-4">
+      <table className="w-full caption-bottom text-sm">
+        <thead className="[&_tr]:border-b">
+          <tr className="border-b">
+            <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Role</th>
+            <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Read</th>
+            <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Export</th>
+            <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Archive</th>
+            <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Hide</th>
+            <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Revoke</th>
+            <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Delete</th>
+            <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Policy</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr className="border-b"><td className="p-4 align-middle">Viewer</td><td className="p-4 align-middle">✓</td><td className="p-4 align-middle">✗</td><td className="p-4 align-middle">✗</td><td className="p-4 align-middle">✗</td><td className="p-4 align-middle">✗</td><td className="p-4 align-middle">✗</td><td className="p-4 align-middle">✗</td></tr>
+          <tr className="border-b"><td className="p-4 align-middle">Operator</td><td className="p-4 align-middle">✓</td><td className="p-4 align-middle">✓</td><td className="p-4 align-middle">✓</td><td className="p-4 align-middle">✓</td><td className="p-4 align-middle">✗</td><td className="p-4 align-middle">✗</td><td className="p-4 align-middle">✗</td></tr>
+          <tr className="border-b"><td className="p-4 align-middle">Auditor</td><td className="p-4 align-middle">✓</td><td className="p-4 align-middle">✓</td><td className="p-4 align-middle">✗</td><td className="p-4 align-middle">✗</td><td className="p-4 align-middle">✗</td><td className="p-4 align-middle">✗</td><td className="p-4 align-middle">✗</td></tr>
+          <tr className="border-b"><td className="p-4 align-middle">Administrator</td><td className="p-4 align-middle">✓</td><td className="p-4 align-middle">✓</td><td className="p-4 align-middle">✓</td><td className="p-4 align-middle">✓</td><td className="p-4 align-middle">✓</td><td className="p-4 align-middle">✓</td><td className="p-4 align-middle">✓</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="permissions-lifecycle">Interaction with Lifecycle and Retention</h3>
+    <p>Permissions determine who can trigger lifecycle transitions such as:</p>
+    <ul>
+      <li>Active → Archived</li>
+      <li>Active → Hidden</li>
+      <li>Archived → Active (restore)</li>
+      <li>Archived → Deleted</li>
+    </ul>
+    <p>Policy permissions may also control who can:</p>
+    <ul>
+      <li>Define retention classes</li>
+      <li>Apply retention overrides</li>
+      <li>Place records under legal or audit hold</li>
+    </ul>
+
+    <h3 id="permissions-audit">Interaction with Audit Workflows</h3>
+    <p>Auditors may require controlled export permissions to generate evidence packs. Export permissions should allow authorized users to create:</p>
+    <ul>
+      <li>CER evidence packs</li>
+      <li>Verification snapshots</li>
+      <li>Export manifests</li>
+    </ul>
+    <p>Audit workflows must not require modification of CER bundles or attestation artifacts.</p>
+
+    <h3 id="permissions-immutability">Interaction with Protocol Immutability</h3>
+    <p>Access control and permissions never modify the CER bundle or its cryptographic evidence.</p>
+    <p>Permissions govern operational access and management actions only. CER bundles, <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> values, signed receipts, and verification rules remain independent of organizational access control.</p>
   </>
 );
 
