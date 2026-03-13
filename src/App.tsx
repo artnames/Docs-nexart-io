@@ -34,6 +34,7 @@ import N8n from "./pages/docs/integrations/N8n";
 import LangChain from "./pages/docs/integrations/LangChain";
 import IntegrationSurfaces from "./pages/docs/IntegrationSurfaces";
 import PrivacyDataHandling from "./pages/docs/PrivacyDataHandling";
+import CERAuditWorkflows from "./pages/docs/CERAuditWorkflows";
 
 const queryClient = new QueryClient();
 
