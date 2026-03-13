@@ -27,8 +27,8 @@ Management actions (hide, delete, revoke, export) operate at the storage, visibi
 
 Actions:
 - Hide — record remains stored and verifiable but no longer publicly resolvable; accessible to authorized organizational users
-- Delete — removes stored bundle from NexArt storage per retention/governance rules; does not invalidate cryptographic provenance
-- Revoke — governance action indicating record should no longer be treated as operationally valid; does not alter or delete the original CER
+- Delete — removes stored bundle from NexArt storage per retention/governance rules; does not invalidate cryptographic provenance; governance-sensitive action that may not be exposed as a self-service operation
+- Revoke — governance action indicating record should no longer be treated as operationally valid; does not alter or delete the original CER; governance-sensitive action that organizations may restrict to review workflows
 - Export — creates external evidence package; does not modify the CER or change verification status
 
 Revocation semantics: revocation must not mutate the original CER. The original record remains historically valid. Revocation applies to operational trust, not historical existence.
