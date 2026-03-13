@@ -145,7 +145,7 @@ const CERRecordManagement = () => (
     <p>The CER is stored and available for normal operations. It can be resolved by execution ID or certificate hash and may appear in dashboard queries and exports.</p>
 
     <h4>Exported</h4>
-    <p>The CER has been exported as part of an audit package or external evidence bundle. Export does not modify the CER or change its verification status.</p>
+    <p>Exported indicates that a CER has been included in one or more evidence exports. Export does not modify the CER or change its verification status. Exported is an event marker, not a storage state — a CER may be exported while remaining Active, Archived, or in any other lifecycle state.</p>
 
     <h4>Archived</h4>
     <p>The CER has been moved to long-term storage for retention purposes. Archived records remain cryptographically verifiable and may still be resolved through the verification system. Archived records may be excluded from normal dashboard queries but remain accessible through audit workflows.</p>
