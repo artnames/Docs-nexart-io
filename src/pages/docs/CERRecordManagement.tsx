@@ -192,7 +192,7 @@ const CERRecordManagement = () => (
 
     <h3 id="revocation-semantics">Revocation Semantics</h3>
     <p>Revocation must not mutate the original CER. The original record remains historically valid as evidence of what was certified at the time.</p>
-    <p>Revocation applies to operational trust or workflow use, not to historical existence. A revoked CER still proves that a specific execution was certified — it simply indicates that the record should no longer be relied upon for current operational purposes.</p>
+    <p>Revocation affects operational reliance, not historical existence or cryptographic validity. A revoked CER still proves that a specific execution was certified — it simply indicates that the record should no longer be relied upon for current operational purposes.</p>
     <p>Future protocol revisions may represent revocation as a separate linked artifact. This documentation defines revocation semantics without extending the current schema.</p>
 
     <h3 id="deletion-semantics">Deletion Semantics</h3>
