@@ -49,6 +49,7 @@ const App = () => (
             <Route path="getting-started" element={<GettingStarted />} />
             <Route path="quickstart" element={<Quickstart />} />
             <Route path="cer-protocol" element={<CERProtocol />} />
+            <Route path="cer-record-management" element={<CERRecordManagement />} />
             <Route path="protocol-overview" element={<ProtocolOverview />} />
             <Route path="concepts/cer" element={<CER />} />
             <Route path="concepts/signed-receipts" element={<SignedReceipts />} />

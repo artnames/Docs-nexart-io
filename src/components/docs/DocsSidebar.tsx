@@ -41,6 +41,7 @@ const navigation: NavItem[] = [
     title: "Protocol",
     children: [
       { title: "CER Protocol", path: "/docs/cer-protocol" },
+      { title: "CER Record Management", path: "/docs/cer-record-management" },
       { title: "Protocol Overview", path: "/docs/protocol-overview" },
       { title: "Trust Model", path: "/docs/trust-model" },
       { title: "Verification", path: "/docs/verification" },
