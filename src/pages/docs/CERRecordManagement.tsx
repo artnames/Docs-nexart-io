@@ -27,8 +27,8 @@ Management actions (hide, delete, revoke, export) operate at the storage, visibi
 
 Actions:
 - Hide — record remains stored and verifiable but no longer publicly resolvable; accessible to authorized organizational users
-- Delete — removes stored bundle from NexArt storage per retention/governance rules; does not invalidate cryptographic provenance
-- Revoke — governance action indicating record should no longer be treated as operationally valid; does not alter or delete the original CER
+- Delete — removes stored bundle from NexArt storage per retention/governance rules; does not invalidate cryptographic provenance; governance-sensitive action that may not be exposed as a self-service operation
+- Revoke — governance action indicating record should no longer be treated as operationally valid; does not alter or delete the original CER; governance-sensitive action that organizations may restrict to review workflows
 - Export — creates external evidence package; does not modify the CER or change verification status
 
 Revocation semantics: revocation must not mutate the original CER. The original record remains historically valid. Revocation applies to operational trust, not historical existence.
@@ -183,9 +183,11 @@ const CERRecordManagement = () => (
 
     <h3>Delete (storage-level deletion)</h3>
     <p>Deletion removes the stored bundle from the NexArt-managed storage layer according to retention or governance rules. Deletion does not invalidate the underlying cryptographic provenance of the record. Previously exported bundles, receipts, and verification artifacts remain independently verifiable.</p>
+    <p>Deletion is a governance-sensitive action. Organizations may restrict deletion to authorized governance review processes rather than exposing it as a normal self-service operation.</p>
 
     <h3>Revoke</h3>
     <p>Revocation does not alter or delete the original CER. Instead, revocation is a governance action indicating that the original record should no longer be treated as operationally valid for current workflows. A revocation must preserve the historical audit trace of the original CER.</p>
+    <p>Revocation is a governance-sensitive action. Organizations may choose not to expose revocation as a direct user-facing action, instead handling it through governance review workflows.</p>
 
     <h3>Export</h3>
     <p>Export creates an external evidence package or bundle copy for audit or archival use. Export does not modify the CER or change its verification status.</p>
@@ -384,6 +386,7 @@ const CERRecordManagement = () => (
       <li>Apply or release legal/audit hold</li>
     </ul>
     <p>These actions require stronger governance controls because they affect how records are relied upon, discovered, or preserved.</p>
+    <p>Some organizations may choose not to expose revocation or deletion as direct user-facing actions. In such cases, these actions are handled through governance review workflows rather than normal self-service UI controls.</p>
     <p>This section defines the classification only. It does not introduce formal permissions, roles, or approval workflows.</p>
 
     <h3 id="why-distinction-matters">Why the Distinction Matters</h3>
@@ -444,7 +447,7 @@ const CERRecordManagement = () => (
     <p>Archive, restore, or hide records.</p>
 
     <h4>Sensitive Permissions</h4>
-    <p>Delete records, revoke operational validity, or change retention behavior.</p>
+    <p>Delete records, revoke operational validity, or change retention behavior. These permissions may not be exposed through standard self-service interfaces — organizations may require governance review processes before these actions can be executed.</p>
 
     <h4>Policy Permissions</h4>
     <p>Modify retention policies or apply legal/audit holds.</p>
@@ -522,7 +525,7 @@ const CERRecordManagement = () => (
     <p>Control when evidence packs should be generated, what export scope is allowed, and whether exports are required before archival or deletion. Export policies support audit readiness by ensuring evidence is preserved before lifecycle transitions.</p>
 
     <h4>Action Policies</h4>
-    <p>Control whether specific management actions — such as delete, hide, revoke, or restore — are allowed under normal operation. Action policies may block or constrain actions that would otherwise be permitted by role-based permissions.</p>
+    <p>Control whether specific management actions — such as delete, hide, revoke, or restore — are allowed under normal operation. Action policies may block or constrain actions that would otherwise be permitted by role-based permissions. Organizations may use action policies to ensure that revocation and deletion are only available through governance-controlled workflows rather than as routine self-service operations.</p>
 
     <h4>Audit Policies</h4>
     <p>Control requirements for audit trace preservation, export logging, and evidence retention. Audit policies help organizations maintain accountability and traceability across record management operations.</p>
