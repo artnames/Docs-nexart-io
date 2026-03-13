@@ -11,6 +11,7 @@ import Quickstart from "./pages/docs/Quickstart";
 import Integrations from "./pages/docs/Integrations";
 import ProtocolOverview from "./pages/docs/ProtocolOverview";
 import CERProtocol from "./pages/docs/CERProtocol";
+import CERRecordManagement from "./pages/docs/CERRecordManagement";
 import CER from "./pages/docs/concepts/CER";
 import SignedReceipts from "./pages/docs/concepts/SignedReceipts";
 import HashTimestamping from "./pages/docs/concepts/HashTimestamping";
