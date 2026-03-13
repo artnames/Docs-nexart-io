@@ -525,7 +525,7 @@ const CERRecordManagement = () => (
     <p>Control when evidence packs should be generated, what export scope is allowed, and whether exports are required before archival or deletion. Export policies support audit readiness by ensuring evidence is preserved before lifecycle transitions.</p>
 
     <h4>Action Policies</h4>
-    <p>Control whether specific management actions — such as delete, hide, revoke, or restore — are allowed under normal operation. Action policies may block or constrain actions that would otherwise be permitted by role-based permissions.</p>
+    <p>Control whether specific management actions — such as delete, hide, revoke, or restore — are allowed under normal operation. Action policies may block or constrain actions that would otherwise be permitted by role-based permissions. Organizations may use action policies to ensure that revocation and deletion are only available through governance-controlled workflows rather than as routine self-service operations.</p>
 
     <h4>Audit Policies</h4>
     <p>Control requirements for audit trace preservation, export logging, and evidence retention. Audit policies help organizations maintain accountability and traceability across record management operations.</p>
