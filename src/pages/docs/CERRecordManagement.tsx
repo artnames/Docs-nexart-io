@@ -87,7 +87,22 @@ Why the distinction matters: separating operational from sensitive actions helps
 
 Lifecycle and retention interaction: operational and sensitive actions interact with lifecycle states and retention policies. Archive is generally operational. Delete is sensitive. Hide is sensitive. Export is operational. Retention expiry may trigger operational or sensitive actions depending on policy. The classification helps determine how actions should later be controlled, reviewed, and audited.
 
-Protocol immutability: neither operational nor sensitive actions mutate the CER bundle or its cryptographic evidence. The distinction concerns governance significance, not protocol behavior.`;
+Protocol immutability: neither operational nor sensitive actions mutate the CER bundle or its cryptographic evidence. The distinction concerns governance significance, not protocol behavior.
+
+## Roles and Permissions Model
+Organizations using NexArt may need to control who can view, manage, export, or modify the operational state of CER records. Roles and permissions apply only to management-layer operations such as lifecycle transitions, export actions, and governance controls. Access control does not modify the CER artifact itself. Verification and cryptographic integrity remain independent of access permissions.
+
+Common role categories: Viewer (read-only access to CER records and verification results), Operator (operational access for day-to-day record management tasks), Auditor (read and export access for compliance and review workflows), Administrator (full management access including lifecycle, policy, and governance controls). Organizations may implement custom roles; these categories represent typical governance structures.
+
+Permission categories: Read Permissions (view CER metadata, verification results, and record details), Export Permissions (generate evidence packs or export verification artifacts), Lifecycle Permissions (archive, restore, or hide records), Sensitive Permissions (delete records, revoke operational validity, or change retention behavior), Policy Permissions (modify retention policies or apply legal/audit holds). Permissions apply only to record management behavior.
+
+Example permission matrix: Viewer — Read ✓, Export ✗, Archive ✗, Hide ✗, Revoke ✗, Delete ✗, Policy ✗. Operator — Read ✓, Export ✓, Archive ✓, Hide ✓, Revoke ✗, Delete ✗, Policy ✗. Auditor — Read ✓, Export ✓, Archive ✗, Hide ✗, Revoke ✗, Delete ✗, Policy ✗. Administrator — Read ✓, Export ✓, Archive ✓, Hide ✓, Revoke ✓, Delete ✓, Policy ✓. This is an example governance model; organizations may customize their permission structure.
+
+Interaction with lifecycle and retention: permissions determine who can trigger lifecycle transitions (Active → Archived, Active → Hidden, Archived → Active, Archived → Deleted) and policy actions (define retention classes, apply retention overrides, place records under legal or audit hold).
+
+Interaction with audit workflows: auditors may require controlled export permissions to generate evidence packs, verification snapshots, and export manifests. Audit workflows must not require modification of CER bundles or attestation artifacts.
+
+Interaction with protocol immutability: access control and permissions never modify the CER bundle or its cryptographic evidence. Permissions govern operational access and management actions only. CER bundles, certificateHash values, signed receipts, and verification rules remain independent of organizational access control.`;
 
 
 const CERRecordManagement = () => (
