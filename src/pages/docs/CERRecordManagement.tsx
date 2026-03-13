@@ -52,7 +52,23 @@ Searchable metadata: core metadata (executionId, certificateHash, bundleType, cr
 
 Restore behavior: archived records may be restored to Active state. Restoration affects storage and visibility only — not the CER bundle or receipt.
 
-Immutability: archival never mutates the CER bundle or its cryptographic evidence.`;
+Immutability: archival never mutates the CER bundle or its cryptographic evidence.
+
+## Retention Policy Model
+Retention policies define how long CER records remain stored and accessible inside NexArt-managed systems. Retention policies affect storage behavior but never modify CER artifacts, certificateHash, or verification semantics.
+
+Retention classes: Short-term (temporary operational logs), Standard (default retention), Long-term (regulated/compliance workflows), Permanent (stored indefinitely). Class definitions may vary by organization.
+
+Policy scope: retention policies may apply at organization, project, application, or execution surface level. Lower-level scopes may override higher-level defaults.
+
+Expiry behavior: when a retention period expires the system may archive the record, delete the stored bundle, require manual review, or trigger export before deletion. Expiry must not invalidate cryptographic evidence.
+
+Legal and audit hold: retention policies must support suspension of deletion for legal investigation, regulatory review, or internal audit. Under hold, deletion is blocked; archival may still occur.
+
+Lifecycle interaction: retention policies influence transitions such as Active → Archived and Archived → Deleted. Policies never mutate the CER bundle.
+
+Record action interaction: retention policies interact with hide, delete, archive, and export actions but must not remove historical audit traces.`;
+
 
 const CERRecordManagement = () => (
   <>
