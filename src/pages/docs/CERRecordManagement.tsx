@@ -183,9 +183,11 @@ const CERRecordManagement = () => (
 
     <h3>Delete (storage-level deletion)</h3>
     <p>Deletion removes the stored bundle from the NexArt-managed storage layer according to retention or governance rules. Deletion does not invalidate the underlying cryptographic provenance of the record. Previously exported bundles, receipts, and verification artifacts remain independently verifiable.</p>
+    <p>Deletion is a governance-sensitive action. Organizations may restrict deletion to authorized governance review processes rather than exposing it as a normal self-service operation.</p>
 
     <h3>Revoke</h3>
     <p>Revocation does not alter or delete the original CER. Instead, revocation is a governance action indicating that the original record should no longer be treated as operationally valid for current workflows. A revocation must preserve the historical audit trace of the original CER.</p>
+    <p>Revocation is a governance-sensitive action. Organizations may choose not to expose revocation as a direct user-facing action, instead handling it through governance review workflows.</p>
 
     <h3>Export</h3>
     <p>Export creates an external evidence package or bundle copy for audit or archival use. Export does not modify the CER or change its verification status.</p>
