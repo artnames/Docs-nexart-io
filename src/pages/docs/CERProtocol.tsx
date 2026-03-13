@@ -80,6 +80,23 @@ Audit trace preservation: all hide, revoke, delete, and export actions must pres
 
 Lifecycle interaction: these actions interact with lifecycle states defined in the CER Lifecycle Model. Hide may move a record into the Hidden state. Delete may move a record into Deleted. Export may record an Exported lifecycle event. Revoke may affect operational validity without mutating the CER.
 
+## Archival Behavior Model
+Archival is a record-management behavior, not a change to the CER bundle itself. Archiving must not modify the CER, certificateHash, attestation receipt, or verification semantics.
+
+Storage behavior: an archived CER is moved from active operational storage into long-term managed storage. Archived records may be excluded from normal dashboard lists, high-frequency operational queries, or default application views. Archival must preserve the ability to retrieve the record for audit, restore, or verification purposes.
+
+Public resolvability: archival does not automatically remove a record from public verification surfaces unless separate visibility rules (such as Hidden) apply. An archived record may remain publicly resolvable by execution ID or certificate hash if public visibility is still allowed by policy. If a record is both archived and hidden, public resolution may be disabled while internal audit access remains preserved.
+
+Verification persistence: archived records remain cryptographically verifiable. Archival does not affect certificateHash validity, signed receipt validity, independent verification of previously exported bundles, or verifier interpretation of the record. Verification depends on the CER artifact and receipt, not on whether the record is active or archived.
+
+Searchable metadata: archived records may be excluded from default operational search results. However, core metadata may remain searchable for authorized users, including executionId, certificateHash, bundleType, createdAt, and project/app identifiers where applicable.
+
+Restore behavior: archived records may be restored to the Active state through management-layer actions. Restoration affects storage and operational visibility only. It does not modify the CER bundle, certificateHash, or signed receipt. Archived → Active is a lifecycle management transition, not a new certification event.
+
+Immutability: archival never mutates the CER bundle or its cryptographic evidence. The same CER must remain verifiable before, during, and after archival. Archival changes how the record is stored and surfaced, not what the record is.
+
+Archival is one lifecycle state within the CER Lifecycle Model. It is distinct from Hide (which affects public resolvability) and Delete (which removes the stored bundle). Archival preserves audit trace and verification continuity.
+
 ## Protocol Surfaces
 NexArt Node, NexArt CLI, NexArt Verifier, NexArt Dashboard, NexArt SDKs. All must follow verification semantics defined in this specification.
 
