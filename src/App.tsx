@@ -64,6 +64,7 @@ const App = () => (
             <Route path="verification" element={<Verification />} />
             <Route path="trust-model" element={<TrustModel />} />
             <Route path="integration-surfaces" element={<IntegrationSurfaces />} />
+            <Route path="cer-audit-workflows" element={<CERAuditWorkflows />} />
             <Route path="integrations" element={<Integrations />} />
             <Route path="dashboard/projects" element={<Projects />} />
             <Route path="dashboard/apps" element={<Apps />} />
