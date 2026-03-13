@@ -76,6 +76,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://docs.nexart.io/docs/cer-record-management</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://docs.nexart.io/docs/protocol-overview</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

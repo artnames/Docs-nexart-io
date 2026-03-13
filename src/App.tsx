@@ -11,6 +11,7 @@ import Quickstart from "./pages/docs/Quickstart";
 import Integrations from "./pages/docs/Integrations";
 import ProtocolOverview from "./pages/docs/ProtocolOverview";
 import CERProtocol from "./pages/docs/CERProtocol";
+import CERRecordManagement from "./pages/docs/CERRecordManagement";
 import CER from "./pages/docs/concepts/CER";
 import SignedReceipts from "./pages/docs/concepts/SignedReceipts";
 import HashTimestamping from "./pages/docs/concepts/HashTimestamping";
@@ -48,6 +49,7 @@ const App = () => (
             <Route path="getting-started" element={<GettingStarted />} />
             <Route path="quickstart" element={<Quickstart />} />
             <Route path="cer-protocol" element={<CERProtocol />} />
+            <Route path="cer-record-management" element={<CERRecordManagement />} />
             <Route path="protocol-overview" element={<ProtocolOverview />} />
             <Route path="concepts/cer" element={<CER />} />
             <Route path="concepts/signed-receipts" element={<SignedReceipts />} />
