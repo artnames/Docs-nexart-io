@@ -429,7 +429,7 @@ const CERRecordManagement = () => (
     <p>Read and export access intended for compliance and review workflows. Auditors can view records and generate evidence packs but cannot modify lifecycle state or governance controls.</p>
 
     <h4>Administrator</h4>
-    <p>Full management access including lifecycle transitions, policy configuration, and governance controls such as hide, revoke, and delete.</p>
+    <p>Full management access including lifecycle transitions, policy configuration, and governance controls such as hide, revoke, and delete — subject to policy constraints.</p>
 
     <h3 id="permission-categories">Permission Categories</h3>
     <p>The following categories define the main types of actions that may require permission controls. These permissions apply only to record management behavior.</p>
