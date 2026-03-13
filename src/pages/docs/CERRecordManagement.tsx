@@ -67,7 +67,20 @@ Legal and audit hold: retention policies must support suspension of deletion for
 
 Lifecycle interaction: retention policies influence transitions such as Active → Archived and Archived → Deleted. Policies never mutate the CER bundle.
 
-Record action interaction: retention policies interact with hide, delete, archive, and export actions but must not remove historical audit traces.`;
+Record action interaction: retention policies interact with hide, delete, archive, and export actions but must not remove historical audit traces.
+
+## Operational and Sensitive Actions
+Record-management actions do not all have the same governance significance. Some affect normal storage and operational workflows. Others affect visibility, trust posture, or governance and require stronger controls. This classification operates only at the management layer — it does not modify the CER bundle, certificateHash, or signed receipt.
+
+Operational actions: normal management actions that organize, store, or surface CER records without changing their trust meaning. Examples: export, archive, restore from archive, ordinary record lookup, ordinary internal search, retention-driven archival. These actions may affect where or how a record is surfaced but do not alter public trust semantics or cryptographic validity.
+
+Sensitive actions: management actions that affect public visibility, operational trust, long-term availability, or governance posture. Examples: hide from public resolution, delete stored bundle, revoke operational validity, override standard retention behavior, apply or release legal/audit hold. These actions require stronger governance controls because they affect how records are relied upon, discovered, or preserved.
+
+Why the distinction matters: separating operational from sensitive actions helps organizations apply stronger controls where record visibility, trust posture, or long-term evidence preservation may be affected. This distinction also supports future work on permissions, approval workflows, audit review processes, and enterprise governance controls.
+
+Lifecycle and retention interaction: operational and sensitive actions interact with lifecycle states and retention policies. Archive is generally operational. Delete is sensitive. Hide is sensitive. Export is operational. Retention expiry may trigger operational or sensitive actions depending on policy. The classification helps determine how actions should later be controlled, reviewed, and audited.
+
+Protocol immutability: neither operational nor sensitive actions mutate the CER bundle or its cryptographic evidence. The distinction concerns governance significance, not protocol behavior.`;
 
 
 const CERRecordManagement = () => (
