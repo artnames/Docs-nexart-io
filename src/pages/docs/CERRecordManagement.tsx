@@ -145,7 +145,7 @@ const CERRecordManagement = () => (
     <p>The CER is stored and available for normal operations. It can be resolved by execution ID or certificate hash and may appear in dashboard queries and exports.</p>
 
     <h4>Exported</h4>
-    <p>The CER has been exported as part of an audit package or external evidence bundle. Export does not modify the CER or change its verification status.</p>
+    <p>Exported indicates that a CER has been included in one or more evidence exports. Export does not modify the CER or change its verification status. Exported is an event marker, not a storage state — a CER may be exported while remaining Active, Archived, or in any other lifecycle state.</p>
 
     <h4>Archived</h4>
     <p>The CER has been moved to long-term storage for retention purposes. Archived records remain cryptographically verifiable and may still be resolved through the verification system. Archived records may be excluded from normal dashboard queries but remain accessible through audit workflows.</p>
@@ -192,7 +192,7 @@ const CERRecordManagement = () => (
 
     <h3 id="revocation-semantics">Revocation Semantics</h3>
     <p>Revocation must not mutate the original CER. The original record remains historically valid as evidence of what was certified at the time.</p>
-    <p>Revocation applies to operational trust or workflow use, not to historical existence. A revoked CER still proves that a specific execution was certified — it simply indicates that the record should no longer be relied upon for current operational purposes.</p>
+    <p>Revocation affects operational reliance, not historical existence or cryptographic validity. A revoked CER still proves that a specific execution was certified — it simply indicates that the record should no longer be relied upon for current operational purposes.</p>
     <p>Future protocol revisions may represent revocation as a separate linked artifact. This documentation defines revocation semantics without extending the current schema.</p>
 
     <h3 id="deletion-semantics">Deletion Semantics</h3>
@@ -429,7 +429,7 @@ const CERRecordManagement = () => (
     <p>Read and export access intended for compliance and review workflows. Auditors can view records and generate evidence packs but cannot modify lifecycle state or governance controls.</p>
 
     <h4>Administrator</h4>
-    <p>Full management access including lifecycle transitions, policy configuration, and governance controls such as hide, revoke, and delete.</p>
+    <p>Full management access including lifecycle transitions, policy configuration, and governance controls such as hide, revoke, and delete — subject to policy constraints.</p>
 
     <h3 id="permission-categories">Permission Categories</h3>
     <p>The following categories define the main types of actions that may require permission controls. These permissions apply only to record management behavior.</p>
