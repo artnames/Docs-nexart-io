@@ -69,6 +69,13 @@ Lifecycle interaction: retention policies influence transitions such as Active �
 
 Record action interaction: retention policies interact with hide, delete, archive, and export actions but must not remove historical audit traces.
 
+## Evidence and Auditability Guarantees
+Certified Execution Records are designed to function as durable execution evidence. A CER captures a verifiable record of a computation or AI execution and binds it to a deterministic certificate hash. When node attestation is present, the record also includes a signed receipt proving that the record existed at a specific point in time.
+
+Evidence guarantees: Immutability — CER bundles and certificate hashes cannot be modified after creation without invalidating verification. Independent verification — verification does not require access to NexArt infrastructure; anyone with the CER bundle and the node's public keys can verify the record. Historical verifiability — records remain verifiable even if archived, hidden, or deleted from NexArt-managed storage. Audit trace preservation — management-layer actions (archive, hide, revoke, delete, export) must preserve an audit trail visible to authorized workflows. Protocol stability — verification semantics are versioned and must remain compatible with earlier protocol versions.
+
+Scope of evidence: CERs provide cryptographic evidence of execution records and attestations. They do not prove that an execution result was correct or desirable. They prove that a specific execution artifact existed and can be verified. This distinction is important for audit clarity.
+
 ## Operational and Sensitive Actions
 Record-management actions do not all have the same governance significance. Some affect normal storage and operational workflows. Others affect visibility, trust posture, or governance and require stronger controls. This classification operates only at the management layer — it does not modify the CER bundle, certificateHash, or signed receipt.
 
@@ -288,6 +295,33 @@ const CERRecordManagement = () => (
     <h3 id="retention-actions">Interaction with Record Actions</h3>
     <p>Retention policies interact with record actions including hide, delete, archive, and export. For example, a policy may trigger an automatic export before a scheduled deletion.</p>
     <p>However, retention rules must not remove historical audit traces. All retention-driven actions must be logged and remain visible to authorized audit workflows.</p>
+
+    {/* ── Evidence and Auditability Guarantees ── */}
+    <h2 id="evidence-auditability">Evidence and Auditability Guarantees</h2>
+    <p>Certified Execution Records are designed to function as durable execution evidence.</p>
+    <p>A CER captures a verifiable record of a computation or AI execution and binds it to a deterministic certificate hash. When node attestation is present, the record also includes a signed receipt proving that the record existed at a specific point in time.</p>
+
+    <h3 id="evidence-guarantees">Evidence Guarantees</h3>
+
+    <h4>Immutability</h4>
+    <p>CER bundles and certificate hashes cannot be modified after creation without invalidating verification. Any alteration to the bundle will produce a different hash, making tampering detectable.</p>
+
+    <h4>Independent Verification</h4>
+    <p>Verification does not require access to NexArt infrastructure. Anyone with the CER bundle and the node's public keys can verify the record independently.</p>
+
+    <h4>Historical Verifiability</h4>
+    <p>Records remain verifiable even if they are archived, hidden, or deleted from NexArt-managed storage. Verification depends on the CER artifact and receipt, not on storage state.</p>
+
+    <h4>Audit Trace Preservation</h4>
+    <p>Management-layer actions (archive, hide, revoke, delete, export) must preserve an audit trail visible to authorized workflows. No management action may silently remove evidence of prior record state.</p>
+
+    <h4>Protocol Stability</h4>
+    <p>Verification semantics are versioned and must remain compatible with earlier protocol versions. Records certified under an earlier version must remain verifiable under future verification implementations.</p>
+
+    <h3 id="scope-of-evidence">Scope of Evidence</h3>
+    <p>CERs provide cryptographic evidence of execution records and attestations.</p>
+    <p>They do not prove that an execution result was correct, desirable, or appropriate. They prove that a specific execution artifact existed and can be verified against its certificate hash and, when present, its attestation receipt.</p>
+    <p>This distinction is important for audit clarity. A CER demonstrates <em>what was executed and certified</em>, not <em>whether the outcome was good</em>.</p>
 
     {/* ── Operational and Sensitive Actions ── */}
     <h2 id="operational-sensitive-actions">Operational and Sensitive Actions</h2>
