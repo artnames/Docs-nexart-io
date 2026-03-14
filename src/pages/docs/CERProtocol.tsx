@@ -20,15 +20,15 @@ Three logical layers: Snapshot (execution data), Certificate Hash (deterministic
 certificateHash = SHA-256 of canonicalized bundle. Canonicalization: remove non-deterministic fields, sort keys, serialize as canonical JSON. Format: sha256:<hex digest>. Hash comparison is case-insensitive, whitespace-normalized. Excluded from hash: meta.attestation, meta.attestation.receipt, meta.attestation.signature (produced after hash).
 
 ## Verification Semantics
-Three checks: Bundle Integrity, Node Signature, Receipt Consistency. Each check returns PASS, FAIL, or SKIPPED. Node attestation is optional — unattested CERs can still be verified for bundle integrity (signature/receipt checks are SKIPPED).
+Three checks: Bundle Integrity, Node Signature, Receipt Consistency. Each check returns PASS, FAIL, or SKIPPED. Node attestation is optional. Unattested CERs can still be verified for bundle integrity (signature/receipt checks are SKIPPED).
 
 ## Schema Versioning
 Namespace identifies execution surface (cer.ai.execution, cer.codemode.render) allowing independent schema evolution. Minor updates (v1.0→v1.1) add optional fields. Breaking changes require new major version (v2).
 
 ## Verification Status Values
-VERIFIED — all checks passed
-FAILED — one or more checks failed
-NOT_FOUND — record not located
+VERIFIED: all checks passed
+FAILED: one or more checks failed
+NOT_FOUND: record not located
 
 ## Reason Codes (stable across versions)
 BUNDLE_HASH_MISMATCH, NODE_SIGNATURE_INVALID, NODE_SIGNATURE_MISSING, RECEIPT_HASH_MISMATCH, SCHEMA_VERSION_UNSUPPORTED, RECORD_NOT_FOUND, BUNDLE_CORRUPTED
@@ -191,9 +191,9 @@ const CERProtocol = () => (
     <p>Each check value must be one of:</p>
     <CodeBlock code={`PASS\nFAIL\nSKIPPED`} language="text" />
     <ul>
-      <li><strong>PASS</strong> — check succeeded</li>
-      <li><strong>FAIL</strong> — check failed</li>
-      <li><strong>SKIPPED</strong> — check not applicable (e.g. no attestation present)</li>
+      <li><strong>PASS</strong>: check succeeded</li>
+      <li><strong>FAIL</strong>: check failed</li>
+      <li><strong>SKIPPED</strong>: check not applicable (e.g. no attestation present)</li>
     </ul>
     <p>Example verification result without attestation:</p>
     <CodeBlock
@@ -310,11 +310,11 @@ const CERProtocol = () => (
     <p>These surfaces share the same schema and verification semantics.</p>
     <p>Current protocol implementations include:</p>
     <ul>
-      <li><strong>NexArt Node</strong> — produces CER bundles and node attestations</li>
-      <li><strong>NexArt CLI</strong> — local creation and verification of CER bundles</li>
-      <li><strong>NexArt Verifier</strong> — public verification interface</li>
-      <li><strong>NexArt Dashboard</strong> — storage, export, and audit reports</li>
-      <li><strong>NexArt SDKs</strong> — developer libraries for generating and verifying CERs</li>
+      <li><strong>NexArt Node</strong>: produces CER bundles and node attestations</li>
+      <li><strong>NexArt CLI</strong>: local creation and verification of CER bundles</li>
+      <li><strong>NexArt Verifier</strong>: public verification interface</li>
+      <li><strong>NexArt Dashboard</strong>: storage, export, and audit reports</li>
+      <li><strong>NexArt SDKs</strong>: developer libraries for generating and verifying CERs</li>
     </ul>
     <p>All implementations must follow the verification semantics defined in this specification.</p>
   </>

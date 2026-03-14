@@ -10,9 +10,9 @@ Verification confirms three things about a CER:
 
 ## How to verify
 Three ways to verify a record:
-1. By executionId — https://verify.nexart.io/e/exec_abc123
-2. By certificateHash — https://verify.nexart.io/c/sha256%3A7f83...
-3. By uploading a CER bundle — drag and drop or paste the JSON bundle at verify.nexart.io
+1. By executionId: https://verify.nexart.io/e/exec_abc123
+2. By certificateHash: https://verify.nexart.io/c/sha256%3A7f83...
+3. By uploading a CER bundle: drag and drop or paste the JSON bundle at verify.nexart.io
 
 ## Public verifier
 verify.nexart.io is the public verification portal.
@@ -20,9 +20,9 @@ The verifier uses a redacted/public-safe representation. Raw inputs/outputs are 
 
 ## Checks
 Each check returns PASS, FAIL, or SKIPPED.
-1. Bundle Integrity — recompute certificateHash from bundle contents, confirm it matches
-2. Node Signature — validate Ed25519 signature using key from node.nexart.io/.well-known/nexart-node.json (matched by kid). SKIPPED if no attestation.
-3. Receipt Consistency — receipt (at meta.attestation.receipt) references same certificateHash as bundle. SKIPPED if no attestation.
+1. Bundle Integrity: recompute certificateHash from bundle contents, confirm it matches
+2. Node Signature: validate Ed25519 signature using key from node.nexart.io/.well-known/nexart-node.json (matched by kid). SKIPPED if no attestation.
+3. Receipt Consistency: receipt (at meta.attestation.receipt) references same certificateHash as bundle. SKIPPED if no attestation.
 
 ## What is publicly visible
 - certificateHash, timestamp, node identity, verification status
@@ -30,9 +30,9 @@ Each check returns PASS, FAIL, or SKIPPED.
 - Metadata fields may be included or redacted based on export settings
 
 ## Verification statuses (per CER Protocol)
-VERIFIED — all applicable checks pass
-FAILED — one or more checks fail
-NOT_FOUND — record not located
+VERIFIED: all applicable checks pass
+FAILED: one or more checks fail
+NOT_FOUND: record not located
 
 ## Independent verification
 Verification can be performed without NexArt API access using the CER bundle (including meta.attestation) and the node's published public keys.`;
@@ -116,11 +116,11 @@ NOT_FOUND     The requested execution record was not located.`}
 
     <h2 id="by-bundle-type">Expected Outcomes by Bundle Type</h2>
     <ul>
-      <li><strong>cer.ai.execution.v1</strong> (with attestation) — all checks PASS → <strong>VERIFIED</strong></li>
-      <li><strong>cer.ai.execution.v1</strong> (without attestation) — bundleIntegrity PASS, attestation checks SKIPPED → <strong>VERIFIED</strong></li>
-      <li><strong>signed-redacted-reseal</strong> — some snapshot fields removed, re-signed → <strong>VERIFIED</strong></li>
-      <li><strong>hash-only-timestamp</strong> — only certificateHash is attested → <strong>VERIFIED</strong></li>
-      <li><strong>legacy</strong> — older format, limited coverage → <strong>VERIFIED</strong> or <strong>FAILED</strong> depending on data</li>
+      <li><strong>cer.ai.execution.v1</strong> (with attestation): all checks PASS → <strong>VERIFIED</strong></li>
+      <li><strong>cer.ai.execution.v1</strong> (without attestation): bundleIntegrity PASS, attestation checks SKIPPED → <strong>VERIFIED</strong></li>
+      <li><strong>signed-redacted-reseal</strong>: some snapshot fields removed, re-signed → <strong>VERIFIED</strong></li>
+      <li><strong>hash-only-timestamp</strong>: only certificateHash is attested → <strong>VERIFIED</strong></li>
+      <li><strong>legacy</strong>: older format, limited coverage → <strong>VERIFIED</strong> or <strong>FAILED</strong> depending on data</li>
     </ul>
 
     <h2 id="independent">Independent Verification (No API Required)</h2>

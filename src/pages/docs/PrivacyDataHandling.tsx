@@ -49,12 +49,12 @@ const PrivacyDataHandling = () => (
     </p>
     <p>A Certified Execution Record (CER) typically contains:</p>
     <ul>
-      <li><strong>Certificate hash</strong> — a SHA-256 hash that uniquely identifies the record</li>
-      <li><strong>Execution identifier</strong> — a reference ID for the execution</li>
-      <li><strong>Input and output hashes</strong> — SHA-256 hashes of the execution inputs and outputs, not the underlying payloads</li>
-      <li><strong>Protocol and runtime metadata</strong> — model, version, and configuration data</li>
-      <li><strong>Node attestation data</strong> — the Ed25519 signature, node identity, and attestor key ID</li>
-      <li><strong>Timestamps</strong> — when the record was created and attested</li>
+      <li><strong>Certificate hash</strong>: a SHA-256 hash that uniquely identifies the record</li>
+      <li><strong>Execution identifier</strong>: a reference ID for the execution</li>
+      <li><strong>Input and output hashes</strong>: SHA-256 hashes of the execution inputs and outputs, not the underlying payloads</li>
+      <li><strong>Protocol and runtime metadata</strong>: model, version, and configuration data</li>
+      <li><strong>Node attestation data</strong>: the Ed25519 signature, node identity, and attestor key ID</li>
+      <li><strong>Timestamps</strong>: when the record was created and attested</li>
     </ul>
     <p>
       Hashes are used to bind execution results to a certification record without storing the underlying data. This means NexArt can verify that an execution happened and was not tampered with, without needing access to what was actually said or generated.

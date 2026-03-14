@@ -4,13 +4,13 @@ const llmBlock = `# NexArt Retention Policy
 Retention policy is a project-level configuration defining how long CERs are intended to be stored.
 
 ## Available options
-- 30 days — development, temporary workflows
-- 90 days — operational monitoring, short audit windows
-- 1 year — typical production retention
-- Forever — retained indefinitely unless manually deleted or exported
+- 30 days: development, temporary workflows
+- 90 days: operational monitoring, short audit windows
+- 1 year: typical production retention
+- Forever: retained indefinitely unless manually deleted or exported
 
 ## Current status
-- Configuration only — stored and displayed in the dashboard
+- Configuration only: stored and displayed in the dashboard
 - Automatic deletion or archival is NOT yet enforced
 - Enforcement planned for a future release
 

@@ -19,7 +19,7 @@ const Quickstart = () => (
   <div className="prose prose-invert max-w-none">
     <PageHeader
       title="Quickstart"
-      summary="Install, create a CER, and verify — in three steps."
+      summary="Install, create a CER, and verify in three steps."
       llmBlock={llmBlock}
     />
 
@@ -72,9 +72,9 @@ console.log(certificateHash);`}
       and paste the certificate hash. The verifier checks:
     </p>
     <ul>
-      <li><strong>Bundle Integrity</strong> — the certificate hash matches the bundle contents</li>
-      <li><strong>Node Signature</strong> — the attestation signature is valid (if attested)</li>
-      <li><strong>Receipt Consistency</strong> — the receipt matches the certified record</li>
+      <li><strong>Bundle Integrity</strong>: the certificate hash matches the bundle contents</li>
+      <li><strong>Node Signature</strong>: the attestation signature is valid (if attested)</li>
+      <li><strong>Receipt Consistency</strong>: the receipt matches the certified record</li>
     </ul>
 
     <p className="font-medium">You now have a verifiable execution record.</p>
@@ -87,24 +87,24 @@ console.log(certificateHash);`}
     <h2>Next Steps</h2>
     <ul>
       <li>
-        <Link to="/docs/integrations/langchain" className="text-primary hover:underline">LangChain Integration</Link>{" "}
-        — certify AI chain and agent executions
+        <Link to="/docs/integrations/langchain" className="text-primary hover:underline">LangChain Integration</Link>
+        : certify AI chain and agent executions
       </li>
       <li>
-        <Link to="/docs/integrations/n8n" className="text-primary hover:underline">n8n Integration</Link>{" "}
-        — certify workflow automation results
+        <Link to="/docs/integrations/n8n" className="text-primary hover:underline">n8n Integration</Link>
+        : certify workflow automation results
       </li>
       <li>
-        <Link to="/docs/cli" className="text-primary hover:underline">CLI</Link>{" "}
-        — create and verify CERs from the command line
+        <Link to="/docs/cli" className="text-primary hover:underline">CLI</Link>
+        : create and verify CERs from the command line
       </li>
       <li>
-        <Link to="/docs/verification" className="text-primary hover:underline">Verification</Link>{" "}
-        — deep dive into verification semantics
+        <Link to="/docs/verification" className="text-primary hover:underline">Verification</Link>
+        : deep dive into verification semantics
       </li>
       <li>
-        <Link to="/docs/cer-protocol" className="text-primary hover:underline">CER Protocol</Link>{" "}
-        — understand the protocol specification
+        <Link to="/docs/cer-protocol" className="text-primary hover:underline">CER Protocol</Link>
+        : understand the protocol specification
       </li>
     </ul>
   </div>

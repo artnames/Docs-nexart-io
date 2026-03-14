@@ -3,9 +3,9 @@ import CodeBlock from "@/components/docs/CodeBlock";
 
 const llmBlock = `# NexArt Trust Model
 NexArt establishes execution integrity through three mechanisms:
-1. Deterministic hashing — CER bundles produce a unique certificateHash (SHA-256)
-2. Node attestation — an attestation node signs the certificateHash with Ed25519
-3. Independent verification — anyone can verify using the CER bundle and the node's published public keys
+1. Deterministic hashing: CER bundles produce a unique certificateHash (SHA-256)
+2. Node attestation: an attestation node signs the certificateHash with Ed25519
+3. Independent verification: anyone can verify using the CER bundle and the node's published public keys
 
 ## How trust is established
 1. Application sends execution data to POST /v1/cer/ai/certify

@@ -54,14 +54,14 @@ const Examples = () => (
         <div className="text-muted-foreground text-xs mt-1">
           Certify an AI decision such as moderation, policy review, or workflow approval.
         </div>
-        <div className="text-xs text-muted-foreground/60 mt-2 italic">Reference example — coming next</div>
+        <div className="text-xs text-muted-foreground/60 mt-2 italic">Reference example coming next</div>
       </div>
       <div className="rounded-lg border border-border bg-card p-4">
         <div className="font-medium text-foreground text-sm">Pipeline Certification Example</div>
         <div className="text-muted-foreground text-xs mt-1">
           Certify a multi-step AI workflow or execution pipeline.
         </div>
-        <div className="text-xs text-muted-foreground/60 mt-2 italic">Reference example — coming next</div>
+        <div className="text-xs text-muted-foreground/60 mt-2 italic">Reference example coming next</div>
       </div>
     </div>
 

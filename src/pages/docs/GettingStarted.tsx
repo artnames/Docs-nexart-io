@@ -65,7 +65,7 @@ console.log(certificateHash);`}
         This produces a Certified Execution Record and returns a deterministic certificate hash.
       </p>
       <p>
-        Raw input and output fields are optional in CERs — hashes are the core integrity mechanism.
+        Raw input and output fields are optional in CERs. Hashes are the core integrity mechanism.
       </p>
 
       <h2 id="verify">Verify the Record</h2>
@@ -111,32 +111,32 @@ console.log(certificateHash);`}
         <li>
           <Link to="/docs/quickstart" className="text-primary hover:underline">
             Quickstart
-          </Link>{" "}
-          — create and verify a CER in three steps
+          </Link>
+          : create and verify a CER in three steps
         </li>
         <li>
           <Link to="/docs/integrations/langchain" className="text-primary hover:underline">
             LangChain
-          </Link>{" "}
-          — generate CERs from LangChain AI workflows
+          </Link>
+          : generate CERs from LangChain AI workflows
         </li>
         <li>
           <Link to="/docs/integrations/n8n" className="text-primary hover:underline">
             n8n
-          </Link>{" "}
-          — certify execution inside n8n automation pipelines
+          </Link>
+          : certify execution inside n8n automation pipelines
         </li>
         <li>
           <Link to="/docs/cli" className="text-primary hover:underline">
             CLI
-          </Link>{" "}
-          — create and verify CERs from the command line
+          </Link>
+          : create and verify CERs from the command line
         </li>
         <li>
           <Link to="/docs/sdk" className="text-primary hover:underline">
             SDK &amp; Protocol
-          </Link>{" "}
-          — full API reference and protocol details
+          </Link>
+          : full API reference and protocol details
         </li>
       </ul>
     </>

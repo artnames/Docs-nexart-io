@@ -4,17 +4,17 @@ import { Link } from "react-router-dom";
 const llmBlock = `# CER Record Management
 Operational lifecycle and enterprise control semantics for CER records.
 
-CER bundles are immutable protocol artifacts. Record management defines how organizations store, surface, and govern CER records over time. This page defines management-layer behavior only — it does not modify the CER protocol schema, certificateHash computation, or verification semantics.
+CER bundles are immutable protocol artifacts. Record management defines how organizations store, surface, and govern CER records over time. This page defines management-layer behavior only. It does not modify the CER protocol schema, certificateHash computation, or verification semantics.
 
 ## CER Lifecycle Model
-Lifecycle states describe how records are managed, stored, or presented — not how the CER bundle behaves cryptographically.
+Lifecycle states describe how records are managed, stored, or presented. They do not describe how the CER bundle behaves cryptographically.
 
 States:
-- Active — stored and available for normal operations, resolvable by execution ID or certificate hash
-- Exported — included in an audit package or evidence bundle; export does not modify the CER
-- Archived — moved to long-term storage; remains cryptographically verifiable; may be excluded from dashboard queries
-- Hidden — stored and verifiable but not publicly resolvable; accessible to authorized organizational users
-- Deleted — removed from NexArt storage per retention policy; does not invalidate cryptographic provenance; previously exported bundles remain verifiable
+- Active: stored and available for normal operations, resolvable by execution ID or certificate hash
+- Exported: included in an audit package or evidence bundle; export does not modify the CER
+- Archived: moved to long-term storage; remains cryptographically verifiable; may be excluded from dashboard queries
+- Hidden: stored and verifiable but not publicly resolvable; accessible to authorized organizational users
+- Deleted: removed from NexArt storage per retention policy; does not invalidate cryptographic provenance; previously exported bundles remain verifiable
 
 Transitions: Active → Archived, Active → Hidden, Archived → Active (restore), Active → Deleted. Transitions affect storage and visibility, not bundle contents.
 
@@ -26,10 +26,10 @@ Immutability guarantee: lifecycle management never modifies the CER bundle, cert
 Management actions (hide, delete, revoke, export) operate at the storage, visibility, and governance layer. They do not modify the CER bundle, certificateHash, or signed receipt.
 
 Actions:
-- Hide — record remains stored and verifiable but no longer publicly resolvable; accessible to authorized organizational users
-- Delete — removes stored bundle from NexArt storage per retention/governance rules; does not invalidate cryptographic provenance; governance-sensitive action that may not be exposed as a self-service operation
-- Revoke — governance action indicating record should no longer be treated as operationally valid; does not alter or delete the original CER; governance-sensitive action that organizations may restrict to review workflows
-- Export — creates external evidence package; does not modify the CER or change verification status
+- Hide: record remains stored and verifiable but no longer publicly resolvable; accessible to authorized organizational users
+- Delete: removes stored bundle from NexArt storage per retention/governance rules; does not invalidate cryptographic provenance; governance-sensitive action that may not be exposed as a self-service operation
+- Revoke: governance action indicating record should no longer be treated as operationally valid; does not alter or delete the original CER; governance-sensitive action that organizations may restrict to review workflows
+- Export: creates external evidence package; does not modify the CER or change verification status
 
 Revocation semantics: revocation must not mutate the original CER. The original record remains historically valid. Revocation applies to operational trust, not historical existence.
 
@@ -50,7 +50,7 @@ Verification persistence: archived records remain cryptographically verifiable. 
 
 Searchable metadata: core metadata (executionId, certificateHash, bundleType, createdAt) may remain searchable for authorized users.
 
-Restore behavior: archived records may be restored to Active state. Restoration affects storage and visibility only — not the CER bundle or receipt.
+Restore behavior: archived records may be restored to Active state. Restoration affects storage and visibility only, not the CER bundle or receipt.
 
 Immutability: archival never mutates the CER bundle or its cryptographic evidence.
 
@@ -72,12 +72,12 @@ Record action interaction: retention policies interact with hide, delete, archiv
 ## Evidence and Auditability Guarantees
 Certified Execution Records are designed to function as durable execution evidence. A CER captures a verifiable record of a computation or AI execution and binds it to a deterministic certificate hash. When node attestation is present, the record also includes a signed receipt proving that the record existed at a specific point in time.
 
-Evidence guarantees: Immutability — CER bundles and certificate hashes cannot be modified after creation without invalidating verification. Independent verification — verification does not require access to NexArt infrastructure; anyone with the CER bundle and the node's public keys can verify the record. Historical verifiability — records remain verifiable even if archived, hidden, or deleted from NexArt-managed storage. Audit trace preservation — management-layer actions (archive, hide, revoke, delete, export) must preserve an audit trail visible to authorized workflows. Protocol stability — verification semantics are versioned and must remain compatible with earlier protocol versions.
+Evidence guarantees: Immutability: CER bundles and certificate hashes cannot be modified after creation without invalidating verification. Independent verification: verification does not require access to NexArt infrastructure; anyone with the CER bundle and the node's public keys can verify the record. Historical verifiability: records remain verifiable even if archived, hidden, or deleted from NexArt-managed storage. Audit trace preservation: management-layer actions (archive, hide, revoke, delete, export) must preserve an audit trail visible to authorized workflows. Protocol stability: verification semantics are versioned and must remain compatible with earlier protocol versions.
 
 Scope of evidence: CERs provide cryptographic evidence of execution records and attestations. They do not prove that an execution result was correct or desirable. They prove that a specific execution artifact existed and can be verified. This distinction is important for audit clarity.
 
 ## Operational and Sensitive Actions
-Record-management actions do not all have the same governance significance. Some affect normal storage and operational workflows. Others affect visibility, trust posture, or governance and require stronger controls. This classification operates only at the management layer — it does not modify the CER bundle, certificateHash, or signed receipt.
+Record-management actions do not all have the same governance significance. Some affect normal storage and operational workflows. Others affect visibility, trust posture, or governance and require stronger controls. This classification operates only at the management layer. It does not modify the CER bundle, certificateHash, or signed receipt.
 
 Operational actions: normal management actions that organize, store, or surface CER records without changing their trust meaning. Examples: export, archive, restore from archive, ordinary record lookup, ordinary internal search, retention-driven archival. These actions may affect where or how a record is surfaced but do not alter public trust semantics or cryptographic validity.
 
@@ -96,7 +96,7 @@ Common role categories: Viewer (read-only access to CER records and verification
 
 Permission categories: Read Permissions (view CER metadata, verification results, and record details), Export Permissions (generate evidence packs or export verification artifacts), Lifecycle Permissions (archive, restore, or hide records), Sensitive Permissions (delete records, revoke operational validity, or change retention behavior), Policy Permissions (modify retention policies or apply legal/audit holds). Permissions apply only to record management behavior.
 
-Example permission matrix: Viewer — Read ✓, Export ✗, Archive ✗, Hide ✗, Revoke ✗, Delete ✗, Policy ✗. Operator — Read ✓, Export ✓, Archive ✓, Hide ✓, Revoke ✗, Delete ✗, Policy ✗. Auditor — Read ✓, Export ✓, Archive ✗, Hide ✗, Revoke ✗, Delete ✗, Policy ✗. Administrator — Read ✓, Export ✓, Archive ✓, Hide ✓, Revoke ✓, Delete ✓, Policy ✓. This is an example governance model; organizations may customize their permission structure.
+Example permission matrix: Viewer: Read ✓, Export ✗, Archive ✗, Hide ✗, Revoke ✗, Delete ✗, Policy ✗. Operator: Read ✓, Export ✓, Archive ✓, Hide ✓, Revoke ✗, Delete ✗, Policy ✗. Auditor: Read ✓, Export ✓, Archive ✗, Hide ✗, Revoke ✗, Delete ✗, Policy ✗. Administrator: Read ✓, Export ✓, Archive ✓, Hide ✓, Revoke ✓, Delete ✓, Policy ✓. This is an example governance model; organizations may customize their permission structure.
 
 Interaction with lifecycle and retention: permissions determine who can trigger lifecycle transitions (Active → Archived, Active → Hidden, Archived → Active, Archived → Deleted) and policy actions (define retention classes, apply retention overrides, place records under legal or audit hold).
 
@@ -136,7 +136,7 @@ const CERRecordManagement = () => (
     {/* ── CER Lifecycle Model ── */}
     <h2 id="lifecycle">CER Lifecycle Model</h2>
     <p>This section defines the operational lifecycle of a Certified Execution Record as a managed record inside the NexArt system.</p>
-    <p>Lifecycle states describe how records are managed, stored, or presented — <strong>not</strong> how the CER bundle itself behaves cryptographically.</p>
+    <p>Lifecycle states describe how records are managed, stored, or presented. They do <strong>not</strong> describe how the CER bundle itself behaves cryptographically.</p>
     <p>CER bundles are immutable protocol artifacts. Lifecycle states apply to record management systems such as dashboards, storage layers, and audit workflows.</p>
 
     <h3>Lifecycle States</h3>
@@ -145,7 +145,7 @@ const CERRecordManagement = () => (
     <p>The CER is stored and available for normal operations. It can be resolved by execution ID or certificate hash and may appear in dashboard queries and exports.</p>
 
     <h4>Exported</h4>
-    <p>Exported indicates that a CER has been included in one or more evidence exports. Export does not modify the CER or change its verification status. Exported is an event marker, not a storage state — a CER may be exported while remaining Active, Archived, or in any other lifecycle state.</p>
+    <p>Exported indicates that a CER has been included in one or more evidence exports. Export does not modify the CER or change its verification status. Exported is an event marker, not a storage state. A CER may be exported while remaining Active, Archived, or in any other lifecycle state.</p>
 
     <h4>Archived</h4>
     <p>The CER has been moved to long-term storage for retention purposes. Archived records remain cryptographically verifiable and may still be resolved through the verification system. Archived records may be excluded from normal dashboard queries but remain accessible through audit workflows.</p>
@@ -194,7 +194,7 @@ const CERRecordManagement = () => (
 
     <h3 id="revocation-semantics">Revocation Semantics</h3>
     <p>Revocation must not mutate the original CER. The original record remains historically valid as evidence of what was certified at the time.</p>
-    <p>Revocation affects operational reliance, not historical existence or cryptographic validity. A revoked CER still proves that a specific execution was certified — it simply indicates that the record should no longer be relied upon for current operational purposes.</p>
+    <p>Revocation affects operational reliance, not historical existence or cryptographic validity. A revoked CER still proves that a specific execution was certified. It simply indicates that the record should no longer be relied upon for current operational purposes.</p>
     <p>Future protocol revisions may represent revocation as a separate linked artifact. This documentation defines revocation semantics without extending the current schema.</p>
 
     <h3 id="deletion-semantics">Deletion Semantics</h3>
@@ -287,15 +287,15 @@ const CERRecordManagement = () => (
     <h4>Permanent</h4>
     <p>Records intended to remain stored indefinitely. Suitable for critical audit evidence or records subject to permanent regulatory requirements.</p>
 
-    <p>Retention class definitions may vary by organization. The classes listed here are examples — organizations may define custom classes aligned with their governance requirements.</p>
+    <p>Retention class definitions may vary by organization. The classes listed here are examples. Organizations may define custom classes aligned with their governance requirements.</p>
 
     <h3 id="retention-scope">Policy Scope</h3>
     <p>Retention policies may apply at multiple levels:</p>
     <ul>
-      <li><strong>Organization</strong> — default retention for all records</li>
-      <li><strong>Project</strong> — override for a specific project</li>
-      <li><strong>Application</strong> — override for a specific app within a project</li>
-      <li><strong>Execution surface</strong> — override based on bundle type (e.g. AI execution vs. Code Mode)</li>
+      <li><strong>Organization</strong>: default retention for all records</li>
+      <li><strong>Project</strong>: override for a specific project</li>
+      <li><strong>Application</strong>: override for a specific app within a project</li>
+      <li><strong>Execution surface</strong>: override based on bundle type (e.g. AI execution vs. Code Mode)</li>
     </ul>
     <p>Lower-level scopes may override higher-level defaults. For example, an organization default of 5 years may be overridden by a project-level policy of 1 year.</p>
 
@@ -402,11 +402,11 @@ const CERRecordManagement = () => (
     <h3 id="action-split-lifecycle">Interaction with Lifecycle and Retention</h3>
     <p>Operational and sensitive actions interact with lifecycle states and retention policies:</p>
     <ul>
-      <li><strong>Archive</strong> — generally operational</li>
-      <li><strong>Delete</strong> — sensitive</li>
-      <li><strong>Hide</strong> — sensitive</li>
-      <li><strong>Export</strong> — operational</li>
-      <li><strong>Retention expiry</strong> — may trigger operational or sensitive actions depending on policy</li>
+      <li><strong>Archive</strong>: generally operational</li>
+      <li><strong>Delete</strong>: sensitive</li>
+      <li><strong>Hide</strong>: sensitive</li>
+      <li><strong>Export</strong>: operational</li>
+      <li><strong>Retention expiry</strong>: may trigger operational or sensitive actions depending on policy</li>
     </ul>
     <p>The classification helps determine how actions should later be controlled, reviewed, and audited.</p>
 
@@ -432,7 +432,7 @@ const CERRecordManagement = () => (
     <p>Read and export access intended for compliance and review workflows. Auditors can view records and generate evidence packs but cannot modify lifecycle state or governance controls.</p>
 
     <h4>Administrator</h4>
-    <p>Full management access including lifecycle transitions, policy configuration, and governance controls such as hide, revoke, and delete — subject to policy constraints.</p>
+    <p>Full management access including lifecycle transitions, policy configuration, and governance controls such as hide, revoke, and delete, subject to policy constraints.</p>
 
     <h3 id="permission-categories">Permission Categories</h3>
     <p>The following categories define the main types of actions that may require permission controls. These permissions apply only to record management behavior.</p>
@@ -447,13 +447,13 @@ const CERRecordManagement = () => (
     <p>Archive, restore, or hide records.</p>
 
     <h4>Sensitive Permissions</h4>
-    <p>Delete records, revoke operational validity, or change retention behavior. These permissions may not be exposed through standard self-service interfaces — organizations may require governance review processes before these actions can be executed.</p>
+    <p>Delete records, revoke operational validity, or change retention behavior. These permissions may not be exposed through standard self-service interfaces. Organizations may require governance review processes before these actions can be executed.</p>
 
     <h4>Policy Permissions</h4>
     <p>Modify retention policies or apply legal/audit holds.</p>
 
     <h3 id="permission-matrix">Example Permission Matrix</h3>
-    <p>The following table illustrates how roles may map to permission categories. This is an example governance model — organizations may customize their permission structure.</p>
+    <p>The following table illustrates how roles may map to permission categories. This is an example governance model. Organizations may customize their permission structure.</p>
 
     <div className="relative w-full overflow-auto my-4">
       <table className="w-full caption-bottom text-sm">
@@ -525,7 +525,7 @@ const CERRecordManagement = () => (
     <p>Control when evidence packs should be generated, what export scope is allowed, and whether exports are required before archival or deletion. Export policies support audit readiness by ensuring evidence is preserved before lifecycle transitions.</p>
 
     <h4>Action Policies</h4>
-    <p>Control whether specific management actions — such as delete, hide, revoke, or restore — are allowed under normal operation. Action policies may block or constrain actions that would otherwise be permitted by role-based permissions. Organizations may use action policies to ensure that revocation and deletion are only available through governance-controlled workflows rather than as routine self-service operations.</p>
+    <p>Control whether specific management actions (such as delete, hide, revoke, or restore) are allowed under normal operation. Action policies may block or constrain actions that would otherwise be permitted by role-based permissions. Organizations may use action policies to ensure that revocation and deletion are only available through governance-controlled workflows rather than as routine self-service operations.</p>
 
     <h4>Audit Policies</h4>
     <p>Control requirements for audit trace preservation, export logging, and evidence retention. Audit policies help organizations maintain accountability and traceability across record management operations.</p>
@@ -536,11 +536,11 @@ const CERRecordManagement = () => (
     <h3 id="policy-scope">Policy Scope</h3>
     <p>Policies may apply at multiple organizational scopes:</p>
     <ul>
-      <li><strong>Organization-wide</strong> — default governance rules for all records</li>
-      <li><strong>Project</strong> — override for a specific project</li>
-      <li><strong>Application</strong> — override for a specific app within a project</li>
-      <li><strong>Execution surface</strong> — override based on bundle type</li>
-      <li><strong>Record class or workflow type</strong> — override based on record classification</li>
+      <li><strong>Organization-wide</strong>: default governance rules for all records</li>
+      <li><strong>Project</strong>: override for a specific project</li>
+      <li><strong>Application</strong>: override for a specific app within a project</li>
+      <li><strong>Execution surface</strong>: override based on bundle type</li>
+      <li><strong>Record class or workflow type</strong>: override based on record classification</li>
     </ul>
     <p>Lower-level scopes may override higher-level defaults, consistent with the <a href="#retention-scope" className="text-primary hover:underline">retention policy scope model</a>.</p>
     <p>For example:</p>

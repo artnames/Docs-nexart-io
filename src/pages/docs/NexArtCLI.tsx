@@ -40,9 +40,9 @@ const NexArtCLI = () => (
       The NexArt CLI supports three distinct operations for AI execution certification:
     </p>
     <ul>
-      <li><strong>Local creation</strong> — generate a CER bundle and certificate hash without contacting the network</li>
-      <li><strong>Node certification</strong> — send an execution to the NexArt node for attestation and receive a signed receipt</li>
-      <li><strong>Local verification</strong> — verify a CER bundle offline by checking hash integrity and signature validity</li>
+      <li><strong>Local creation</strong>: generate a CER bundle and certificate hash without contacting the network</li>
+      <li><strong>Node certification</strong>: send an execution to the NexArt node for attestation and receive a signed receipt</li>
+      <li><strong>Local verification</strong>: verify a CER bundle offline by checking hash integrity and signature validity</li>
     </ul>
     <p>
       The CLI also supports deterministic rendering workflows for canvas-based executions.
@@ -53,8 +53,8 @@ const NexArtCLI = () => (
 
     <h2>Environment Variables</h2>
     <ul>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">NEXART_API_KEY</code> — API key for node certification</li>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">NEXART_RENDERER_ENDPOINT</code> — URL of the canonical renderer service (for rendering workflows)</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">NEXART_API_KEY</code>: API key for node certification</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">NEXART_RENDERER_ENDPOINT</code>: URL of the canonical renderer service (for rendering workflows)</li>
     </ul>
 
     <h2>Create a CER Locally</h2>
@@ -127,24 +127,24 @@ npx @nexart/cli@0.4.0 ai verify cer.json`} />
     <h2>Next Steps</h2>
     <ul>
       <li>
-        <Link to="/docs/quickstart" className="text-primary hover:underline">Quickstart</Link>{" "}
-        — create your first CER in three steps
+        <Link to="/docs/quickstart" className="text-primary hover:underline">Quickstart</Link>
+        : create your first CER in three steps
       </li>
       <li>
-        <Link to="/docs/verification" className="text-primary hover:underline">Verification</Link>{" "}
-        — deep dive into verification semantics
+        <Link to="/docs/verification" className="text-primary hover:underline">Verification</Link>
+        : deep dive into verification semantics
       </li>
       <li>
-        <Link to="/docs/examples" className="text-primary hover:underline">Examples</Link>{" "}
-        — copy-ready API requests and response shapes
+        <Link to="/docs/examples" className="text-primary hover:underline">Examples</Link>
+        : copy-ready API requests and response shapes
       </li>
       <li>
-        <Link to="/docs/integrations/langchain" className="text-primary hover:underline">LangChain</Link>{" "}
-        — certify AI chain and agent executions
+        <Link to="/docs/integrations/langchain" className="text-primary hover:underline">LangChain</Link>
+        : certify AI chain and agent executions
       </li>
       <li>
-        <Link to="/docs/integrations/n8n" className="text-primary hover:underline">n8n</Link>{" "}
-        — certify workflow automation results
+        <Link to="/docs/integrations/n8n" className="text-primary hover:underline">n8n</Link>
+        : certify workflow automation results
       </li>
     </ul>
   </>

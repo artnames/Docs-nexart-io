@@ -8,7 +8,7 @@ Apps are organizational units within a Project.
 Project → Apps → CER records
 
 Apps represent the specific application, service, or workflow that produced the attestation.
-They are used for organization and filtering — they do not change the cryptographic structure of CERs.
+They are used for organization and filtering. They do not change the cryptographic structure of CERs.
 
 ## In CER metadata
 { "metadata": { "appId": "customer-chatbot" } }
