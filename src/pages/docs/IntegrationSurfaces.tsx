@@ -4,17 +4,17 @@ import PageHeader from "@/components/docs/PageHeader";
 const llmBlock = `# NexArt Integration Surfaces
 
 ## API
-POST /v1/cer/ai/certify — create and certify a CER (bundleType: cer.ai.execution.v1) in one request (recommended)
-POST /v1/cer/ai/create — create a CER bundle without attestation
+POST /v1/cer/ai/certify: create and certify a CER (bundleType: cer.ai.execution.v1) in one request (recommended)
+POST /v1/cer/ai/create: create a CER bundle without attestation
 Authentication: Bearer NEXART_API_KEY
 
 ## Public Verifier
-verify.nexart.io — verify records by executionId or certificateHash
+verify.nexart.io: verify records by executionId or certificateHash
 Uses redacted/public-safe representation. Raw inputs/outputs not exposed.
 
 ## Attestation Node
-node.nexart.io — node identity and status
-node.nexart.io/.well-known/nexart-node.json — published Ed25519 signing keys (kid, activeKid)
+node.nexart.io: node identity and status
+node.nexart.io/.well-known/nexart-node.json: published Ed25519 signing keys (kid, activeKid)
 
 ## n8n
 Community node for certifying AI executions inside n8n workflows.
@@ -26,9 +26,9 @@ npx @nexart/cli
 Currently supports CodeMode (deterministic generative rendering).
 
 ## SDKs
-AI Execution SDK — CER creation and attestation workflows
-CodeMode SDK — deterministic generative execution
-UI Renderer SDK — deterministic UI rendering`;
+AI Execution SDK: CER creation and attestation workflows
+CodeMode SDK: deterministic generative execution
+UI Renderer SDK: deterministic UI rendering`;
 
 const IntegrationSurfaces = () => (
   <>

@@ -92,14 +92,14 @@ const AttestationNode = () => (
     <p>The canonical node publishes at <a href="https://node.nexart.io" target="_blank" rel="noopener noreferrer">node.nexart.io</a>.</p>
     <p><strong>Required fields:</strong></p>
     <ul>
-      <li><strong>nodeId</strong> — unique identifier for the attestation node.</li>
-      <li><strong>activeKid</strong> — the key identifier currently used for signing.</li>
-      <li><strong>keys[]</strong> — array of signing key entries. Each entry requires:
+      <li><strong>nodeId</strong>: unique identifier for the attestation node.</li>
+      <li><strong>activeKid</strong>: the key identifier currently used for signing.</li>
+      <li><strong>keys[]</strong>: array of signing key entries. Each entry requires:
         <ul className="mt-1">
-          <li><strong>kid</strong> — unique key identifier.</li>
-          <li><strong>algorithm</strong> — signing algorithm (Ed25519).</li>
-          <li><strong>publicKey</strong> — the public key material.</li>
-          <li><strong>status</strong> — key status (e.g. <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">active</code>, <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">retired</code>).</li>
+          <li><strong>kid</strong>: unique key identifier.</li>
+          <li><strong>algorithm</strong>: signing algorithm (Ed25519).</li>
+          <li><strong>publicKey</strong>: the public key material.</li>
+          <li><strong>status</strong>: key status (e.g. <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">active</code>, <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">retired</code>).</li>
         </ul>
       </li>
     </ul>

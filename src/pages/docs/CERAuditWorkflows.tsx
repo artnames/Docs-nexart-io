@@ -199,10 +199,10 @@ const CERAuditWorkflows = () => {
       </p>
       <p>Suggested contents:</p>
       <ul>
-        <li><code>nodeId</code> — identifier of the attestation node</li>
-        <li><code>activeKid</code> — key identifier active at export time</li>
-        <li><code>keys[]</code> — public key material used for receipt verification</li>
-        <li><code>protocolVersion</code> — protocol version if available</li>
+        <li><code>nodeId</code>: identifier of the attestation node</li>
+        <li><code>activeKid</code>: key identifier active at export time</li>
+        <li><code>keys[]</code>: public key material used for receipt verification</li>
+        <li><code>protocolVersion</code>: protocol version if available</li>
       </ul>
       <CodeBlock code={nodeMetadataExample} language="json" title="Example: Node Metadata Snapshot" />
       <p>
@@ -213,7 +213,7 @@ const CERAuditWorkflows = () => {
 
       {/* Export Scope and Filters */}
       <h2>Export Scope and Filters</h2>
-      <p>Evidence packs may be generated for a variety of scopes. Audits rarely export all records — scoping ensures relevance and efficiency.</p>
+      <p>Evidence packs may be generated for a variety of scopes. Audits rarely export all records. Scoping ensures relevance and efficiency.</p>
       <p>Supported export scopes include:</p>
       <ul>
         <li>A single execution</li>
@@ -250,15 +250,15 @@ const CERAuditWorkflows = () => {
 
       <h3>Machine-Readable</h3>
       <ul>
-        <li><code>cer.json</code> — CER bundle</li>
-        <li><code>receipt.json</code> — signed attestation receipt</li>
-        <li><code>verification-report.json</code> — verification result</li>
-        <li><code>manifest.json</code> — export manifest</li>
+        <li><code>cer.json</code>: CER bundle</li>
+        <li><code>receipt.json</code>: signed attestation receipt</li>
+        <li><code>verification-report.json</code>: verification result</li>
+        <li><code>manifest.json</code>: export manifest</li>
       </ul>
 
       <h3>Human-Readable</h3>
       <ul>
-        <li><code>evidence-summary.html</code> — formatted evidence overview</li>
+        <li><code>evidence-summary.html</code>: formatted evidence overview</li>
         <li>Reviewer notes</li>
         <li>Exported summary report</li>
       </ul>
@@ -275,7 +275,7 @@ const CERAuditWorkflows = () => {
         <li>Deleted records may still be verifiable if previously exported</li>
       </ul>
       <p>
-        The audit workflow model builds on — but does not replace — the governance and lifecycle controls defined at the record-management layer.
+        The audit workflow model builds on the governance and lifecycle controls defined at the record-management layer. It does not replace them.
       </p>
     </div>
   );

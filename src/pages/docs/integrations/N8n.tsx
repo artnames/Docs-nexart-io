@@ -156,16 +156,16 @@ const N8n = () => {
       <h2>Next Steps</h2>
       <ul>
         <li>
-          <Link to="/docs/verification" className="text-primary hover:underline">Verification</Link>{" "}
-          — understand how CER verification works
+          <Link to="/docs/verification" className="text-primary hover:underline">Verification</Link>
+          : understand how CER verification works
         </li>
         <li>
-          <Link to="/docs/examples" className="text-primary hover:underline">Examples</Link>{" "}
-          — copy-ready API requests and response shapes
+          <Link to="/docs/examples" className="text-primary hover:underline">Examples</Link>
+          : copy-ready API requests and response shapes
         </li>
         <li>
-          <Link to="/docs/integrations/langchain" className="text-primary hover:underline">LangChain</Link>{" "}
-          — for teams moving from workflow automation into code
+          <Link to="/docs/integrations/langchain" className="text-primary hover:underline">LangChain</Link>
+          : for teams moving from workflow automation into code
         </li>
       </ul>
     </div>

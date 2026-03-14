@@ -19,7 +19,7 @@ Node attestation:
 import { certifyLangChainRun } from "@nexart/ai-execution";
 const result = await certifyLangChainRun({ provider, model, input, output, nodeUrl, apiKey });
 
-Verification: verify.nexart.io — verify by executionId, certificateHash, or uploaded CER bundle.
+Verification: verify.nexart.io. Verify by executionId, certificateHash, or uploaded CER bundle.
 
 Use cases: AI agent decisions, moderation pipelines, workflow approvals, AI-assisted automation.
 `;
@@ -66,11 +66,11 @@ const LangChain = () => {
       <ul>
         <li>
           <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">createLangChainCer(...)</code>{" "}
-          — creates a CER locally. No network call. Returns a deterministic certificate hash you can verify independently.
+          creates a CER locally. No network call. Returns a deterministic certificate hash you can verify independently.
         </li>
         <li>
           <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certifyLangChainRun(...)</code>{" "}
-          — creates a CER and sends it to a NexArt node for attestation. Returns a signed receipt and a public verification URL.
+          creates a CER and sends it to a NexArt node for attestation. Returns a signed receipt and a public verification URL.
         </li>
       </ul>
 
@@ -107,7 +107,7 @@ console.log(certificateHash);`} />
       <h2>Certify with the NexArt Node</h2>
       <p>
         When a node URL is provided, the record is attested by the NexArt node and includes a signed
-        receipt. This step is optional — local CER creation is sufficient for many use cases.
+        receipt. This step is optional. Local CER creation is sufficient for many use cases.
       </p>
       <CodeBlock language="typescript" title="Node Attestation" code={`import { certifyLangChainRun } from "@nexart/ai-execution";
 
@@ -139,9 +139,9 @@ console.log(result.verificationUrl);`} />
         {" "}and verify using:
       </p>
       <ul>
-        <li><strong>Execution ID</strong> — look up by the execution identifier</li>
-        <li><strong>Certificate hash</strong> — paste the deterministic hash</li>
-        <li><strong>Uploaded CER bundle</strong> — upload the full bundle for offline-first verification</li>
+        <li><strong>Execution ID</strong>: look up by the execution identifier</li>
+        <li><strong>Certificate hash</strong>: paste the deterministic hash</li>
+        <li><strong>Uploaded CER bundle</strong>: upload the full bundle for offline-first verification</li>
       </ul>
 
       <h2>Use Cases</h2>
@@ -155,16 +155,16 @@ console.log(result.verificationUrl);`} />
       <h2>Next Steps</h2>
       <ul>
         <li>
-          <Link to="/docs/quickstart" className="text-primary hover:underline">Quickstart</Link>{" "}
-          — create your first CER in three steps
+          <Link to="/docs/quickstart" className="text-primary hover:underline">Quickstart</Link>
+          : create your first CER in three steps
         </li>
         <li>
-          <Link to="/docs/verification" className="text-primary hover:underline">Verification</Link>{" "}
-          — deep dive into verification semantics
+          <Link to="/docs/verification" className="text-primary hover:underline">Verification</Link>
+          : deep dive into verification semantics
         </li>
         <li>
-          <Link to="/docs/examples" className="text-primary hover:underline">Examples</Link>{" "}
-          — copy-ready API requests and response shapes
+          <Link to="/docs/examples" className="text-primary hover:underline">Examples</Link>
+          : copy-ready API requests and response shapes
         </li>
       </ul>
     </div>

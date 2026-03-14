@@ -5,7 +5,7 @@ const llmBlock = `# NexArt AI Execution SDK
 
 ## API Endpoints
 
-POST /v1/cer/ai/certify — recommended
+POST /v1/cer/ai/certify (recommended)
 Creates a CER, attests it via the node, and returns certificateHash, receipt, signatureB64Url, and verificationUrl.
 
 POST /v1/cer/ai/create
@@ -53,7 +53,7 @@ The API response duplicates receipt and signature fields for convenience.
 Locally using bundle + node keys from node.nexart.io/.well-known/nexart-node.json
 Or through verify.nexart.io
 Checks: Bundle Integrity, Node Signature, Receipt Consistency
-Verification statuses: VERIFIED | FAILED | NOT_FOUND (per CER Protocol). Check statuses: PASS | FAIL | SKIPPED. (per CER Protocol). Check statuses: PASS | FAIL | SKIPPED.`;
+Verification statuses: VERIFIED | FAILED | NOT_FOUND (per CER Protocol). Check statuses: PASS | FAIL | SKIPPED.`;
 
 const SDK = () => (
   <>
