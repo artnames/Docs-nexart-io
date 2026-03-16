@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import DocsSidebar from "./DocsSidebar";
 import DocsHeader from "./DocsHeader";
+import DocsFooter from "./DocsFooter";
 
 const DocsLayout = () => {
   return (
@@ -12,6 +13,7 @@ const DocsLayout = () => {
           <div className="docs-prose max-w-[681px]">
             <Outlet />
           </div>
+          <DocsFooter />
         </main>
       </div>
     </div>
