@@ -17,10 +17,10 @@ const DocsHeader = () => {
           >
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
-          <Link to="/" className="flex items-center gap-1.5 text-foreground">
+          <a href="https://nexart.io" className="flex items-center gap-1.5 text-foreground">
             <span className="font-mono text-sm font-medium tracking-tight">nexart.io</span>
-            <span className="text-muted-foreground text-sm font-normal ml-2">docs</span>
-          </Link>
+          </a>
+          <Link to="/" className="text-muted-foreground text-sm font-normal ml-2">docs</Link>
           <div className="ml-auto">
             <DocsSearch />
           </div>
