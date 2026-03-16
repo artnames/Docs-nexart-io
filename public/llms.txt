@@ -1,0 +1,35 @@
+# NexArt
+
+> NexArt provides deterministic execution verification infrastructure. Certified Execution Records (CERs) are cryptographically bound records of AI or deterministic execution that can be independently verified.
+
+## Documentation
+
+- [Getting Started](https://docs.nexart.io/docs/getting-started)
+- [Quickstart](https://docs.nexart.io/docs/quickstart)
+- [CER Protocol](https://docs.nexart.io/docs/cer-protocol)
+- [Protocol Overview](https://docs.nexart.io/docs/protocol-overview)
+- [AI Execution SDK](https://docs.nexart.io/docs/sdk)
+- [NexArt CLI](https://docs.nexart.io/docs/cli)
+- [Verification](https://docs.nexart.io/docs/verification)
+- [Trust Model](https://docs.nexart.io/docs/trust-model)
+- [Attestation Node](https://docs.nexart.io/docs/attestation-node)
+- [Examples](https://docs.nexart.io/docs/examples)
+- [FAQ](https://docs.nexart.io/docs/faq)
+
+## Integrations
+
+- [n8n](https://docs.nexart.io/docs/integrations/n8n)
+- [LangChain](https://docs.nexart.io/docs/integrations/langchain)
+
+## Concepts
+
+- [Certified Execution Records](https://docs.nexart.io/docs/concepts/cer)
+- [Signed Receipts](https://docs.nexart.io/docs/concepts/signed-receipts)
+- [Hash-Only Timestamping](https://docs.nexart.io/docs/concepts/hash-timestamping)
+- [Verification Reports](https://docs.nexart.io/docs/concepts/verification-reports)
+
+## Links
+
+- Main site: https://nexart.io
+- Verification portal: https://verify.nexart.io
+- Documentation: https://docs.nexart.io
