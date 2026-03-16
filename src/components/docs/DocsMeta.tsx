@@ -14,6 +14,12 @@ interface DocsMetaProps {
 
 const BASE_URL = "https://docs.nexart.io";
 
+const sectionNames: Record<string, string> = {
+  concepts: "Concepts",
+  integrations: "Integrations",
+  dashboard: "Dashboard",
+};
+
 const DocsMeta = ({ title, description, breadcrumbs }: DocsMetaProps) => {
   const { pathname } = useLocation();
   const canonicalUrl = `${BASE_URL}${pathname}`;
@@ -47,14 +53,25 @@ const DocsMeta = ({ title, description, breadcrumbs }: DocsMetaProps) => {
     ],
   };
 
-  const defaultBreadcrumbs: BreadcrumbItem[] = [
-    { name: "Home", path: "/" },
-    { name: "Docs", path: "/docs/getting-started" },
-  ];
+  // Auto-detect section from path for breadcrumbs
+  const buildBreadcrumbs = (): BreadcrumbItem[] => {
+    if (breadcrumbs) {
+      return [{ name: "Home", path: "/" }, { name: "Docs", path: "/docs/getting-started" }, ...breadcrumbs];
+    }
+    const parts = pathname.replace(/^\/docs\//, "").split("/");
+    const crumbs: BreadcrumbItem[] = [
+      { name: "Home", path: "/" },
+      { name: "Docs", path: "/docs/getting-started" },
+    ];
+    if (parts.length > 1 && sectionNames[parts[0]]) {
+      const sectionPath = parts[0] === "integrations" ? "/docs/integrations" : `/docs/${parts[0]}/${parts[1]}`;
+      crumbs.push({ name: sectionNames[parts[0]], path: parts[0] === "integrations" ? "/docs/integrations" : `/docs/${parts[0]}` });
+    }
+    crumbs.push({ name: title, path: pathname });
+    return crumbs;
+  };
 
-  const allCrumbs = breadcrumbs
-    ? [...defaultBreadcrumbs, ...breadcrumbs]
-    : [...defaultBreadcrumbs, { name: title, path: pathname }];
+  const allCrumbs = buildBreadcrumbs();
 
   const breadcrumbSchema = {
     "@context": "https://schema.org",
