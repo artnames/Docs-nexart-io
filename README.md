@@ -1,5 +1,11 @@
 # Welcome to your Lovable project
 
+## Execution Verification
+
+This project documents the NexArt deterministic execution runtime and its approach to Certified Execution Records (CERs). CERs are cryptographically bound records of AI or deterministic execution that can be independently verified.
+
+Protocol documentation: [https://docs.nexart.io](https://docs.nexart.io)
+
 ## Project info
 
 **URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
