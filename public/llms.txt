@@ -11,6 +11,7 @@
 - [AI Execution SDK](https://docs.nexart.io/docs/sdk)
 - [NexArt CLI](https://docs.nexart.io/docs/cli)
 - [Verification](https://docs.nexart.io/docs/verification)
+- [AI CER Verification Layers](https://docs.nexart.io/docs/ai-cer-verification-layers)
 - [Trust Model](https://docs.nexart.io/docs/trust-model)
 - [Attestation Node](https://docs.nexart.io/docs/attestation-node)
 - [Examples](https://docs.nexart.io/docs/examples)

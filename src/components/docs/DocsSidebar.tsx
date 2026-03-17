@@ -47,6 +47,7 @@ const navigation: NavItem[] = [
       { title: "Protocol Overview", path: "/docs/protocol-overview" },
       { title: "Trust Model", path: "/docs/trust-model" },
       { title: "Verification", path: "/docs/verification" },
+      { title: "AI CER Verification Layers", path: "/docs/ai-cer-verification-layers" },
       { title: "Attestation Node", path: "/docs/attestation-node" },
       { title: "Integration Surfaces", path: "/docs/integration-surfaces" },
     ],

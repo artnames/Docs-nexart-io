@@ -3,10 +3,11 @@ import CodeBlock from "@/components/docs/CodeBlock";
 import { Link } from "react-router-dom";
 
 const llmBlock = `# NexArt Verification
-Verification confirms three things about a CER:
-1. The bundle has not been modified
-2. The receipt was signed by a valid attestation node
-3. The receipt references the correct certificateHash
+Verification confirms up to four things about a CER:
+1. The bundle has not been modified (Bundle Integrity)
+2. The receipt was signed by a valid attestation node (Node Signature)
+3. The receipt references the correct certificateHash (Receipt Consistency)
+4. The verification envelope has not been altered (Verification Envelope — when present)
 
 ## How to verify
 Three ways to verify a record:
@@ -23,6 +24,7 @@ Each check returns PASS, FAIL, or SKIPPED.
 1. Bundle Integrity: recompute certificateHash from bundle contents, confirm it matches
 2. Node Signature: validate Ed25519 signature using key from node.nexart.io/.well-known/nexart-node.json (matched by kid). SKIPPED if no attestation.
 3. Receipt Consistency: receipt (at meta.attestation.receipt) references same certificateHash as bundle. SKIPPED if no attestation.
+4. Verification Envelope: validate meta.verificationEnvelopeSignature against meta.verificationEnvelope. SKIPPED if no envelope present.
 
 ## What is publicly visible
 - certificateHash, timestamp, node identity, verification status
@@ -33,6 +35,11 @@ Each check returns PASS, FAIL, or SKIPPED.
 VERIFIED: all applicable checks pass
 FAILED: one or more checks fail
 NOT_FOUND: record not located
+
+## Verification layers
+AI CER bundles support up to three layers: Bundle Integrity, Signed Attestation Receipt, and Verification Envelope.
+Historical artifacts may not include the verification envelope. The verifier applies compatibility fallback for older artifacts.
+See AI CER Verification Layers for details.
 
 ## Independent verification
 Verification can be performed without NexArt API access using the CER bundle (including meta.attestation) and the node's published public keys.`;
@@ -46,13 +53,14 @@ const Verification = () => (
     />
 
     <h2 id="overview">What Verification Proves</h2>
-    <p>Verification answers three questions about a Certified Execution Record:</p>
+    <p>Verification answers up to four questions about a Certified Execution Record:</p>
     <ol>
       <li>Has the CER bundle been modified since it was created?</li>
       <li>Was the receipt signed by a valid NexArt attestation node?</li>
       <li>Does the receipt reference the correct <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>?</li>
+      <li>Has the verification envelope been altered? (when present)</li>
     </ol>
-    <p>If all applicable checks pass, the record is intact and its attestation is trustworthy.</p>
+    <p>If all applicable checks pass, the record is intact and its attestation is trustworthy. For a detailed breakdown of the three verification layers, see <Link to="/docs/ai-cer-verification-layers" className="text-primary hover:underline">AI CER Verification Layers</Link>.</p>
 
     <h2 id="how-to-verify">How to Verify a Record</h2>
     <p>There are three ways to verify a CER through the public verifier at <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a>:</p>
@@ -99,7 +107,9 @@ const Verification = () => (
       <li><strong>Bundle Integrity.</strong> Recompute the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> from the bundle contents. If the hash differs, the bundle has been modified.</li>
       <li><strong>Node Signature.</strong> Validate the Ed25519 signature using the public key published at <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">node.nexart.io/.well-known/nexart-node.json</code>, matched by the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">kid</code> in the receipt. <strong>SKIPPED</strong> if no attestation is present.</li>
       <li><strong>Receipt Consistency.</strong> Confirm the receipt at <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation.receipt</code> references the same <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> as the bundle and that the node identity matches. <strong>SKIPPED</strong> if no attestation is present.</li>
+      <li><strong>Verification Envelope.</strong> When present, validate <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.verificationEnvelopeSignature</code> against <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.verificationEnvelope</code>. This confirms the authoritative displayed verification surface has not been altered. <strong>SKIPPED</strong> if the bundle does not include a verification envelope.</li>
     </ol>
+    <p className="text-sm text-muted-foreground">For a detailed breakdown of what each layer protects, see <Link to="/docs/ai-cer-verification-layers" className="text-primary hover:underline">AI CER Verification Layers</Link>.</p>
 
     <h2 id="outcomes">Verification Statuses</h2>
     <p>The verification status reflects the overall outcome, as defined by the <Link to="/docs/cer-protocol" className="text-primary hover:underline">CER Protocol</Link>:</p>
