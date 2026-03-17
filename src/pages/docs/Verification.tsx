@@ -53,13 +53,14 @@ const Verification = () => (
     />
 
     <h2 id="overview">What Verification Proves</h2>
-    <p>Verification answers three questions about a Certified Execution Record:</p>
+    <p>Verification answers up to four questions about a Certified Execution Record:</p>
     <ol>
       <li>Has the CER bundle been modified since it was created?</li>
       <li>Was the receipt signed by a valid NexArt attestation node?</li>
       <li>Does the receipt reference the correct <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>?</li>
+      <li>Has the verification envelope been altered? (when present)</li>
     </ol>
-    <p>If all applicable checks pass, the record is intact and its attestation is trustworthy.</p>
+    <p>If all applicable checks pass, the record is intact and its attestation is trustworthy. For a detailed breakdown of the three verification layers, see <Link to="/docs/ai-cer-verification-layers" className="text-primary hover:underline">AI CER Verification Layers</Link>.</p>
 
     <h2 id="how-to-verify">How to Verify a Record</h2>
     <p>There are three ways to verify a CER through the public verifier at <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a>:</p>

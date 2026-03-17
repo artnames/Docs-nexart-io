@@ -52,8 +52,9 @@ The API response duplicates receipt and signature fields for convenience.
 ## Verification
 Locally using bundle + node keys from node.nexart.io/.well-known/nexart-node.json
 Or through verify.nexart.io
-Checks: Bundle Integrity, Node Signature, Receipt Consistency
-Verification statuses: VERIFIED | FAILED | NOT_FOUND (per CER Protocol). Check statuses: PASS | FAIL | SKIPPED.`;
+Checks: Bundle Integrity, Node Signature, Receipt Consistency, Verification Envelope (when present)
+Verification statuses: VERIFIED | FAILED | NOT_FOUND (per CER Protocol). Check statuses: PASS | FAIL | SKIPPED.
+Newer uploaded AI CER bundles may include meta.verificationEnvelope and meta.verificationEnvelopeSignature for stronger verification.`;
 
 const SDK = () => (
   <>
