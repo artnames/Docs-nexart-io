@@ -36,6 +36,7 @@ import IntegrationSurfaces from "./pages/docs/IntegrationSurfaces";
 import PrivacyDataHandling from "./pages/docs/PrivacyDataHandling";
 import CERAuditWorkflows from "./pages/docs/CERAuditWorkflows";
 import ContextSignals from "./pages/docs/concepts/ContextSignals";
+import AICERVerificationLayers from "./pages/docs/AICERVerificationLayers";
 
 const queryClient = new QueryClient();
 
