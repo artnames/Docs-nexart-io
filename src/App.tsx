@@ -65,6 +65,7 @@ const App = () => (
             <Route path="ui-renderer-sdk" element={<UIRendererSDK />} />
             <Route path="attestation-node" element={<AttestationNode />} />
             <Route path="verification" element={<Verification />} />
+            <Route path="ai-cer-verification-layers" element={<AICERVerificationLayers />} />
             <Route path="trust-model" element={<TrustModel />} />
             <Route path="integration-surfaces" element={<IntegrationSurfaces />} />
             <Route path="cer-audit-workflows" element={<CERAuditWorkflows />} />
