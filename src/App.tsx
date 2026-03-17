@@ -57,6 +57,7 @@ const App = () => (
             <Route path="concepts/signed-receipts" element={<SignedReceipts />} />
             <Route path="concepts/hash-timestamping" element={<HashTimestamping />} />
             <Route path="concepts/verification-reports" element={<VerificationReports />} />
+            <Route path="concepts/context-signals" element={<ContextSignals />} />
             <Route path="sdk" element={<SDK />} />
             <Route path="cli" element={<NexArtCLI />} />
             <Route path="codemode-sdk" element={<CodeModeSDK />} />

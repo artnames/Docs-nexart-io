@@ -38,6 +38,10 @@
   </url>
   <url>
     <loc>https://docs.nexart.io/docs/concepts/verification-reports</loc>
+    <lastmod>2026-03-17</lastmod>
+  </url>
+  <url>
+    <loc>https://docs.nexart.io/docs/concepts/context-signals</loc>
     <lastmod>2026-03-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

@@ -18,6 +18,7 @@ const navigation: NavItem[] = [
       { title: "Signed Receipts", path: "/docs/concepts/signed-receipts" },
       { title: "Hash-Only Timestamping", path: "/docs/concepts/hash-timestamping" },
       { title: "Verification Reports", path: "/docs/concepts/verification-reports" },
+      { title: "Context Signals", path: "/docs/concepts/context-signals" },
     ],
   },
   {

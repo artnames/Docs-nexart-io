@@ -207,6 +207,26 @@ Authorization: Bearer NEXART_API_KEY
       <li><strong>Signed receipt vs hash-only timestamp.</strong> A signed receipt attests the full CER bundle. A hash-only timestamp attests only the certificateHash, without the snapshot contents.</li>
     </ul>
 
+    <h2 id="signals">Context Signals</h2>
+    <p>Both endpoints accept an optional <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">signals</code> parameter — an array of structured metadata objects recorded alongside the execution.</p>
+    <CodeBlock
+      code={`{
+  "model": "gpt-4",
+  "input": "Summarize this contract...",
+  "output": "The contract states that...",
+  "signals": [
+    {
+      "type": "policy.check",
+      "source": "compliance-engine",
+      "payload": { "policyId": "ret-30d", "result": "pass" }
+    }
+  ]
+}`}
+      title="Request with Signals"
+    />
+    <p>When signals are present, they are included in the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> computation. This makes them part of the tamper-evidence chain — any modification to a signal after certification will cause verification to fail.</p>
+    <p className="text-sm text-muted-foreground">Signals are backward-compatible. Requests without the <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">signals</code> field behave exactly as before. Existing CER bundles without signals remain valid and verifiable.</p>
+
     <h2 id="verification">Verification</h2>
     <p>CERs produced by the certify endpoint can be verified by checking:</p>
     <ul>
