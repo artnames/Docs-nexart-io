@@ -228,14 +228,15 @@ Authorization: Bearer NEXART_API_KEY
     <p className="text-sm text-muted-foreground">Signals are backward-compatible. Requests without the <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">signals</code> field behave exactly as before. Existing CER bundles without signals remain valid and verifiable.</p>
 
     <h2 id="verification">Verification</h2>
-    <p>CERs produced by the certify endpoint can be verified by checking:</p>
+    <p>CERs produced by the certify endpoint can be verified across multiple layers:</p>
     <ul>
       <li><strong>Bundle Integrity.</strong> The CER bundle hashes are internally consistent.</li>
       <li><strong>Node Signature.</strong> The receipt signature is valid against the node's published Ed25519 key.</li>
       <li><strong>Receipt Consistency.</strong> The receipt's <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> matches the CER bundle.</li>
+      <li><strong>Verification Envelope.</strong> When present (newer uploaded bundles), <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.verificationEnvelopeSignature</code> validates the authoritative displayed verification surface.</li>
     </ul>
     <p>Verification statuses: <strong>VERIFIED</strong>, <strong>FAILED</strong>, or <strong>NOT_FOUND</strong>. Each check returns <strong>PASS</strong>, <strong>FAIL</strong>, or <strong>SKIPPED</strong>.</p>
-    <p>Verify at <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a> or locally using the bundle and node keys from <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">node.nexart.io/.well-known/nexart-node.json</code>.</p>
+    <p>Verify at <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a> or locally using the bundle and node keys from <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">node.nexart.io/.well-known/nexart-node.json</code>. For a full breakdown of verification layers, see <Link to="/docs/ai-cer-verification-layers" className="text-primary hover:underline">AI CER Verification Layers</Link>.</p>
 
     <h2 id="scope">Scope</h2>
     <p className="text-muted-foreground">The SDK API surface is still evolving. This page documents the current endpoints and data model. Check back for updates as new capabilities are added.</p>
