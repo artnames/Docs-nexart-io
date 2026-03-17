@@ -35,6 +35,7 @@ import LangChain from "./pages/docs/integrations/LangChain";
 import IntegrationSurfaces from "./pages/docs/IntegrationSurfaces";
 import PrivacyDataHandling from "./pages/docs/PrivacyDataHandling";
 import CERAuditWorkflows from "./pages/docs/CERAuditWorkflows";
+import ContextSignals from "./pages/docs/concepts/ContextSignals";
 
 const queryClient = new QueryClient();
 
