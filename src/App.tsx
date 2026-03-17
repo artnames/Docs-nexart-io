@@ -35,6 +35,7 @@ import LangChain from "./pages/docs/integrations/LangChain";
 import IntegrationSurfaces from "./pages/docs/IntegrationSurfaces";
 import PrivacyDataHandling from "./pages/docs/PrivacyDataHandling";
 import CERAuditWorkflows from "./pages/docs/CERAuditWorkflows";
+import ContextSignals from "./pages/docs/concepts/ContextSignals";
 
 const queryClient = new QueryClient();
 
@@ -56,6 +57,7 @@ const App = () => (
             <Route path="concepts/signed-receipts" element={<SignedReceipts />} />
             <Route path="concepts/hash-timestamping" element={<HashTimestamping />} />
             <Route path="concepts/verification-reports" element={<VerificationReports />} />
+            <Route path="concepts/context-signals" element={<ContextSignals />} />
             <Route path="sdk" element={<SDK />} />
             <Route path="cli" element={<NexArtCLI />} />
             <Route path="codemode-sdk" element={<CodeModeSDK />} />

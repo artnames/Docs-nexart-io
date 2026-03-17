@@ -112,6 +112,16 @@ npx @nexart/cli@0.4.0 ai certify execution.json --out cer.json
 # Verify the bundle in a later step
 npx @nexart/cli@0.4.0 ai verify cer.json`} />
 
+    <h2>Context Signals</h2>
+    <p>Attach structured metadata to a CER using a signals file:</p>
+    <CodeBlock code={`npx @nexart/cli@0.4.0 ai create execution.json --signals-file signals.json`} title="Create with Signals" />
+    <CodeBlock code={`npx @nexart/cli@0.4.0 ai certify execution.json --signals-file signals.json`} title="Certify with Signals" />
+    <p>
+      Signals are included in the certificate hash. See{" "}
+      <Link to="/docs/concepts/context-signals" className="text-primary hover:underline">Context Signals</Link> for
+      the full specification.
+    </p>
+
     <h2>Deterministic Rendering</h2>
     <p>The CLI also supports deterministic rendering workflows for canvas-based executions:</p>
     <CodeBlock
