@@ -3,10 +3,11 @@ import CodeBlock from "@/components/docs/CodeBlock";
 import { Link } from "react-router-dom";
 
 const llmBlock = `# NexArt Verification
-Verification confirms three things about a CER:
-1. The bundle has not been modified
-2. The receipt was signed by a valid attestation node
-3. The receipt references the correct certificateHash
+Verification confirms up to four things about a CER:
+1. The bundle has not been modified (Bundle Integrity)
+2. The receipt was signed by a valid attestation node (Node Signature)
+3. The receipt references the correct certificateHash (Receipt Consistency)
+4. The verification envelope has not been altered (Verification Envelope — when present)
 
 ## How to verify
 Three ways to verify a record:
@@ -23,6 +24,7 @@ Each check returns PASS, FAIL, or SKIPPED.
 1. Bundle Integrity: recompute certificateHash from bundle contents, confirm it matches
 2. Node Signature: validate Ed25519 signature using key from node.nexart.io/.well-known/nexart-node.json (matched by kid). SKIPPED if no attestation.
 3. Receipt Consistency: receipt (at meta.attestation.receipt) references same certificateHash as bundle. SKIPPED if no attestation.
+4. Verification Envelope: validate meta.verificationEnvelopeSignature against meta.verificationEnvelope. SKIPPED if no envelope present.
 
 ## What is publicly visible
 - certificateHash, timestamp, node identity, verification status
@@ -33,6 +35,11 @@ Each check returns PASS, FAIL, or SKIPPED.
 VERIFIED: all applicable checks pass
 FAILED: one or more checks fail
 NOT_FOUND: record not located
+
+## Verification layers
+AI CER bundles support up to three layers: Bundle Integrity, Signed Attestation Receipt, and Verification Envelope.
+Historical artifacts may not include the verification envelope. The verifier applies compatibility fallback for older artifacts.
+See AI CER Verification Layers for details.
 
 ## Independent verification
 Verification can be performed without NexArt API access using the CER bundle (including meta.attestation) and the node's published public keys.`;
