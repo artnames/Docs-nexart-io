@@ -18,10 +18,10 @@ Signature is Ed25519 over the deterministically serialized receipt payload.
 Protects: attestation receipt fields. Changing receipt or signature causes this check to fail.
 
 ## Layer 3: Verification Envelope
-Fields: meta.verificationEnvelope, meta.verificationEnvelopeSignature
-Signs the authoritative displayed verification surface for uploaded/newer AI CER bundles.
-Protects: the rendered verification representation. Changing any envelope-covered field causes this check to fail.
-Present in newer uploaded AI CER bundles. Historical artifacts may not include this layer.
+In the official package format, verificationEnvelope and verificationEnvelopeSignature are at package level.
+For v2, the signable payload is reconstructed from package.verificationEnvelope.attestation, package.cer, and package.verificationEnvelope.envelopeType.
+The cer object is used as-is. Any mutation to cer after signing causes this check to fail.
+Legacy artifacts may store envelope fields inside meta as a compatibility fallback.
 
 ## Backward Compatibility
 - Historical artifacts may not include meta.verificationEnvelope

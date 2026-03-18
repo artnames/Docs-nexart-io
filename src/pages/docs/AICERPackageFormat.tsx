@@ -327,9 +327,10 @@ meta.verificationEnvelopeType`}
     />
     <p>This format is invalid because:</p>
     <ul>
-      <li>Package-level attestation and verification artifacts (<code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">attestation</code>, <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verificationEnvelope</code>, <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verificationEnvelopeSignature</code>) were injected into <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer.meta</code> after signing.</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation</code> was injected into <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer</code> after the node signed the bundle. This changes <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer</code>.</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verificationEnvelope</code> and <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verificationEnvelopeSignature</code> were merged into <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer.meta</code> instead of remaining at the package level.</li>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer</code> no longer matches the exact bundle that was sent to and signed by the node.</li>
-      <li>Verification envelope verification will fail because the signable payload includes <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer</code> as-is, and the mutated bundle does not match the original signed bundle.</li>
+      <li>Verification Envelope v2 will fail because the signable payload uses <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer</code> as-is, and the mutated bundle does not match the original signed bundle.</li>
     </ul>
 
     {/* ── 8. Valid Format Example ── */}
