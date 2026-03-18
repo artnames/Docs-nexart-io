@@ -7,7 +7,7 @@ Version: 1.0 | Status: Normative Specification
 The official NexArt AI CER package format defines the exact JSON structure that third-party builders MUST produce and consume when transporting, storing, or verifying AI Certified Execution Records.
 
 ## Package vs. Bundle
-The top-level package is the transport/export object. It is NOT the signed CER bundle. The CER bundle is contained in the "cer" field of the package. Verifiers MUST extract "cer" as the bundle input for integrity verification.
+The top-level package is the transport/export object. It is NOT the signed CER bundle. The CER bundle is contained in the "cer" field of the package. For the official AI CER package format, verifiers MUST extract "cer" as the bundle input. For Verification Envelope v2, verifiers MUST reconstruct the signable payload from verificationEnvelope.attestation, cer, and envelopeType, rather than from the full package object.
 
 ## Official Package Format (top-level)
 Five fields: cer (CER bundle object), verificationEnvelope (verification envelope metadata), verificationEnvelopeSignature (base64url signature), receipt (attestation receipt), signature (base64url node signature).
@@ -66,12 +66,16 @@ const AICERPackageFormat = () => (
 }`}
       title="Official AI CER Package (top-level shape)"
     />
-    <p>Key rules:</p>
-    <ul>
-      <li>The top-level package is the transport/export object.</li>
-      <li>The top-level package is NOT itself the signed CER bundle.</li>
-      <li>Verifiers MUST extract <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer</code> as the bundle input for integrity verification.</li>
-    </ul>
+    <p>
+      The top-level package is the transport/export object. It is not itself the signed CER bundle.
+      For the official AI CER package format, verifiers MUST extract{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer</code> as the bundle input.
+      For Verification Envelope v2, verifiers MUST reconstruct the signable payload from{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verificationEnvelope.attestation</code>,{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer</code>, and{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">envelopeType</code>,
+      rather than from the full package object.
+    </p>
     <p>
       An <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">attestation</code> field
       MAY be included separately at the package level only if needed for backward compatibility,
@@ -163,7 +167,7 @@ const AICERPackageFormat = () => (
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">source</code> &mdash; origin identifier (e.g. application name)</li>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">tags</code> &mdash; array of classification tags</li>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">attestation</code> &mdash; attestation summary (if the core spec allows it within the bundle)</li>
-      <li>Other bundle-level metadata as defined by the schema version</li>
+      <li>Other bundle-level metadata fields explicitly defined by the current schema version</li>
     </ul>
     <p>
       <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer.meta</code> MUST NOT
@@ -247,8 +251,11 @@ meta.verificationEnvelopeType`}
 
     <h3 id="field-verification-envelope-signature"><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verificationEnvelopeSignature</code></h3>
     <p>
-      Base64url-encoded signature over the v2 signable payload. This signature protects the
-      authoritative displayed verification surface.
+      Base64url-encoded signature over the v2 signable payload reconstructed from the package.
+      This signature covers the payload built from{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verificationEnvelope.attestation</code>,{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer</code>, and{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">envelopeType</code>.
     </p>
 
     <h3 id="field-receipt"><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">receipt</code></h3>
@@ -280,6 +287,7 @@ meta.verificationEnvelopeType`}
     <ul>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">bundle</code> comes from <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">package.cer</code></li>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">attestation</code> comes from <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">package.verificationEnvelope.attestation</code></li>
+      <li>The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer</code> object used in the signable payload is the raw CER bundle, not the full package wrapper</li>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verificationEnvelope</code> itself is NOT the signed payload</li>
       <li>The whole package object is NOT the signed payload</li>
     </ul>
@@ -401,8 +409,8 @@ meta.verificationEnvelopeType`}
       compatibility considerations apply:
     </p>
     <ul>
-      <li>Historical artifacts MAY embed verification envelope fields inside <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer.meta</code>. Verifiers SHOULD support these artifacts using a compatibility fallback path.</li>
-      <li>Historical public artifacts MAY not include <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">context</code> in the certificate hash computation.</li>
+      <li>Historical artifacts MAY embed verification envelope fields inside <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer.meta</code>. The NexArt verifier currently accepts these artifacts and extracts envelope fields from <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta</code> when no package-level envelope is present.</li>
+      <li>Historical public artifacts MAY not include <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">context</code> in the certificate hash computation. The verifier detects this and validates using the hash rules active at the time the artifact was created.</li>
       <li>Artifacts without a <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verificationEnvelope</code> can still be verified for bundle integrity and attestation receipt, but the Verification Envelope check will be SKIPPED.</li>
       <li>New artifacts produced by conforming builders MUST use the official package format defined in this document.</li>
     </ul>
