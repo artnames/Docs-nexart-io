@@ -18,10 +18,10 @@ Signature is Ed25519 over the deterministically serialized receipt payload.
 Protects: attestation receipt fields. Changing receipt or signature causes this check to fail.
 
 ## Layer 3: Verification Envelope
-Fields: meta.verificationEnvelope, meta.verificationEnvelopeSignature
-Signs the authoritative displayed verification surface for uploaded/newer AI CER bundles.
-Protects: the rendered verification representation. Changing any envelope-covered field causes this check to fail.
-Present in newer uploaded AI CER bundles. Historical artifacts may not include this layer.
+In the official package format, verificationEnvelope and verificationEnvelopeSignature are at package level.
+For v2, the signable payload is reconstructed from package.verificationEnvelope.attestation, package.cer, and package.verificationEnvelope.envelopeType.
+The cer object is used as-is. Any mutation to cer after signing causes this check to fail.
+Legacy artifacts may store envelope fields inside meta as a compatibility fallback.
 
 ## Backward Compatibility
 - Historical artifacts may not include meta.verificationEnvelope
@@ -90,18 +90,42 @@ const AICERVerificationLayers = () => (
 
     <h2 id="verification-envelope">Layer 3: Verification Envelope</h2>
     <p>
-      Uploaded and newer AI CER bundles may include a verification envelope that signs the authoritative displayed verification surface.
+      Uploaded and newer AI CER bundles may include a verification envelope that protects the authoritative displayed verification surface.
     </p>
 
     <h3 id="envelope-fields">Envelope Fields</h3>
+    <p>
+      In the <Link to="/docs/ai-cer-package-format" className="text-primary hover:underline">official package format</Link>,
+      verification envelope fields are at the package level:
+    </p>
     <ul>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.verificationEnvelope</code> — the signed representation of the authoritative verification surface</li>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.verificationEnvelopeSignature</code> — signature over the verification envelope</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verificationEnvelope</code> — metadata describing the v2 verification envelope</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verificationEnvelopeSignature</code> — signature over the v2 signable payload</li>
     </ul>
     <p>
-      This layer provides a stronger trust guarantee for uploaded verification artifacts. It ensures that the displayed verification output (status, checks, metadata) has not been altered after being produced.
+      For legacy/raw bundle artifacts, these fields may appear inside <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta</code> as a compatibility fallback.
     </p>
-    <p><strong>What it protects:</strong> the authoritative displayed verification surface.</p>
+
+    <h3 id="v2-signable-payload">Package-Path Signable Payload (v2)</h3>
+    <p>
+      For the official package format, verifiers reconstruct the v2 signable payload as:
+    </p>
+    <CodeBlock
+      code={`{
+  "attestation": package.verificationEnvelope.attestation,
+  "bundle": package.cer,
+  "envelopeType": package.verificationEnvelope.envelopeType
+}`}
+      title="v2 Signable Payload Construction"
+    />
+    <ul>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">bundle</code> comes from <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">package.cer</code> — the raw CER bundle, not the full package</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">attestation</code> comes from <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">package.verificationEnvelope.attestation</code></li>
+      <li>The full package object is NOT the signed payload</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verificationEnvelope</code> itself is NOT the signed payload</li>
+      <li>For the package path, <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer</code> is used as-is — any mutation to <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer</code> after signing will cause this check to fail</li>
+    </ul>
+    <p><strong>What it protects:</strong> the authoritative displayed verification surface via the reconstructed signable payload.</p>
 
     <h2 id="field-reference">Field-Level Reference</h2>
     <p>The following fields may be present on an uploaded AI CER bundle:</p>
@@ -186,6 +210,7 @@ const AICERVerificationLayers = () => (
 
     <h2 id="relationship">Relationship to Other Documentation</h2>
     <ul>
+      <li>For the official package format and bundle immutability rules, see <Link to="/docs/ai-cer-package-format" className="text-primary hover:underline">AI CER Package Format</Link>.</li>
       <li>For the CER data model and bundle structure, see the <Link to="/docs/cer-protocol" className="text-primary hover:underline">CER Protocol specification</Link>.</li>
       <li>For verification checks and statuses, see <Link to="/docs/verification" className="text-primary hover:underline">Verification</Link>.</li>
       <li>For the attestation node contract, see <Link to="/docs/attestation-node" className="text-primary hover:underline">Attestation Node</Link>.</li>
