@@ -287,6 +287,7 @@ meta.verificationEnvelopeType`}
     <ul>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">bundle</code> comes from <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">package.cer</code></li>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">attestation</code> comes from <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">package.verificationEnvelope.attestation</code></li>
+      <li>The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer</code> object used in the signable payload is the raw CER bundle, not the full package wrapper</li>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verificationEnvelope</code> itself is NOT the signed payload</li>
       <li>The whole package object is NOT the signed payload</li>
     </ul>
