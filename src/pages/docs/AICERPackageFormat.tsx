@@ -7,7 +7,7 @@ Version: 1.0 | Status: Normative Specification
 The official NexArt AI CER package format defines the exact JSON structure that third-party builders MUST produce and consume when transporting, storing, or verifying AI Certified Execution Records.
 
 ## Package vs. Bundle
-The top-level package is the transport/export object. It is NOT the signed CER bundle. The CER bundle is contained in the "cer" field of the package. Verifiers MUST extract "cer" as the bundle input for integrity verification.
+The top-level package is the transport/export object. It is NOT the signed CER bundle. The CER bundle is contained in the "cer" field of the package. For the official AI CER package format, verifiers MUST extract "cer" as the bundle input. For Verification Envelope v2, verifiers MUST reconstruct the signable payload from verificationEnvelope.attestation, cer, and envelopeType, rather than from the full package object.
 
 ## Official Package Format (top-level)
 Five fields: cer (CER bundle object), verificationEnvelope (verification envelope metadata), verificationEnvelopeSignature (base64url signature), receipt (attestation receipt), signature (base64url node signature).
