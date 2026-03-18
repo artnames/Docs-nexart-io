@@ -251,8 +251,11 @@ meta.verificationEnvelopeType`}
 
     <h3 id="field-verification-envelope-signature"><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verificationEnvelopeSignature</code></h3>
     <p>
-      Base64url-encoded signature over the v2 signable payload. This signature protects the
-      authoritative displayed verification surface.
+      Base64url-encoded signature over the v2 signable payload reconstructed from the package.
+      This signature covers the payload built from{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verificationEnvelope.attestation</code>,{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer</code>, and{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">envelopeType</code>.
     </p>
 
     <h3 id="field-receipt"><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">receipt</code></h3>
