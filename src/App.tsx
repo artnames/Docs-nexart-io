@@ -37,6 +37,7 @@ import PrivacyDataHandling from "./pages/docs/PrivacyDataHandling";
 import CERAuditWorkflows from "./pages/docs/CERAuditWorkflows";
 import ContextSignals from "./pages/docs/concepts/ContextSignals";
 import AICERVerificationLayers from "./pages/docs/AICERVerificationLayers";
+import AICERPackageFormat from "./pages/docs/AICERPackageFormat";
 
 const queryClient = new QueryClient();
 
@@ -66,6 +67,7 @@ const App = () => (
             <Route path="attestation-node" element={<AttestationNode />} />
             <Route path="verification" element={<Verification />} />
             <Route path="ai-cer-verification-layers" element={<AICERVerificationLayers />} />
+            <Route path="ai-cer-package-format" element={<AICERPackageFormat />} />
             <Route path="trust-model" element={<TrustModel />} />
             <Route path="integration-surfaces" element={<IntegrationSurfaces />} />
             <Route path="cer-audit-workflows" element={<CERAuditWorkflows />} />
