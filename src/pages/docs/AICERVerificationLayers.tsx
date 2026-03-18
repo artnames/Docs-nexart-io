@@ -210,6 +210,7 @@ const AICERVerificationLayers = () => (
 
     <h2 id="relationship">Relationship to Other Documentation</h2>
     <ul>
+      <li>For the official package format and bundle immutability rules, see <Link to="/docs/ai-cer-package-format" className="text-primary hover:underline">AI CER Package Format</Link>.</li>
       <li>For the CER data model and bundle structure, see the <Link to="/docs/cer-protocol" className="text-primary hover:underline">CER Protocol specification</Link>.</li>
       <li>For verification checks and statuses, see <Link to="/docs/verification" className="text-primary hover:underline">Verification</Link>.</li>
       <li>For the attestation node contract, see <Link to="/docs/attestation-node" className="text-primary hover:underline">Attestation Node</Link>.</li>
