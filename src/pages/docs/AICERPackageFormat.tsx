@@ -167,7 +167,7 @@ const AICERPackageFormat = () => (
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">source</code> &mdash; origin identifier (e.g. application name)</li>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">tags</code> &mdash; array of classification tags</li>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">attestation</code> &mdash; attestation summary (if the core spec allows it within the bundle)</li>
-      <li>Other bundle-level metadata as defined by the schema version</li>
+      <li>Other bundle-level metadata fields explicitly defined by the current schema version</li>
     </ul>
     <p>
       <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer.meta</code> MUST NOT
