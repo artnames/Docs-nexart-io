@@ -409,8 +409,8 @@ meta.verificationEnvelopeType`}
       compatibility considerations apply:
     </p>
     <ul>
-      <li>Historical artifacts MAY embed verification envelope fields inside <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer.meta</code>. Verifiers SHOULD support these artifacts using a compatibility fallback path.</li>
-      <li>Historical public artifacts MAY not include <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">context</code> in the certificate hash computation.</li>
+      <li>Historical artifacts MAY embed verification envelope fields inside <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer.meta</code>. The NexArt verifier currently accepts these artifacts and extracts envelope fields from <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta</code> when no package-level envelope is present.</li>
+      <li>Historical public artifacts MAY not include <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">context</code> in the certificate hash computation. The verifier detects this and validates using the hash rules active at the time the artifact was created.</li>
       <li>Artifacts without a <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verificationEnvelope</code> can still be verified for bundle integrity and attestation receipt, but the Verification Envelope check will be SKIPPED.</li>
       <li>New artifacts produced by conforming builders MUST use the official package format defined in this document.</li>
     </ul>
