@@ -66,12 +66,16 @@ const AICERPackageFormat = () => (
 }`}
       title="Official AI CER Package (top-level shape)"
     />
-    <p>Key rules:</p>
-    <ul>
-      <li>The top-level package is the transport/export object.</li>
-      <li>The top-level package is NOT itself the signed CER bundle.</li>
-      <li>Verifiers MUST extract <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer</code> as the bundle input for integrity verification.</li>
-    </ul>
+    <p>
+      The top-level package is the transport/export object. It is not itself the signed CER bundle.
+      For the official AI CER package format, verifiers MUST extract{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer</code> as the bundle input.
+      For Verification Envelope v2, verifiers MUST reconstruct the signable payload from{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verificationEnvelope.attestation</code>,{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer</code>, and{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">envelopeType</code>,
+      rather than from the full package object.
+    </p>
     <p>
       An <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">attestation</code> field
       MAY be included separately at the package level only if needed for backward compatibility,
