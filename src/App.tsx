@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import DocsLayout from "./components/docs/DocsLayout";
@@ -50,6 +50,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/docs" element={<DocsLayout />}>
+            <Route index element={<Navigate to="/docs/getting-started" replace />} />
             <Route path="getting-started" element={<GettingStarted />} />
             <Route path="quickstart" element={<Quickstart />} />
             <Route path="cer-protocol" element={<CERProtocol />} />
