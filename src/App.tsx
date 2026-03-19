@@ -50,6 +50,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/docs" element={<DocsLayout />}>
+            <Route index element={<Navigate to="/docs/getting-started" replace />} />
             <Route path="getting-started" element={<GettingStarted />} />
             <Route path="quickstart" element={<Quickstart />} />
             <Route path="cer-protocol" element={<CERProtocol />} />
