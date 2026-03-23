@@ -61,6 +61,10 @@ const AgentKit = () => (
     <h2 id="installation">Installation</h2>
     <CodeBlock language="bash" code="npm install @nexart/agent-kit" />
     <p className="text-sm text-muted-foreground">Current version: 0.1.1</p>
+    <p className="text-sm text-muted-foreground">
+      If you also import <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">@nexart/signals</code> or <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">@nexart/ai-execution</code> directly:
+    </p>
+    <CodeBlock language="bash" code="npm install @nexart/agent-kit @nexart/signals @nexart/ai-execution" />
 
     <h2 id="exports">Exports</h2>
 
