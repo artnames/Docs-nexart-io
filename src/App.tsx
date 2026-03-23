@@ -83,6 +83,7 @@ const App = () => (
             <Route path="examples" element={<Examples />} />
             <Route path="integrations/n8n" element={<N8n />} />
             <Route path="integrations/langchain" element={<LangChain />} />
+            <Route path="agent-kit" element={<AgentKit />} />
             <Route path="faq" element={<FAQ />} />
           </Route>
           <Route path="*" element={<NotFound />} />
