@@ -187,8 +187,9 @@ const { bundle } = await certifyDecision({
     <h2 id="verification">Verification</h2>
     <p>
       Bundles produced by <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/agent-kit</code> are
-      standard <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer.ai.execution.v1</code> artifacts.
-      They verify exactly like any other NexArt AI CER at{" "}
+      standard <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer.ai.execution.v1</code> artifacts
+      and verify with existing NexArt verification tooling,
+      including <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verifyCer()</code> and{" "}
       <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">verify.nexart.io</a>.
       No special verifier is needed.
     </p>
