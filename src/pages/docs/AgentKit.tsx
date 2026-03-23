@@ -102,10 +102,13 @@ const lookupCustomer = wrapTool({
   }
 });
 
-const { result, bundle } = await lookupCustomer({ email: "user@example.com" });
+const { result, bundle, certificateHash } = await lookupCustomer({
+  email: "user@example.com"
+});
 
-// result = { customerId: "cust_123", tier: "enterprise" }
-// bundle = standard cer.ai.execution.v1 bundle`}
+// result          = { customerId: "cust_123", tier: "enterprise" }
+// bundle          = standard cer.ai.execution.v1 bundle
+// certificateHash = "sha256:..."`}
     />
 
     <h3 id="certify-decision">certifyDecision()</h3>
