@@ -39,6 +39,10 @@ const AgentKit = () => (
       a thin convenience layer for builders who want agent tool calls and final decisions to produce
       tamper-evident, verifiable execution records with minimal integration work.
     </p>
+    <p>
+      Use <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/agent-kit</code> when
+      you want agent steps to emit standard NexArt CERs without wiring the lower-level SDKs manually.
+    </p>
     <p>It sits on top of two existing packages:</p>
     <ul>
       <li><Link to="/docs/sdk" className="text-primary hover:underline">@nexart/ai-execution</Link> for CER creation and attestation</li>
