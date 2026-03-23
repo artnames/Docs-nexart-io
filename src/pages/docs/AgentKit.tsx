@@ -39,6 +39,10 @@ const AgentKit = () => (
       a thin convenience layer for builders who want agent tool calls and final decisions to produce
       tamper-evident, verifiable execution records with minimal integration work.
     </p>
+    <p>
+      Use <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/agent-kit</code> when
+      you want agent steps to emit standard NexArt CERs without wiring the lower-level SDKs manually.
+    </p>
     <p>It sits on top of two existing packages:</p>
     <ul>
       <li><Link to="/docs/sdk" className="text-primary hover:underline">@nexart/ai-execution</Link> for CER creation and attestation</li>
@@ -57,6 +61,10 @@ const AgentKit = () => (
     <h2 id="installation">Installation</h2>
     <CodeBlock language="bash" code="npm install @nexart/agent-kit" />
     <p className="text-sm text-muted-foreground">Current version: 0.1.1</p>
+    <p className="text-sm text-muted-foreground">
+      If you also import <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">@nexart/signals</code> or <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">@nexart/ai-execution</code> directly:
+    </p>
+    <CodeBlock language="bash" code="npm install @nexart/agent-kit @nexart/signals @nexart/ai-execution" />
 
     <h2 id="exports">Exports</h2>
 
@@ -94,10 +102,13 @@ const lookupCustomer = wrapTool({
   }
 });
 
-const { result, bundle } = await lookupCustomer({ email: "user@example.com" });
+const { result, bundle, certificateHash } = await lookupCustomer({
+  email: "user@example.com"
+});
 
-// result = { customerId: "cust_123", tier: "enterprise" }
-// bundle = standard cer.ai.execution.v1 bundle`}
+// result          = { customerId: "cust_123", tier: "enterprise" }
+// bundle          = standard cer.ai.execution.v1 bundle
+// certificateHash = "sha256:..."`}
     />
 
     <h3 id="certify-decision">certifyDecision()</h3>
@@ -176,8 +187,9 @@ const { bundle } = await certifyDecision({
     <h2 id="verification">Verification</h2>
     <p>
       Bundles produced by <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/agent-kit</code> are
-      standard <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer.ai.execution.v1</code> artifacts.
-      They verify exactly like any other NexArt AI CER at{" "}
+      standard <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer.ai.execution.v1</code> artifacts
+      and verify with existing NexArt verification tooling,
+      including <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verifyCer()</code> and{" "}
       <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">verify.nexart.io</a>.
       No special verifier is needed.
     </p>
