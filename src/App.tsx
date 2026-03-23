@@ -38,6 +38,7 @@ import CERAuditWorkflows from "./pages/docs/CERAuditWorkflows";
 import ContextSignals from "./pages/docs/concepts/ContextSignals";
 import AICERVerificationLayers from "./pages/docs/AICERVerificationLayers";
 import AICERPackageFormat from "./pages/docs/AICERPackageFormat";
+import AgentKit from "./pages/docs/AgentKit";
 
 const queryClient = new QueryClient();
 
