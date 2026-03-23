@@ -10,8 +10,8 @@ A thin convenience layer for producing verifiable Certified Execution Records fr
 @nexart/agent-kit@0.1.1
 
 ## Exports
-- wrapTool(): wraps an async tool function, executes it, and produces a cer.ai.execution.v1 bundle for that invocation
-- certifyDecision(): certifies a final agent decision or workflow outcome as a standard CER
+- wrapTool(opts): returns a callable that wraps an async tool function; when invoked, executes it and produces a cer.ai.execution.v1 bundle
+- certifyDecision(opts): certifies a final agent decision or workflow outcome as a standard CER bundle
 
 ## Built on
 - @nexart/ai-execution (CER creation and attestation)
@@ -65,31 +65,39 @@ const AgentKit = () => (
       Use <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">wrapTool()</code> when
       you want an individual tool call to produce its own standard CER.
     </p>
-    <p>It wraps an async function, executes it, and returns the tool result alongside a
-      standard <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer.ai.execution.v1</code> bundle
-      for that invocation. Signals and node attestation are optional.</p>
+    <p>
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">wrapTool(opts)</code> returns
+      a callable. When invoked with arguments, it executes
+      the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">run</code> function and
+      returns the tool result alongside a
+      standard <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer.ai.execution.v1</code> bundle.
+      Signals and node attestation are optional.
+    </p>
 
     <CodeBlock
       language="typescript"
       title="wrapTool()"
       code={`import { wrapTool } from "@nexart/agent-kit";
 
-const { result, cer } = await wrapTool({
+const lookupCustomer = wrapTool({
   name: "lookup_customer",
-  fn: async (input) => {
+  model: "gpt-4o",
+  run: async (input) => {
     // your tool logic
     return { customerId: "cust_123", tier: "enterprise" };
   },
-  input: { email: "user@example.com" },
-  model: "gpt-4o",
   // optional
-  signals: collector.signals(),
-  nodeUrl: "https://your-node.nexart.io",
-  apiKey: process.env.NEXART_API_KEY
+  signals: collector.export().signals,
+  attestOptions: {
+    nodeUrl: "https://your-node.nexart.io",
+    apiKey: process.env.NEXART_API_KEY
+  }
 });
 
+const { result, bundle } = await lookupCustomer({ email: "user@example.com" });
+
 // result = { customerId: "cust_123", tier: "enterprise" }
-// cer   = standard cer.ai.execution.v1 bundle`}
+// bundle = standard cer.ai.execution.v1 bundle`}
     />
 
     <h3 id="certify-decision">certifyDecision()</h3>
@@ -106,14 +114,16 @@ const { result, cer } = await wrapTool({
       title="certifyDecision()"
       code={`import { certifyDecision } from "@nexart/agent-kit";
 
-const { cer } = await certifyDecision({
+const { bundle } = await certifyDecision({
   model: "gpt-4o",
   input: { query: "Should we approve this refund?" },
   output: { decision: "approve", reason: "within policy" },
   // optional
-  signals: collector.signals(),
-  nodeUrl: "https://your-node.nexart.io",
-  apiKey: process.env.NEXART_API_KEY
+  signals: collector.export().signals,
+  attestOptions: {
+    nodeUrl: "https://your-node.nexart.io",
+    apiKey: process.env.NEXART_API_KEY
+  }
 });`}
     />
 
@@ -133,14 +143,15 @@ import { createSignalCollector } from "@nexart/signals";
 
 const collector = createSignalCollector();
 
-// 1. Wrap a tool call
-const { result } = await wrapTool({
+// 1. Define and invoke a wrapped tool
+const checkPolicy = wrapTool({
   name: "check_policy",
-  fn: async (input) => ({ eligible: true, policyId: "ret-30d" }),
-  input: { orderId: "order_456" },
   model: "gpt-4o",
-  signals: collector.signals()
+  run: async (input) => ({ eligible: true, policyId: "ret-30d" }),
+  signals: collector.export().signals
 });
+
+const { result } = await checkPolicy({ orderId: "order_456" });
 
 // 2. Add a signal based on the tool result
 collector.add({
@@ -150,13 +161,15 @@ collector.add({
 });
 
 // 3. Certify the final decision
-const { cer } = await certifyDecision({
+const { bundle } = await certifyDecision({
   model: "gpt-4o",
   input: { orderId: "order_456", policyResult: result },
   output: { decision: "approve_refund" },
-  signals: collector.signals(),
-  nodeUrl: "https://your-node.nexart.io",
-  apiKey: process.env.NEXART_API_KEY
+  signals: collector.export().signals,
+  attestOptions: {
+    nodeUrl: "https://your-node.nexart.io",
+    apiKey: process.env.NEXART_API_KEY
+  }
 });`}
     />
 
