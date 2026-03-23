@@ -38,6 +38,7 @@ import CERAuditWorkflows from "./pages/docs/CERAuditWorkflows";
 import ContextSignals from "./pages/docs/concepts/ContextSignals";
 import AICERVerificationLayers from "./pages/docs/AICERVerificationLayers";
 import AICERPackageFormat from "./pages/docs/AICERPackageFormat";
+import AgentKit from "./pages/docs/AgentKit";
 
 const queryClient = new QueryClient();
 
@@ -82,6 +83,7 @@ const App = () => (
             <Route path="examples" element={<Examples />} />
             <Route path="integrations/n8n" element={<N8n />} />
             <Route path="integrations/langchain" element={<LangChain />} />
+            <Route path="agent-kit" element={<AgentKit />} />
             <Route path="faq" element={<FAQ />} />
           </Route>
           <Route path="*" element={<NotFound />} />

@@ -36,6 +36,7 @@ const navigation: NavItem[] = [
       { title: "NexArt CLI", path: "/docs/cli" },
       { title: "CodeMode SDK", path: "/docs/codemode-sdk" },
       { title: "UI Renderer SDK", path: "/docs/ui-renderer-sdk" },
+      { title: "Agent Kit", path: "/docs/agent-kit" },
     ],
   },
   {

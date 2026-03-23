@@ -240,6 +240,9 @@ Authorization: Bearer NEXART_API_KEY
     <p>Verification statuses: <strong>VERIFIED</strong>, <strong>FAILED</strong>, or <strong>NOT_FOUND</strong>. Each check returns <strong>PASS</strong>, <strong>FAIL</strong>, or <strong>SKIPPED</strong>.</p>
     <p>Verify at <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a> or locally using the bundle and node keys from <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">node.nexart.io/.well-known/nexart-node.json</code>. For a full breakdown of verification layers, see <Link to="/docs/ai-cer-verification-layers" className="text-primary hover:underline">AI CER Verification Layers</Link>.</p>
 
+    <h2 id="agent-kit">Agent Kit</h2>
+    <p>For agent workflows, <Link to="/docs/agent-kit" className="text-primary hover:underline">@nexart/agent-kit</Link> provides <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">wrapTool()</code> and <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certifyDecision()</code> as thin convenience wrappers over this SDK.</p>
+
     <h2 id="scope">Scope</h2>
     <p className="text-muted-foreground">The SDK API surface is still evolving. This page documents the current endpoints and data model. Check back for updates as new capabilities are added.</p>
   </>

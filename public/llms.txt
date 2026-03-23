@@ -16,6 +16,7 @@
 - [Trust Model](https://docs.nexart.io/docs/trust-model)
 - [Attestation Node](https://docs.nexart.io/docs/attestation-node)
 - [Examples](https://docs.nexart.io/docs/examples)
+- [Agent Kit](https://docs.nexart.io/docs/agent-kit)
 - [FAQ](https://docs.nexart.io/docs/faq)
 
 ## Integrations
