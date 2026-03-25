@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 
 const llmBlock = `# NexArt AI Execution SDK
 
+Package: @nexart/ai-execution@0.12.0
+
 ## API Endpoints
 
 POST /v1/cer/ai/certify (recommended)
@@ -17,6 +19,17 @@ Use POST /v1/cer/ai/certify for most integrations. It handles CER creation, atte
 
 ## Authentication
 API key via NEXART_API_KEY header.
+
+## CER Package Helpers (v0.12.0+)
+Official helpers for working with the CER package format:
+- isCerPackage(value): type guard for CER packages
+- createCerPackage(params): creates a CER package from a bundle, receipt, signature, and optional verification artifacts
+- getCerFromPackage(pkg): extracts the inner cer bundle from a package
+- exportCerPackage(pkg): serializes a CER package to JSON
+- importCerPackage(json): deserializes and validates a CER package from JSON
+- verifyCerPackage(pkg): verifies the inner CER bundle within a package
+
+Package helpers are additive only. They do not change CER hashing, attestation, or verification semantics.
 
 ## CER bundle shape
 {
@@ -61,7 +74,7 @@ const SDK = () => (
   <>
     <PageHeader
       title="AI Execution SDK"
-      summary="API reference for certifying AI executions and creating CER bundles."
+      summary="API reference for certifying AI executions, creating CER bundles, and working with CER packages."
       llmBlock={llmBlock}
     />
 
@@ -239,6 +252,77 @@ Authorization: Bearer NEXART_API_KEY
     </ul>
     <p>Verification statuses: <strong>VERIFIED</strong>, <strong>FAILED</strong>, or <strong>NOT_FOUND</strong>. Each check returns <strong>PASS</strong>, <strong>FAIL</strong>, or <strong>SKIPPED</strong>.</p>
     <p>Verify at <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a> or locally using the bundle and node keys from <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">node.nexart.io/.well-known/nexart-node.json</code>. For a full breakdown of verification layers, see <Link to="/docs/ai-cer-verification-layers" className="text-primary hover:underline">AI CER Verification Layers</Link>.</p>
+
+    <h2 id="package-helpers">CER Package Helpers</h2>
+    <p>
+      As of <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@0.12.0</code>,
+      the SDK includes official helpers for working with the{" "}
+      <Link to="/docs/ai-cer-package-format" className="text-primary hover:underline">CER package format</Link>.
+      A CER package is a transport/export wrapper around the inner <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer</code> bundle.
+      The inner <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer</code> remains the actual execution artifact.
+    </p>
+
+    <h3 id="package-helper-api">API</h3>
+    <ul>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">isCerPackage(value)</code> — type guard; returns <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">true</code> if the value conforms to the CER package shape</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">createCerPackage(params)</code> — creates a CER package from a bundle, receipt, signature, and optional verification artifacts</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">getCerFromPackage(pkg)</code> — extracts the inner <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer</code> bundle from a package</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">exportCerPackage(pkg)</code> — serializes a CER package to JSON</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">importCerPackage(json)</code> — deserializes and validates a CER package from JSON</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verifyCerPackage(pkg)</code> — verifies the inner CER bundle within a package</li>
+    </ul>
+
+    <div className="not-prose my-6 rounded-lg border border-border bg-muted/30 p-4">
+      <div className="text-sm font-medium text-foreground mb-1">Scope of verifyCerPackage()</div>
+      <div className="text-sm text-muted-foreground">
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">verifyCerPackage()</code> verifies
+        the inner CER bundle (hash integrity, node signature, receipt consistency). It does not fully verify
+        all package-level trust layers such as the verification envelope. For full package-level verification,
+        use the verification layers documented in the{" "}
+        <Link to="/docs/ai-cer-verification-layers" className="text-primary hover:underline">AI CER Verification Layers</Link> spec.
+      </div>
+    </div>
+
+    <h3 id="package-create-example">Creating a CER Package</h3>
+    <CodeBlock
+      language="typescript"
+      title="Create and export a CER package"
+      code={`import { createCerPackage, exportCerPackage } from "@nexart/ai-execution";
+
+const pkg = createCerPackage({
+  cer: bundle,
+  receipt,
+  signature: signatureB64Url,
+  attestation: { nodeId, kid, timestamp }
+});
+
+const json = exportCerPackage(pkg);
+// json is a serialized CER package ready for storage or transport`}
+    />
+
+    <h3 id="package-import-verify-example">Importing and Verifying a CER Package</h3>
+    <CodeBlock
+      language="typescript"
+      title="Import and verify a CER package"
+      code={`import {
+  importCerPackage,
+  getCerFromPackage,
+  verifyCerPackage
+} from "@nexart/ai-execution";
+
+const pkg = importCerPackage(jsonString);
+const cer = getCerFromPackage(pkg);
+
+const result = await verifyCerPackage(pkg);
+// result contains inner CER verification status
+// Package-level trust layers (e.g. verification envelope) are not fully verified by this helper`}
+    />
+
+    <p className="text-sm text-muted-foreground">
+      Package helpers are additive only. They do not change CER hashing, attestation, or verification semantics.
+      See the <Link to="/docs/ai-cer-package-format" className="text-primary hover:underline">AI CER Package Format</Link> specification
+      for the normative package structure.
+    </p>
 
     <h2 id="agent-kit">Agent Kit</h2>
     <p>For agent workflows, <Link to="/docs/agent-kit" className="text-primary hover:underline">@nexart/agent-kit</Link> provides <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">wrapTool()</code> and <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certifyDecision()</code> as thin convenience wrappers over this SDK.</p>

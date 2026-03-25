@@ -4,20 +4,24 @@ import { Link } from "react-router-dom";
 
 const llmBlock = `# NexArt CLI
 
-The NexArt CLI (@nexart/cli@0.4.0) is a command-line tool for creating, certifying, and verifying Certified Execution Records (CERs).
+The NexArt CLI (@nexart/cli@0.6.0) is a command-line tool for creating, certifying, and verifying Certified Execution Records (CERs).
 
 ## Tasks
 - Create a CER locally (nexart ai create)
 - Certify an execution with node attestation (nexart ai certify)
-- Verify a CER bundle offline (nexart ai verify)
+- Verify a CER bundle or CER package offline (nexart ai verify)
 - Run deterministic renders (nexart run)
 
 ## Installation
-npx @nexart/cli@0.4.0 --help
+npx @nexart/cli@0.6.0 --help
 
 ## Environment Variables
 - NEXART_RENDERER_ENDPOINT: URL of the canonical renderer service
-- NEXART_API_KEY: API key for authenticated operations`;
+- NEXART_API_KEY: API key for authenticated operations
+
+## Package-aware verify (v0.6.0+)
+nexart ai verify accepts both raw CER bundles and CER packages.
+For package input, the CLI verifies the inner CER. Package-level trust layers (e.g. verification envelope) are not fully verified by this command.`;
 
 const NexArtCLI = () => (
   <>
@@ -49,7 +53,7 @@ const NexArtCLI = () => (
     </p>
 
     <h2>Installation</h2>
-    <CodeBlock code={`npx @nexart/cli@0.4.0 --help`} title="Install / Help" />
+    <CodeBlock code={`npx @nexart/cli@0.6.0 --help`} title="Install / Help" />
 
     <h2>Environment Variables</h2>
     <ul>
@@ -59,7 +63,7 @@ const NexArtCLI = () => (
 
     <h2>Create a CER Locally</h2>
     <p>Generate a Certified Execution Record from a JSON execution input. No network call required.</p>
-    <CodeBlock code={`npx @nexart/cli@0.4.0 ai create execution.json`} title="Create a CER" />
+    <CodeBlock code={`npx @nexart/cli@0.6.0 ai create execution.json`} title="Create a CER" />
     <p>Example execution input:</p>
     <CodeBlock
       language="json"
@@ -83,39 +87,77 @@ const NexArtCLI = () => (
 }`}
     />
     <p>Save the bundle to a file:</p>
-    <CodeBlock code={`npx @nexart/cli@0.4.0 ai create execution.json --out cer.json`} title="Save CER Bundle" />
+    <CodeBlock code={`npx @nexart/cli@0.6.0 ai create execution.json --out cer.json`} title="Save CER Bundle" />
     <p>This builds the canonical CER bundle, computes the certificate hash, and outputs the record.</p>
 
     <h2>Certify an Execution</h2>
     <p>Send an execution to the NexArt node for attestation. Returns a signed receipt and a public verification URL.</p>
-    <CodeBlock code={`npx @nexart/cli@0.4.0 ai certify execution.json`} title="Certify" />
+    <CodeBlock code={`npx @nexart/cli@0.6.0 ai certify execution.json`} title="Certify" />
     <p>Example output:</p>
     <CodeBlock
       code={`CER certified\ncertificateHash: sha256:...\nverificationUrl: https://verify.nexart.io/e/demo-001`}
       title="Certify Result"
     />
 
-    <h2>Verify a CER Bundle</h2>
-    <p>Verify a CER bundle locally. Checks hash integrity, signature validity, and receipt consistency.</p>
-    <CodeBlock code={`npx @nexart/cli@0.4.0 ai verify cer.json`} title="Verify CER" />
-    <p>Example result:</p>
+    <h2>Verify a CER Bundle or Package</h2>
+    <p>
+      As of v0.6.0, <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">nexart ai verify</code> accepts
+      both raw CER bundles and{" "}
+      <Link to="/docs/ai-cer-package-format" className="text-primary hover:underline">CER packages</Link>.
+    </p>
+
+    <h3>Verify a raw CER bundle</h3>
+    <p>Checks hash integrity, signature validity, and receipt consistency.</p>
+    <CodeBlock code={`npx @nexart/cli@0.6.0 ai verify cer.json`} title="Verify Raw Bundle" />
     <CodeBlock
-      code={`status: VERIFIED\nbundleIntegrity: PASS\nnodeSignature: PASS\nreceiptConsistency: PASS`}
-      title="Verification Result"
+      code={`{
+  "status": "VERIFIED",
+  "inputType": "bundle",
+  "bundleIntegrity": "PASS",
+  "nodeSignature": "PASS",
+  "receiptConsistency": "PASS"
+}`}
+      language="json"
+      title="Raw Bundle Result"
     />
+
+    <h3>Verify a CER package</h3>
+    <p>
+      When the input file is a CER package, the CLI extracts and verifies the inner CER bundle.
+      Package-level trust layers (e.g. verification envelope) are not fully verified by this command.
+    </p>
+    <CodeBlock code={`npx @nexart/cli@0.6.0 ai verify package.json`} title="Verify CER Package" />
+    <CodeBlock
+      code={`{
+  "status": "VERIFIED",
+  "inputType": "package",
+  "verifiedInnerCer": true,
+  "packageTrustLayersVerified": false,
+  "bundleIntegrity": "PASS",
+  "nodeSignature": "PASS",
+  "receiptConsistency": "PASS"
+}`}
+      language="json"
+      title="Package Result"
+    />
+    <p className="text-sm text-muted-foreground">
+      For working with CER packages programmatically, see the{" "}
+      <Link to="/docs/sdk#package-helpers" className="text-primary hover:underline">CER Package Helpers</Link> in
+      the AI Execution SDK.
+    </p>
 
     <h2>Use in Automation or CI</h2>
     <p>The CLI can be used in CI pipelines to certify and verify executions as part of automated workflows:</p>
     <CodeBlock language="bash" title="CI Example" code={`# Certify an execution and save the bundle
-npx @nexart/cli@0.4.0 ai certify execution.json --out cer.json
+npx @nexart/cli@0.6.0 ai certify execution.json --out cer.json
 
 # Verify the bundle in a later step
-npx @nexart/cli@0.4.0 ai verify cer.json`} />
+npx @nexart/cli@0.6.0 ai verify cer.json`} />
 
     <h2>Context Signals</h2>
     <p>Attach structured metadata to a CER using a signals file:</p>
-    <CodeBlock code={`npx @nexart/cli@0.4.0 ai create execution.json --signals-file signals.json`} title="Create with Signals" />
-    <CodeBlock code={`npx @nexart/cli@0.4.0 ai certify execution.json --signals-file signals.json`} title="Certify with Signals" />
+    <CodeBlock code={`npx @nexart/cli@0.6.0 ai create execution.json --signals-file signals.json`} title="Create with Signals" />
+    <CodeBlock code={`npx @nexart/cli@0.6.0 ai certify execution.json --signals-file signals.json`} title="Certify with Signals" />
     <p>
       Signals are included in the certificate hash. See{" "}
       <Link to="/docs/concepts/context-signals" className="text-primary hover:underline">Context Signals</Link> for
@@ -125,14 +167,14 @@ npx @nexart/cli@0.4.0 ai verify cer.json`} />
     <h2>Deterministic Rendering</h2>
     <p>The CLI also supports deterministic rendering workflows for canvas-based executions:</p>
     <CodeBlock
-      code={`npx @nexart/cli@0.4.0 run ./examples/sketch.js \\
+      code={`npx @nexart/cli@0.6.0 run ./examples/sketch.js \\
   --seed 12345 \\
   --vars "50,50,50,0,0,0,0,0,0,0" \\
   --include-code \\
   --out out.png`}
       title="Run a Render"
     />
-    <CodeBlock code={`npx @nexart/cli@0.4.0 verify out.snapshot.json`} title="Verify a Snapshot" />
+    <CodeBlock code={`npx @nexart/cli@0.6.0 verify out.snapshot.json`} title="Verify a Snapshot" />
 
     <h2>Next Steps</h2>
     <ul>
