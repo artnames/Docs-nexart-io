@@ -72,7 +72,7 @@ const IntegrationSurfaces = () => (
     <p><Link to="/docs/integrations/n8n" className="text-primary hover:underline">See the n8n integration docs</Link></p>
 
     <h2 id="cli">NexArt CLI</h2>
-    <p>The command-line interface for deterministic rendering and verification. Currently supports CodeMode (deterministic generative rendering) with expanding AI CLI support planned.</p>
+    <p>The command-line interface for creating, certifying, and verifying CERs, plus deterministic rendering. As of v0.6.0, <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">nexart ai verify</code> accepts both raw CER bundles and CER packages.</p>
     <p>Install and run with:</p>
     <code className="block bg-muted px-3 py-2 rounded text-sm font-mono my-2">npx @nexart/cli --help</code>
     <p><Link to="/docs/cli" className="text-primary hover:underline">See the CLI docs</Link></p>
