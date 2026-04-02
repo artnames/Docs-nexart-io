@@ -49,20 +49,16 @@ const Examples = () => (
     <p>End-to-end examples showing how NexArt fits into real applications.</p>
 
     <div className="not-prose my-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
-      <div className="rounded-lg border border-border bg-card p-4">
-        <div className="font-medium text-foreground text-sm">Agent Decision Example</div>
-        <div className="text-muted-foreground text-xs mt-1">
-          Certify an AI decision such as moderation, policy review, or workflow approval.
-        </div>
-        <div className="text-xs text-muted-foreground/60 mt-2 italic">Reference example coming next</div>
-      </div>
-      <div className="rounded-lg border border-border bg-card p-4">
-        <div className="font-medium text-foreground text-sm">Pipeline Certification Example</div>
-        <div className="text-muted-foreground text-xs mt-1">
-          Certify a multi-step AI workflow or execution pipeline.
-        </div>
-        <div className="text-xs text-muted-foreground/60 mt-2 italic">Reference example coming next</div>
-      </div>
+      <a href="https://github.com/artnames/nexart-langchain" target="_blank" rel="noopener noreferrer" className="block rounded-lg border border-border bg-card p-4 hover:border-primary/40 hover:bg-accent/30 transition-colors no-underline">
+        <div className="font-medium text-foreground text-sm">LangChain example</div>
+        <div className="text-muted-foreground text-xs mt-1">Create and verify CERs in LangChain chains and agent workflows.</div>
+        <div className="text-xs text-muted-foreground/60 mt-2">Official example repo · GitHub</div>
+      </a>
+      <a href="https://github.com/artnames/nexart-n8n" target="_blank" rel="noopener noreferrer" className="block rounded-lg border border-border bg-card p-4 hover:border-primary/40 hover:bg-accent/30 transition-colors no-underline">
+        <div className="font-medium text-foreground text-sm">n8n example</div>
+        <div className="text-muted-foreground text-xs mt-1">Turn n8n workflow outcomes into Certified Execution Records.</div>
+        <div className="text-xs text-muted-foreground/60 mt-2">Official example repo · GitHub</div>
+      </a>
     </div>
 
     {/* ── Section B: Common Integration Patterns ── */}

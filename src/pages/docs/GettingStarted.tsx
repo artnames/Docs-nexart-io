@@ -106,6 +106,20 @@ console.log(certificateHash);`}
         ))}
       </div>
 
+      <h2 id="examples">Official Example Repos</h2>
+      <div className="not-prose my-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <a href="https://github.com/artnames/nexart-langchain" target="_blank" rel="noopener noreferrer" className="block rounded-lg border border-border bg-card p-4 hover:border-primary/40 hover:bg-accent/30 transition-colors no-underline">
+          <div className="font-medium text-foreground text-sm">LangChain example</div>
+          <div className="text-muted-foreground text-xs mt-1">Create and verify CERs in LangChain chains and agent workflows.</div>
+          <div className="text-xs text-muted-foreground/60 mt-2">github.com/artnames/nexart-langchain</div>
+        </a>
+        <a href="https://github.com/artnames/nexart-n8n" target="_blank" rel="noopener noreferrer" className="block rounded-lg border border-border bg-card p-4 hover:border-primary/40 hover:bg-accent/30 transition-colors no-underline">
+          <div className="font-medium text-foreground text-sm">n8n example</div>
+          <div className="text-muted-foreground text-xs mt-1">Turn n8n workflow outcomes into Certified Execution Records.</div>
+          <div className="text-xs text-muted-foreground/60 mt-2">github.com/artnames/nexart-n8n</div>
+        </a>
+      </div>
+
       <h2 id="next">Next Steps</h2>
       <ul>
         <li>
