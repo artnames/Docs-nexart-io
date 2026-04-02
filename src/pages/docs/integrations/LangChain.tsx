@@ -152,6 +152,14 @@ console.log(result.verificationUrl);`} />
         <li>AI-assisted automation with certification</li>
       </ul>
 
+      <h2>Official Example Repo</h2>
+      <p>
+        <a href="https://github.com/artnames/nexart-langchain" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+          github.com/artnames/nexart-langchain
+        </a>
+        {" "}— runnable integration example for LangChain chains and agent workflows.
+      </p>
+
       <h2>Next Steps</h2>
       <ul>
         <li>

@@ -153,6 +153,14 @@ const N8n = () => {
         <li>Store verifiable records alongside workflow outputs</li>
       </ul>
 
+      <h2>Official Example Repo</h2>
+      <p>
+        <a href="https://github.com/artnames/nexart-n8n" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+          github.com/artnames/nexart-n8n
+        </a>
+        {" "}— runnable integration example for n8n workflows.
+      </p>
+
       <h2>Next Steps</h2>
       <ul>
         <li>
