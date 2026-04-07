@@ -68,7 +68,7 @@ const TrustModel = () => (
     <p className="text-sm text-muted-foreground">In the CER bundle, the receipt and signature are stored at <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">meta.attestation</code>. The API response duplicates them at the top level for convenience.</p>
 
     <h2 id="node-attestation">Node Attestation</h2>
-    <p>The attestation node is the trust anchor. When it signs a CER, it produces a receipt that proves:</p>
+    <p>The attestation node is an independent witness. It does not define truth or control verification. When it signs a CER, it produces a receipt that proves:</p>
     <ul>
       <li>The node witnessed the CER bundle at a specific time</li>
       <li>The certificateHash was computed from the bundle at that time</li>

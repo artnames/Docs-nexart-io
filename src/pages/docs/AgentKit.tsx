@@ -184,6 +184,40 @@ const { bundle } = await certifyDecision({
 });`}
     />
 
+    <h2 id="workflow-helpers">Workflow Helpers</h2>
+    <p>For linear multi-step workflows that produce a <Link to="/docs/concepts/project-bundles" className="text-primary hover:underline">Project Bundle</Link>, agent-kit provides workflow helpers:</p>
+    <ul>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">startWorkflow(opts)</code> begins a new workflow and generates a <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">workflowId</code></li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">step(name, fn)</code> creates a CER per step. Records the step name as input and the function return value as output. Each step gets its own <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">executionId</code>. The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">workflowId</code> links them. Implicit closure state is NOT recorded.</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">finish()</code> builds the Project Bundle synchronously</li>
+    </ul>
+
+    <CodeBlock
+      language="typescript"
+      title="Linear workflow with agent-kit"
+      code={`import { startWorkflow } from "@nexart/agent-kit";
+
+const workflow = startWorkflow({ projectTitle: "Contract review" });
+
+const clauses = await workflow.step("Extract clauses", async () => {
+  return await llm.call("Extract key clauses...");
+});
+
+const risks = await workflow.step("Summarize risks", async () => {
+  return await llm.call("Summarize risks from: " + clauses);
+});
+
+const bundle = workflow.finish();
+// bundle.integrity.projectHash is the verifiable hash`}
+    />
+
+    <div className="not-prose my-6 rounded-lg border border-border bg-muted/30 p-4">
+      <div className="text-sm font-medium text-foreground mb-1">Designed for linear workflows</div>
+      <div className="text-sm text-muted-foreground">
+        agent-kit v0.3.0 handles simple linear workflows. For complex DAGs or non-linear execution graphs, use the lower-level SDK helpers (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">certify</code> + <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">createProjectBundle</code>).
+      </div>
+    </div>
+
     <h2 id="verification">Verification</h2>
     <p>
       Bundles produced by <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/agent-kit</code> are
@@ -191,7 +225,7 @@ const { bundle } = await certifyDecision({
       and verify with existing NexArt verification tooling,
       including <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verifyCer()</code> and{" "}
       <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">verify.nexart.io</a>.
-      No special verifier is needed.
+      No special verifier is needed. Project Bundles built with <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">finish()</code> verify via <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verifyProjectBundle()</code> or <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verifyProjectBundleAsync()</code>.
     </p>
 
     <h2 id="compatibility">Backward Compatibility</h2>
@@ -204,9 +238,9 @@ const { bundle } = await certifyDecision({
     <h2 id="related">Related</h2>
     <ul>
       <li><Link to="/docs/sdk" className="text-primary hover:underline">AI Execution SDK</Link> — the underlying CER creation and attestation API</li>
+      <li><Link to="/docs/concepts/project-bundles" className="text-primary hover:underline">Project Bundles</Link> — multi-step workflow verification</li>
       <li><Link to="/docs/concepts/context-signals" className="text-primary hover:underline">Context Signals</Link> — structured metadata recorded alongside executions</li>
       <li><Link to="/docs/verification" className="text-primary hover:underline">Verification</Link> — how CER verification works</li>
-      <li><Link to="/docs/ai-cer-package-format" className="text-primary hover:underline">AI CER Package Format</Link> — the normative package structure for AI CER artifacts</li>
     </ul>
   </>
 );

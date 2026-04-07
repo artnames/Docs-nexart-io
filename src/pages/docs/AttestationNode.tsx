@@ -77,7 +77,7 @@ const AttestationNode = () => (
     </ol>
 
     <h2 id="role">What Does the Node Do?</h2>
-    <p>The attestation node is the signing authority in the NexArt system. When the API submits a CER bundle, the node:</p>
+    <p>The attestation node is an independent witness in the NexArt system. It does not define truth or control verification. When the API submits a CER bundle, the node:</p>
     <ol>
       <li>Validates the bundle structure</li>
       <li>Records a precise timestamp</li>
