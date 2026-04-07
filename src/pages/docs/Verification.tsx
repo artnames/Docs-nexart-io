@@ -143,8 +143,17 @@ NOT_FOUND     The requested execution record was not located.`}
       <li><strong>legacy</strong>: older format, limited coverage → <strong>VERIFIED</strong> or <strong>FAILED</strong> depending on data</li>
     </ul>
 
+    <h2 id="project-bundle-verification">Project Bundle Verification</h2>
+    <p>For multi-step workflows, verification covers the entire Project Bundle:</p>
+    <ul>
+      <li><strong>projectHash integrity</strong>: recomputed from canonical content using <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">sha256-canonical-json</code></li>
+      <li><strong>Per-step CER verification</strong>: each embedded CER's <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> is checked independently</li>
+      <li><strong>Project-level node receipt</strong>: validated if present</li>
+    </ul>
+    <p>Use <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verifyProjectBundle()</code> (Node) or <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verifyProjectBundleAsync()</code> (browser) from the SDK, or verify at <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a> via <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">/p/:projectHash</code>.</p>
+
     <h2 id="independent">Independent Verification (No API Required)</h2>
-    <p>You can verify a CER without calling any NexArt API. All you need is the CER bundle (including <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation</code>) and access to the node's published keys:</p>
+    <p>You can verify a CER without calling any NexArt API. No trust in NexArt infrastructure is required. All you need is the CER bundle (including <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation</code>) and access to the node's published keys:</p>
     <ol>
       <li>Recompute the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> from the CER bundle (SHA-256)</li>
       <li>Compare it with the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> in <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation.receipt</code></li>

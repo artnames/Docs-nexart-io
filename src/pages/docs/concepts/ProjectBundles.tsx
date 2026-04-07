@@ -169,13 +169,51 @@ const projectBundle = await createProjectBundle({
       <li>Register it on the node if you want public lookup by <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">projectHash</code>.</li>
     </ul>
 
+    <h2 id="agent-kit">Using agent-kit (recommended)</h2>
+    <p>For linear workflows, <Link to="/docs/agent-kit" className="text-primary hover:underline">@nexart/agent-kit</Link> removes manual step tracking. Instead of creating CERs individually and assembling them, you use the workflow helpers:</p>
+    <ul>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">startWorkflow()</code> begins a new workflow and generates a <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">workflowId</code></li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">step()</code> creates a CER per step. Each step gets its own <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">executionId</code>. The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">workflowId</code> links them together.</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">finish()</code> builds the Project Bundle synchronously</li>
+    </ul>
+    <p className="text-sm text-muted-foreground mt-2"><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">step()</code> records the step name as input and the function return value as output. Implicit closure state is NOT recorded.</p>
+
+    <CodeBlock
+      code={`import { startWorkflow } from "@nexart/agent-kit";
+
+const workflow = startWorkflow({ projectTitle: "Contract review" });
+
+const clauses = await workflow.step("Extract clauses", async () => {
+  return await llm.call("Extract key clauses...");
+});
+
+const risks = await workflow.step("Summarize risks", async () => {
+  return await llm.call("Summarize risks from: " + clauses);
+});
+
+const bundle = workflow.finish();
+// bundle.integrity.projectHash is the verifiable hash`}
+      title="Workflow with agent-kit (v0.3.0)"
+    />
+
+    <div className="rounded-md border border-border bg-muted/30 p-4 my-4">
+      <p className="text-sm font-medium text-foreground mb-1">Limitation</p>
+      <p className="text-sm text-muted-foreground">agent-kit v0.3.0 is designed for linear workflows. For complex DAGs or non-linear execution graphs, use the lower-level SDK helpers (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">certify</code> + <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">createProjectBundle</code>).</p>
+    </div>
+
     <h2 id="verification">Verification</h2>
     <p>Project Bundles can be verified in two ways:</p>
     <ul>
       <li>On <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">verify.nexart.io</a> via <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">/p/:projectHash</code>. The site fetches the Project Bundle from the node-backed trust surface and runs verification independently in the browser.</li>
       <li>With the SDK: <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verifyProjectBundle()</code> for Node/server environments, or <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verifyProjectBundleAsync()</code> for browser-safe verification.</li>
     </ul>
-    <p>Verification checks the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">projectHash</code>, each embedded CER's <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>, and any node receipt present at the project level.</p>
+    <p>Verification checks:</p>
+    <ul>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">projectHash</code> integrity</li>
+      <li>Each embedded CER's <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code></li>
+      <li>Optional node receipt at the project level</li>
+    </ul>
+    <p className="text-muted-foreground mt-2">The node is not required for verification. It provides discovery and independent attestation. Integrity is proven by the hashes alone.</p>
     <p>See <Link to="/docs/verification" className="text-primary hover:underline">How Verification Works</Link> and <Link to="/docs/sdk" className="text-primary hover:underline">AI Execution SDK</Link> for details.</p>
   </>
 );
