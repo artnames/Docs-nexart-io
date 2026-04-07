@@ -1,5 +1,6 @@
 import PageHeader from "@/components/docs/PageHeader";
 import CodeBlock from "@/components/docs/CodeBlock";
+import { Link } from "react-router-dom";
 
 const llmBlock = `# CER (Certified Execution Record)
 A CER is a portable, tamper-evident record of an execution. CERs may represent AI or deterministic system executions.
