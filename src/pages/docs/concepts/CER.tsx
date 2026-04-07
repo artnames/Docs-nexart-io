@@ -1,5 +1,6 @@
 import PageHeader from "@/components/docs/PageHeader";
 import CodeBlock from "@/components/docs/CodeBlock";
+import { Link } from "react-router-dom";
 
 const llmBlock = `# CER (Certified Execution Record)
 A CER is a portable, tamper-evident record of an execution. CERs may represent AI or deterministic system executions.
@@ -45,14 +46,32 @@ Verification statuses: VERIFIED | FAILED | NOT_FOUND. Check statuses: PASS | FAI
 const CER = () => (
   <>
     <PageHeader
-      title="What is a CER?"
-      summary="Certified Execution Records are the core unit of proof in NexArt."
+      title="Certified Execution Records"
+      summary="CERs are the core unit of proof in NexArt. They prove execution integrity, not just log events."
       llmBlock={llmBlock}
     />
 
     <h2 id="overview">Overview</h2>
-    <p>A <strong>Certified Execution Record (CER)</strong> is a portable, tamper-evident record of an execution. CERs can represent AI completions, deterministic system operations, or any execution you want to certify. NexArt is not limited to AI.</p>
+    <p>A <strong>Certified Execution Record (CER)</strong> is a portable, tamper-evident record of an execution. CERs can represent AI completions, deterministic system operations, or any execution you want to certify.</p>
+
+    <div className="not-prose my-6 rounded-lg border border-border bg-muted/30 p-4">
+      <div className="text-sm font-medium text-foreground mb-1">Logs vs CERs</div>
+      <div className="text-sm text-muted-foreground">
+        Logs describe events. CERs prove execution integrity. A CER binds execution inputs, outputs, parameters, and context into a single tamper-evident artifact with a deterministic hash.
+      </div>
+    </div>
+
     <p>A CER binds execution metadata to a <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>. The bundle structure is deterministic: given the same inputs, the same hash is produced. Attestation adds a signed receipt under <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation</code>, but the CER itself is the base record.</p>
+
+    <h2 id="what-it-contains">What a CER Contains</h2>
+    <ul>
+      <li><strong>Inputs</strong>: hashed (SHA-256) representation of the execution input. Raw content is not stored in the CER.</li>
+      <li><strong>Outputs</strong>: hashed representation of the execution output.</li>
+      <li><strong>Parameters</strong>: model identifier, execution configuration.</li>
+      <li><strong>Context (signals)</strong>: optional structured metadata recorded alongside the execution. See <Link to="/docs/concepts/context-signals" className="text-primary hover:underline">Context Signals</Link>.</li>
+      <li><strong>Metadata</strong>: application-defined fields like <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">appId</code> and <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">projectId</code>.</li>
+      <li><strong>certificateHash</strong>: SHA-256 hash derived from the canonical bundle. This is the unique identifier and what the node signs.</li>
+    </ul>
 
     <h2 id="anatomy">CER Anatomy</h2>
     <p>A fully certified CER contains these fields:</p>
@@ -62,7 +81,7 @@ const CER = () => (
       <li><strong>bundleType</strong>: identifies the record type (e.g. <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer.ai.execution.v1</code>). Determines what verification checks apply.</li>
       <li><strong>version</strong>: protocol version (currently <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">"1.0"</code>).</li>
       <li><strong>createdAt</strong>: when the CER was created (ISO 8601).</li>
-      <li><strong>certificateHash</strong>: SHA-256 hash derived from the canonical bundle. This is the unique identifier of the record and what the node signs.</li>
+      <li><strong>certificateHash</strong>: SHA-256 hash derived from the canonical bundle.</li>
     </ul>
 
     <h3>Snapshot (execution metadata)</h3>
@@ -139,6 +158,12 @@ const CER = () => (
       <li><strong>Legacy export</strong>: older records with limited verification coverage.</li>
     </ul>
 
+    <h2 id="tamper-evidence">Tamper Evidence</h2>
+    <p>The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> makes tampering immediately evident. Any modification to the CER produces a different hash. Verification tools recompute the hash and compare it to detect changes.</p>
+
+    <h2 id="replayability">Replayability</h2>
+    <p>Because a CER captures all relevant execution parameters and context, it can support replay where applicable. The deterministic hash computation means the same inputs always produce the same certificateHash, enabling independent verification without re-executing.</p>
+
     <h2 id="verification">Verification</h2>
     <p>Any CER can be verified by checking:</p>
     <ul>
@@ -147,7 +172,11 @@ const CER = () => (
       <li><strong>Receipt Consistency</strong>: the receipt's certificateHash matches the CER bundle.</li>
     </ul>
     <p>Verification statuses: <strong>VERIFIED</strong>, <strong>FAILED</strong>, or <strong>NOT_FOUND</strong>. Each check returns <strong>PASS</strong>, <strong>FAIL</strong>, or <strong>SKIPPED</strong>.</p>
-    <p>See the <a href="/docs/verification">Verification</a> page and the <a href="/docs/cer-protocol">CER Protocol</a> for full details, including how to verify without API access.</p>
+    <p>Verify using the SDK (<code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verifyCer()</code> or <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verifyCerAsync()</code>) or at <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a>.</p>
+    <p>See <Link to="/docs/verification" className="text-primary hover:underline">How Verification Works</Link>, <Link to="/docs/concepts/hashes" className="text-primary hover:underline">Certificate Hash vs Project Hash</Link>, and the <Link to="/docs/cer-protocol" className="text-primary hover:underline">CER Protocol</Link> for full details.</p>
+
+    <h2 id="multi-step">Multi-Step Workflows</h2>
+    <p>For workflows with multiple steps, CERs can be collected into a <Link to="/docs/concepts/project-bundles" className="text-primary hover:underline">Project Bundle</Link> with its own projectHash covering the entire sequence.</p>
   </>
 );
 

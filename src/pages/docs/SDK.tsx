@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const llmBlock = `# NexArt AI Execution SDK
 
-Package: @nexart/ai-execution@0.12.0
+Package: @nexart/ai-execution@0.14.0
 
 ## API Endpoints
 
@@ -243,15 +243,50 @@ Authorization: Bearer NEXART_API_KEY
     <p className="text-sm text-muted-foreground">Signals are backward-compatible. Requests without the <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">signals</code> field behave exactly as before. Existing CER bundles without signals remain valid and verifiable.</p>
 
     <h2 id="verification">Verification</h2>
+    <p>As of <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">v0.14.0</code>, the SDK provides both sync and async verification functions:</p>
+
+    <div className="not-prose my-6 overflow-x-auto">
+      <table className="w-full text-sm border border-border rounded-lg">
+        <thead>
+          <tr className="bg-muted/50">
+            <th className="text-left px-4 py-3 font-medium border-b border-border">Mode</th>
+            <th className="text-left px-4 py-3 font-medium border-b border-border">Environment</th>
+            <th className="text-left px-4 py-3 font-medium border-b border-border">Functions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td className="px-4 py-3 font-medium border-b border-border">Sync</td>
+            <td className="px-4 py-3 border-b border-border">Node 18+</td>
+            <td className="px-4 py-3 border-b border-border">
+              <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">verifyProjectBundle()</code>,{" "}
+              <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">verifyCer()</code>
+            </td>
+          </tr>
+          <tr>
+            <td className="px-4 py-3 font-medium">Async</td>
+            <td className="px-4 py-3">Browser, Edge, Node 18+</td>
+            <td className="px-4 py-3">
+              <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">verifyProjectBundleAsync()</code>,{" "}
+              <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">verifyCerAsync()</code>,{" "}
+              <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">verifySnapshotAsync()</code>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>You no longer need to write your own browser verifier. The async functions use the Web Crypto API internally.</p>
+
     <p>CERs produced by the certify endpoint can be verified across multiple layers:</p>
     <ul>
       <li><strong>Bundle Integrity.</strong> The CER bundle hashes are internally consistent.</li>
       <li><strong>Node Signature.</strong> The receipt signature is valid against the node's published Ed25519 key.</li>
       <li><strong>Receipt Consistency.</strong> The receipt's <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> matches the CER bundle.</li>
-      <li><strong>Verification Envelope.</strong> When present (newer uploaded bundles), <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.verificationEnvelopeSignature</code> validates the authoritative displayed verification surface.</li>
+      <li><strong>Verification Envelope.</strong> When present, <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.verificationEnvelopeSignature</code> validates the authoritative displayed verification surface.</li>
     </ul>
     <p>Verification statuses: <strong>VERIFIED</strong>, <strong>FAILED</strong>, or <strong>NOT_FOUND</strong>. Each check returns <strong>PASS</strong>, <strong>FAIL</strong>, or <strong>SKIPPED</strong>.</p>
-    <p>Verify at <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a> or locally using the bundle and node keys from <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">node.nexart.io/.well-known/nexart-node.json</code>. For a full breakdown of verification layers, see <Link to="/docs/ai-cer-verification-layers" className="text-primary hover:underline">AI CER Verification Layers</Link>.</p>
+    <p>Verify at <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a> or locally using the bundle and node keys from <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">node.nexart.io/.well-known/nexart-node.json</code>. For a full breakdown of verification layers, see <Link to="/docs/ai-cer-verification-layers" className="text-primary hover:underline">AI CER Verification Layers</Link>. For browser examples, see <Link to="/docs/browser-verification" className="text-primary hover:underline">Browser Verification</Link>.</p>
 
     <h2 id="package-helpers">CER Package Helpers</h2>
     <p>

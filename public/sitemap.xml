@@ -193,6 +193,36 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://docs.nexart.io/docs/concepts/project-bundles</loc>
+    <lastmod>2026-04-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docs.nexart.io/docs/concepts/hashes</loc>
+    <lastmod>2026-04-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docs.nexart.io/docs/verify-nexart</loc>
+    <lastmod>2026-04-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docs.nexart.io/docs/browser-verification</loc>
+    <lastmod>2026-04-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docs.nexart.io/docs/guides</loc>
+    <lastmod>2026-04-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://docs.nexart.io/docs/faq</loc>
     <lastmod>2026-03-16</lastmod>
     <changefreq>monthly</changefreq>

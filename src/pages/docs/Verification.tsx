@@ -52,7 +52,17 @@ const Verification = () => (
       llmBlock={llmBlock}
     />
 
-    <h2 id="overview">What Verification Proves</h2>
+    <h2 id="overview">How Verification Works</h2>
+    <p>Verification confirms the integrity and authenticity of a Certified Execution Record or Project Bundle. The process is:</p>
+    <ol>
+      <li>An execution happens.</li>
+      <li>A CER is created, binding execution metadata to a deterministic <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>.</li>
+      <li>Optionally, the CER is attested by a node, which adds a signed receipt.</li>
+      <li>Optionally, multiple CERs are collected into a <Link to="/docs/concepts/project-bundles" className="text-primary hover:underline">Project Bundle</Link> with a <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">projectHash</code>.</li>
+      <li>Verification can happen offline (using the SDK) or at <Link to="/docs/verify-nexart" className="text-primary hover:underline">verify.nexart.io</Link>.</li>
+    </ol>
+
+    <h2 id="what-it-proves">What Verification Proves</h2>
     <p>Verification answers up to four questions about a Certified Execution Record:</p>
     <ol>
       <li>Has the CER bundle been modified since it was created?</li>
@@ -143,7 +153,7 @@ NOT_FOUND     The requested execution record was not located.`}
       <li>Verify the Ed25519 signature over the receipt payload</li>
     </ol>
     <p>If all steps pass, you can trust the attestation independently of NexArt infrastructure. No account, API key, or network call to NexArt is required beyond fetching the node's public key.</p>
-    <p>For the full verification contract, see the <Link to="/docs/cer-protocol" className="text-primary hover:underline">CER Protocol specification</Link>.</p>
+    <p>For the full verification contract, see the <Link to="/docs/cer-protocol" className="text-primary hover:underline">CER Protocol specification</Link>. For SDK functions, see <Link to="/docs/sdk" className="text-primary hover:underline">AI Execution SDK</Link> (sync and async modes). For browser-specific usage, see <Link to="/docs/browser-verification" className="text-primary hover:underline">Browser Verification</Link>.</p>
   </>
 );
 

@@ -58,6 +58,13 @@ const AttestationNode = () => (
     <p>Attestation nodes act as independent witnesses for Certified Execution Records. A node verifies the integrity of a CER bundle and signs an attestation receipt confirming that the record existed at a specific point in time.</p>
     <p>Nodes do not own or control the execution data. Their role is limited to validating bundle integrity and producing a signed receipt.</p>
 
+    <div className="not-prose my-6 rounded-lg border border-border bg-muted/30 p-4">
+      <div className="text-sm font-medium text-foreground mb-1">Where trust comes from</div>
+      <div className="text-sm text-muted-foreground">
+        Trust comes from cryptographic integrity, independent verification, and optional attestation. Not from the node itself. The node is a witness, not a trust authority.
+      </div>
+    </div>
+
     <h2 id="minimal-requirements">Minimal Node Requirements</h2>
     <p>A NexArt attestation node must satisfy the following protocol contract:</p>
     <ol>
