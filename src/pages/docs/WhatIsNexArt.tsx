@@ -30,9 +30,13 @@ const WhatIsNexArt = () => {
           <li>Outputs</li>
           <li>Parameters</li>
           <li>Context (signals)</li>
+          <li>Metadata</li>
         </ul>
         <p className="text-muted-foreground mt-3">
           The record is hashed (SHA-256) to produce a <code>certificateHash</code>. Any change to the record breaks the hash.
+        </p>
+        <p className="text-muted-foreground mt-2">
+          Single executions are identified by a <code>certificateHash</code>. Multi-step workflows are identified by a <code>projectHash</code>.
         </p>
         <p className="font-semibold mt-4">Logs describe events. CERs prove execution integrity.</p>
       </section>
@@ -54,7 +58,7 @@ const WhatIsNexArt = () => {
           </div>
           <div>
             <h3>Node</h3>
-            <p className="text-muted-foreground">Independent witness. Provides attestation and lookup. Does not define truth. See <Link to="/docs/attestation-node" className="text-primary hover:underline">Attestation Node</Link>.</p>
+            <p className="text-muted-foreground">Independent witness and public trust surface. Provides attestation and lookup. Verification still happens independently. See <Link to="/docs/attestation-node" className="text-primary hover:underline">Attestation Node</Link>.</p>
           </div>
           <div>
             <h3>verify.nexart.io</h3>
@@ -66,12 +70,12 @@ const WhatIsNexArt = () => {
       <section>
         <h2>How it works</h2>
         <ol className="list-decimal pl-6 space-y-1.5 text-muted-foreground">
-          <li><strong>Execute</strong> — AI or code runs via SDK</li>
-          <li><strong>Record</strong> — CER is created</li>
-          <li><strong>Seal</strong> — <code>certificateHash</code> is computed</li>
-          <li><strong>Certify</strong> (optional) — node issues attestation</li>
-          <li><strong>Bundle</strong> (optional) — Project Bundle created, <code>projectHash</code> derived</li>
-          <li><strong>Verify</strong> — using SDK or <Link to="/docs/verify-nexart" className="text-primary hover:underline">verify.nexart.io</Link></li>
+          <li><strong>Execute</strong>: AI or code runs via SDK</li>
+          <li><strong>Record</strong>: CER is created</li>
+          <li><strong>Seal</strong>: <code>certificateHash</code> is computed</li>
+          <li><strong>Attest</strong> (optional): node issues attestation</li>
+          <li><strong>Bundle</strong> (optional): Project Bundle created, <code>projectHash</code> derived</li>
+          <li><strong>Verify</strong>: using SDK or <Link to="/docs/verify-nexart" className="text-primary hover:underline">verify.nexart.io</Link></li>
         </ol>
       </section>
 
@@ -91,8 +95,9 @@ const WhatIsNexArt = () => {
         <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
           <li>AI agents</li>
           <li>Multi-step workflows</li>
-          <li>Compliance and audits</li>
+          <li>Compliance and audit trails</li>
           <li>Decision traceability</li>
+          <li>Evidence-backed automation</li>
         </ul>
       </section>
 
