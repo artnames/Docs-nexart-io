@@ -165,12 +165,13 @@ const CER = () => (
     <p>Because a CER captures all relevant execution parameters and context, it can support replay where applicable. The deterministic hash computation means the same inputs always produce the same certificateHash, enabling independent verification without re-executing.</p>
 
     <h2 id="verification">Verification</h2>
-    <p>Any CER can be verified by checking:</p>
+    <p>Any CER can be verified independently. No trust in NexArt infrastructure is required. Verification checks:</p>
     <ul>
       <li><strong>Bundle Integrity</strong>: the bundle hashes are internally consistent.</li>
-      <li><strong>Node Signature</strong>: the receipt signature is valid against a published node key.</li>
-      <li><strong>Receipt Consistency</strong>: the receipt's certificateHash matches the CER bundle.</li>
+      <li><strong>Node Signature</strong>: the receipt signature is valid against a published node key. SKIPPED if no attestation.</li>
+      <li><strong>Receipt Consistency</strong>: the receipt's certificateHash matches the CER bundle. SKIPPED if no attestation.</li>
     </ul>
+    <p>The node provides attestation and discovery. It is not required to verify integrity. Integrity is proven by the hashes alone.</p>
     <p>Verification statuses: <strong>VERIFIED</strong>, <strong>FAILED</strong>, or <strong>NOT_FOUND</strong>. Each check returns <strong>PASS</strong>, <strong>FAIL</strong>, or <strong>SKIPPED</strong>.</p>
     <p>Verify using the SDK (<code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verifyCer()</code> or <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verifyCerAsync()</code>) or at <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a>.</p>
     <p>See <Link to="/docs/verification" className="text-primary hover:underline">How Verification Works</Link>, <Link to="/docs/concepts/hashes" className="text-primary hover:underline">Certificate Hash vs Project Hash</Link>, and the <Link to="/docs/cer-protocol" className="text-primary hover:underline">CER Protocol</Link> for full details.</p>
