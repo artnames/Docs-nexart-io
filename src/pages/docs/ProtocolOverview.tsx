@@ -15,7 +15,7 @@ NexArt is a protocol for producing verifiable execution records. It separates ex
 ## Record types
 - cer.ai.execution.v1: AI execution record. Fully verifiable when attested.
 - signed-redacted-reseal: redacted CER re-signed for safe sharing.
-- hash-only-timestamp: attestation of only the certificateHash. Typically verifies as PARTIAL.
+- hash-only-timestamp: attestation of only the certificateHash.
 - legacy: older records that may lack full attestation data.
 
 ## Verification statuses (per CER Protocol)
@@ -85,7 +85,7 @@ const ProtocolOverview = () => (
     <p>The node returns a signed receipt stored at <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation</code> in the CER bundle. The receipt contains the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>, timestamp, <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">nodeId</code>, and <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">kid</code> (the signing key identifier).</p>
 
     <h3>Verification</h3>
-    <p>Anyone can verify the record by checking three things: bundle integrity, node signature, and receipt consistency. Verification can be performed locally or through <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a>.</p>
+    <p>Anyone can verify the record by checking three things: bundle integrity, node signature, and receipt consistency. Verification can be performed locally using the SDK or through <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a>. The node is not required for verification. Integrity is proven by the hashes alone.</p>
 
     <h2 id="components">Core Components</h2>
 
@@ -93,7 +93,7 @@ const ProtocolOverview = () => (
     <p>A structured record that captures execution metadata and hashes of inputs and outputs. The CER is the base unit of proof in NexArt. It is portable, self-contained, and deterministic.</p>
 
     <h3>Attestation Node</h3>
-    <p>A service that signs CERs and produces receipts. Nodes publish their public keys at <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">node.nexart.io/.well-known/nexart-node.json</code> using <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">kid</code> and <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">activeKid</code> fields so verifiers can independently retrieve them.</p>
+    <p>An independent witness that signs CERs and produces receipts. The node does not define truth or control verification. Nodes publish their public keys at <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">node.nexart.io/.well-known/nexart-node.json</code> using <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">kid</code> and <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">activeKid</code> fields so verifiers can independently retrieve them.</p>
 
     <h3>Signed Receipt</h3>
     <p>A cryptographic proof returned by the node. It proves that the node witnessed the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> at a specific time. The receipt does not imply the node stores or owns the execution data.</p>
@@ -106,13 +106,13 @@ const ProtocolOverview = () => (
     <ul>
       <li><strong>cer.ai.execution.v1.</strong> AI execution record. Fully verifiable when attested with a signed receipt.</li>
       <li><strong>signed-redacted-reseal.</strong> A redacted version of a CER that has been re-signed by the node for safe sharing.</li>
-      <li><strong>hash-only-timestamp.</strong> Attestation of only the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>. Snapshot contents are not attested. Typically verifies as PARTIAL.</li>
+      <li><strong>hash-only-timestamp.</strong> Attestation of only the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>. Snapshot contents are not attested.</li>
       <li><strong>legacy.</strong> Older records from previous system versions. May lack full attestation data.</li>
     </ul>
 
     <h2 id="surfaces">Public Surfaces</h2>
     <ul>
-      <li><a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer"><strong>verify.nexart.io</strong></a> is the public verification portal for CERs.</li>
+      <li><a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer"><strong>verify.nexart.io</strong></a> is the public verification portal for CERs and Project Bundles.</li>
       <li><a href="https://node.nexart.io" target="_blank" rel="noopener noreferrer"><strong>node.nexart.io</strong></a> is the attestation node identity and status surface.</li>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">node.nexart.io/.well-known/nexart-node.json</code> publishes the node's signing keys for independent signature verification.</li>
     </ul>

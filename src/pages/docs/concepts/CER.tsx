@@ -176,8 +176,12 @@ const CER = () => (
     <p>Verify using the SDK (<code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verifyCer()</code> or <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verifyCerAsync()</code>) or at <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a>.</p>
     <p>See <Link to="/docs/verification" className="text-primary hover:underline">How Verification Works</Link>, <Link to="/docs/concepts/hashes" className="text-primary hover:underline">Certificate Hash vs Project Hash</Link>, and the <Link to="/docs/cer-protocol" className="text-primary hover:underline">CER Protocol</Link> for full details.</p>
 
+    <h2 id="guarantees">What NexArt Guarantees (and Does Not)</h2>
+    <p><strong>Guaranteed:</strong> integrity of the recorded execution (tamper-evidence via certificateHash), independent verification without trusting NexArt infrastructure.</p>
+    <p><strong>Not guaranteed:</strong> correctness of the execution result, completeness of recorded steps. NexArt proves what happened. It does not evaluate whether the result was correct or whether all steps were recorded.</p>
+
     <h2 id="multi-step">Multi-Step Workflows</h2>
-    <p>For workflows with multiple steps, CERs can be collected into a <Link to="/docs/concepts/project-bundles" className="text-primary hover:underline">Project Bundle</Link> with its own projectHash covering the entire sequence.</p>
+    <p>For workflows with multiple steps, CERs can be collected into a <Link to="/docs/concepts/project-bundles" className="text-primary hover:underline">Project Bundle</Link> with its own <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">projectHash</code> covering the entire sequence. Use <Link to="/docs/agent-kit" className="text-primary hover:underline">agent-kit</Link> for simplified workflow orchestration.</p>
   </>
 );
 

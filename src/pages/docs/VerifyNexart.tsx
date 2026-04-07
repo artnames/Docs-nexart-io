@@ -70,7 +70,7 @@ const VerifyNexart = () => (
     <ul>
       <li>Project hash integrity: recomputes the projectHash from all steps</li>
       <li>Per-step CER verification: each embedded CER is verified individually</li>
-      <li>Step ordering and parent references: confirms the step graph is consistent</li>
+      <li>Step registry consistency: confirms step ordering and structure are intact</li>
       <li>Project-level node receipt: validates the project-level attestation (if present)</li>
     </ul>
 
