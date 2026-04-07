@@ -58,7 +58,7 @@ const WhatIsNexArt = () => {
           </div>
           <div>
             <h3>Node</h3>
-            <p className="text-muted-foreground">Independent witness and public trust surface. Provides attestation and lookup. Verification still happens independently. See <Link to="/docs/attestation-node" className="text-primary hover:underline">Attestation Node</Link>.</p>
+            <p className="text-muted-foreground">Independent witness and public trust surface. Provides attestation and lookup. Verification always happens independently. No trust in NexArt is required to verify a record. See <Link to="/docs/attestation-node" className="text-primary hover:underline">Attestation Node</Link>.</p>
           </div>
           <div>
             <h3>verify.nexart.io</h3>
@@ -113,12 +113,23 @@ const WhatIsNexArt = () => {
       </section>
 
       <section>
+        <h2>What NexArt guarantees</h2>
+        <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
+          <li>Integrity of what was recorded (tamper-evidence via hashing)</li>
+          <li>Independent verification without trusting NexArt infrastructure</li>
+          <li>Attestation as an optional layer (node receipt, not required for integrity)</li>
+        </ul>
+        <p className="text-muted-foreground mt-2">NexArt does NOT guarantee completeness. Recording every step is the developer's responsibility.</p>
+      </section>
+
+      <section>
         <h2>Next steps</h2>
         <ul className="space-y-2">
           <li><Link to="/docs/concepts/cer" className="text-primary hover:underline">Certified Execution Records</Link></li>
           <li><Link to="/docs/concepts/project-bundles" className="text-primary hover:underline">Project Bundles</Link></li>
           <li><Link to="/docs/verification" className="text-primary hover:underline">Verification</Link></li>
           <li><Link to="/docs/sdk" className="text-primary hover:underline">AI Execution SDK</Link></li>
+          <li><Link to="/docs/agent-kit" className="text-primary hover:underline">Agent Kit</Link></li>
         </ul>
       </section>
     </div>
