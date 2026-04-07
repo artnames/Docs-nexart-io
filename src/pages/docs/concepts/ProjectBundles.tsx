@@ -102,6 +102,55 @@ const ProjectBundles = () => (
       <li>Optional project-level node attestation</li>
     </ul>
 
+    <h2 id="workflow-boundaries">Defining Workflow Boundaries</h2>
+    <p>NexArt does not automatically detect workflows. The developer explicitly defines the start and end of a workflow and decides which steps are included.</p>
+    <ul>
+      <li>A workflow starts when you begin recording CERs.</li>
+      <li>Each meaningful step must create its own CER.</li>
+      <li>All CERs in the same workflow share a common <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">executionId</code>.</li>
+      <li>The workflow ends when you collect those CERs and build a Project Bundle.</li>
+    </ul>
+
+    <h3>Example flow</h3>
+    <CodeBlock
+      code={`import { randomUUID } from "crypto";
+import { certify, createProjectBundle } from "@nexart/ai-execution";
+
+// 1. Generate a shared executionId
+const executionId = randomUUID();
+
+// 2. Step 1: create CER
+const cer1 = await certify({ executionId, model: "gpt-4", input: "...", output: "..." });
+
+// 3. Step 2: create CER
+const cer2 = await certify({ executionId, model: "gpt-4", input: "...", output: "..." });
+
+// 4. Step 3: create CER
+const cer3 = await certify({ executionId, model: "gpt-4", input: "...", output: "..." });
+
+// 5. Collect CERs and build Project Bundle
+const bundle = await createProjectBundle({
+  projectId: "proj_abc123",
+  steps: [cer1, cer2, cer3],
+});
+
+// bundle.projectHash is the verifiable hash for the entire workflow`}
+      title="Building a Project Bundle"
+    />
+
+    <div className="rounded-md border border-yellow-500/30 bg-yellow-500/5 p-4 my-4">
+      <p className="text-sm font-medium text-yellow-600 dark:text-yellow-400 mb-1">Important</p>
+      <p className="text-sm text-muted-foreground">NexArt guarantees integrity of what is recorded. It does not guarantee that all steps were recorded. Completeness is controlled by the developer.</p>
+    </div>
+
+    <h3>Best practices</h3>
+    <ul>
+      <li>Always create a new <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">executionId</code> at workflow start.</li>
+      <li>Record every external decision (LLM call, tool call, transformation).</li>
+      <li>Keep step ordering explicit.</li>
+      <li>Build the Project Bundle immediately after execution completes.</li>
+    </ul>
+
     <h2 id="verification">Verification</h2>
     <p>Project Bundles can be verified in two ways:</p>
     <ul>
