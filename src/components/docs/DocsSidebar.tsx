@@ -12,31 +12,40 @@ const navigation: NavItem[] = [
   { title: "Getting Started", path: "/docs/getting-started" },
   { title: "Quickstart", path: "/docs/quickstart" },
   {
-    title: "Concepts",
+    title: "Core Concepts",
     children: [
       { title: "Certified Execution Records", path: "/docs/concepts/cer" },
+      { title: "Project Bundles", path: "/docs/concepts/project-bundles" },
+      { title: "Certificate Hash vs Project Hash", path: "/docs/concepts/hashes" },
       { title: "Signed Receipts", path: "/docs/concepts/signed-receipts" },
       { title: "Hash-Only Timestamping", path: "/docs/concepts/hash-timestamping" },
-      { title: "Verification Reports", path: "/docs/concepts/verification-reports" },
       { title: "Context Signals", path: "/docs/concepts/context-signals" },
+      { title: "Verification Reports", path: "/docs/concepts/verification-reports" },
     ],
   },
   {
-    title: "Integrations",
+    title: "Verification",
     children: [
-      { title: "Overview", path: "/docs/integrations" },
-      { title: "n8n", path: "/docs/integrations/n8n" },
-      { title: "LangChain", path: "/docs/integrations/langchain" },
+      { title: "How Verification Works", path: "/docs/verification" },
+      { title: "verify.nexart.io", path: "/docs/verify-nexart" },
     ],
   },
   {
-    title: "Builders",
+    title: "SDK",
     children: [
       { title: "AI Execution SDK", path: "/docs/sdk" },
-      { title: "NexArt CLI", path: "/docs/cli" },
+      { title: "Browser Verification", path: "/docs/browser-verification" },
       { title: "CodeMode SDK", path: "/docs/codemode-sdk" },
       { title: "UI Renderer SDK", path: "/docs/ui-renderer-sdk" },
       { title: "Agent Kit", path: "/docs/agent-kit" },
+      { title: "NexArt CLI", path: "/docs/cli" },
+    ],
+  },
+  {
+    title: "Node & Attestation",
+    children: [
+      { title: "Attestation Node", path: "/docs/attestation-node" },
+      { title: "Trust Model", path: "/docs/trust-model" },
     ],
   },
   {
@@ -46,12 +55,17 @@ const navigation: NavItem[] = [
       { title: "CER Record Management", path: "/docs/cer-record-management" },
       { title: "CER Audit Workflows", path: "/docs/cer-audit-workflows" },
       { title: "Protocol Overview", path: "/docs/protocol-overview" },
-      { title: "Trust Model", path: "/docs/trust-model" },
-      { title: "Verification", path: "/docs/verification" },
       { title: "AI CER Verification Layers", path: "/docs/ai-cer-verification-layers" },
       { title: "AI CER Package Format", path: "/docs/ai-cer-package-format" },
-      { title: "Attestation Node", path: "/docs/attestation-node" },
       { title: "Integration Surfaces", path: "/docs/integration-surfaces" },
+    ],
+  },
+  {
+    title: "Integrations",
+    children: [
+      { title: "Overview", path: "/docs/integrations" },
+      { title: "n8n", path: "/docs/integrations/n8n" },
+      { title: "LangChain", path: "/docs/integrations/langchain" },
     ],
   },
   {
@@ -64,8 +78,9 @@ const navigation: NavItem[] = [
       { title: "Audit Exports", path: "/docs/dashboard/audit-exports" },
     ],
   },
-  { title: "Privacy & Data Handling", path: "/docs/privacy" },
+  { title: "Guides", path: "/docs/guides" },
   { title: "Examples", path: "/docs/examples" },
+  { title: "Privacy & Data Handling", path: "/docs/privacy" },
   { title: "FAQ", path: "/docs/faq" },
 ];
 

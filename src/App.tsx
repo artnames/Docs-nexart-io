@@ -13,6 +13,8 @@ import ProtocolOverview from "./pages/docs/ProtocolOverview";
 import CERProtocol from "./pages/docs/CERProtocol";
 import CERRecordManagement from "./pages/docs/CERRecordManagement";
 import CER from "./pages/docs/concepts/CER";
+import ProjectBundles from "./pages/docs/concepts/ProjectBundles";
+import Hashes from "./pages/docs/concepts/Hashes";
 import SignedReceipts from "./pages/docs/concepts/SignedReceipts";
 import HashTimestamping from "./pages/docs/concepts/HashTimestamping";
 import VerificationReports from "./pages/docs/concepts/VerificationReports";
@@ -22,6 +24,8 @@ import CodeModeSDK from "./pages/docs/CodeModeSDK";
 import UIRendererSDK from "./pages/docs/UIRendererSDK";
 import AttestationNode from "./pages/docs/AttestationNode";
 import Verification from "./pages/docs/Verification";
+import VerifyNexart from "./pages/docs/VerifyNexart";
+import BrowserVerification from "./pages/docs/BrowserVerification";
 import TrustModel from "./pages/docs/TrustModel";
 import Projects from "./pages/docs/dashboard/Projects";
 import Apps from "./pages/docs/dashboard/Apps";
@@ -39,6 +43,7 @@ import ContextSignals from "./pages/docs/concepts/ContextSignals";
 import AICERVerificationLayers from "./pages/docs/AICERVerificationLayers";
 import AICERPackageFormat from "./pages/docs/AICERPackageFormat";
 import AgentKit from "./pages/docs/AgentKit";
+import Guides from "./pages/docs/Guides";
 
 const queryClient = new QueryClient();
 
@@ -58,6 +63,8 @@ const App = () => (
             <Route path="cer-record-management" element={<CERRecordManagement />} />
             <Route path="protocol-overview" element={<ProtocolOverview />} />
             <Route path="concepts/cer" element={<CER />} />
+            <Route path="concepts/project-bundles" element={<ProjectBundles />} />
+            <Route path="concepts/hashes" element={<Hashes />} />
             <Route path="concepts/signed-receipts" element={<SignedReceipts />} />
             <Route path="concepts/hash-timestamping" element={<HashTimestamping />} />
             <Route path="concepts/verification-reports" element={<VerificationReports />} />
@@ -68,6 +75,8 @@ const App = () => (
             <Route path="ui-renderer-sdk" element={<UIRendererSDK />} />
             <Route path="attestation-node" element={<AttestationNode />} />
             <Route path="verification" element={<Verification />} />
+            <Route path="verify-nexart" element={<VerifyNexart />} />
+            <Route path="browser-verification" element={<BrowserVerification />} />
             <Route path="ai-cer-verification-layers" element={<AICERVerificationLayers />} />
             <Route path="ai-cer-package-format" element={<AICERPackageFormat />} />
             <Route path="trust-model" element={<TrustModel />} />
@@ -84,6 +93,7 @@ const App = () => (
             <Route path="integrations/n8n" element={<N8n />} />
             <Route path="integrations/langchain" element={<LangChain />} />
             <Route path="agent-kit" element={<AgentKit />} />
+            <Route path="guides" element={<Guides />} />
             <Route path="faq" element={<FAQ />} />
           </Route>
           <Route path="*" element={<NotFound />} />
