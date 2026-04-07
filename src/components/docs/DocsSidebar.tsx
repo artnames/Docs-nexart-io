@@ -9,6 +9,7 @@ interface NavItem {
 }
 
 const navigation: NavItem[] = [
+  { title: "What is NexArt", path: "/docs/what-is-nexart" },
   { title: "Getting Started", path: "/docs/getting-started" },
   { title: "Quickstart", path: "/docs/quickstart" },
   {

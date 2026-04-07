@@ -44,6 +44,7 @@ import AICERVerificationLayers from "./pages/docs/AICERVerificationLayers";
 import AICERPackageFormat from "./pages/docs/AICERPackageFormat";
 import AgentKit from "./pages/docs/AgentKit";
 import Guides from "./pages/docs/Guides";
+import WhatIsNexArt from "./pages/docs/WhatIsNexArt";
 
 const queryClient = new QueryClient();
 
@@ -57,6 +58,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/docs" element={<DocsLayout />}>
             <Route index element={<Navigate to="/docs/getting-started" replace />} />
+            <Route path="what-is-nexart" element={<WhatIsNexArt />} />
             <Route path="getting-started" element={<GettingStarted />} />
             <Route path="quickstart" element={<Quickstart />} />
             <Route path="cer-protocol" element={<CERProtocol />} />
