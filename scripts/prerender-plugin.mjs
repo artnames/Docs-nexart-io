@@ -127,16 +127,75 @@ export default function prerenderPlugin(options = {}) {
           req.continue();
         });
 
+        const llmsFullSections = [];
         for (const route of routes) {
           try {
             const out = await snapshot(page, baseUrl, resolvedDistDir, route);
             console.log(
               `[prerender]   ✓ ${route} → ${out.replace(resolvedDistDir + "/", "")}`,
             );
+            // Extract plain text + title for llms-full.txt
+            try {
+              const extracted = await page.evaluate(() => {
+                const title =
+                  document.querySelector("h1")?.textContent?.trim() ||
+                  document.title ||
+                  "";
+                const main =
+                  document.querySelector("main") || document.body;
+                // Strip nav/aside/script/style/footer noise
+                const clone = main.cloneNode(true);
+                clone
+                  .querySelectorAll("nav, aside, script, style, footer, button")
+                  .forEach((n) => n.remove());
+                const text = (clone.textContent || "")
+                  .replace(/\u00a0/g, " ")
+                  .replace(/[ \t]+/g, " ")
+                  .replace(/\n[ \t]+/g, "\n")
+                  .replace(/\n{3,}/g, "\n\n")
+                  .trim();
+                return { title, text };
+              });
+              const url = `https://docs.nexart.io${route === "/" ? "" : route}`;
+              llmsFullSections.push(
+                `# ${extracted.title}\n\nURL: ${url}\n\n${extracted.text}`,
+              );
+            } catch (err) {
+              console.warn(
+                `[prerender]   (llms-full extract failed for ${route}: ${err.message})`,
+              );
+            }
           } catch (err) {
             failed++;
             console.error(`[prerender]   ✗ ${route}: ${err.message}`);
           }
+        }
+
+        // Write llms-full.txt to dist root
+        try {
+          const header = [
+            "# NexArt Documentation — Full Text",
+            "",
+            "> Concatenated full text of every NexArt documentation page.",
+            "> Companion to /llms.txt (which lists URLs only).",
+            "> Generated at build time from the live rendered pages.",
+            "",
+            `Generated: ${new Date().toISOString()}`,
+            `Pages: ${llmsFullSections.length}`,
+            "",
+            "---",
+            "",
+          ].join("\n");
+          await writeFile(
+            join(resolvedDistDir, "llms-full.txt"),
+            header + llmsFullSections.join("\n\n---\n\n") + "\n",
+            "utf8",
+          );
+          console.log(
+            `[prerender] wrote llms-full.txt (${llmsFullSections.length} pages)`,
+          );
+        } catch (err) {
+          console.warn(`[prerender] failed to write llms-full.txt: ${err.message}`);
         }
       } finally {
         if (browser) await browser.close().catch(() => {});

@@ -7,6 +7,8 @@ const DocsFooter = () => {
         <a href="https://nexart.io/protocol" className="hover:text-foreground transition-colors">Protocol</a>
         <a href="https://verify.nexart.io" className="hover:text-foreground transition-colors">Verification Portal</a>
         <a href="https://docs.nexart.io" className="hover:text-foreground transition-colors">Documentation</a>
+        <a href="/llms.txt" className="hover:text-foreground transition-colors">llms.txt</a>
+        <a href="/llms-full.txt" className="hover:text-foreground transition-colors">llms-full.txt</a>
       </div>
     </footer>
   );
