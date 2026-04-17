@@ -18,11 +18,15 @@ interface SearchEntry {
 }
 
 const searchIndex: SearchEntry[] = [
+  { title: "What is NexArt", path: "/docs/what-is-nexart", section: "Getting Started", keywords: "what is nexart introduction overview platform protocol cryptographic verification execution integrity" },
   { title: "Getting Started", path: "/docs/getting-started", section: "Getting Started", keywords: "getting started introduction overview install SDK CER certified execution record verify" },
   { title: "Quickstart", path: "/docs/quickstart", section: "Getting Started", keywords: "quickstart create verify first CER certificate hash API curl POST certify audit export evidence" },
   { title: "CER Anatomy", path: "/docs/concepts/cer", section: "Core Concepts", keywords: "CER anatomy structure bundle schema type namespace version metadata certificate hash execution" },
+  { title: "Project Bundles", path: "/docs/concepts/project-bundles", section: "Core Concepts", keywords: "project bundles grouping CER projectHash multi-execution aggregate" },
+  { title: "Certificate Hash vs Project Hash", path: "/docs/concepts/hashes", section: "Core Concepts", keywords: "certificate hash project hash comparison SHA-256 identifier difference" },
   { title: "Signed Receipts", path: "/docs/concepts/signed-receipts", section: "Core Concepts", keywords: "signed receipts attestation node signature Ed25519 receipt kid timestamp" },
   { title: "Hash-Only Timestamping", path: "/docs/concepts/hash-timestamping", section: "Core Concepts", keywords: "hash timestamping SHA-256 certificate hash privacy data handling zero knowledge" },
+  { title: "Context Signals", path: "/docs/concepts/context-signals", section: "Core Concepts", keywords: "context signals metadata immutable certificateHash provenance evidence" },
   { title: "Verification Reports", path: "/docs/concepts/verification-reports", section: "Core Concepts", keywords: "verification reports bundle integrity node signature receipt consistency PASS FAIL SKIPPED VERIFIED FAILED" },
   { title: "Integrations", path: "/docs/integrations", section: "Integrations", keywords: "integrations overview API CLI n8n LangChain" },
   { title: "n8n Integration", path: "/docs/integrations/n8n", section: "Integrations", keywords: "n8n integration automation workflow community node certify verify" },
