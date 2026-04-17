@@ -53,6 +53,12 @@ const ROUTES = [
   "/docs/faq",
 ];
 
+const PARENT_ROUTES = new Set(
+  ROUTES.filter((route) => route !== "/").filter((route) =>
+    ROUTES.some((candidate) => candidate !== route && candidate.startsWith(`${route}/`)),
+  ),
+);
+
 async function waitForRouteContent(page) {
   // Tolerant readiness: wait for any H1 inside the docs main/prose container,
   // then give React Router + Helmet a brief settle window. Avoid strict
@@ -68,7 +74,14 @@ async function waitForRouteContent(page) {
 
 function routeToFilePath(distDir, route) {
   if (route === "/") return join(distDir, "index.html");
-  return join(distDir, route.replace(/^\/+/, ""), "index.html");
+  if (PARENT_ROUTES.has(route)) {
+    return join(distDir, route.replace(/^\/+/, ""), "index.html");
+  }
+
+  // Lovable hosting serves exact files for deep paths before falling back to
+  // the SPA shell. Writing leaf routes as extensionless files ensures
+  // /docs/foo returns prerendered HTML instead of the root index fallback.
+  return join(distDir, route.replace(/^\/+/, ""));
 }
 
 async function snapshot(page, baseUrl, distDir, route) {
