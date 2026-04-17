@@ -55,6 +55,7 @@ const searchIndex: SearchEntry[] = [
   { title: "Audit Exports", path: "/docs/dashboard/audit-exports", section: "Dashboard", keywords: "audit exports download evidence package zip" },
   { title: "Privacy & Data Handling", path: "/docs/privacy", section: "Reference", keywords: "privacy data handling hash-only zero knowledge GDPR" },
   { title: "Examples", path: "/docs/examples", section: "Reference", keywords: "examples use cases AI decision automation compliance audit" },
+  { title: "Guides", path: "/docs/guides", section: "Reference", keywords: "guides tutorials walkthroughs how-to" },
   { title: "FAQ", path: "/docs/faq", section: "Reference", keywords: "FAQ questions answers common" },
 ];
 
