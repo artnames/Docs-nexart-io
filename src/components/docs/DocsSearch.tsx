@@ -47,6 +47,7 @@ const searchIndex: SearchEntry[] = [
   { title: "NexArt CLI", path: "/docs/cli", section: "Developer Tools", keywords: "CLI command line nexart ai create certify verify json output terminal" },
   { title: "CodeMode SDK", path: "/docs/codemode-sdk", section: "Developer Tools", keywords: "codemode SDK render deterministic code execution" },
   { title: "UI Renderer SDK", path: "/docs/ui-renderer-sdk", section: "Developer Tools", keywords: "UI renderer SDK component display CER verification" },
+  { title: "Agent Kit", path: "/docs/agent-kit", section: "Developer Tools", keywords: "agent kit linear workflow startWorkflow step finish API" },
   { title: "Projects", path: "/docs/dashboard/projects", section: "Dashboard", keywords: "dashboard projects manage create settings" },
   { title: "Apps", path: "/docs/dashboard/apps", section: "Dashboard", keywords: "dashboard apps API keys credentials" },
   { title: "Auto-stamp", path: "/docs/dashboard/auto-stamp", section: "Dashboard", keywords: "auto-stamp automatic attestation stamping" },
