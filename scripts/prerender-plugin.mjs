@@ -68,7 +68,10 @@ async function waitForRouteContent(page) {
 
 function routeToFilePath(distDir, route) {
   if (route === "/") return join(distDir, "index.html");
-  return join(distDir, route.replace(/^\/+/, ""), "index.html");
+  // Lovable hosting serves exact files for deep paths before falling back to
+  // the SPA shell. Writing /docs/foo as a real file ensures /docs/foo returns
+  // prerendered HTML instead of the root index fallback.
+  return join(distDir, route.replace(/^\/+/, ""));
 }
 
 async function snapshot(page, baseUrl, distDir, route) {
