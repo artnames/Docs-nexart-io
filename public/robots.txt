@@ -1,3 +1,6 @@
+# LLM-readable index: https://docs.nexart.io/llms.txt
+# LLM-readable full content: https://docs.nexart.io/llms-full.txt
+
 User-agent: Googlebot
 Allow: /
 
