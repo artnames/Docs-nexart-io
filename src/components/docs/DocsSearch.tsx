@@ -18,11 +18,15 @@ interface SearchEntry {
 }
 
 const searchIndex: SearchEntry[] = [
+  { title: "What is NexArt", path: "/docs/what-is-nexart", section: "Getting Started", keywords: "what is nexart introduction overview platform protocol cryptographic verification execution integrity" },
   { title: "Getting Started", path: "/docs/getting-started", section: "Getting Started", keywords: "getting started introduction overview install SDK CER certified execution record verify" },
   { title: "Quickstart", path: "/docs/quickstart", section: "Getting Started", keywords: "quickstart create verify first CER certificate hash API curl POST certify audit export evidence" },
   { title: "CER Anatomy", path: "/docs/concepts/cer", section: "Core Concepts", keywords: "CER anatomy structure bundle schema type namespace version metadata certificate hash execution" },
+  { title: "Project Bundles", path: "/docs/concepts/project-bundles", section: "Core Concepts", keywords: "project bundles grouping CER projectHash multi-execution aggregate" },
+  { title: "Certificate Hash vs Project Hash", path: "/docs/concepts/hashes", section: "Core Concepts", keywords: "certificate hash project hash comparison SHA-256 identifier difference" },
   { title: "Signed Receipts", path: "/docs/concepts/signed-receipts", section: "Core Concepts", keywords: "signed receipts attestation node signature Ed25519 receipt kid timestamp" },
   { title: "Hash-Only Timestamping", path: "/docs/concepts/hash-timestamping", section: "Core Concepts", keywords: "hash timestamping SHA-256 certificate hash privacy data handling zero knowledge" },
+  { title: "Context Signals", path: "/docs/concepts/context-signals", section: "Core Concepts", keywords: "context signals metadata immutable certificateHash provenance evidence" },
   { title: "Verification Reports", path: "/docs/concepts/verification-reports", section: "Core Concepts", keywords: "verification reports bundle integrity node signature receipt consistency PASS FAIL SKIPPED VERIFIED FAILED" },
   { title: "Integrations", path: "/docs/integrations", section: "Integrations", keywords: "integrations overview API CLI n8n LangChain" },
   { title: "n8n Integration", path: "/docs/integrations/n8n", section: "Integrations", keywords: "n8n integration automation workflow community node certify verify" },
@@ -32,13 +36,18 @@ const searchIndex: SearchEntry[] = [
   { title: "CER Audit Workflows", path: "/docs/cer-audit-workflows", section: "Protocol", keywords: "audit workflows evidence pack export manifest verification snapshot node metadata offline verification review compliance evidence packaging" },
   { title: "Protocol Overview", path: "/docs/protocol-overview", section: "Protocol", keywords: "protocol overview architecture flow execution attestation verification trust" },
   { title: "Trust Model", path: "/docs/trust-model", section: "Protocol", keywords: "trust model node attestation independent verification transparency public key" },
-  { title: "Verification", path: "/docs/verification", section: "Protocol", keywords: "verification verify bundle integrity node signature receipt consistency VERIFIED FAILED NOT_FOUND PASS FAIL SKIPPED" },
+  { title: "Verification", path: "/docs/verification", section: "Verification", keywords: "verification verify bundle integrity node signature receipt consistency VERIFIED FAILED NOT_FOUND PASS FAIL SKIPPED" },
+  { title: "verify.nexart.io", path: "/docs/verify-nexart", section: "Verification", keywords: "verify nexart io public verification portal hosted webapp" },
+  { title: "Browser Verification", path: "/docs/browser-verification", section: "Verification", keywords: "browser verification client side in-browser SHA-256 webcrypto" },
+  { title: "AI CER Verification Layers", path: "/docs/ai-cer-verification-layers", section: "Protocol", keywords: "AI CER verification layers pillars sync async modes" },
+  { title: "AI CER Package Format", path: "/docs/ai-cer-package-format", section: "Protocol", keywords: "AI CER package format normative 6 field transport specification" },
   { title: "Attestation Node", path: "/docs/attestation-node", section: "Protocol", keywords: "attestation node nexart node signing Ed25519 receipt endpoint" },
   { title: "Integration Surfaces", path: "/docs/integration-surfaces", section: "Protocol", keywords: "integration surfaces API SDK CLI dashboard webhook" },
   { title: "AI Execution SDK", path: "/docs/sdk", section: "Developer Tools", keywords: "SDK ai-execution npm package certify verify typescript javascript API client" },
   { title: "NexArt CLI", path: "/docs/cli", section: "Developer Tools", keywords: "CLI command line nexart ai create certify verify json output terminal" },
   { title: "CodeMode SDK", path: "/docs/codemode-sdk", section: "Developer Tools", keywords: "codemode SDK render deterministic code execution" },
   { title: "UI Renderer SDK", path: "/docs/ui-renderer-sdk", section: "Developer Tools", keywords: "UI renderer SDK component display CER verification" },
+  { title: "Agent Kit", path: "/docs/agent-kit", section: "Developer Tools", keywords: "agent kit linear workflow startWorkflow step finish API" },
   { title: "Projects", path: "/docs/dashboard/projects", section: "Dashboard", keywords: "dashboard projects manage create settings" },
   { title: "Apps", path: "/docs/dashboard/apps", section: "Dashboard", keywords: "dashboard apps API keys credentials" },
   { title: "Auto-stamp", path: "/docs/dashboard/auto-stamp", section: "Dashboard", keywords: "auto-stamp automatic attestation stamping" },
@@ -46,6 +55,7 @@ const searchIndex: SearchEntry[] = [
   { title: "Audit Exports", path: "/docs/dashboard/audit-exports", section: "Dashboard", keywords: "audit exports download evidence package zip" },
   { title: "Privacy & Data Handling", path: "/docs/privacy", section: "Reference", keywords: "privacy data handling hash-only zero knowledge GDPR" },
   { title: "Examples", path: "/docs/examples", section: "Reference", keywords: "examples use cases AI decision automation compliance audit" },
+  { title: "Guides", path: "/docs/guides", section: "Reference", keywords: "guides tutorials walkthroughs how-to" },
   { title: "FAQ", path: "/docs/faq", section: "Reference", keywords: "FAQ questions answers common" },
 ];
 
