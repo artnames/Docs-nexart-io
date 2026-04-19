@@ -8,19 +8,19 @@ const llmBlock = `# End-to-End Verification Flow
 
 NexArt verification has THREE distinct levels. Builders MUST understand all three.
 
-## Level 1 — Local SDK Verification (integrity only)
+## Level 1 - Local SDK Verification (integrity only)
 - verifyCer(bundle), verifyProjectBundle(bundle), verifyCerAsync, verifyProjectBundleAsync
 - Proves the artifact has not been modified
 - Does NOT make the artifact publicly verifiable
 - Does NOT prove the artifact was witnessed by an attestation node
 
-## Level 2 — Node Certification / Registration (trust anchor)
+## Level 2 - Node Certification / Registration (trust anchor)
 - POST /api/stamp                     -> attest a single CER
 - POST /v1/project-bundle/register    -> register a Project Bundle
 - The node returns a signed receipt and writes the artifact to its proof tables
 - This is what makes the artifact PUBLICLY verifiable
 
-## Level 3 — Public Verification (independent witness)
+## Level 3 - Public Verification (independent witness)
 - https://verify.nexart.io/c/{certificateHash}   (single CER)
 - https://verify.nexart.io/p/{projectHash}       (Project Bundle)
 - Requires a node-registered artifact. Local-only artifacts will NOT resolve.
@@ -97,7 +97,7 @@ const EndToEndVerification = () => (
       questions and are NOT interchangeable.
     </p>
 
-    <h3 id="level-1">Level 1 — Local SDK Verification (integrity)</h3>
+    <h3 id="level-1">Level 1 - Local SDK Verification (integrity)</h3>
     <p>Proves the artifact has not been modified since it was produced.</p>
     <ul>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verifyCer(bundle)</code></li>
@@ -115,7 +115,7 @@ const EndToEndVerification = () => (
       <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono ml-1">verify.nexart.io</code>.
     </p>
 
-    <h3 id="level-2">Level 2 — Node Certification / Registration (trust anchor)</h3>
+    <h3 id="level-2">Level 2 - Node Certification / Registration (trust anchor)</h3>
     <p>Submits the artifact to the attestation node, which signs a receipt and writes the artifact to its proof tables.</p>
     <ul>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">POST /api/stamp</code> — attest a single CER</li>
@@ -127,7 +127,7 @@ const EndToEndVerification = () => (
       anchors trust.
     </p>
 
-    <h3 id="level-3">Level 3 — Public Verification (independent witness)</h3>
+    <h3 id="level-3">Level 3 - Public Verification (independent witness)</h3>
     <p>Anyone can verify a node-registered artifact without your API key.</p>
     <ul>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">https://verify.nexart.io/c/&#123;certificateHash&#125;</code> — single CER</li>
