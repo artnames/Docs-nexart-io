@@ -48,9 +48,9 @@ const AICERVerificationLayers = () => (
       NexArt AI CER bundles support up to three independent verification layers. Each layer protects a distinct part of the record, and each can be validated independently.
     </p>
     <ul>
-      <li><strong>Bundle Integrity</strong> — protects execution evidence and context</li>
-      <li><strong>Signed Attestation Receipt</strong> — protects attestation receipt fields</li>
-      <li><strong>Verification Envelope</strong> — protects the authoritative displayed verification surface</li>
+      <li><strong>Bundle Integrity</strong> - protects execution evidence and context</li>
+      <li><strong>Signed Attestation Receipt</strong> - protects attestation receipt fields</li>
+      <li><strong>Verification Envelope</strong> - protects the authoritative displayed verification surface</li>
     </ul>
     <p>
       Not all layers are present on every artifact. Historical records may include only the first two layers. Newer uploaded AI CER bundles may include all three.
@@ -71,7 +71,7 @@ const AICERVerificationLayers = () => (
       title="certificateHash computation"
     />
     <p>
-      This layer guarantees that the execution evidence — including model identifier, input/output hashes, metadata, and any <Link to="/docs/concepts/context-signals" className="text-primary hover:underline">context signals</Link> — has not been modified since the record was created.
+      This layer guarantees that the execution evidence - including model identifier, input/output hashes, metadata, and any <Link to="/docs/concepts/context-signals" className="text-primary hover:underline">context signals</Link> - has not been modified since the record was created.
     </p>
     <p><strong>What it protects:</strong> execution snapshot, context signals, bundle metadata.</p>
 
@@ -82,9 +82,9 @@ const AICERVerificationLayers = () => (
 
     <h3 id="receipt-fields">Receipt Fields</h3>
     <ul>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation.receipt</code> — the receipt payload containing <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">certificateHash</code>, <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">timestamp</code>, <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">nodeId</code>, and <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">kid</code></li>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation.signature</code> — raw Ed25519 signature bytes over the deterministically serialized receipt payload</li>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation.kid</code> — key identifier; resolves via the node's published metadata at <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">node.nexart.io/.well-known/nexart-node.json</code></li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation.receipt</code> - the receipt payload containing <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">certificateHash</code>, <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">timestamp</code>, <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">nodeId</code>, and <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">kid</code></li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation.signature</code> - raw Ed25519 signature bytes over the deterministically serialized receipt payload</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation.kid</code> - key identifier; resolves via the node's published metadata at <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">node.nexart.io/.well-known/nexart-node.json</code></li>
     </ul>
     <p><strong>What it protects:</strong> attestation receipt fields (certificateHash binding, timestamp, node identity, signature validity).</p>
 
@@ -99,8 +99,8 @@ const AICERVerificationLayers = () => (
       verification envelope fields are at the package level:
     </p>
     <ul>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verificationEnvelope</code> — metadata describing the v2 verification envelope</li>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verificationEnvelopeSignature</code> — signature over the v2 signable payload</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verificationEnvelope</code> - metadata describing the v2 verification envelope</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verificationEnvelopeSignature</code> - signature over the v2 signable payload</li>
     </ul>
     <p>
       For legacy/raw bundle artifacts, these fields may appear inside <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta</code> as a compatibility fallback.
@@ -119,11 +119,11 @@ const AICERVerificationLayers = () => (
       title="v2 Signable Payload Construction"
     />
     <ul>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">bundle</code> comes from <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">package.cer</code> — the raw CER bundle, not the full package</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">bundle</code> comes from <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">package.cer</code> - the raw CER bundle, not the full package</li>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">attestation</code> comes from <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">package.verificationEnvelope.attestation</code></li>
       <li>The full package object is NOT the signed payload</li>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verificationEnvelope</code> itself is NOT the signed payload</li>
-      <li>For the package path, <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer</code> is used as-is — any mutation to <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer</code> after signing will cause this check to fail</li>
+      <li>For the package path, <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer</code> is used as-is - any mutation to <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer</code> after signing will cause this check to fail</li>
     </ul>
     <p><strong>What it protects:</strong> the authoritative displayed verification surface via the reconstructed signable payload.</p>
 
