@@ -223,7 +223,7 @@ Authorization: Bearer NEXART_API_KEY
     </ul>
 
     <h2 id="signals">Context Signals</h2>
-    <p>Both endpoints accept an optional <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">signals</code> parameter — an array of structured metadata objects recorded alongside the execution.</p>
+    <p>Both endpoints accept an optional <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">signals</code> parameter - an array of structured metadata objects recorded alongside the execution.</p>
     <CodeBlock
       code={`{
   "model": "gpt-4",
@@ -239,7 +239,7 @@ Authorization: Bearer NEXART_API_KEY
 }`}
       title="Request with Signals"
     />
-    <p>When signals are present, they are included in the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> computation. This makes them part of the tamper-evidence chain — any modification to a signal after certification will cause verification to fail.</p>
+    <p>When signals are present, they are included in the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> computation. This makes them part of the tamper-evidence chain - any modification to a signal after certification will cause verification to fail.</p>
     <p className="text-sm text-muted-foreground">Signals are backward-compatible. Requests without the <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">signals</code> field behave exactly as before. Existing CER bundles without signals remain valid and verifiable.</p>
 
     <h2 id="verification">Verification</h2>
@@ -299,12 +299,12 @@ Authorization: Bearer NEXART_API_KEY
 
     <h3 id="package-helper-api">API</h3>
     <ul>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">isCerPackage(value)</code> — type guard; returns <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">true</code> if the value conforms to the CER package shape</li>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">createCerPackage(params)</code> — creates a CER package from a bundle, receipt, signature, and optional verification artifacts</li>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">getCerFromPackage(pkg)</code> — extracts the inner <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer</code> bundle from a package</li>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">exportCerPackage(pkg)</code> — serializes a CER package to JSON</li>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">importCerPackage(json)</code> — deserializes and validates a CER package from JSON</li>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verifyCerPackage(pkg)</code> — verifies the inner CER bundle within a package</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">isCerPackage(value)</code> - type guard; returns <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">true</code> if the value conforms to the CER package shape</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">createCerPackage(params)</code> - creates a CER package from a bundle, receipt, signature, and optional verification artifacts</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">getCerFromPackage(pkg)</code> - extracts the inner <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer</code> bundle from a package</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">exportCerPackage(pkg)</code> - serializes a CER package to JSON</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">importCerPackage(json)</code> - deserializes and validates a CER package from JSON</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verifyCerPackage(pkg)</code> - verifies the inner CER bundle within a package</li>
     </ul>
 
     <div className="not-prose my-6 rounded-lg border border-border bg-muted/30 p-4">

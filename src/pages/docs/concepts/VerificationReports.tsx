@@ -7,14 +7,14 @@ A verification report is the result of validating a CER bundle and its attestati
 
 ## Checks
 Each check returns PASS, FAIL, or SKIPPED.
-1. Bundle Integrity — computed certificateHash matches the bundle contents
-2. Node Signature — receipt signature is valid against the node's published Ed25519 key (matched by kid). SKIPPED if no attestation.
-3. Receipt Consistency — receipt (at meta.attestation.receipt) references the same certificateHash as the CER bundle. SKIPPED if no attestation.
+1. Bundle Integrity - computed certificateHash matches the bundle contents
+2. Node Signature - receipt signature is valid against the node's published Ed25519 key (matched by kid). SKIPPED if no attestation.
+3. Receipt Consistency - receipt (at meta.attestation.receipt) references the same certificateHash as the CER bundle. SKIPPED if no attestation.
 
 ## Verification statuses (per CER Protocol)
-VERIFIED — all applicable checks pass
-FAILED — one or more checks fail
-NOT_FOUND — record not located
+VERIFIED - all applicable checks pass
+FAILED - one or more checks fail
+NOT_FOUND - record not located
 
 ## How to verify
 Locally using the CER bundle and node keys from node.nexart.io/.well-known/nexart-node.json

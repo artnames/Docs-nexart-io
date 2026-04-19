@@ -9,7 +9,7 @@ Project
    └ CER records
 
 A CER belongs to a specific app within a project, or remains unassigned.
-Projects are for organization, filtering, and configuration — they do not affect the cryptographic structure of CERs.
+Projects are for organization, filtering, and configuration - they do not affect the cryptographic structure of CERs.
 
 ## Project settings
 - Auto-stamp: controls whether CERs are automatically stamped during ingestion
