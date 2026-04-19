@@ -30,6 +30,7 @@ const ROUTES = [
   "/docs/codemode-sdk",
   "/docs/ui-renderer-sdk",
   "/docs/attestation-node",
+  "/docs/end-to-end-verification",
   "/docs/verification",
   "/docs/verify-nexart",
   "/docs/browser-verification",

@@ -27,6 +27,7 @@ const navigation: NavItem[] = [
   {
     title: "Verification",
     children: [
+      { title: "End-to-End Verification Flow", path: "/docs/end-to-end-verification" },
       { title: "How Verification Works", path: "/docs/verification" },
       { title: "verify.nexart.io", path: "/docs/verify-nexart" },
     ],
