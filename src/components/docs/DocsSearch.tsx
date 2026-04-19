@@ -36,6 +36,7 @@ const searchIndex: SearchEntry[] = [
   { title: "CER Audit Workflows", path: "/docs/cer-audit-workflows", section: "Protocol", keywords: "audit workflows evidence pack export manifest verification snapshot node metadata offline verification review compliance evidence packaging" },
   { title: "Protocol Overview", path: "/docs/protocol-overview", section: "Protocol", keywords: "protocol overview architecture flow execution attestation verification trust" },
   { title: "Trust Model", path: "/docs/trust-model", section: "Protocol", keywords: "trust model node attestation independent verification transparency public key" },
+  { title: "End-to-End Verification Flow", path: "/docs/end-to-end-verification", section: "Verification", keywords: "end to end verification flow project bundle register node certification public verify trust levels checklist required step missing not found stamp register endpoint POST attestationId signature local vs node vs public" },
   { title: "Verification", path: "/docs/verification", section: "Verification", keywords: "verification verify bundle integrity node signature receipt consistency VERIFIED FAILED NOT_FOUND PASS FAIL SKIPPED" },
   { title: "verify.nexart.io", path: "/docs/verify-nexart", section: "Verification", keywords: "verify nexart io public verification portal hosted webapp" },
   { title: "Browser Verification", path: "/docs/browser-verification", section: "Verification", keywords: "browser verification client side in-browser SHA-256 webcrypto" },

@@ -45,6 +45,7 @@ import AICERPackageFormat from "./pages/docs/AICERPackageFormat";
 import AgentKit from "./pages/docs/AgentKit";
 import Guides from "./pages/docs/Guides";
 import WhatIsNexArt from "./pages/docs/WhatIsNexArt";
+import EndToEndVerification from "./pages/docs/EndToEndVerification";
 
 const queryClient = new QueryClient();
 
@@ -76,6 +77,7 @@ const App = () => (
             <Route path="codemode-sdk" element={<CodeModeSDK />} />
             <Route path="ui-renderer-sdk" element={<UIRendererSDK />} />
             <Route path="attestation-node" element={<AttestationNode />} />
+            <Route path="end-to-end-verification" element={<EndToEndVerification />} />
             <Route path="verification" element={<Verification />} />
             <Route path="verify-nexart" element={<VerifyNexart />} />
             <Route path="browser-verification" element={<BrowserVerification />} />
