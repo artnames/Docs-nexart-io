@@ -7,7 +7,7 @@ Verification confirms up to four things about a CER:
 1. The bundle has not been modified (Bundle Integrity)
 2. The receipt was signed by a valid attestation node (Node Signature)
 3. The receipt references the correct certificateHash (Receipt Consistency)
-4. The verification envelope has not been altered (Verification Envelope — when present)
+4. The verification envelope has not been altered (Verification Envelope - when present)
 
 ## How to verify
 Three ways to verify a record:

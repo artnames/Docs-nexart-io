@@ -39,8 +39,8 @@ const ContextSignals = () => (
     <h2>What are Context Signals</h2>
     <p>
       Context Signals are structured metadata recorded alongside an execution to capture
-      external context. They allow builders to attach additional evidence — such as policy
-      check results, environment state, or authorization decisions — directly to a Certified
+      external context. They allow builders to attach additional evidence - such as policy
+      check results, environment state, or authorization decisions - directly to a Certified
       Execution Record.
     </p>
 

@@ -237,10 +237,10 @@ const bundle = workflow.finish();
 
     <h2 id="related">Related</h2>
     <ul>
-      <li><Link to="/docs/sdk" className="text-primary hover:underline">AI Execution SDK</Link> — the underlying CER creation and attestation API</li>
-      <li><Link to="/docs/concepts/project-bundles" className="text-primary hover:underline">Project Bundles</Link> — multi-step workflow verification</li>
-      <li><Link to="/docs/concepts/context-signals" className="text-primary hover:underline">Context Signals</Link> — structured metadata recorded alongside executions</li>
-      <li><Link to="/docs/verification" className="text-primary hover:underline">Verification</Link> — how CER verification works</li>
+      <li><Link to="/docs/sdk" className="text-primary hover:underline">AI Execution SDK</Link> - the underlying CER creation and attestation API</li>
+      <li><Link to="/docs/concepts/project-bundles" className="text-primary hover:underline">Project Bundles</Link> - multi-step workflow verification</li>
+      <li><Link to="/docs/concepts/context-signals" className="text-primary hover:underline">Context Signals</Link> - structured metadata recorded alongside executions</li>
+      <li><Link to="/docs/verification" className="text-primary hover:underline">Verification</Link> - how CER verification works</li>
     </ul>
   </>
 );

@@ -158,7 +158,7 @@ const N8n = () => {
         <a href="https://github.com/artnames/nexart-n8n" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
           github.com/artnames/nexart-n8n
         </a>
-        {" "}— runnable integration example for n8n workflows.
+        {" "}- runnable integration example for n8n workflows.
       </p>
 
       <h2>Next Steps</h2>

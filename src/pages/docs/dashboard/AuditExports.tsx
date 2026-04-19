@@ -5,12 +5,12 @@ const llmBlock = `# NexArt Audit Exports
 Audit exports allow users to export verification and attestation information from the dashboard.
 
 ## Export types
-1. Single-record audit export (JSON) — audit summary for one CER, from the record detail / CER drawer
-2. Project-level export (CSV) — summary of records belonging to a project
+1. Single-record audit export (JSON) - audit summary for one CER, from the record detail / CER drawer
+2. Project-level export (CSV) - summary of records belonging to a project
 
 ## Important distinction
 - Audit exports are summary/reporting formats for auditors and operational workflows
-- Raw CER downloads are separate — protocol-level bundles for independent cryptographic verification
+- Raw CER downloads are separate - protocol-level bundles for independent cryptographic verification
 - The audit export is NOT the raw CER bundle
 
 ## Single-record audit export fields

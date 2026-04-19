@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const llmBlock = `# NexArt FAQ Summary
 
 ## What is NexArt?
-NexArt works with Certified Execution Records (CERs) — portable, tamper-evident records of AI or deterministic system executions.
+NexArt works with Certified Execution Records (CERs) - portable, tamper-evident records of AI or deterministic system executions.
 
 ## How verification works
 Three checks: Bundle Integrity, Node Signature, Receipt Consistency.
@@ -44,7 +44,7 @@ const FAQ = () => (
     <p>A <strong>signed receipt</strong> supports full attestation of the CER bundle and can verify as VERIFIED. A <strong>hash-only timestamp</strong> signs only the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>. It proves the hash existed at a specific time but does not attest the snapshot contents. Hash-only timestamps verify as <strong>VERIFIED</strong> when the applicable checks pass.</p>
 
     <h2 id="skipped">What does SKIPPED mean?</h2>
-    <p>A SKIPPED check means the check is not applicable to the record. For example, a CER without attestation will have Node Signature and Receipt Consistency checks marked as SKIPPED. This does not indicate failure — it means the record was not attested, so those checks cannot be performed. The overall status can still be VERIFIED if all applicable checks pass.</p>
+    <p>A SKIPPED check means the check is not applicable to the record. For example, a CER without attestation will have Node Signature and Receipt Consistency checks marked as SKIPPED. This does not indicate failure - it means the record was not attested, so those checks cannot be performed. The overall status can still be VERIFIED if all applicable checks pass.</p>
 
     <h2 id="redacted">What does a redacted export prove?</h2>
     <p>A redacted export contains a limited view of the original record with sensitive fields removed. A <strong>redacted reseal</strong> is signed again by the attestation node so the shared version remains verifiable. The signature covers exactly what is present in the exported record. The original full bundle is not recoverable from the redacted version.</p>

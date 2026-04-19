@@ -8,19 +8,19 @@ const llmBlock = `# End-to-End Verification Flow
 
 NexArt verification has THREE distinct levels. Builders MUST understand all three.
 
-## Level 1 — Local SDK Verification (integrity only)
+## Level 1 - Local SDK Verification (integrity only)
 - verifyCer(bundle), verifyProjectBundle(bundle), verifyCerAsync, verifyProjectBundleAsync
 - Proves the artifact has not been modified
 - Does NOT make the artifact publicly verifiable
 - Does NOT prove the artifact was witnessed by an attestation node
 
-## Level 2 — Node Certification / Registration (trust anchor)
+## Level 2 - Node Certification / Registration (trust anchor)
 - POST /api/stamp                     -> attest a single CER
 - POST /v1/project-bundle/register    -> register a Project Bundle
 - The node returns a signed receipt and writes the artifact to its proof tables
 - This is what makes the artifact PUBLICLY verifiable
 
-## Level 3 — Public Verification (independent witness)
+## Level 3 - Public Verification (independent witness)
 - https://verify.nexart.io/c/{certificateHash}   (single CER)
 - https://verify.nexart.io/p/{projectHash}       (Project Bundle)
 - Requires a node-registered artifact. Local-only artifacts will NOT resolve.
@@ -97,7 +97,7 @@ const EndToEndVerification = () => (
       questions and are NOT interchangeable.
     </p>
 
-    <h3 id="level-1">Level 1 — Local SDK Verification (integrity)</h3>
+    <h3 id="level-1">Level 1 - Local SDK Verification (integrity)</h3>
     <p>Proves the artifact has not been modified since it was produced.</p>
     <ul>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verifyCer(bundle)</code></li>
@@ -115,11 +115,11 @@ const EndToEndVerification = () => (
       <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono ml-1">verify.nexart.io</code>.
     </p>
 
-    <h3 id="level-2">Level 2 — Node Certification / Registration (trust anchor)</h3>
+    <h3 id="level-2">Level 2 - Node Certification / Registration (trust anchor)</h3>
     <p>Submits the artifact to the attestation node, which signs a receipt and writes the artifact to its proof tables.</p>
     <ul>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">POST /api/stamp</code> — attest a single CER</li>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">POST /v1/project-bundle/register</code> — register a Project Bundle</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">POST /api/stamp</code> - attest a single CER</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">POST /v1/project-bundle/register</code> - register a Project Bundle</li>
     </ul>
     <p>
       <strong>What it produces:</strong> An Ed25519-signed receipt anchored to the
@@ -127,11 +127,11 @@ const EndToEndVerification = () => (
       anchors trust.
     </p>
 
-    <h3 id="level-3">Level 3 — Public Verification (independent witness)</h3>
+    <h3 id="level-3">Level 3 - Public Verification (independent witness)</h3>
     <p>Anyone can verify a node-registered artifact without your API key.</p>
     <ul>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">https://verify.nexart.io/c/&#123;certificateHash&#125;</code> — single CER</li>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">https://verify.nexart.io/p/&#123;projectHash&#125;</code> — Project Bundle</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">https://verify.nexart.io/c/&#123;certificateHash&#125;</code> - single CER</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">https://verify.nexart.io/p/&#123;projectHash&#125;</code> - Project Bundle</li>
     </ul>
     <p>
       <strong>Requires:</strong> A node-registered artifact. If the artifact was
@@ -158,10 +158,10 @@ Content-Type: application/json
     <h3 id="response">Response</h3>
     <p>A successful response includes:</p>
     <ul>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">attestationId</code> — node-assigned identifier for the registered bundle</li>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verificationEnvelope</code> — canonical envelope covering the project-level receipt</li>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">signature</code> — Ed25519 signature over the envelope by the node's signing key</li>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">metadata</code> — node identity, key id, timestamp, protocol version</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">attestationId</code> - node-assigned identifier for the registered bundle</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verificationEnvelope</code> - canonical envelope covering the project-level receipt</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">signature</code> - Ed25519 signature over the envelope by the node's signing key</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">metadata</code> - node identity, key id, timestamp, protocol version</li>
     </ul>
 
     <h3 id="success-definition">Success Definition</h3>
@@ -279,7 +279,7 @@ console.log(\`https://verify.nexart.io/p/\${encodeURIComponent(projectHash)}\`);
     <ul className="list-none pl-0 space-y-2">
       <li className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 mt-1 text-primary shrink-0" /><span>CER verifies locally with <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verifyCer()</code>.</span></li>
       <li className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 mt-1 text-primary shrink-0" /><span>Project Bundle verifies locally with <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verifyProjectBundle()</code>.</span></li>
-      <li className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 mt-1 text-primary shrink-0" /><span>Bundle registered on the node — response includes <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">attestationId</code> and <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">signature</code>.</span></li>
+      <li className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 mt-1 text-primary shrink-0" /><span>Bundle registered on the node - response includes <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">attestationId</code> and <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">signature</code>.</span></li>
       <li className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 mt-1 text-primary shrink-0" /><span>Bundle appears in node proof tables (lookup by <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">projectHash</code> succeeds).</span></li>
       <li className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 mt-1 text-primary shrink-0" /><span><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verify.nexart.io/p/&#123;projectHash&#125;</code> resolves and returns <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">VERIFIED</code>.</span></li>
     </ul>

@@ -157,7 +157,7 @@ console.log(result.verificationUrl);`} />
         <a href="https://github.com/artnames/nexart-langchain" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
           github.com/artnames/nexart-langchain
         </a>
-        {" "}— runnable integration example for LangChain chains and agent workflows.
+        {" "}- runnable integration example for LangChain chains and agent workflows.
       </p>
 
       <h2>Next Steps</h2>

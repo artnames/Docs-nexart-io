@@ -7,7 +7,7 @@ Auto-stamp is a project-level ingestion setting.
 - Controls whether CERs are automatically submitted for attestation during ingestion
 - Runs server-side in nexart.io, not client-side or SDK-side
 - Affects only records associated with that project
-- Does not change CER structure — only affects whether a signed receipt is added automatically
+- Does not change CER structure - only affects whether a signed receipt is added automatically
 
 ## States
 Enabled: CERs are automatically sent through the stamping flow during ingestion
