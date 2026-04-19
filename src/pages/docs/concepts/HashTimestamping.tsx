@@ -20,9 +20,9 @@ bundleType: "hash-only-timestamp", snapshot may be null or minimal, certificateH
 
 ## Verification
 Hash-only timestamps verify as VERIFIED when all applicable checks pass:
-- Bundle Integrity — PASS (bundle structure and certificateHash are consistent)
-- Node Signature — PASS (receipt signature is valid against the node's public key)
-- Receipt Consistency — PASS (receipt references the certificateHash)
+- Bundle Integrity - PASS (bundle structure and certificateHash are consistent)
+- Node Signature - PASS (receipt signature is valid against the node's public key)
+- Receipt Consistency - PASS (receipt references the certificateHash)
 
 The attestation scope is narrower than a full signed receipt, but the verification status is VERIFIED per the CER Protocol.
 
@@ -74,9 +74,9 @@ const HashTimestamping = () => (
     <h2 id="verification">Verification</h2>
     <p>Hash-only timestamp records verify as <strong>VERIFIED</strong> when all applicable checks pass. Per the <Link to="/docs/cer-protocol" className="text-primary hover:underline">CER Protocol</Link>:</p>
     <ul>
-      <li><strong>Bundle Integrity</strong> — PASS. The bundle structure and <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> are consistent.</li>
-      <li><strong>Node Signature</strong> — PASS. The receipt signature is valid against the node's public key.</li>
-      <li><strong>Receipt Consistency</strong> — PASS. The receipt references the correct <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>.</li>
+      <li><strong>Bundle Integrity</strong> - PASS. The bundle structure and <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> are consistent.</li>
+      <li><strong>Node Signature</strong> - PASS. The receipt signature is valid against the node's public key.</li>
+      <li><strong>Receipt Consistency</strong> - PASS. The receipt references the correct <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>.</li>
     </ul>
     <p>The attestation scope is narrower than a full signed receipt (snapshot contents are not attested), but the verification status is VERIFIED because all applicable checks pass.</p>
 
