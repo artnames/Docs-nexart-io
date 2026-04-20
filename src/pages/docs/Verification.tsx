@@ -83,20 +83,20 @@ const Verification = () => (
     <p>If all applicable checks pass, the record is intact and its attestation is trustworthy. For a detailed breakdown of the three verification layers, see <Link to="/docs/ai-cer-verification-layers" className="text-primary hover:underline">AI CER Verification Layers</Link>.</p>
 
     <h2 id="how-to-verify">How to Verify a Record</h2>
-    <p>There are three ways to verify a CER through the public verifier at <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a>:</p>
+    <p>There are three ways to verify a CER through the public verifier at <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a>. <strong>Prefer <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> for any persisted reference</strong> — it is the canonical identity of the artifact. <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">executionId</code> is convenience metadata only.</p>
 
-    <h3 id="by-execution-id">1. By Execution ID</h3>
-    <p>If you have the execution ID returned by the certification API, open the verification URL directly:</p>
-    <CodeBlock
-      code={`https://verify.nexart.io/e/exec_abc123`}
-      title="Verify by Execution ID"
-    />
-
-    <h3 id="by-certificate-hash">2. By Certificate Hash</h3>
+    <h3 id="by-certificate-hash">1. By Certificate Hash (canonical)</h3>
     <p>If you have the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>, use the hash-based URL. The colon in the hash must be URL-encoded:</p>
     <CodeBlock
       code={`https://verify.nexart.io/c/sha256%3A7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069`}
       title="Verify by Certificate Hash"
+    />
+
+    <h3 id="by-execution-id">2. By Execution ID (convenience only)</h3>
+    <p><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">executionId</code> is a convenience identifier returned by the certify API. It MUST NOT be used as a primary key for storage or deduplication. Use it for ad-hoc lookup only:</p>
+    <CodeBlock
+      code={`https://verify.nexart.io/e/exec_abc123`}
+      title="Verify by Execution ID"
     />
 
     <h3 id="by-bundle-upload">3. By Uploading a CER Bundle</h3>
@@ -144,11 +144,21 @@ NOT_FOUND     The requested execution record was not located.`}
       title="Verification Statuses"
     />
 
+    <h2 id="result-classes">Reading Verification Results</h2>
+    <p>The verifier reports four distinct outcome classes. They are not all failures:</p>
+    <ul>
+      <li><strong>VERIFIED</strong>: all applicable checks pass.</li>
+      <li><strong>VERIFIED (supplemental)</strong>: core integrity passes, but supplemental context (e.g. <Link to="/docs/concepts/context-signals" className="text-primary hover:underline">signals</Link> outside the hash scope) is present. This is NOT a failure; supplemental fields are simply not cryptographically bound.</li>
+      <li><strong>FAILED</strong>: one or more applicable checks fail.</li>
+      <li><strong>NOT_FOUND</strong>: the artifact was never registered on the node. See <Link to="/docs/end-to-end-verification" className="text-primary hover:underline">End-to-End Verification</Link>.</li>
+    </ul>
+    <p>For the precise semantics of each result class, reseal handling, and the canonical role of <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> vs <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">executionId</code>, see <Link to="/docs/verification-semantics" className="text-primary hover:underline">Verification Semantics</Link>.</p>
+
     <h2 id="by-bundle-type">Expected Outcomes by Bundle Type</h2>
     <ul>
       <li><strong>cer.ai.execution.v1</strong> (with attestation): all checks PASS → <strong>VERIFIED</strong></li>
       <li><strong>cer.ai.execution.v1</strong> (without attestation): bundleIntegrity PASS, attestation checks SKIPPED → <strong>VERIFIED</strong></li>
-      <li><strong>signed-redacted-reseal</strong>: some snapshot fields removed, re-signed → <strong>VERIFIED</strong></li>
+      <li><strong>signed-redacted-reseal</strong>: redacted reseal returned by the public verifier; validated against the NEW resealed <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> → <strong>VERIFIED</strong></li>
       <li><strong>hash-only-timestamp</strong>: only certificateHash is attested → <strong>VERIFIED</strong></li>
       <li><strong>legacy</strong>: older format, limited coverage → <strong>VERIFIED</strong> or <strong>FAILED</strong> depending on data</li>
     </ul>

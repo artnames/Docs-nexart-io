@@ -11,6 +11,8 @@
 - [AI Execution SDK](https://docs.nexart.io/docs/sdk)
 - [NexArt CLI](https://docs.nexart.io/docs/cli)
 - [End-to-End Verification Flow](https://docs.nexart.io/docs/end-to-end-verification)
+- [AI Execution CER](https://docs.nexart.io/docs/ai-execution)
+- [Verification Semantics](https://docs.nexart.io/docs/verification-semantics)
 - [Verification](https://docs.nexart.io/docs/verification)
 - [AI CER Verification Layers](https://docs.nexart.io/docs/ai-cer-verification-layers)
 - [AI CER Package Format](https://docs.nexart.io/docs/ai-cer-package-format)

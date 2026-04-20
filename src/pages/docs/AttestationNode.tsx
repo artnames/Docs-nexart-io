@@ -1,8 +1,9 @@
 import PageHeader from "@/components/docs/PageHeader";
 import CodeBlock from "@/components/docs/CodeBlock";
+import { Link } from "react-router-dom";
 
-const llmBlock = `# NexArt Attestation Node
-The attestation node signs CERs and returns signed receipts.
+const llmBlock = `# NexArt Attestation Node (v0.11.2)
+The attestation node verifies, persists, and signs CERs and Project Bundles.
 
 ## Node role in the protocol
 Attestation nodes act as independent witnesses for Certified Execution Records.
@@ -42,6 +43,24 @@ Verification must not depend on the continued availability of the original attes
 
 ## Signing algorithm
 Ed25519
+
+## Persistence and registration
+The node persists registered artifacts (single CERs via /api/stamp; Project Bundles via /v1/project-bundle/register).
+Persistence is what makes an artifact resolvable on verify.nexart.io.
+Failure modes include PERSISTENCE_FAILED (write to proof tables failed) and AUTH_INVALID.
+
+## Redacted reseal behavior
+The node MAY return a redacted reseal of the original CER for public verification.
+Reseal exists so artifacts containing sensitive metadata can still be publicly
+verified after redaction.
+
+A reseal is a NEW bundle (bundleType: signed-redacted-reseal) with:
+- a NEW certificateHash covering the redacted content
+- a provenance pointer to the ORIGINAL certificateHash (reference only)
+- a fresh node signature over the resealed content
+
+The original certificateHash is reference-only in public context.
+The resealed hash is what the public verifier validates.
 
 ## Self-hosted nodes
 Roadmap only. Not currently available.`;
@@ -153,6 +172,49 @@ const AttestationNode = () => (
       <li>The node's published public key material</li>
     </ul>
     <p>Verification must not depend on the continued availability of the original attestation node beyond its published verification material.</p>
+
+    <h2 id="persistence">Persistence and Registration</h2>
+    <p>
+      Beyond signing, the canonical node persists registered artifacts. Persistence is
+      what makes an artifact resolvable on{" "}
+      <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a>.
+    </p>
+    <ul>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">POST /api/stamp</code> persists a single CER attestation.</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">POST /v1/project-bundle/register</code> persists a full Project Bundle.</li>
+    </ul>
+    <p>Common registration failure modes:</p>
+    <ul>
+      <li><strong>AUTH_INVALID</strong>: missing or wrong API key.</li>
+      <li><strong>PERSISTENCE_FAILED</strong>: the bundle was signed but writing to the proof tables failed; the artifact will not resolve publicly. Retry with the same payload.</li>
+      <li><strong>HASH_MISMATCH</strong>: the recomputed hash does not match the declared hash; usually caused by undefined values breaking canonical JSON.</li>
+    </ul>
+    <p>
+      A 200 response is not sufficient evidence of success. Always confirm against
+      the public verifier as the authoritative success signal. See{" "}
+      <Link to="/docs/end-to-end-verification" className="text-primary hover:underline">End-to-End Verification</Link>.
+    </p>
+
+    <h2 id="reseal">Redacted Reseal Behavior</h2>
+    <p>
+      The node MAY return a <strong>redacted reseal</strong> of the original CER for
+      public verification. Reseal exists so that artifacts containing sensitive
+      metadata can still be publicly verified after redaction, without exposing the
+      private fields.
+    </p>
+    <p>A reseal is a NEW bundle with the following properties:</p>
+    <ul>
+      <li><strong>bundleType:</strong> <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">signed-redacted-reseal</code></li>
+      <li><strong>NEW certificateHash:</strong> covers the resealed (redacted) content. This is what the public verifier validates.</li>
+      <li><strong>Provenance pointer:</strong> references the ORIGINAL <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>. Reference only; not validated.</li>
+      <li><strong>Fresh node signature:</strong> covers the resealed content under <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation</code>.</li>
+    </ul>
+    <p>
+      The original and resealed hashes can legitimately coexist. They describe the
+      same execution at different visibility levels. See{" "}
+      <Link to="/docs/verification-semantics" className="text-primary hover:underline">Verification Semantics</Link>{" "}
+      for the rules to apply when handling reseals.
+    </p>
 
     <h2 id="self-hosted">Self-Hosted Nodes</h2>
     <p className="text-muted-foreground"><strong>Roadmap.</strong> Self-hosted attestation nodes are not currently available. This feature is planned for a future release.</p>

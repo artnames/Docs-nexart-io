@@ -31,6 +31,8 @@ const ROUTES = [
   "/docs/ui-renderer-sdk",
   "/docs/attestation-node",
   "/docs/end-to-end-verification",
+  "/docs/ai-execution",
+  "/docs/verification-semantics",
   "/docs/verification",
   "/docs/verify-nexart",
   "/docs/browser-verification",
