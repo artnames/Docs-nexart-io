@@ -46,6 +46,8 @@ import AgentKit from "./pages/docs/AgentKit";
 import Guides from "./pages/docs/Guides";
 import WhatIsNexArt from "./pages/docs/WhatIsNexArt";
 import EndToEndVerification from "./pages/docs/EndToEndVerification";
+import AIExecution from "./pages/docs/AIExecution";
+import VerificationSemantics from "./pages/docs/VerificationSemantics";
 
 const queryClient = new QueryClient();
 
@@ -78,6 +80,8 @@ const App = () => (
             <Route path="ui-renderer-sdk" element={<UIRendererSDK />} />
             <Route path="attestation-node" element={<AttestationNode />} />
             <Route path="end-to-end-verification" element={<EndToEndVerification />} />
+            <Route path="ai-execution" element={<AIExecution />} />
+            <Route path="verification-semantics" element={<VerificationSemantics />} />
             <Route path="verification" element={<Verification />} />
             <Route path="verify-nexart" element={<VerifyNexart />} />
             <Route path="browser-verification" element={<BrowserVerification />} />

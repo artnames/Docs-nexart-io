@@ -16,6 +16,7 @@ const navigation: NavItem[] = [
     title: "Core Concepts",
     children: [
       { title: "Certified Execution Records", path: "/docs/concepts/cer" },
+      { title: "AI Execution CER", path: "/docs/ai-execution" },
       { title: "Project Bundles", path: "/docs/concepts/project-bundles" },
       { title: "Certificate Hash vs Project Hash", path: "/docs/concepts/hashes" },
       { title: "Signed Receipts", path: "/docs/concepts/signed-receipts" },
@@ -29,6 +30,7 @@ const navigation: NavItem[] = [
     children: [
       { title: "End-to-End Verification Flow", path: "/docs/end-to-end-verification" },
       { title: "How Verification Works", path: "/docs/verification" },
+      { title: "Verification Semantics", path: "/docs/verification-semantics" },
       { title: "verify.nexart.io", path: "/docs/verify-nexart" },
     ],
   },
