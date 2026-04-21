@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Info } from "lucide-react";
 
+// Retained for LLM/SEO discoverability. Not rendered in UI.
 const llmBlock = `# Verification Statuses & Errors
 
 Builder-facing reference. Maps every verification outcome and node error to
@@ -27,12 +28,13 @@ its likely cause and the next action.
 - AUTH_INVALID                : Missing or rejected API key.
 - LOCAL_OK_PUBLIC_NOT_FOUND   : Local SDK verification passes but verify.nexart.io
                                 returns NOT_FOUND. The artifact was not registered
-                                on the node. This is the single most common
-                                "why doesn't it work in public" cause.
+                                on the node.
 
 ## Identity
 - certificateHash is the canonical identity. Always look up by certificateHash.
 - executionId is NOT a unique identifier and MUST NOT be used for verification.`;
+
+void llmBlock;
 
 const Row = ({
   status,
@@ -53,12 +55,20 @@ const Row = ({
   </tr>
 );
 
+const SectionHeading = ({ icon, title, note }: { icon: string; title: string; note: string }) => (
+  <div className="mt-8 mb-3">
+    <h2 className="m-0 flex items-center gap-2">
+      <span aria-hidden>{icon}</span> {title}
+    </h2>
+    <p className="text-sm text-muted-foreground mt-1 mb-0">{note}</p>
+  </div>
+);
+
 const VerificationStatusesAndErrors = () => (
   <>
     <PageHeader
       title="Verification Statuses & Errors"
-      summary="What every verification result and node error actually means, what most likely caused it, and what to do next. Use this when your integration is not behaving the way you expected."
-      llmBlock={llmBlock}
+      summary="Every verification outcome and node error, what most likely caused it, and what to do next."
     />
 
     <Alert className="mb-6">
@@ -72,7 +82,7 @@ const VerificationStatusesAndErrors = () => (
       </AlertDescription>
     </Alert>
 
-    <h2>Verification outcomes</h2>
+    <SectionHeading icon="✅" title="Success" note="Artifact integrity is confirmed. No action required." />
     <div className="overflow-x-auto">
       <table>
         <thead>
@@ -88,8 +98,28 @@ const VerificationStatusesAndErrors = () => (
             status="VERIFIED"
             meaning="All applicable checks passed. Artifact integrity is confirmed."
             cause="Normal success path."
-            next="Treat the artifact as verified. No action."
+            next="Treat the artifact as verified."
           />
+        </tbody>
+      </table>
+    </div>
+
+    <SectionHeading
+      icon="⚠️"
+      title="Valid but informational"
+      note="Core integrity passes. Additional context is reported but does not invalidate verification."
+    />
+    <div className="overflow-x-auto">
+      <table>
+        <thead>
+          <tr>
+            <th>Outcome</th>
+            <th>Meaning</th>
+            <th>Likely cause</th>
+            <th>What to do</th>
+          </tr>
+        </thead>
+        <tbody>
           <Row
             status="VERIFIED (supplemental)"
             meaning="Core integrity passed. Supplemental context (e.g. signals outside hash scope) is present."
@@ -97,22 +127,16 @@ const VerificationStatusesAndErrors = () => (
             next="Safe to treat as verified. If you require signals to be hash-bound, re-issue with signals inside the canonical bundle."
           />
           <Row
-            status="FAILED"
-            meaning="One or more checks failed. Do NOT treat as verified."
-            cause="Bundle was modified, signature is invalid, or recomputed hash does not match."
-            next="Re-fetch the original artifact. If the failure persists, the artifact has been tampered with or was never valid."
-          />
-          <Row
-            status="NOT_FOUND"
-            meaning="No record of this certificateHash or projectHash on the node."
-            cause="Artifact was never registered, or you are looking it up by the wrong identifier."
-            next="Confirm you are using certificateHash (not executionId). For Project Bundles, register via /v1/project-bundle/register."
+            status="CONTEXT_NOT_PROTECTED"
+            meaning="Context signals were submitted but are not covered by the certificateHash."
+            cause="Signals were transported as supplemental metadata, outside the canonical bundle."
+            next="Treat as supplemental. Not a failure of core integrity. See Context Signals."
           />
         </tbody>
       </table>
     </div>
 
-    <h2>Error codes</h2>
+    <SectionHeading icon="❌" title="Failures" note="Do not treat the artifact as verified. Investigate before trusting." />
     <div className="overflow-x-auto">
       <table>
         <thead>
@@ -125,10 +149,10 @@ const VerificationStatusesAndErrors = () => (
         </thead>
         <tbody>
           <Row
-            status="CONTEXT_NOT_PROTECTED"
-            meaning="Context signals were submitted but are not covered by the certificateHash."
-            cause="Signals were transported as supplemental metadata, outside the canonical bundle."
-            next="Treat as supplemental. Not a failure of core integrity. See Context Signals."
+            status="FAILED"
+            meaning="One or more checks failed. Do NOT treat as verified."
+            cause="Bundle was modified, signature is invalid, or recomputed hash does not match."
+            next="Re-fetch the original artifact. If the failure persists, the artifact has been tampered with or was never valid."
           />
           <Row
             status="CERTIFICATE_HASH_MISMATCH"
@@ -153,6 +177,28 @@ const VerificationStatusesAndErrors = () => (
             meaning="API key missing, malformed, or rejected."
             cause="Wrong key, wrong environment, or revoked key."
             next="Confirm NEXART_API_KEY is set and matches the App in the dashboard."
+          />
+        </tbody>
+      </table>
+    </div>
+
+    <SectionHeading icon="🔍" title="Lookup issues" note="The artifact cannot be found at the address used. Usually a registration or identity problem." />
+    <div className="overflow-x-auto">
+      <table>
+        <thead>
+          <tr>
+            <th>Outcome</th>
+            <th>Meaning</th>
+            <th>Likely cause</th>
+            <th>What to do</th>
+          </tr>
+        </thead>
+        <tbody>
+          <Row
+            status="NOT_FOUND"
+            meaning="No record of this certificateHash or projectHash on the node."
+            cause="Artifact was never registered, or you are looking it up by the wrong identifier."
+            next="Confirm you are using certificateHash (not executionId). For Project Bundles, register via /v1/project-bundle/register."
           />
           <Row
             status="LOCAL_OK_PUBLIC_NOT_FOUND"

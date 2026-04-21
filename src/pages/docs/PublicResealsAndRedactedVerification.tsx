@@ -4,10 +4,11 @@ import { Link } from "react-router-dom";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Info } from "lucide-react";
 
+// Retained for LLM/SEO discoverability. Not rendered in UI.
 const llmBlock = `# Public Reseals & Redacted Verification
 
-Why a publicly verifiable artifact may have a different certificateHash than
-the original artifact, and what that means for trust.
+A reseal is a new public artifact, not the original record. It is independently
+signed by the node and does not weaken the integrity of the original.
 
 ## Why public reseals exist
 - The original CER may contain content the publisher does not want public
@@ -46,12 +47,13 @@ the original artifact, and what that means for trust.
   certificateHash scope. Treat as VERIFIED (supplemental). See Verification
   Semantics.`;
 
+void llmBlock;
+
 const PublicResealsAndRedactedVerification = () => (
   <>
     <PageHeader
       title="Public Reseals & Redacted Verification"
-      summary="Why a publicly verifiable artifact can have a different certificateHash than the original. The reseal is a separate verifiable artifact. The original record is not broken."
-      llmBlock={llmBlock}
+      summary="A reseal is a new public artifact, not the original record. It is independently signed and does not weaken the original's integrity."
     />
 
     <Alert className="mb-6">
@@ -59,8 +61,9 @@ const PublicResealsAndRedactedVerification = () => (
       <AlertTitle>Reseal in one sentence</AlertTitle>
       <AlertDescription>
         A reseal is a new, independently signed CER covering a redacted view of
-        an original execution. It has a new certificateHash and a provenance
-        pointer back to the original.
+        an original execution. It has its own certificateHash, its own node
+        signature, and a provenance pointer back to the original. The original
+        record remains valid for any holder.
       </AlertDescription>
     </Alert>
 
