@@ -4,10 +4,11 @@ import { Link } from "react-router-dom";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Info } from "lucide-react";
 
+// Retained for LLM/SEO discoverability. Not rendered in UI.
 const llmBlock = `# Multi-step & Multi-agent Workflows
 
-NexArt applies to any execution graph where one or more meaningful steps
-should be independently verifiable.
+Without bundling, workflows produce logs. With bundling, they produce
+verifiable execution evidence.
 
 ## Core idea
 - Each meaningful step (LLM call, tool call, agent handoff) MAY produce its
@@ -32,12 +33,13 @@ should be independently verifiable.
     /c/{certificateHash}   for any single step
     /p/{projectHash}       for the whole workflow`;
 
+void llmBlock;
+
 const MultiStepAndMultiAgentWorkflows = () => (
   <>
     <PageHeader
       title="Multi-step & Multi-agent Workflows"
-      summary="How NexArt applies to workflows with more than one meaningful step. Each step can be its own CER. Steps can be grouped into a Project Bundle. Project Bundles can be registered for public verification."
-      llmBlock={llmBlock}
+      summary="Without bundling, workflows produce logs. With bundling, they produce verifiable execution evidence."
     />
 
     <Alert className="mb-6">
@@ -49,6 +51,27 @@ const MultiStepAndMultiAgentWorkflows = () => (
         <Link to="/docs/getting-started">Getting Started</Link> for Path A.
       </AlertDescription>
     </Alert>
+
+    <h2>When to use a Project Bundle</h2>
+    <div className="grid gap-4 md:grid-cols-2 my-4">
+      <div className="rounded-md border border-border p-4">
+        <p className="font-medium mb-2">Use when</p>
+        <ul className="m-0">
+          <li>Multi-step workflows (Step 1 → Step 2 → Step 3)</li>
+          <li>Multi-agent handoffs (Agent A → Agent B → Agent C)</li>
+          <li>Tool-using agents where each call should be auditable</li>
+          <li>Branching or parallel graphs that share a final state</li>
+        </ul>
+      </div>
+      <div className="rounded-md border border-border p-4">
+        <p className="font-medium mb-2">Skip when</p>
+        <ul className="m-0">
+          <li>A single LLM call, tool call, or deterministic run</li>
+          <li>Independent decisions with no shared workflow identity</li>
+          <li>Internal logs that never need workflow-level verification</li>
+        </ul>
+      </div>
+    </div>
 
     <h2>The mental model</h2>
     <ul>

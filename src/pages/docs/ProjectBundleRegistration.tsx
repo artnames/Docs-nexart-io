@@ -4,11 +4,10 @@ import { Link } from "react-router-dom";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertTriangle, CheckCircle2 } from "lucide-react";
 
+// Retained for LLM/SEO discoverability. Not rendered in UI.
 const llmBlock = `# Project Bundle Registration
 
-Project Bundle registration is the step that anchors a locally built
-cer.project.bundle.v1 artifact on a NexArt attestation node so it becomes
-publicly verifiable on verify.nexart.io.
+Registration turns a locally verified bundle into a publicly verifiable artifact.
 
 ## Three distinct verification layers
 1. Local SDK verification - proves bundle integrity on the caller's machine.
@@ -19,14 +18,15 @@ Local verification and public verification are NOT interchangeable.
 A bundle that verifies locally but is not registered on the node will NOT
 resolve on verify.nexart.io.
 
-## When registration is REQUIRED
-- You want public verification of a multi-step / multi-agent workflow.
-- You need an external auditor to resolve the bundle without your SDK.
-- You need a node-signed receipt as a trust anchor.
+## When to use registration
+Use when:
+- multiple steps or agents need workflow-level public verification
+- an external auditor must resolve the bundle without your SDK
+- a node-signed receipt is required as a trust anchor
 
-## When registration is OPTIONAL
-- Single-CER flows where node attestation is handled via /api/stamp.
-- Internal-only audit trails that never need public resolution.
+Do not use when:
+- the flow is a single execution (use Path A and /api/stamp)
+- the audit trail is internal-only and never resolved publicly
 
 ## Endpoint
 POST https://node.nexart.io/v1/project-bundle/register
@@ -47,12 +47,13 @@ Body: full cer.project.bundle.v1 JSON returned by createProjectBundle()
 - Individual step CERs remain reachable at /c/{certificateHash}
 - Re-registering the same projectHash is idempotent (duplicate prevention).`;
 
+void llmBlock;
+
 const ProjectBundleRegistration = () => (
   <>
     <PageHeader
       title="Project Bundle Registration"
-      summary="The step that turns a locally verified Project Bundle into a publicly verifiable artifact on verify.nexart.io. Required only for Path B (multi-step workflows). Single-CER flows do not need it."
-      llmBlock={llmBlock}
+      summary="Registration turns a locally verified bundle into a publicly verifiable artifact on verify.nexart.io."
     />
 
     <Alert className="mb-6 border-destructive/40">
@@ -65,24 +66,32 @@ const ProjectBundleRegistration = () => (
       </AlertDescription>
     </Alert>
 
-    <h2>Path A vs Path B</h2>
-    <p>
-      NexArt supports two integration paths. This page only applies to Path B.
-    </p>
-    <ul>
-      <li>
-        <strong>Path A (single CER):</strong> one execution produces one CER.
-        Optional node attestation via <code>POST /api/stamp</code>. Many builders
-        only need this and never need Project Bundle registration.
-      </li>
-      <li>
-        <strong>Path B (Project Bundle):</strong> multiple step CERs are grouped
-        into one <code>cer.project.bundle.v1</code> artifact. Registration on the
-        node is required to make that bundle publicly verifiable.
-      </li>
-    </ul>
+    <h2>When to use registration</h2>
+    <div className="grid gap-4 md:grid-cols-2 my-4">
+      <div className="rounded-md border border-border p-4">
+        <p className="font-medium mb-2">Use when</p>
+        <ul className="m-0">
+          <li>Multiple steps or agents</li>
+          <li>Workflow-level public verification</li>
+          <li>External auditor must resolve without your SDK</li>
+          <li>Node-signed receipt required as trust anchor</li>
+        </ul>
+      </div>
+      <div className="rounded-md border border-border p-4">
+        <p className="font-medium mb-2">Skip when</p>
+        <ul className="m-0">
+          <li>Single execution (use Path A + <code>/api/stamp</code>)</li>
+          <li>Independent decisions, not a workflow</li>
+          <li>Internal-only audit trail, never resolved publicly</li>
+        </ul>
+      </div>
+    </div>
 
     <h2>The three verification layers</h2>
+    <p>
+      These are distinct and not interchangeable. A bundle can pass one and still
+      need the next.
+    </p>
     <ol>
       <li>
         <strong>Local SDK verification.</strong>{" "}
