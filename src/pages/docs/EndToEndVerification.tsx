@@ -290,6 +290,14 @@ console.log(\`https://verify.nexart.io/p/\${encodeURIComponent(projectHash)}\`);
       independent check.</strong> See <Link to="/docs/trust-model" className="text-primary hover:underline">Trust Model</Link> for the
       full breakdown of who signs what and why each role is necessary.
     </p>
+
+    <h2 id="see-also">See also</h2>
+    <ul>
+      <li><Link to="/docs/project-bundle-registration" className="text-primary hover:underline">Project Bundle Registration</Link> - the registration step in detail.</li>
+      <li><Link to="/docs/verification-statuses-and-errors" className="text-primary hover:underline">Verification Statuses & Errors</Link> - what every result and error means.</li>
+      <li><Link to="/docs/multi-step-and-multi-agent-workflows" className="text-primary hover:underline">Multi-step & Multi-agent Workflows</Link> - applying this to agents.</li>
+      <li><Link to="/docs/public-reseals-and-redacted-verification" className="text-primary hover:underline">Public Reseals & Redacted Verification</Link> - why public hashes can differ.</li>
+    </ul>
   </>
 );
 
