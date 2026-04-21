@@ -4,47 +4,54 @@ import { Link } from "react-router-dom";
 
 const llmBlock = `# Quickstart
 
-Install SDK, create a CER, verify.
+NexArt supports two paths. Pick one.
 
+## Path A - Single CER (one execution)
 npm install @nexart/ai-execution
-
-Create:
 import { createLangChainCer } from "@nexart/ai-execution";
 const { certificateHash } = createLangChainCer({ provider, model, input, output });
+Verify: https://verify.nexart.io/c/{certificateHash}
 
-Verify:
-Open verify.nexart.io and paste the certificate hash.`;
+## Path B - Project Bundle (multi-step workflow)
+npm install @nexart/agent-kit
+import { startWorkflow } from "@nexart/agent-kit";
+const w = startWorkflow({ projectTitle });
+await w.step("name", async () => {...});
+const bundle = w.finish();
+Then register the bundle on the node for public verification.
+
+certificateHash is the canonical identity. Always verify by certificateHash, never by executionId.`;
 
 const Quickstart = () => (
   <div className="prose prose-invert max-w-none">
     <PageHeader
       title="Quickstart"
-      summary="Install, create a CER, and verify in three steps."
+      summary="Two integration paths: single execution CER, or multi-step Project Bundle. Pick one."
       llmBlock={llmBlock}
     />
 
     <p>
-      This is the fastest path from zero to a verified execution record. For a broader overview, see the{" "}
-      <Link to="/docs/getting-started" className="text-primary hover:underline">
-        Getting Started
-      </Link>{" "}
-      guide.
+      The fastest path from zero to a verified record. For a broader overview, see{" "}
+      <Link to="/docs/getting-started" className="text-primary hover:underline">Getting Started</Link>.
     </p>
 
-    <h2>What You Will Do</h2>
+    <h2>Choose a Path</h2>
     <ul>
-      <li>Send one certification request</li>
-      <li>Receive a certificate hash and verification URL</li>
-      <li>Verify the record publicly</li>
+      <li><strong>Path A - Single CER</strong>: certify one execution. The most common starting point.</li>
+      <li><strong>Path B - Project Bundle</strong>: certify a multi-step or multi-agent workflow as a single verifiable unit.</li>
     </ul>
+    <p>Project Bundles are <strong>not</strong> required for single-execution use cases.</p>
 
-    <h2>1. Install the SDK</h2>
+    <h2>Path A: Single CER</h2>
+
+    <h3>1. Install the SDK</h3>
     <CodeBlock language="bash" code="npm install @nexart/ai-execution" />
+    <p className="text-sm text-muted-foreground">Current version: <code>@nexart/ai-execution@0.15.0</code>.</p>
 
-    <h2>2. Create and Certify a CER</h2>
+    <h3>2. Create and Certify a CER</h3>
     <CodeBlock
       language="typescript"
-      title="Certify an AI Execution"
+      title="Certify a single AI Execution"
       code={`import { createLangChainCer } from "@nexart/ai-execution";
 
 const { bundle, certificateHash } = createLangChainCer({
@@ -61,51 +68,63 @@ const { bundle, certificateHash } = createLangChainCer({
 
 console.log(certificateHash);`}
     />
-    <p>This produces a Certified Execution Record locally and returns a deterministic certificate hash.</p>
+    <p>This produces a Certified Execution Record locally and returns a deterministic <code>certificateHash</code>. That hash is the canonical identity of the record.</p>
 
-    <h2>3. Verify the Record</h2>
+    <h3>3. Verify</h3>
     <p>
       Open{" "}
-      <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">
-        verify.nexart.io
-      </a>{" "}
-      and paste the certificate hash. The verifier checks:
+      <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a>{" "}
+      and paste the <code>certificateHash</code>, or open the URL directly:
     </p>
-    <ul>
-      <li><strong>Bundle Integrity</strong>: the certificate hash matches the bundle contents</li>
-      <li><strong>Node Signature</strong>: the attestation signature is valid (if attested)</li>
-      <li><strong>Receipt Consistency</strong>: the receipt matches the certified record</li>
-    </ul>
+    <CodeBlock language="bash" code="https://verify.nexart.io/c/{certificateHash}" />
+    <p>The verifier checks Bundle Integrity, Node Signature (if attested), and Receipt Consistency.</p>
 
-    <p className="font-medium">You now have a verifiable execution record.</p>
+    <h2>Path B: Project Bundle (Multi-Step Workflow)</h2>
 
-    <h2>Optional: Export Evidence</h2>
+    <h3>1. Install agent-kit</h3>
+    <CodeBlock language="bash" code="npm install @nexart/agent-kit" />
+    <p className="text-sm text-muted-foreground">Current version: <code>@nexart/agent-kit@0.4.0</code>.</p>
+
+    <h3>2. Build a workflow</h3>
+    <CodeBlock
+      language="typescript"
+      title="Linear workflow producing a Project Bundle"
+      code={`import { startWorkflow } from "@nexart/agent-kit";
+
+const workflow = startWorkflow({ projectTitle: "Refund decision" });
+
+const policy = await workflow.step("Check policy", async () => {
+  return { eligible: true, policyId: "ret-30d" };
+});
+
+const decision = await workflow.step("Final decision", async () => {
+  return { decision: "approve_refund", policy };
+});
+
+const bundle = workflow.finish();
+console.log(bundle.integrity.projectHash);`}
+    />
+
+    <h3>3. Register on the node and verify publicly</h3>
     <p>
-      Once verified, you can export the CER bundle or share the verification URL for external audit or compliance workflows.
+      To make the bundle verifiable on <code>verify.nexart.io</code>, register it on the node. See{" "}
+      <Link to="/docs/end-to-end-verification" className="text-primary hover:underline">End-to-End Verification</Link> for
+      the registration flow and node behavior.
+    </p>
+
+    <h2>Important: certificateHash, not executionId</h2>
+    <p>
+      Always look up and share records by <code>certificateHash</code>. <code>executionId</code> is{" "}
+      <strong>not</strong> a unique artifact identifier and must not be used as the primary identity for verification.
     </p>
 
     <h2>Next Steps</h2>
     <ul>
-      <li>
-        <Link to="/docs/integrations/langchain" className="text-primary hover:underline">LangChain Integration</Link>
-        : certify AI chain and agent executions
-      </li>
-      <li>
-        <Link to="/docs/integrations/n8n" className="text-primary hover:underline">n8n Integration</Link>
-        : certify workflow automation results
-      </li>
-      <li>
-        <Link to="/docs/cli" className="text-primary hover:underline">CLI</Link>
-        : create and verify CERs from the command line
-      </li>
-      <li>
-        <Link to="/docs/verification" className="text-primary hover:underline">Verification</Link>
-        : deep dive into verification semantics
-      </li>
-      <li>
-        <Link to="/docs/cer-protocol" className="text-primary hover:underline">CER Protocol</Link>
-        : understand the protocol specification
-      </li>
+      <li><Link to="/docs/integrations/langchain" className="text-primary hover:underline">LangChain Integration</Link>: certify chain and agent executions</li>
+      <li><Link to="/docs/integrations/n8n" className="text-primary hover:underline">n8n Integration</Link>: certify workflow automation results</li>
+      <li><Link to="/docs/concepts/project-bundles" className="text-primary hover:underline">Project Bundles</Link>: deeper look at multi-step verification</li>
+      <li><Link to="/docs/cli" className="text-primary hover:underline">CLI</Link>: create and verify CERs from the command line</li>
+      <li><Link to="/docs/verification" className="text-primary hover:underline">Verification</Link>: deep dive into verification semantics</li>
     </ul>
   </div>
 );

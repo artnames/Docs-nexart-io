@@ -10,9 +10,12 @@ Returns verificationUrl, certificateHash, receipt, signatureB64Url.
 ## Example B: Certify response
 { verificationUrl, certificateHash, receipt: { certificateHash, timestamp, nodeId, kid }, signatureB64Url }
 
-## Example C: Verification URLs
-https://verify.nexart.io/e/exec_abc123
-https://verify.nexart.io/c/sha256%3A...
+## Example C: Verification URL
+https://verify.nexart.io/c/{certificateHash}
+certificateHash is the canonical identity. executionId is NOT a unique artifact identifier.
+
+## Example D: Project Bundle
+Multiple step CERs grouped into a Project Bundle (cer.project.bundle.v1) with a projectHash covering all step certificateHash values. Bundle must be registered on the node for public verification.
 
 ## Example D: n8n flow
 AI Step → NexArt Certify AI Execution → verificationUrl + receipt
@@ -87,7 +90,7 @@ Authorization: Bearer NEXART_API_KEY
     <p>The response includes everything needed to share and verify the record.</p>
     <CodeBlock
       code={`{
-  "verificationUrl": "https://verify.nexart.io/e/exec_abc123",
+  "verificationUrl": "https://verify.nexart.io/c/sha256%3A9e8d7c6b5a4f3210...",
   "certificateHash": "sha256:9e8d7c6b5a4f3210...",
   "receipt": {
     "certificateHash": "sha256:9e8d7c6b5a4f3210...",
@@ -101,17 +104,19 @@ Authorization: Bearer NEXART_API_KEY
     />
     <p className="text-sm text-muted-foreground">The API response includes receipt and signature at the top level for convenience. In the CER bundle, this data lives at <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">meta.attestation</code>.</p>
 
-    <h3 id="verification-urls">Verification URLs</h3>
-    <p>Records can be verified publicly using either format:</p>
+    <h3 id="verification-urls">Verification URL</h3>
+    <p>Records are verified publicly by <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>:</p>
     <CodeBlock
-      code={`# By execution ID
-https://verify.nexart.io/e/exec_abc123
-
-# By certificate hash
+      code={`# By certificate hash (canonical)
 https://verify.nexart.io/c/sha256%3A9e8d7c6b5a4f3210...`}
-      title="Verification URL Formats"
+      title="Verification URL"
     />
-    <p>Share these URLs with anyone. The public verifier shows the verification status without exposing raw inputs or outputs.</p>
+    <p>
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> is the canonical identity of a CER.{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">executionId</code> is a builder-supplied label and is{" "}
+      <strong>not</strong> a unique artifact identifier. Do not build verification URLs around it.
+    </p>
+    <p>Share the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">/c/</code> URL with anyone. The public verifier shows the verification status without exposing raw inputs or outputs.</p>
 
     <h3 id="create-only">Create-Only Response (No Attestation)</h3>
     <p>If you use <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">POST /v1/cer/ai/create</code>, you get the CER bundle but no attestation, receipt, or verification URL.</p>
@@ -197,6 +202,40 @@ https://verify.nexart.io/c/sha256%3A9e8d7c6b5a4f3210...`}
 }`}
       title="CER Bundle (Certified)"
     />
+
+    <h3 id="project-bundle">Project Bundle (Multi-Step Workflow)</h3>
+    <p>
+      A Project Bundle groups multiple step CERs into one verifiable unit. Use this when you have a
+      multi-step or multi-agent workflow that should be verified as a whole. Single-CER use cases do
+      not need a Project Bundle.
+    </p>
+    <CodeBlock
+      language="typescript"
+      title="Build a Project Bundle with @nexart/agent-kit"
+      code={`import { startWorkflow } from "@nexart/agent-kit";
+
+const workflow = startWorkflow({ projectTitle: "Refund decision" });
+
+const policy = await workflow.step("Check policy", async () => {
+  return { eligible: true, policyId: "ret-30d" };
+});
+
+const decision = await workflow.step("Final decision", async () => {
+  return { decision: "approve_refund", policy };
+});
+
+const bundle = workflow.finish();
+// bundle.bundleType        = "cer.project.bundle.v1"
+// bundle.integrity.projectHash = "sha256:..."
+// bundle.steps[i].certificateHash = "sha256:..."
+
+// Register the bundle on the node for public verification.
+// See /docs/end-to-end-verification.`}
+    />
+    <p className="text-sm text-muted-foreground">
+      Local SDK verification of a Project Bundle works without registration. Public verification on{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">verify.nexart.io</code> requires the bundle to be registered on the node.
+    </p>
 
     <h3 id="redacted">Redacted Reseal</h3>
     <p>A redacted reseal has sensitive fields removed and is re-signed for safe sharing. The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> is recomputed over the redacted contents.</p>
