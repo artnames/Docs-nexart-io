@@ -115,6 +115,14 @@ const FAQ = () => (
 
     <h2 id="verify-where">Where can I verify a CER?</h2>
     <p>Public verification is available at <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">https://verify.nexart.io/c/{`{certificateHash}`}</code>. Independent verification can also be performed locally using the CER bundle, signed receipt, and node keys from <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">node.nexart.io/.well-known/nexart-node.json</code>.</p>
+
+    <h2 id="see-also">See also</h2>
+    <ul>
+      <li><Link to="/docs/project-bundle-registration">Project Bundle Registration</Link> - how to make a bundle publicly verifiable.</li>
+      <li><Link to="/docs/verification-statuses-and-errors">Verification Statuses & Errors</Link> - troubleshooting cheatsheet.</li>
+      <li><Link to="/docs/multi-step-and-multi-agent-workflows">Multi-step & Multi-agent Workflows</Link> - applying NexArt to agents.</li>
+      <li><Link to="/docs/public-reseals-and-redacted-verification">Public Reseals & Redacted Verification</Link> - why public hashes can differ.</li>
+    </ul>
   </>
 );
 
