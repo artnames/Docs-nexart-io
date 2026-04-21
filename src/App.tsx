@@ -48,6 +48,10 @@ import WhatIsNexArt from "./pages/docs/WhatIsNexArt";
 import EndToEndVerification from "./pages/docs/EndToEndVerification";
 import AIExecution from "./pages/docs/AIExecution";
 import VerificationSemantics from "./pages/docs/VerificationSemantics";
+import ProjectBundleRegistration from "./pages/docs/ProjectBundleRegistration";
+import VerificationStatusesAndErrors from "./pages/docs/VerificationStatusesAndErrors";
+import MultiStepAndMultiAgentWorkflows from "./pages/docs/MultiStepAndMultiAgentWorkflows";
+import PublicResealsAndRedactedVerification from "./pages/docs/PublicResealsAndRedactedVerification";
 
 const queryClient = new QueryClient();
 
@@ -82,6 +86,10 @@ const App = () => (
             <Route path="end-to-end-verification" element={<EndToEndVerification />} />
             <Route path="ai-execution" element={<AIExecution />} />
             <Route path="verification-semantics" element={<VerificationSemantics />} />
+            <Route path="project-bundle-registration" element={<ProjectBundleRegistration />} />
+            <Route path="verification-statuses-and-errors" element={<VerificationStatusesAndErrors />} />
+            <Route path="multi-step-and-multi-agent-workflows" element={<MultiStepAndMultiAgentWorkflows />} />
+            <Route path="public-reseals-and-redacted-verification" element={<PublicResealsAndRedactedVerification />} />
             <Route path="verification" element={<Verification />} />
             <Route path="verify-nexart" element={<VerifyNexart />} />
             <Route path="browser-verification" element={<BrowserVerification />} />
