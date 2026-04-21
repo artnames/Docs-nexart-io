@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const llmBlock = `# NexArt AI Execution SDK
 
-Package: @nexart/ai-execution@0.14.0
+Package: @nexart/ai-execution@0.15.0
 
 ## API Endpoints
 
@@ -243,7 +243,7 @@ Authorization: Bearer NEXART_API_KEY
     <p className="text-sm text-muted-foreground">Signals are backward-compatible. Requests without the <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">signals</code> field behave exactly as before. Existing CER bundles without signals remain valid and verifiable.</p>
 
     <h2 id="verification">Verification</h2>
-    <p>As of <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">v0.14.0</code>, the SDK provides both sync and async verification functions:</p>
+    <p>As of <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">v0.15.0</code>, the SDK provides both sync and async verification functions:</p>
 
     <div className="not-prose my-6 overflow-x-auto">
       <table className="w-full text-sm border border-border rounded-lg">
