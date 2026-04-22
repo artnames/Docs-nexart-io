@@ -6,7 +6,7 @@ interface Props {
   label?: string;
 }
 
-const CopyForLLM = ({ content, label = "Copy for LLM" }: Props) => {
+const CopyForLLM = ({ content, label = "Copy" }: Props) => {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -18,6 +18,7 @@ const CopyForLLM = ({ content, label = "Copy for LLM" }: Props) => {
   return (
     <button
       onClick={handleCopy}
+      aria-label="Copy page summary"
       className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md border border-border bg-card text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors"
     >
       {copied ? (

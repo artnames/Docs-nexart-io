@@ -29,8 +29,8 @@ const WhatIsNexArt = () => {
           <li>Inputs</li>
           <li>Outputs</li>
           <li>Parameters</li>
-          <li>Context (signals)</li>
           <li>Metadata</li>
+          <li>Optional contextual evidence such as signals</li>
         </ul>
         <p className="text-muted-foreground mt-3">
           The record is hashed (SHA-256) to produce a <code>certificateHash</code>. Any change to the record breaks the hash.

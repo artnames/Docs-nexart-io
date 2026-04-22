@@ -77,6 +77,9 @@ console.log(certificateHash);`}
       and paste the <code>certificateHash</code>, or open the URL directly:
     </p>
     <CodeBlock language="bash" code="https://verify.nexart.io/c/{certificateHash}" />
+    <p>
+      Local CER creation produces a valid, verifiable artifact. Public resolution on <code>verify.nexart.io</code> depends on node attestation or availability of the record.
+    </p>
     <p>The verifier checks Bundle Integrity, Node Signature (if attested), and Receipt Consistency.</p>
 
     <h2>Path B: Project Bundle (Multi-Step Workflow)</h2>
