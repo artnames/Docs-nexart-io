@@ -68,7 +68,7 @@ const CER = () => (
       <li><strong>Inputs</strong>: hashed (SHA-256) representation of the execution input. Raw content is not stored in the CER.</li>
       <li><strong>Outputs</strong>: hashed representation of the execution output.</li>
       <li><strong>Parameters</strong>: model identifier, execution configuration.</li>
-      <li><strong>Context (signals)</strong>: optional structured metadata recorded alongside the execution. See <Link to="/docs/concepts/context-signals" className="text-primary hover:underline">Context Signals</Link>.</li>
+      <li><strong>Context (signals)</strong>: optional structured metadata recorded alongside the execution. See <Link to="/docs/concepts/context-signals" className="text-primary hover:underline">Context Signals</Link> and <Link to="/docs/concepts/execution-context" className="text-primary hover:underline">Execution Context and Signals</Link> for the builder API.</li>
       <li><strong>Metadata</strong>: application-defined fields like <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">appId</code> and <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">projectId</code>.</li>
       <li><strong>certificateHash</strong>: SHA-256 hash derived from the canonical bundle. This is the unique identifier and what the node signs.</li>
     </ul>

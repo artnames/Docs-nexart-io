@@ -189,6 +189,10 @@ console.log(result.certificateHash);`}
     <h2>Next Steps</h2>
     <ul>
       <li>
+        <Link to="/docs/concepts/execution-context" className="text-primary hover:underline">Execution Context and Signals</Link>
+        : builder API using <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/signals</code> (createContext, ctx.input, ctx.tool, ctx.decision, ctx.output, ctx.wrap)
+      </li>
+      <li>
         <Link to="/docs/sdk" className="text-primary hover:underline">AI Execution SDK</Link>
         : API reference for the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">signals</code> parameter
       </li>
