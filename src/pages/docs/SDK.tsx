@@ -241,7 +241,7 @@ Authorization: Bearer NEXART_API_KEY
     />
     <p>When signals are present, they are included in the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> computation. This makes them part of the tamper-evidence chain - any modification to a signal after certification will cause verification to fail.</p>
     <p className="text-sm text-muted-foreground">Signals are backward-compatible. Requests without the <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">signals</code> field behave exactly as before. Existing CER bundles without signals remain valid and verifiable.</p>
-    <p className="text-sm text-muted-foreground">For the builder API to capture structured signals (input, tool calls, decisions, output) using <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">@nexart/signals</code>, see <Link to="/docs/concepts/execution-context" className="text-primary hover:underline">Execution Context and Signals</Link>.</p>
+    <p className="text-sm text-muted-foreground">For the builder API to capture structured signals (input, tool calls, decisions, output) using <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">@nexart/signals</code>, see the <Link to="/docs/signals-sdk" className="text-primary hover:underline">Signals SDK</Link> reference and <Link to="/docs/concepts/execution-context" className="text-primary hover:underline">Execution Context and Signals</Link>.</p>
 
     <h2 id="verification">Verification</h2>
     <p>As of <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">v0.15.0</code>, the SDK provides both sync and async verification functions:</p>

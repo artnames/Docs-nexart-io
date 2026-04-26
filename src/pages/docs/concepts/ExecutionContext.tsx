@@ -211,6 +211,12 @@ console.log(result.certificateHash);`}
     <h2 id="related">Related</h2>
     <ul>
       <li>
+        <Link to="/docs/signals-sdk" className="text-primary hover:underline">
+          Signals SDK
+        </Link>
+        : full <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/signals</code> reference
+      </li>
+      <li>
         <Link to="/docs/concepts/cer" className="text-primary hover:underline">
           Certified Execution Records
         </Link>
