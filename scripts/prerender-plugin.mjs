@@ -27,6 +27,7 @@ const ROUTES = [
   "/docs/concepts/context-signals",
   "/docs/concepts/execution-context",
   "/docs/sdk",
+  "/docs/signals-sdk",
   "/docs/cli",
   "/docs/codemode-sdk",
   "/docs/ui-renderer-sdk",

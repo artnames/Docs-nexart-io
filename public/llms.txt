@@ -9,6 +9,7 @@
 - [CER Protocol](https://docs.nexart.io/docs/cer-protocol)
 - [Protocol Overview](https://docs.nexart.io/docs/protocol-overview)
 - [AI Execution SDK](https://docs.nexart.io/docs/sdk)
+- [Signals SDK](https://docs.nexart.io/docs/signals-sdk)
 - [NexArt CLI](https://docs.nexart.io/docs/cli)
 - [End-to-End Verification Flow](https://docs.nexart.io/docs/end-to-end-verification)
 - [AI Execution CER](https://docs.nexart.io/docs/ai-execution)
