@@ -64,6 +64,13 @@ const ExecutionContext = () => (
         <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">wrap</code>, and the
         typed helpers below.
       </li>
+      <li>
+        Full reference:{" "}
+        <Link to="/docs/signals-sdk" className="text-primary hover:underline">
+          Signals SDK
+        </Link>
+        .
+      </li>
     </ul>
 
     <h3><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution</code></h3>
