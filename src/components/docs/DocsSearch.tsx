@@ -27,6 +27,7 @@ const searchIndex: SearchEntry[] = [
   { title: "Signed Receipts", path: "/docs/concepts/signed-receipts", section: "Core Concepts", keywords: "signed receipts attestation node signature Ed25519 receipt kid timestamp" },
   { title: "Hash-Only Timestamping", path: "/docs/concepts/hash-timestamping", section: "Core Concepts", keywords: "hash timestamping SHA-256 certificate hash privacy data handling zero knowledge" },
   { title: "Context Signals", path: "/docs/concepts/context-signals", section: "Core Concepts", keywords: "context signals metadata immutable certificateHash provenance evidence" },
+  { title: "Execution Context", path: "/docs/concepts/execution-context", section: "Core Concepts", keywords: "execution context signals @nexart/signals createContext ctx.input ctx.tool ctx.decision ctx.output ctx.step ctx.wrap auto-instrumentation certificateHash determinism v0.16.1 reseal contextHash contextSummary verifyCer immutable bundle" },
   { title: "Verification Reports", path: "/docs/concepts/verification-reports", section: "Core Concepts", keywords: "verification reports bundle integrity node signature receipt consistency PASS FAIL SKIPPED VERIFIED FAILED" },
   { title: "Integrations", path: "/docs/integrations", section: "Integrations", keywords: "integrations overview API CLI n8n LangChain" },
   { title: "n8n Integration", path: "/docs/integrations/n8n", section: "Integrations", keywords: "n8n integration automation workflow community node certify verify" },

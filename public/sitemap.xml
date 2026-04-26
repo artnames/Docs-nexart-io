@@ -49,6 +49,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://docs.nexart.io/docs/concepts/execution-context</loc>
+    <lastmod>2026-04-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
     <loc>https://docs.nexart.io/docs/integrations</loc>
     <lastmod>2026-03-16</lastmod>
     <changefreq>weekly</changefreq>
