@@ -43,6 +43,7 @@ const navigation: NavItem[] = [
     title: "SDK",
     children: [
       { title: "AI Execution SDK", path: "/docs/sdk" },
+      { title: "Signals SDK", path: "/docs/signals-sdk" },
       { title: "Browser Verification", path: "/docs/browser-verification" },
       { title: "CodeMode SDK", path: "/docs/codemode-sdk" },
       { title: "UI Renderer SDK", path: "/docs/ui-renderer-sdk" },

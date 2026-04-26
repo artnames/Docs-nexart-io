@@ -53,6 +53,7 @@ import ProjectBundleRegistration from "./pages/docs/ProjectBundleRegistration";
 import VerificationStatusesAndErrors from "./pages/docs/VerificationStatusesAndErrors";
 import MultiStepAndMultiAgentWorkflows from "./pages/docs/MultiStepAndMultiAgentWorkflows";
 import PublicResealsAndRedactedVerification from "./pages/docs/PublicResealsAndRedactedVerification";
+import SignalsSDK from "./pages/docs/SignalsSDK";
 
 const queryClient = new QueryClient();
 
@@ -81,6 +82,7 @@ const App = () => (
             <Route path="concepts/context-signals" element={<ContextSignals />} />
             <Route path="concepts/execution-context" element={<ExecutionContext />} />
             <Route path="sdk" element={<SDK />} />
+            <Route path="signals-sdk" element={<SignalsSDK />} />
             <Route path="cli" element={<NexArtCLI />} />
             <Route path="codemode-sdk" element={<CodeModeSDK />} />
             <Route path="ui-renderer-sdk" element={<UIRendererSDK />} />
