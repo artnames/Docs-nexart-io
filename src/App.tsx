@@ -40,6 +40,7 @@ import IntegrationSurfaces from "./pages/docs/IntegrationSurfaces";
 import PrivacyDataHandling from "./pages/docs/PrivacyDataHandling";
 import CERAuditWorkflows from "./pages/docs/CERAuditWorkflows";
 import ContextSignals from "./pages/docs/concepts/ContextSignals";
+import ExecutionContext from "./pages/docs/concepts/ExecutionContext";
 import AICERVerificationLayers from "./pages/docs/AICERVerificationLayers";
 import AICERPackageFormat from "./pages/docs/AICERPackageFormat";
 import AgentKit from "./pages/docs/AgentKit";
@@ -78,6 +79,7 @@ const App = () => (
             <Route path="concepts/hash-timestamping" element={<HashTimestamping />} />
             <Route path="concepts/verification-reports" element={<VerificationReports />} />
             <Route path="concepts/context-signals" element={<ContextSignals />} />
+            <Route path="concepts/execution-context" element={<ExecutionContext />} />
             <Route path="sdk" element={<SDK />} />
             <Route path="cli" element={<NexArtCLI />} />
             <Route path="codemode-sdk" element={<CodeModeSDK />} />

@@ -25,6 +25,7 @@ const ROUTES = [
   "/docs/concepts/hash-timestamping",
   "/docs/concepts/verification-reports",
   "/docs/concepts/context-signals",
+  "/docs/concepts/execution-context",
   "/docs/sdk",
   "/docs/cli",
   "/docs/codemode-sdk",
