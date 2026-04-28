@@ -1,4 +1,5 @@
 import PageHeader from "@/components/docs/PageHeader";
+import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import { Link } from "react-router-dom";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -37,6 +38,10 @@ void llmBlock;
 
 const MultiStepAndMultiAgentWorkflows = () => (
   <>
+    <DocsMeta
+      title="Multi-step and Multi-agent Workflows"
+      description="Certify multi-step and multi-agent executions: one CER per step, assembled into a Project Bundle for end-to-end verification."
+    />
     <PageHeader
       title="Multi-step & Multi-agent Workflows"
       summary="Without bundling, workflows produce logs. With bundling, they produce verifiable execution evidence."

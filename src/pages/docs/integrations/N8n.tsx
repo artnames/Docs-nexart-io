@@ -1,4 +1,5 @@
 import PageHeader from "@/components/docs/PageHeader";
+import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import { Link } from "react-router-dom";
 
@@ -25,6 +26,10 @@ Attestation data in the CER bundle lives at meta.attestation.
 const N8n = () => {
   return (
     <div className="prose prose-invert max-w-none">
+      <DocsMeta
+        title="n8n Integration"
+        description="Add NexArt to n8n workflows using the HTTP Request node. Certify each step and aggregate into Project Bundles."
+      />
       <PageHeader
         title="n8n"
         summary="Certify AI execution results inside n8n workflows using the NexArt certification API."

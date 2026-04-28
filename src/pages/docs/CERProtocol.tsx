@@ -1,4 +1,5 @@
 import PageHeader from "@/components/docs/PageHeader";
+import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 
 const llmBlock = `# Certified Execution Record (CER) Protocol
@@ -58,6 +59,10 @@ CER Snapshot → AIEF Execution Artifact, certificateHash → Execution Fingerpr
 
 const CERProtocol = () => (
   <>
+    <DocsMeta
+      title="CER Protocol"
+      description="The Certified Execution Record protocol: bundle schema, certificateHash coverage, signed receipts, and deterministic JSON serialization."
+    />
     <PageHeader
       title="Certified Execution Record (CER) Protocol"
       summary="Governance, verification semantics, and schema rules for the NexArt protocol."

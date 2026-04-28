@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import PageHeader from "@/components/docs/PageHeader";
+import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 
 const llmBlock = `# Getting Started with NexArt
@@ -32,6 +33,10 @@ Public verification URL: https://verify.nexart.io/c/{certificateHash}`;
 const GettingStarted = () => {
   return (
     <>
+      <DocsMeta
+        title="Getting Started"
+        description="Start with NexArt: certify a single execution or assemble a Project Bundle for multi-step and multi-agent workflows."
+      />
       <PageHeader
         title="Getting Started"
         summary="Pick the path that matches your use case: a single execution CER, or a multi-step Project Bundle."

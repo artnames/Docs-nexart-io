@@ -1,5 +1,6 @@
 import PageHeader from "@/components/docs/PageHeader";
 
+import DocsMeta from "@/components/docs/DocsMeta";
 const llmBlock = `# NexArt Projects
 Projects are the primary organizational container in the NexArt dashboard.
 
@@ -23,6 +24,10 @@ Projects are for organization, filtering, and configuration - they do not affect
 
 const Projects = () => (
   <>
+    <DocsMeta
+      title="Dashboard: Projects"
+      description="Organize Certified Execution Records by Project in the NexArt dashboard. Projects contain Apps, which contain CERs."
+    />
     <PageHeader
       title="Projects"
       summary="The primary organizational container in the NexArt dashboard."

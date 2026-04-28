@@ -1,4 +1,5 @@
 import PageHeader from "@/components/docs/PageHeader";
+import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import { Link } from "react-router-dom";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -49,6 +50,10 @@ Body: full cer.project.bundle.v1 JSON returned by createProjectBundle()
 
 const EndToEndVerification = () => (
   <>
+    <DocsMeta
+      title="End-to-End Verification Flow"
+      description="Trace a CER from creation through attestation to public verification on verify.nexart.io. Covers single CERs and Project Bundles."
+    />
     <PageHeader
       title="From Execution to Public Verification"
       summary="The complete end-to-end flow. Local verification proves integrity. Node registration anchors trust. Public verification is an independent witness. They are not interchangeable."

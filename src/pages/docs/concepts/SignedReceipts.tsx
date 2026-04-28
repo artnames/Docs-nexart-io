@@ -1,4 +1,5 @@
 import PageHeader from "@/components/docs/PageHeader";
+import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 
 const llmBlock = `# NexArt Signed Receipts (Attestation Receipt Protocol)
@@ -52,6 +53,10 @@ Current trust model is centered on a canonical attestation node. The receipt pro
 
 const SignedReceipts = () => (
   <>
+    <DocsMeta
+      title="Signed Receipts"
+      description="Receipt payload structure, Ed25519 signing by the attestation node, and how receipts bind to certificateHash."
+    />
     <PageHeader
       title="Signed Receipts"
       summary="The canonical trust artifact returned by a node after it certifies a CER."

@@ -1,4 +1,5 @@
 import PageHeader from "@/components/docs/PageHeader";
+import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import { Link } from "react-router-dom";
 
@@ -29,6 +30,10 @@ Bundles created with v0.16.0 that include signals may fail verification. Re-seal
 
 const ExecutionContext = () => (
   <div className="prose prose-invert max-w-none">
+    <DocsMeta
+      title="Execution Context and Signals"
+      description="Implement execution context with @nexart/signals. Capture inputs, tools, decisions, and outputs into the certified bundle."
+    />
     <PageHeader
       title="Execution Context and Signals"
       summary="How to capture structured execution signals with @nexart/signals and certify them with @nexart/ai-execution."

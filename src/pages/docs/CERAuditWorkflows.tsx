@@ -1,4 +1,5 @@
 import PageHeader from "@/components/docs/PageHeader";
+import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import { Link } from "react-router-dom";
 
@@ -86,6 +87,10 @@ const nodeMetadataExample = `{
 const CERAuditWorkflows = () => {
   return (
     <div className="prose-custom">
+      <DocsMeta
+        title="CER Audit Workflows"
+        description="Export Evidence Packs of Certified Execution Records for auditors. Includes bundles, receipts, and verification reports."
+      />
       <PageHeader
         title="CER Audit Workflows"
         summary="How Certified Execution Records are packaged, exported, and consumed in audit, compliance, and review workflows."

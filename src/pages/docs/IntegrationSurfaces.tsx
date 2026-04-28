@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import PageHeader from "@/components/docs/PageHeader";
 
+import DocsMeta from "@/components/docs/DocsMeta";
 const llmBlock = `# NexArt Integration Surfaces
 
 ## API
@@ -32,6 +33,10 @@ UI Renderer SDK: deterministic UI rendering`;
 
 const IntegrationSurfaces = () => (
   <>
+    <DocsMeta
+      title="Integration Surfaces"
+      description="Choose how to integrate NexArt: Node SDK, CLI, n8n nodes, or LangChain callbacks. Trade-offs and recommended use cases."
+    />
     <PageHeader
       title="Integration Surfaces"
       summary="All the ways you can connect to NexArt: API, verifier, CLI, n8n, and SDKs."

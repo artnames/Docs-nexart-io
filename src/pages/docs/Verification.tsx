@@ -1,4 +1,5 @@
 import PageHeader from "@/components/docs/PageHeader";
+import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import { Link } from "react-router-dom";
 
@@ -46,6 +47,10 @@ Verification can be performed without NexArt API access using the CER bundle (in
 
 const Verification = () => (
   <>
+    <DocsMeta
+      title="Verification"
+      description="How to verify a Certified Execution Record: locally, via the SDK, or publicly at verify.nexart.io/c/{certificateHash}."
+    />
     <PageHeader
       title="Verification"
       summary="How to verify any NexArt record, with or without API access."

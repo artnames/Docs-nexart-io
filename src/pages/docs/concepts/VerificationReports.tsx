@@ -1,4 +1,5 @@
 import PageHeader from "@/components/docs/PageHeader";
+import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import { Link } from "react-router-dom";
 
@@ -22,6 +23,10 @@ Or through the public verifier at verify.nexart.io`;
 
 const VerificationReports = () => (
   <>
+    <DocsMeta
+      title="Verification Reports"
+      description="Structured reports returned by CER verification. Include status, signature checks, registration state, and signal validation."
+    />
     <PageHeader
       title="Verification Reports"
       summary="The result of validating a CER bundle and its attestation data."

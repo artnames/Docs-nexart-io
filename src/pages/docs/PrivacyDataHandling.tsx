@@ -1,4 +1,5 @@
 import PageHeader from "@/components/docs/PageHeader";
+import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 
 const llmBlock = `# Privacy & Data Handling
@@ -37,6 +38,10 @@ Logs do not include raw execution payloads and are retained for a limited period
 
 const PrivacyDataHandling = () => (
   <>
+    <DocsMeta
+      title="Privacy and Data Handling"
+      description="How NexArt handles execution data. Only cryptographic metadata is stored on the attestation node; payloads stay with the builder."
+    />
     <PageHeader
       title="Privacy & Data Handling"
       summary="How NexArt handles execution data, what gets stored, and who is responsible for personal data."

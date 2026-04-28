@@ -1,4 +1,5 @@
 import PageHeader from "@/components/docs/PageHeader";
+import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import { Link } from "react-router-dom";
 
@@ -33,6 +34,10 @@ Both verify as VERIFIED when checks pass.`;
 
 const HashTimestamping = () => (
   <>
+    <DocsMeta
+      title="Hash-Only Timestamping"
+      description="How NexArt timestamps executions using only cryptographic hashes, without disclosing payload content to the attestation node."
+    />
     <PageHeader
       title="Hash-Only Timestamping"
       summary="A receipt mode that signs only the certificateHash, proving existence at a specific time."

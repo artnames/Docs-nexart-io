@@ -1,4 +1,5 @@
 import PageHeader from "@/components/docs/PageHeader";
+import DocsMeta from "@/components/docs/DocsMeta";
 import { Link } from "react-router-dom";
 
 const llmBlock = `# NexArt FAQ Summary
@@ -39,6 +40,10 @@ Use attestorKeyId from the receipt to select the correct key.`;
 
 const FAQ = () => (
   <>
+    <DocsMeta
+      title="FAQ"
+      description="Answers to common questions about NexArt: what verification proves, certificateHash vs projectHash, redaction, and trust model."
+    />
     <PageHeader
       title="FAQ"
       summary="Common questions from builders integrating NexArt."

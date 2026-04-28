@@ -1,4 +1,5 @@
 import PageHeader from "@/components/docs/PageHeader";
+import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import { Link } from "react-router-dom";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -52,6 +53,10 @@ The verifier reports signals scope in the verification report. Treat
 
 const VerificationSemantics = () => (
   <>
+    <DocsMeta
+      title="Verification Semantics"
+      description="What CER verification proves and what it does not. Cryptographic integrity over a bundle, not semantic correctness of outputs."
+    />
     <PageHeader
       title="Verification Semantics"
       summary="How to read verification results correctly: identity, reseal behavior, signals scope, and common pitfalls."

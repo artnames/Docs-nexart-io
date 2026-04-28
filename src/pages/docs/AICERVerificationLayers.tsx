@@ -1,4 +1,5 @@
 import PageHeader from "@/components/docs/PageHeader";
+import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import { Link } from "react-router-dom";
 
@@ -37,6 +38,10 @@ Legacy artifacts may store envelope fields inside meta as a compatibility fallba
 
 const AICERVerificationLayers = () => (
   <>
+    <DocsMeta
+      title="AI CER Verification Layers"
+      description="The four pillars of CER verification: bundle integrity, signature, registration, and optional context signal validation."
+    />
     <PageHeader
       title="AI CER Verification Layers"
       summary="How NexArt verifies AI Certified Execution Records across three independent trust layers."

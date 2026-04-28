@@ -1,4 +1,5 @@
 import PageHeader from "@/components/docs/PageHeader";
+import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import { Link } from "react-router-dom";
 
@@ -27,6 +28,10 @@ The node provides data (bundles, receipts, keys). Trust comes from cryptographic
 
 const VerifyNexart = () => (
   <>
+    <DocsMeta
+      title="verify.nexart.io"
+      description="The public verification portal. Resolve any registered CER or Project Bundle by certificateHash or projectHash."
+    />
     <PageHeader
       title="verify.nexart.io"
       summary="The public verification portal for CERs and Project Bundles."

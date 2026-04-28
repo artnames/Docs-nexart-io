@@ -1,4 +1,5 @@
 import PageHeader from "@/components/docs/PageHeader";
+import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import { Link } from "react-router-dom";
 
@@ -41,6 +42,10 @@ NexArtSignal[] is structurally identical to CerContextSignal[]. Pass collector.e
 
 const SignalsSDK = () => (
   <div className="prose prose-invert max-w-none">
+    <DocsMeta
+      title="Signals SDK"
+      description="@nexart/signals: deterministic capture of execution context with integrity hashing, replay-safe diffing, and ExecutionContext objects."
+    />
     <PageHeader
       title="Signals SDK"
       summary="@nexart/signals v0.8.0 — protocol-agnostic structured execution context with deterministic capture, integrity hashing, replay-safe diffing, and a builder API."

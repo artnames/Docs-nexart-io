@@ -1,4 +1,5 @@
 import PageHeader from "@/components/docs/PageHeader";
+import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import { Link } from "react-router-dom";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -51,6 +52,10 @@ void llmBlock;
 
 const PublicResealsAndRedactedVerification = () => (
   <>
+    <DocsMeta
+      title="Public Reseals and Redacted Verification"
+      description="Reseal CERs for public exposure with optional redaction. Hash coverage stays intact while sensitive payload fields are removed."
+    />
     <PageHeader
       title="Public Reseals & Redacted Verification"
       summary="A reseal is a new public artifact, not the original record. It is independently signed and does not weaken the original's integrity."

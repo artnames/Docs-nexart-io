@@ -1,4 +1,5 @@
 import PageHeader from "@/components/docs/PageHeader";
+import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import { Link } from "react-router-dom";
 
@@ -27,6 +28,10 @@ Use cases: AI agent decisions, moderation pipelines, workflow approvals, AI-assi
 const LangChain = () => {
   return (
     <div className="prose prose-invert max-w-none">
+      <DocsMeta
+        title="LangChain Integration"
+        description="Generate CERs from LangChain agents and chains. Capture model calls, tool usage, and outputs into verifiable records."
+      />
       <PageHeader
         title="LangChain Integration"
         summary="Generate Certified Execution Records (CERs) from LangChain workflows."

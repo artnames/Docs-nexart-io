@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import PageHeader from "@/components/docs/PageHeader";
+import DocsMeta from "@/components/docs/DocsMeta";
 import {
   Table,
   TableHeader,
@@ -85,6 +86,10 @@ const comparisonRows = [
 
 const Integrations = () => (
   <>
+    <DocsMeta
+      title="Integrations"
+      description="Connect NexArt to your stack: n8n workflows, LangChain agents, custom Node services, and CLI pipelines."
+    />
     <PageHeader
       title="Integrations"
       summary="Connect NexArt to your execution environment. Single-CER and Project Bundle paths are both supported."

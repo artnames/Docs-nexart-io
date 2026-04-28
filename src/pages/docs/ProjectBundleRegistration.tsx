@@ -1,4 +1,5 @@
 import PageHeader from "@/components/docs/PageHeader";
+import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import { Link } from "react-router-dom";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -51,6 +52,10 @@ void llmBlock;
 
 const ProjectBundleRegistration = () => (
   <>
+    <DocsMeta
+      title="Project Bundle Registration"
+      description="Group multiple CERs into a Project Bundle and register it via projectHash for unified public verification."
+    />
     <PageHeader
       title="Project Bundle Registration"
       summary="Registration turns a locally verified bundle into a publicly verifiable artifact on verify.nexart.io."

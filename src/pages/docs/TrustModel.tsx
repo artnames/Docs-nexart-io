@@ -1,4 +1,5 @@
 import PageHeader from "@/components/docs/PageHeader";
+import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 
 const llmBlock = `# NexArt Trust Model
@@ -36,6 +37,10 @@ Verification requires no NexArt API access:
 
 const TrustModel = () => (
   <>
+    <DocsMeta
+      title="Trust Model"
+      description="How NexArt distributes trust between builders, the attestation node, and public verifiers. What each party can and cannot prove."
+    />
     <PageHeader
       title="Trust Model"
       summary="How NexArt establishes and verifies execution integrity."

@@ -1,4 +1,5 @@
 import PageHeader from "@/components/docs/PageHeader";
+import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import { Link } from "react-router-dom";
 
@@ -16,6 +17,10 @@ All use the Web Crypto API internally. No Node.js dependencies.`;
 
 const BrowserVerification = () => (
   <>
+    <DocsMeta
+      title="Browser Verification"
+      description="Verify Certified Execution Records directly in the browser using the public verification portal at verify.nexart.io."
+    />
     <PageHeader
       title="Browser Verification"
       summary="Verify CERs and Project Bundles directly in the browser using the async SDK."
