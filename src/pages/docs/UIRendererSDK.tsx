@@ -1,5 +1,6 @@
 import PageHeader from "@/components/docs/PageHeader";
 
+import DocsMeta from "@/components/docs/DocsMeta";
 const llmBlock = `# UI Renderer SDK
 
 The UI Renderer SDK produces deterministic user interface outputs that can be tied to verifiable execution records.
@@ -24,6 +25,10 @@ Because rendering is deterministic, a verifier can re-render the same component 
 
 const UIRendererSDK = () => (
   <>
+    <DocsMeta
+      title="UI Renderer SDK"
+      description="Render and certify deterministic UI execution flows with verifiable input and output snapshots."
+    />
     <PageHeader
       title="UI Renderer SDK"
       summary="Deterministic UI rendering for verifiable interface artifacts."

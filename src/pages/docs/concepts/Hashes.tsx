@@ -1,4 +1,5 @@
 import PageHeader from "@/components/docs/PageHeader";
+import DocsMeta from "@/components/docs/DocsMeta";
 import { Link } from "react-router-dom";
 
 const llmBlock = `# Certificate Hash vs Project Hash
@@ -19,6 +20,10 @@ Both are SHA-256 hashes. Both are tamper-evident. They differ in scope: one CER 
 
 const Hashes = () => (
   <>
+    <DocsMeta
+      title="Hashes: certificateHash and projectHash"
+      description="How NexArt uses certificateHash for individual CERs and projectHash for bundles. certificateHash is the canonical identity."
+    />
     <PageHeader
       title="Certificate Hash vs Project Hash"
       summary="Two hash types, two scopes. One for single executions, one for multi-step workflows."

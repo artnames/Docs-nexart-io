@@ -1,4 +1,5 @@
 import PageHeader from "@/components/docs/PageHeader";
+import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import { Link } from "react-router-dom";
 
@@ -45,6 +46,10 @@ Verification statuses: VERIFIED | FAILED | NOT_FOUND. Check statuses: PASS | FAI
 
 const CER = () => (
   <>
+    <DocsMeta
+      title="Certified Execution Records"
+      description="Anatomy of a Certified Execution Record: snapshot, certificateHash, attestation receipt, and bundle versioning."
+    />
     <PageHeader
       title="Certified Execution Records"
       summary="CERs are the core unit of proof in NexArt. They prove execution integrity, not just log events."

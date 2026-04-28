@@ -1,4 +1,5 @@
 import PageHeader from "@/components/docs/PageHeader";
+import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 
 const llmBlock = `# AI CER Package Format
@@ -30,6 +31,10 @@ Builders MUST package AI CER artifacts using the top-level cer wrapper format. B
 
 const AICERPackageFormat = () => (
   <>
+    <DocsMeta
+      title="AI CER Package Format"
+      description="The 6-field normative transport specification for AI Certified Execution Records: structure, encoding, and field semantics."
+    />
     <PageHeader
       title="AI CER Package Format"
       summary="Normative specification for the official NexArt AI CER package and bundle structure."

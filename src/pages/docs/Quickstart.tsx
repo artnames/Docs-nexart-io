@@ -1,4 +1,5 @@
 import PageHeader from "@/components/docs/PageHeader";
+import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import { Link } from "react-router-dom";
 
@@ -24,6 +25,10 @@ certificateHash is the canonical identity. Always verify by certificateHash, nev
 
 const Quickstart = () => (
   <div className="prose prose-invert max-w-none">
+    <DocsMeta
+      title="Quickstart"
+      description="Install @nexart/ai-execution, create your first Certified Execution Record, and verify it at verify.nexart.io in under 5 minutes."
+    />
     <PageHeader
       title="Quickstart"
       summary="Two integration paths: single execution CER, or multi-step Project Bundle. Pick one."

@@ -1,5 +1,6 @@
 import PageHeader from "@/components/docs/PageHeader";
 
+import DocsMeta from "@/components/docs/DocsMeta";
 const llmBlock = `# NexArt Protocol Overview
 
 NexArt is a protocol for producing verifiable execution records. It separates execution, attestation, and verification.
@@ -31,6 +32,10 @@ Verifiers fetch node keys from node.nexart.io/.well-known/nexart-node.json and m
 
 const ProtocolOverview = () => (
   <>
+    <DocsMeta
+      title="Protocol Overview"
+      description="How NexArt verifies execution integrity: CERs, attestation nodes, signed receipts, certificateHash, and projectHash."
+    />
     <PageHeader
       title="Protocol Overview"
       summary="How NexArt produces, attests, and verifies execution records."

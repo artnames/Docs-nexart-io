@@ -1,5 +1,6 @@
 import PageHeader from "@/components/docs/PageHeader";
 
+import DocsMeta from "@/components/docs/DocsMeta";
 const llmBlock = `# NexArt Retention Policy
 Retention policy is a project-level configuration defining how long CERs are intended to be stored.
 
@@ -22,6 +23,10 @@ Retention policy is a project-level configuration defining how long CERs are int
 
 const Retention = () => (
   <>
+    <DocsMeta
+      title="Dashboard: Retention"
+      description="Set retention classes for CER metadata and apply Legal Hold to prevent expiry. Retention policy applies per App."
+    />
     <PageHeader
       title="Retention Policy"
       summary="Project-level configuration for how long CER records are intended to be stored."

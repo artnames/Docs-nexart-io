@@ -1,4 +1,5 @@
 import PageHeader from "@/components/docs/PageHeader";
+import DocsMeta from "@/components/docs/DocsMeta";
 import { Link } from "react-router-dom";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Info } from "lucide-react";
@@ -66,6 +67,10 @@ const SectionHeading = ({ icon, title, note }: { icon: string; title: string; no
 
 const VerificationStatusesAndErrors = () => (
   <>
+    <DocsMeta
+      title="Verification Statuses and Errors"
+      description="Verification result statuses (verified, unregistered, mismatch, redacted), common error causes, and how to resolve them."
+    />
     <PageHeader
       title="Verification Statuses & Errors"
       summary="Every verification outcome and node error, what most likely caused it, and what to do next."

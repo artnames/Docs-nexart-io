@@ -1,4 +1,5 @@
 import PageHeader from "@/components/docs/PageHeader";
+import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import { Link } from "react-router-dom";
 
@@ -25,6 +26,10 @@ For package input, the CLI verifies the inner CER. Package-level trust layers (e
 
 const NexArtCLI = () => (
   <>
+    <DocsMeta
+      title="NexArt CLI"
+      description="Use the NexArt CLI to certify executions, inspect CER bundles, and verify receipts from the command line."
+    />
     <PageHeader
       title="NexArt CLI"
       summary="Command-line interface for creating, certifying, and verifying Certified Execution Records."

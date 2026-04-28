@@ -1,9 +1,14 @@
 import PageHeader from "@/components/docs/PageHeader";
+import DocsMeta from "@/components/docs/DocsMeta";
 import { Link } from "react-router-dom";
 
 const WhatIsNexArt = () => {
   return (
     <div className="space-y-10">
+      <DocsMeta
+        title="What is NexArt"
+        description="NexArt provides cryptographic proof of execution integrity for AI and deterministic systems. Verify what ran, not whether it was correct."
+      />
       <PageHeader
         title="What is NexArt"
         summary="NexArt turns AI and code executions into cryptographically verifiable evidence."

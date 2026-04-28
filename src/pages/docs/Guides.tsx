@@ -1,4 +1,5 @@
 import PageHeader from "@/components/docs/PageHeader";
+import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import { Link } from "react-router-dom";
 
@@ -22,6 +23,10 @@ POST /v1/project-bundle/register with the Project Bundle JSON.`;
 
 const Guides = () => (
   <>
+    <DocsMeta
+      title="Guides"
+      description="Practical guides for adopting NexArt: choosing single CER vs Project Bundle, redaction patterns, and audit export workflows."
+    />
     <PageHeader
       title="Builder Guides"
       summary="Quick-start paths for common NexArt tasks."

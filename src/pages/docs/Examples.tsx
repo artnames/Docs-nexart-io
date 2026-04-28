@@ -1,4 +1,5 @@
 import PageHeader from "@/components/docs/PageHeader";
+import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 
 const llmBlock = `# NexArt Examples
@@ -41,6 +42,10 @@ Fields: nodeId, activeKid, keys[] (kid, algorithm, publicKey)`;
 
 const Examples = () => (
   <>
+    <DocsMeta
+      title="Examples"
+      description="Working code examples for single-CER certification, Project Bundle assembly, and multi-agent workflow verification."
+    />
     <PageHeader
       title="Examples"
       summary="Copy-ready examples for API requests, responses, verification URLs, and data structures."

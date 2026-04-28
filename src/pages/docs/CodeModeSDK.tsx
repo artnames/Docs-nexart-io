@@ -1,4 +1,5 @@
 import PageHeader from "@/components/docs/PageHeader";
+import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 
 const llmBlock = `# CodeMode SDK
@@ -26,6 +27,10 @@ If the same code, seed, and parameters are used, the renderer produces the exact
 
 const CodeModeSDK = () => (
   <>
+    <DocsMeta
+      title="CodeMode SDK"
+      description="Deterministic execution wrapping for code-driven workflows. Capture inputs, outputs, and tool calls into Certified Execution Records."
+    />
     <PageHeader
       title="CodeMode SDK"
       summary="Deterministic generative execution environment for verifiable visual outputs."

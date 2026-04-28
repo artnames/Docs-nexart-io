@@ -1,4 +1,5 @@
 import PageHeader from "@/components/docs/PageHeader";
+import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 
 const llmBlock = `# NexArt Apps
@@ -26,6 +27,10 @@ This associates the record with the correct app in the dashboard.
 
 const Apps = () => (
   <>
+    <DocsMeta
+      title="Dashboard: Apps"
+      description="Apps group CERs within a Project. Each App has its own API credentials, retention policy, and audit settings."
+    />
     <PageHeader
       title="Apps"
       summary="Organizational units within a project for grouping CER records by application or service."

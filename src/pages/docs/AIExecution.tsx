@@ -1,4 +1,5 @@
 import PageHeader from "@/components/docs/PageHeader";
+import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import { Link } from "react-router-dom";
 
@@ -45,6 +46,10 @@ const cer = await certifyDecision({
 
 const AIExecution = () => (
   <>
+    <DocsMeta
+      title="AI Execution CER"
+      description="Create Certified Execution Records for AI executions: model, inputHash, outputHash, metadata, and attested receipt."
+    />
     <PageHeader
       title="AI Execution CER"
       summary="The smallest unit of proof in NexArt: a tamper-evident record of one AI execution step."

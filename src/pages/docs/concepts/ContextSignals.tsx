@@ -1,4 +1,5 @@
 import PageHeader from "@/components/docs/PageHeader";
+import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import { Link } from "react-router-dom";
 
@@ -27,6 +28,10 @@ NexArt records signals but does not interpret or enforce them.`;
 
 const ContextSignals = () => (
   <div className="prose prose-invert max-w-none">
+    <DocsMeta
+      title="Context Signals"
+      description="Immutable contextual metadata bound into certificateHash. Capture upstream evidence, decisions, and tool calls into a CER."
+    />
     <PageHeader
       title="Context Signals"
       summary="Optional structured metadata recorded alongside an execution. May be hash-bound or supplemental."

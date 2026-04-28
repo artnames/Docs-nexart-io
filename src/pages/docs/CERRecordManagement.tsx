@@ -1,4 +1,5 @@
 import PageHeader from "@/components/docs/PageHeader";
+import DocsMeta from "@/components/docs/DocsMeta";
 import { Link } from "react-router-dom";
 
 const llmBlock = `# CER Record Management
@@ -124,6 +125,10 @@ Interaction with protocol immutability: policies do not mutate the CER bundle, c
 
 const CERRecordManagement = () => (
   <>
+    <DocsMeta
+      title="CER Record Management"
+      description="Manage Certified Execution Records across lifecycle states (Active, Archived, Hidden, Deleted) without mutating immutable bundles."
+    />
     <PageHeader
       title="CER Record Management"
       summary="Operational lifecycle and enterprise control semantics for CER records."
