@@ -1,45 +1,82 @@
 # NexArt
 
-> NexArt provides deterministic execution verification infrastructure. Certified Execution Records (CERs) are cryptographically bound records of AI or deterministic execution that can be independently verified.
+> NexArt provides deterministic execution verification infrastructure. Certified Execution Records (CERs) are cryptographically bound records of AI or deterministic execution that can be independently verified. NexArt supports both single-execution CERs and Project Bundles for multi-step or multi-agent workflows.
 
-## Documentation
+## Start Here
 
+- [What is NexArt](https://docs.nexart.io/docs/what-is-nexart)
 - [Getting Started](https://docs.nexart.io/docs/getting-started)
 - [Quickstart](https://docs.nexart.io/docs/quickstart)
-- [CER Protocol](https://docs.nexart.io/docs/cer-protocol)
+- [FAQ](https://docs.nexart.io/docs/faq)
+- [Examples](https://docs.nexart.io/docs/examples)
+- [Guides](https://docs.nexart.io/docs/guides)
+
+## Protocol
+
 - [Protocol Overview](https://docs.nexart.io/docs/protocol-overview)
-- [AI Execution SDK](https://docs.nexart.io/docs/sdk)
-- [Signals SDK](https://docs.nexart.io/docs/signals-sdk)
-- [NexArt CLI](https://docs.nexart.io/docs/cli)
-- [End-to-End Verification Flow](https://docs.nexart.io/docs/end-to-end-verification)
-- [AI Execution CER](https://docs.nexart.io/docs/ai-execution)
-- [Verification Semantics](https://docs.nexart.io/docs/verification-semantics)
-- [Verification Statuses & Errors](https://docs.nexart.io/docs/verification-statuses-and-errors)
-- [Project Bundle Registration](https://docs.nexart.io/docs/project-bundle-registration)
-- [Multi-step & Multi-agent Workflows](https://docs.nexart.io/docs/multi-step-and-multi-agent-workflows)
-- [Public Reseals & Redacted Verification](https://docs.nexart.io/docs/public-reseals-and-redacted-verification)
-- [Verification](https://docs.nexart.io/docs/verification)
-- [AI CER Verification Layers](https://docs.nexart.io/docs/ai-cer-verification-layers)
+- [CER Protocol](https://docs.nexart.io/docs/cer-protocol)
+- [CER Record Management](https://docs.nexart.io/docs/cer-record-management)
 - [AI CER Package Format](https://docs.nexart.io/docs/ai-cer-package-format)
+- [AI CER Verification Layers](https://docs.nexart.io/docs/ai-cer-verification-layers)
 - [Trust Model](https://docs.nexart.io/docs/trust-model)
 - [Attestation Node](https://docs.nexart.io/docs/attestation-node)
-- [Examples](https://docs.nexart.io/docs/examples)
-- [Agent Kit](https://docs.nexart.io/docs/agent-kit)
-- [FAQ](https://docs.nexart.io/docs/faq)
-
-## Integrations
-
-- [n8n](https://docs.nexart.io/docs/integrations/n8n)
-- [LangChain](https://docs.nexart.io/docs/integrations/langchain)
 
 ## Concepts
 
 - [Certified Execution Records](https://docs.nexart.io/docs/concepts/cer)
+- [Project Bundles](https://docs.nexart.io/docs/concepts/project-bundles)
+- [Hashes (certificateHash, projectHash)](https://docs.nexart.io/docs/concepts/hashes)
 - [Signed Receipts](https://docs.nexart.io/docs/concepts/signed-receipts)
 - [Hash-Only Timestamping](https://docs.nexart.io/docs/concepts/hash-timestamping)
 - [Verification Reports](https://docs.nexart.io/docs/concepts/verification-reports)
 - [Context Signals](https://docs.nexart.io/docs/concepts/context-signals)
 - [Execution Context and Signals](https://docs.nexart.io/docs/concepts/execution-context)
+
+## SDKs and Tools
+
+- [AI Execution SDK](https://docs.nexart.io/docs/sdk)
+- [Signals SDK](https://docs.nexart.io/docs/signals-sdk)
+- [NexArt CLI](https://docs.nexart.io/docs/cli)
+- [CodeMode SDK](https://docs.nexart.io/docs/codemode-sdk)
+- [UI Renderer SDK](https://docs.nexart.io/docs/ui-renderer-sdk)
+- [Agent Kit](https://docs.nexart.io/docs/agent-kit)
+- [Integration Surfaces](https://docs.nexart.io/docs/integration-surfaces)
+
+## Workflows
+
+- [End-to-End Verification Flow](https://docs.nexart.io/docs/end-to-end-verification)
+- [AI Execution CER](https://docs.nexart.io/docs/ai-execution)
+- [Project Bundle Registration](https://docs.nexart.io/docs/project-bundle-registration)
+- [Multi-step & Multi-agent Workflows](https://docs.nexart.io/docs/multi-step-and-multi-agent-workflows)
+- [Public Reseals & Redacted Verification](https://docs.nexart.io/docs/public-reseals-and-redacted-verification)
+- [CER Audit Workflows](https://docs.nexart.io/docs/cer-audit-workflows)
+
+## Verification
+
+- [Verification](https://docs.nexart.io/docs/verification)
+- [Verification Semantics](https://docs.nexart.io/docs/verification-semantics)
+- [Verification Statuses & Errors](https://docs.nexart.io/docs/verification-statuses-and-errors)
+- [verify.nexart.io](https://docs.nexart.io/docs/verify-nexart)
+- [Browser Verification](https://docs.nexart.io/docs/browser-verification)
+
+## Integrations
+
+- [Integrations Overview](https://docs.nexart.io/docs/integrations)
+- [n8n](https://docs.nexart.io/docs/integrations/n8n)
+- [LangChain](https://docs.nexart.io/docs/integrations/langchain)
+
+## Dashboard
+
+- [Projects](https://docs.nexart.io/docs/dashboard/projects)
+- [Apps](https://docs.nexart.io/docs/dashboard/apps)
+- [Auto-Stamp](https://docs.nexart.io/docs/dashboard/auto-stamp)
+- [Retention](https://docs.nexart.io/docs/dashboard/retention)
+- [Audit Exports](https://docs.nexart.io/docs/dashboard/audit-exports)
+- [Privacy & Data Handling](https://docs.nexart.io/docs/privacy)
+
+## Optional
+
+- [Full text of all pages](https://docs.nexart.io/llms-full.txt)
 
 ## Links
 
