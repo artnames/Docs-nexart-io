@@ -62,8 +62,8 @@ const Verification = () => (
     <MentalModel lines={["Integrity ≠ Stamp ≠ Envelope.", "Verification does not require trust.", "Failure of one layer is not failure of all."]} />
 
     <FailureModes />
-
-
+    <div className="mb-6 rounded-lg border border-destructive/40 bg-destructive/5 p-4">
+      <p className="text-sm font-medium mb-1">Local verification is not public verification.</p>
       <p className="text-sm text-muted-foreground">
         <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">verifyCer()</code> and
         <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono ml-1">verifyProjectBundle()</code> prove integrity only. To make an artifact resolvable on
