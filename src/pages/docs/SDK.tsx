@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const llmBlock = `# NexArt AI Execution SDK
 
-Package: @nexart/ai-execution@0.15.0
+Package: @nexart/ai-execution@0.16.1
 
 ## API Endpoints
 
