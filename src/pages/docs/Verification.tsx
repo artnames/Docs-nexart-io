@@ -3,6 +3,7 @@ import MentalModel from "@/components/docs/MentalModel";
 import FailureModes from "@/components/docs/FailureModes";
 import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
+import TechnicalTruth from "@/components/docs/TechnicalTruth";
 import { Link } from "react-router-dom";
 
 const llmBlock = `# NexArt Verification
@@ -58,6 +59,8 @@ const Verification = () => (
       summary="How to verify any NexArt record, with or without API access."
       llmBlock={llmBlock}
     />
+
+    <TechnicalTruth />
 
     <MentalModel lines={["Integrity ≠ Stamp ≠ Envelope.", "Verification does not require trust.", "Failure of one layer is not failure of all."]} />
 

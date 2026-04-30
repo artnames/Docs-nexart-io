@@ -1,6 +1,7 @@
 import PageHeader from "@/components/docs/PageHeader";
 import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
+import TechnicalTruth from "@/components/docs/TechnicalTruth";
 import { Link } from "react-router-dom";
 
 const llmBlock = `# NexArt CLI
@@ -35,6 +36,8 @@ const NexArtCLI = () => (
       summary="Command-line interface for creating, certifying, and verifying Certified Execution Records."
       llmBlock={llmBlock}
     />
+
+    <TechnicalTruth />
 
     <h2>Best For</h2>
     <ul>
