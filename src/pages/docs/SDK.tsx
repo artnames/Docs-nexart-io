@@ -103,12 +103,18 @@ const SDK = () => (
     <TechnicalTruth />
 
     <h2 id="overview">Overview</h2>
-    <p>The AI Execution SDK provides two endpoints for working with Certified Execution Records. Most builders should use the <strong>certify</strong> endpoint, which handles everything in a single request.</p>
+    <p>
+      The AI Execution SDK provides functions for sealing CERs locally and for certifying them
+      via the attestation node. The canonical workflow is:
+      <strong> seal → verify → (optional) certify → verify</strong>. Sealing is offline and
+      requires no API key. Certification adds independently verifiable node attestation without
+      changing the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>.
+    </p>
 
     <MentalModel />
 
     <h2 id="flow">Quick Implementation Flow</h2>
-    <p>Capture, create, certify, verify. The SDK exposes one function per step.</p>
+    <p>Capture, seal, verify, optionally certify, verify again. The SDK exposes one function per step.</p>
     <GoldenPath />
 
     <h2 id="minimal-example">Minimal working example</h2>
