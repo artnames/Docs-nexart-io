@@ -60,6 +60,8 @@ const Verification = () => (
       llmBlock={llmBlock}
     />
 
+    <TechnicalTruth />
+
     <MentalModel lines={["Integrity ≠ Stamp ≠ Envelope.", "Verification does not require trust.", "Failure of one layer is not failure of all."]} />
 
     <FailureModes />
