@@ -11,13 +11,22 @@ import TestHarness from "@/components/docs/TestHarness";
 
 const llmBlock = `# Quickstart
 
-NexArt supports two paths. Pick one.
+NexArt supports two paths. Pick one. Canonical workflow: seal -> verify -> (optional) certify -> verify.
+
+Terminology:
+- Sealed   = integrity only. Produced offline by SDK sealCer() or CLI 'nexart ai seal'. Layer 1 PASS, Layers 2 & 3 SKIPPED.
+- Certified = integrity + node attestation + envelope. Produced via POST /v1/cer/ai/certify or 'nexart ai certify'. Layers 1, 2, 3 all PASS.
+SKIPPED is not a failure.
 
 ## Path A - Single CER (one execution)
-npm install @nexart/ai-execution
-import { createLangChainCer } from "@nexart/ai-execution";
-const { certificateHash } = createLangChainCer({ provider, model, input, output });
-Verify: https://verify.nexart.io/c/{certificateHash}
+npm install @nexart/ai-execution      # SDK 0.16.1
+import { sealCer, certifyLangChainRun, verifyAiCerBundleDetailed } from "@nexart/ai-execution";
+1. Create input
+2. Seal locally        -> sealCer(...) returns { bundle, certificateHash }
+3. Verify locally      -> verifyAiCerBundleDetailed(bundle) -> integrity PASS, receipt SKIPPED, envelope SKIPPED
+4. (Optional) Certify  -> certifyLangChainRun({...}) returns attested bundle
+5. Verify again        -> integrity PASS, receipt PASS, envelope PASS
+Public verification URL: https://verify.nexart.io/c/{certificateHash}
 
 ## Path B - Project Bundle (multi-step workflow)
 npm install @nexart/agent-kit
