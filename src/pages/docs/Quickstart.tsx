@@ -7,6 +7,7 @@ import MentalModel from "@/components/docs/MentalModel";
 import MinimalExample from "@/components/docs/MinimalExample";
 import CommonMistakes from "@/components/docs/CommonMistakes";
 import FailureModes from "@/components/docs/FailureModes";
+import CanonicalFlow from "@/components/docs/CanonicalFlow";
 
 
 const llmBlock = `# Quickstart
@@ -49,6 +50,7 @@ const Quickstart = () => (
       summary="Two integration paths: single execution CER, or multi-step Project Bundle. Pick one."
       llmBlock={llmBlock}
     />
+    <CanonicalFlow context="This is the fastest correct integration path." />
 
     <p>
       The fastest path from zero to a verified record. For a broader overview, see{" "}

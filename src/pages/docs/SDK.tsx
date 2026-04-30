@@ -9,6 +9,7 @@ import CommonMistakes from "@/components/docs/CommonMistakes";
 import FailureModes from "@/components/docs/FailureModes";
 import TechnicalTruth from "@/components/docs/TechnicalTruth";
 import TestHarness from "@/components/docs/TestHarness";
+import CanonicalFlow from "@/components/docs/CanonicalFlow";
 
 const llmBlock = `# NexArt AI Execution SDK
 
@@ -99,6 +100,7 @@ const SDK = () => (
       summary="API reference for certifying AI executions, creating CER bundles, and working with CER packages."
       llmBlock={llmBlock}
     />
+    <CanonicalFlow context="All SDK helpers must follow this flow." />
 
     <TechnicalTruth />
 

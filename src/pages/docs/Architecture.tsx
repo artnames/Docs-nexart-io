@@ -4,6 +4,7 @@ import CodeBlock from "@/components/docs/CodeBlock";
 import MentalModel from "@/components/docs/MentalModel";
 import TestHarness from "@/components/docs/TestHarness";
 import SealedVsCertified from "@/components/docs/SealedVsCertified";
+import CanonicalFlow from "@/components/docs/CanonicalFlow";
 import { Link } from "react-router-dom";
 
 const llmBlock = `# NexArt Architecture (Canonical Reference)
@@ -60,6 +61,7 @@ const Architecture = () => (
       summary="Canonical, normative reference for the NexArt protocol pipeline: capture, create, hash, attest, verify."
       llmBlock={llmBlock}
     />
+    <CanonicalFlow context="This flow reflects the system boundaries (SDK, CLI, Node)." />
 
     <MentalModel
       lines={[

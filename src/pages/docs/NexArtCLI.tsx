@@ -3,6 +3,7 @@ import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import TechnicalTruth from "@/components/docs/TechnicalTruth";
 import SealedVsCertified from "@/components/docs/SealedVsCertified";
+import CanonicalFlow from "@/components/docs/CanonicalFlow";
 import { Link } from "react-router-dom";
 
 const llmBlock = `# NexArt CLI
@@ -76,6 +77,7 @@ const NexArtCLI = () => (
       summary="Command-line surface over the AI Execution SDK. Seal locally, certify optionally, verify anywhere."
       llmBlock={llmBlock}
     />
+    <CanonicalFlow context="CLI commands map directly to this flow." />
 
     <TechnicalTruth />
 
