@@ -122,13 +122,16 @@ const AICERVerificationLayers = () => (
       title="v2 Signable Payload Construction"
     />
     <ul>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">bundle</code> comes from <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">package.cer</code> - the raw CER bundle, not the full package</li>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">attestation</code> comes from <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">package.verificationEnvelope.attestation</code></li>
-      <li>The full package object is NOT the signed payload</li>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verificationEnvelope</code> itself is NOT the signed payload</li>
-      <li>For the package path, <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer</code> is used as-is - any mutation to <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer</code> after signing will cause this check to fail</li>
+      <li><strong>Attestation projection — exactly 5 fields:</strong> <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">attestationId</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">attestedAt</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">kid</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">nodeRuntimeHash</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">protocolVersion</code>.</li>
+      <li><strong>Bundle projection (whitelist):</strong> <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">bundleType</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">version</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">createdAt</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">snapshot</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">context</code> (if present), <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">contextSummary</code> (if present).</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> is NOT part of the signed payload.</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta</code> is NOT signed by the envelope.</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">receipt</code> is NOT signed by the envelope.</li>
+      <li>The full package object is NOT the signed payload.</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verificationEnvelope</code> itself is NOT the signed payload.</li>
+      <li>For the package path, <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer</code> is used as-is. Any mutation after signing will cause this check to fail.</li>
     </ul>
-    <p><strong>What it protects:</strong> the authoritative displayed verification surface via the reconstructed signable payload.</p>
+    <p><strong>What it protects:</strong> full bundle integrity under the node's signature, beyond the certificateHash. Envelope failure indicates the signed bundle projection has been altered. It MUST NOT be reported as integrity (Layer 1) failure.</p>
 
     <h2 id="field-reference">Field-Level Reference</h2>
     <p>The following fields may be present on an uploaded AI CER bundle:</p>
