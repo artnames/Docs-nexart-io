@@ -7,6 +7,7 @@ import MentalModel from "@/components/docs/MentalModel";
 import MinimalExample from "@/components/docs/MinimalExample";
 import CommonMistakes from "@/components/docs/CommonMistakes";
 import FailureModes from "@/components/docs/FailureModes";
+import TestHarness from "@/components/docs/TestHarness";
 
 const llmBlock = `# Getting Started with NexArt
 
@@ -47,6 +48,8 @@ const GettingStarted = () => {
         summary="Pick the path that matches your use case: a single execution CER, or a multi-step Project Bundle."
         llmBlock={llmBlock}
       />
+
+      <TestHarness />
 
       <MentalModel />
 

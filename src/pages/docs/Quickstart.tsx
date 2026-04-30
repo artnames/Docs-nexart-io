@@ -7,6 +7,7 @@ import MentalModel from "@/components/docs/MentalModel";
 import MinimalExample from "@/components/docs/MinimalExample";
 import CommonMistakes from "@/components/docs/CommonMistakes";
 import FailureModes from "@/components/docs/FailureModes";
+import TestHarness from "@/components/docs/TestHarness";
 
 const llmBlock = `# Quickstart
 
@@ -44,6 +45,8 @@ const Quickstart = () => (
       The fastest path from zero to a verified record. For a broader overview, see{" "}
       <Link to="/docs/getting-started" className="text-primary hover:underline">Getting Started</Link>.
     </p>
+
+    <TestHarness />
 
     <MentalModel />
 
