@@ -326,6 +326,20 @@ const Architecture = () => (
       portal is a convenience layer; it runs the same checks any client can run.
     </p>
 
+    <h2 id="guarantees">What NexArt guarantees</h2>
+    <ul>
+      <li><strong>Execution integrity</strong> — the recorded execution cannot be modified after sealing without breaking the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>.</li>
+      <li><strong>Tamper detection</strong> — any change to a hashed field is detectable by recomputation against the JCS-canonicalized whitelist projection.</li>
+      <li><strong>Independent verification</strong> — any party can verify a bundle using only the bundle and the node's published public keys. No NexArt API access required.</li>
+    </ul>
+
+    <h2 id="non-goals">What NexArt does not guarantee</h2>
+    <ul>
+      <li><strong>Output correctness</strong> — NexArt does not validate whether the captured output is right, useful, or safe.</li>
+      <li><strong>Model validity</strong> — NexArt does not certify the model, its weights, or its behavior.</li>
+      <li><strong>Deterministic replay</strong> — NexArt does not guarantee that re-running the same input produces the same output. It records what happened; it does not reproduce it.</li>
+    </ul>
+
     <h2 id="references">Authoritative references</h2>
     <ul>
       <li><Link to="/docs/concepts/cer" className="text-primary hover:underline">Certified Execution Records</Link> - bundle definition.</li>

@@ -81,8 +81,41 @@ const TechnicalTruth = () => {
         </div>
 
         <div>
+          <dt className="font-semibold text-foreground">The three verification layers</dt>
+          <dd className="text-foreground/90 mt-1">
+            <ul className="list-disc pl-5 space-y-1">
+              <li>
+                <strong>certificateHash (integrity)</strong> — recompute SHA-256 over the
+                JCS-canonicalized whitelist projection and compare with the bundle's{" "}
+                <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">certificateHash</code>.
+              </li>
+              <li>
+                <strong>receipt signature (node attestation)</strong> — validate the Ed25519
+                receipt at{" "}
+                <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">meta.attestation</code>{" "}
+                using the node key matched by{" "}
+                <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">kid</code>, and
+                confirm it references the bundle's{" "}
+                <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">certificateHash</code>.
+              </li>
+              <li>
+                <strong>verification envelope (full bundle signature, v0.16.1)</strong> — validate{" "}
+                <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">meta.verificationEnvelopeSignature</code>{" "}
+                against{" "}
+                <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">meta.verificationEnvelope</code>.
+                When absent, this layer returns SKIPPED.
+              </li>
+            </ul>
+            <p className="mt-2">
+              Each layer reports independently as PASS, FAIL, or SKIPPED. Verification statuses:
+              VERIFIED, FAILED, NOT_FOUND.
+            </p>
+          </dd>
+        </div>
+
+        <div>
           <dt className="font-semibold text-foreground">
-            Local creation vs Node certification vs Public verification
+            Independence model: local creation, optional node certification, independent verification
           </dt>
           <dd className="text-foreground/90 mt-1 space-y-2">
             <p>
@@ -100,10 +133,10 @@ const TechnicalTruth = () => {
               </code>
               ). Builds a canonical CER bundle and computes the{" "}
               <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">certificateHash</code>.
-              No network call to the attestation node, no receipt, no signature, no public verification URL.
+              No network call to the attestation node. No receipt, no signature, no public verification URL.
             </p>
             <p>
-              <strong>Node certification</strong> — performed by the attestation node (
+              <strong>Optional node certification</strong> — performed by the attestation node (
               <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">
                 POST /v1/cer/ai/certify
               </code>{" "}
@@ -111,8 +144,7 @@ const TechnicalTruth = () => {
               <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">
                 nexart ai certify
               </code>
-              ). The node receives the bundle, validates it, and issues a signed receipt
-              (Ed25519, identified by{" "}
+              ). The node validates the bundle and issues an Ed25519-signed receipt (identified by{" "}
               <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">kid</code>) referencing
               the bundle's{" "}
               <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">certificateHash</code>.
@@ -124,22 +156,12 @@ const TechnicalTruth = () => {
               <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">certificateHash</code>.
             </p>
             <p>
-              <strong>Public verification</strong> — performed independently by anyone, with no
-              trust in NexArt infrastructure required. Available via{" "}
+              <strong>Independent verification</strong> — performed by anyone, with no trust in
+              NexArt infrastructure required. Available via{" "}
               <Link to="/docs/verify-nexart" className="text-primary hover:underline">
                 verify.nexart.io
               </Link>
-              , the SDK (
-              <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">verifyCer</code>
-              /
-              <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">verifyCerAsync</code>
-              ), or the CLI (
-              <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">
-                nexart ai verify
-              </code>
-              ). Up to four checks run, each returning PASS / FAIL / SKIPPED:
-              Bundle Integrity, Node Signature, Receipt Consistency, and Verification Envelope.
-              Verification statuses: VERIFIED, FAILED, NOT_FOUND.
+              , the SDK, or the CLI. The bundle plus the node's published public keys are sufficient.
             </p>
           </dd>
         </div>
