@@ -42,8 +42,22 @@ NOT_FOUND: record not located
 
 ## Verification layers
 AI CER bundles support up to three layers: Bundle Integrity, Signed Attestation Receipt, and Verification Envelope.
-Historical artifacts may not include the verification envelope. The verifier applies compatibility fallback for older artifacts.
-See AI CER Verification Layers for details.
+- Layer 1 (Integrity): SHA-256 over JCS-canonicalized whitelist projection (bundleType, version, createdAt, snapshot, context?, contextSummary?). Recomputes certificateHash.
+- Layer 2 (Receipt): validates Ed25519 receipt over certificateHash. Independent of envelope.
+- Layer 3 (Envelope, v0.16.1): Ed25519 over { attestation projection (attestationId, attestedAt, kid, nodeRuntimeHash, protocolVersion), bundle projection (bundleType, version, createdAt, snapshot, context?, contextSummary?) }. certificateHash, meta, and receipt are NOT signed by the envelope.
+
+## Why envelope verification may fail
+- Envelope FAIL with Integrity PASS: the bundle's hashed content is intact, but a signed-but-unhashed attestation field (attestationId, attestedAt, kid, nodeRuntimeHash, protocolVersion) was modified.
+- Envelope SKIPPED: bundle does not include verificationEnvelope/verificationEnvelopeSignature, or the projection cannot be reconstructed (e.g. redacted public bundle).
+- Re-serialization that breaks JCS canonicalization invalidates the envelope even when content is semantically equivalent.
+- kid mismatch: the node key referenced by kid is not in the published key set at node.nexart.io/.well-known/nexart-node.json.
+- v0.16.0 signals alignment bug: fixed in v0.16.1; affected executions can be re-certified via POST /v1/admin/recertify-batch.
+- Pre-envelope artifacts predate v0.16.1; Layer 3 returns SKIPPED by compatibility fallback.
+
+## Why public bundles cannot always verify the envelope
+The public verifier consumes a redacted representation. Raw snapshot.input / snapshot.output are never exposed; only SHA-256 digests are. Layer 3 signs a strict whitelist projection that includes snapshot (and context/contextSummary when present), so a verifier without the original bytes cannot reconstruct the signed payload byte-for-byte. In that case Layer 3 returns SKIPPED while Layer 1 (against the public-safe representation) and Layer 2 still PASS. Full envelope verification requires the original non-redacted bundle.
+
+Envelope FAIL is reported independently and MUST NOT be conflated with integrity failure.
 
 ## Independent verification
 Verification can be performed without NexArt API access using the CER bundle (including meta.attestation) and the node's published public keys.`;
@@ -118,6 +132,110 @@ const Verification = () => (
         </ul>
       </div>
     </div>
+
+    <h2 id="why-envelope-may-fail">Why Envelope Verification May Fail</h2>
+    <p>
+      Envelope verification (Layer 3) is independent of integrity (Layer 1) and receipt (Layer 2).
+      A bundle can be fully intact and properly attested while the envelope check returns
+      <strong> FAIL</strong> or <strong>SKIPPED</strong>. The two outcomes carry different meaning and
+      MUST NOT be conflated with integrity failure.
+    </p>
+
+    <h3 id="envelope-skipped-vs-failed">SKIPPED vs FAIL</h3>
+    <ul>
+      <li>
+        <strong>SKIPPED</strong> — the envelope check is not applicable. The bundle does not include
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono ml-1">meta.verificationEnvelope</code>{" "}
+        and/or <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">meta.verificationEnvelopeSignature</code>,
+        OR the verifier cannot reconstruct the signed projection (for example, fields required by
+        the projection are not present in the received bundle). SKIPPED is NOT a failure.
+      </li>
+      <li>
+        <strong>FAIL</strong> — the envelope is present and reconstructable, but the Ed25519
+        signature does not validate against the projected payload using the node key matched by
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono ml-1">kid</code>.
+      </li>
+    </ul>
+
+    <h3 id="envelope-fail-causes">Reasons Layer 3 returns FAIL while Layers 1 and 2 PASS</h3>
+    <ol>
+      <li>
+        <strong>Mutation of a signed-but-unhashed field.</strong> The envelope signs an attestation
+        projection (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">attestationId</code>,{" "}
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">attestedAt</code>,{" "}
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">kid</code>,{" "}
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">nodeRuntimeHash</code>,{" "}
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">protocolVersion</code>) that
+        is NOT covered by <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">certificateHash</code>.
+        Editing one of those fields breaks Layer 3 while Layer 1 still passes.
+      </li>
+      <li>
+        <strong>Re-serialization that breaks JCS.</strong> Layer 3 requires the exact JCS (RFC 8785)
+        canonicalization of the whitelist projection. Tools that pretty-print, reorder keys, change
+        number formatting, or alter Unicode escaping invalidate the signature even when content is
+        semantically identical.
+      </li>
+      <li>
+        <strong>Key mismatch (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">kid</code>).</strong>{" "}
+        The verifier resolves the public key by <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">kid</code>{" "}
+        from <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">node.nexart.io/.well-known/nexart-node.json</code>.
+        If the published key set has rotated or the <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">kid</code>{" "}
+        is unknown, the signature cannot be validated.
+      </li>
+      <li>
+        <strong>Partial / redacted bundle.</strong> Public-safe representations may strip fields
+        from <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">snapshot</code> or omit
+        attestation projection fields. The envelope payload cannot be reconstructed bit-for-bit, so
+        Layer 3 returns <strong>SKIPPED</strong> (or <strong>FAIL</strong> if the verifier
+        attempts strict reconstruction). See "Why public bundles cannot always verify the envelope" below.
+      </li>
+      <li>
+        <strong>v0.16.0 signals payload alignment bug.</strong> Bundles created with
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono ml-1">@nexart/ai-execution@0.16.0</code>{" "}
+        that include signals MAY fail envelope verification due to a payload alignment issue fixed
+        in <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">v0.16.1</code>. Operators
+        SHOULD re-certify affected executions via{" "}
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">POST /v1/admin/recertify-batch</code>.
+      </li>
+      <li>
+        <strong>Pre-envelope artifact.</strong> Bundles produced before v0.16.1 may not include any
+        envelope at all. Layer 3 returns <strong>SKIPPED</strong> by compatibility fallback.
+        This is NOT a failure of integrity or attestation.
+      </li>
+    </ol>
+
+    <h3 id="envelope-failure-vs-integrity">Envelope FAIL does not imply Integrity FAIL</h3>
+    <p>
+      Because <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>{" "}
+      and the envelope cover different projections (the envelope additionally signs the attestation
+      projection and excludes <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>{" "}
+      itself), a Layer 3 <strong>FAIL</strong> with Layer 1 <strong>PASS</strong> indicates the bundle's
+      hashed content is intact, but the node's signed surface around it has been altered. Verifiers
+      MUST report each layer independently. The aggregate verification status follows the rules in{" "}
+      <Link to="/docs/verification-statuses-and-errors" className="text-primary hover:underline">
+        Verification Statuses and Errors
+      </Link>.
+    </p>
+
+    <h3 id="public-bundle-envelope-limit">Why public bundles cannot always verify the envelope</h3>
+    <p>
+      The public verifier consumes a redacted representation of the record. Raw{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">snapshot.input</code> and{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">snapshot.output</code> are
+      never exposed publicly; only their SHA-256 digests are. Some metadata fields may also be
+      withheld depending on export settings. Because Layer 3 signs a strict whitelist projection
+      that includes <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">snapshot</code>{" "}
+      (and, when present, <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">context</code>{" "}
+      / <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">contextSummary</code>), a
+      verifier without the exact source bytes cannot reconstruct the signed payload byte-for-byte.
+    </p>
+    <p>
+      In that case the public verifier returns <strong>SKIPPED</strong> for Layer 3 and still
+      reports <strong>PASS</strong> for Layer 1 (against the public-safe representation) and
+      Layer 2 (receipt validation against <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>).
+      Full envelope verification requires the original, non-redacted CER bundle — typically held by
+      the producer or an authorized auditor.
+    </p>
 
     <h2 id="what-it-proves">What Verification Proves</h2>
     <p>Verification answers up to four questions about a Certified Execution Record:</p>
