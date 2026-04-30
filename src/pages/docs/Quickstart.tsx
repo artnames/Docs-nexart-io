@@ -51,7 +51,7 @@ const Quickstart = () => (
 
     <h3>1. Install the SDK</h3>
     <CodeBlock language="bash" code="npm install @nexart/ai-execution" />
-    <p className="text-sm text-muted-foreground">Current version: <code>@nexart/ai-execution@0.15.0</code>.</p>
+    <p className="text-sm text-muted-foreground">Current version: <code>@nexart/ai-execution@0.16.1</code>.</p>
 
     <h3>2. Create and Certify a CER</h3>
     <CodeBlock
