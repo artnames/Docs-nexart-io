@@ -22,7 +22,7 @@ Multiple step CERs grouped into a Project Bundle (cer.project.bundle.v1) with a 
 AI Step → NexArt Certify AI Execution → verificationUrl + receipt
 
 ## CER bundle (cer.ai.execution.v1)
-{ bundleType: "cer.ai.execution.v1", version: "1.0", createdAt: ISO 8601,
+{ bundleType: "cer.ai.execution.v1", version: "0.1", createdAt: ISO 8601,
   snapshot: { model, inputHash, outputHash, metadata }, certificateHash,
   meta: { attestation: { receipt, signature, kid } } }
 

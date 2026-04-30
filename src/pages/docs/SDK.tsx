@@ -35,7 +35,7 @@ Package helpers are additive only. They do not change CER hashing, attestation, 
 ## CER bundle shape
 {
   bundleType: "cer.ai.execution.v1",
-  version: "1.0",
+  version: "0.1",
   createdAt: ISO 8601,
   snapshot: {
     model: "gpt-4",

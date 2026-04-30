@@ -9,7 +9,7 @@ A CER is a portable, tamper-evident record of an execution. CERs may represent A
 ## Full anatomy
 {
   bundleType: "cer.ai.execution.v1",
-  version: "1.0",
+  version: "0.1",
   createdAt: ISO 8601,
   snapshot: { model, inputHash, outputHash, metadata },
   certificateHash: "sha256:...",
@@ -84,7 +84,7 @@ const CER = () => (
     <h3>Top-level fields</h3>
     <ul>
       <li><strong>bundleType</strong>: identifies the record type (e.g. <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer.ai.execution.v1</code>). Determines what verification checks apply.</li>
-      <li><strong>version</strong>: protocol version (currently <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">"1.0"</code>).</li>
+      <li><strong>version</strong>: protocol version (currently <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">"0.1"</code>).</li>
       <li><strong>createdAt</strong>: when the CER was created (ISO 8601).</li>
       <li><strong>certificateHash</strong>: SHA-256 hash derived from the canonical bundle.</li>
     </ul>
