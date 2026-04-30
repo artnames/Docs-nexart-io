@@ -3,6 +3,7 @@ import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import MentalModel from "@/components/docs/MentalModel";
 import TestHarness from "@/components/docs/TestHarness";
+import SealedVsCertified from "@/components/docs/SealedVsCertified";
 import { Link } from "react-router-dom";
 
 const llmBlock = `# NexArt Architecture (Canonical Reference)
@@ -367,6 +368,15 @@ const Architecture = () => (
       <Link to="/docs/verify-nexart" className="text-primary hover:underline ml-1">verify.nexart.io</Link>{" "}
       portal is a convenience layer; it runs the same checks any client can run.
     </p>
+
+    <h2 id="sealed-vs-certified">Sealed vs Certified</h2>
+    <p>
+      Two valid CER states. <strong>Sealed</strong> is produced offline by the SDK or CLI and
+      proves integrity only. <strong>Certified</strong> adds an Ed25519 receipt and a verification
+      envelope from the attestation node, making the bundle independently verifiable end-to-end.
+      Certification does not change the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>.
+    </p>
+    <SealedVsCertified />
 
     <h2 id="guarantees">What NexArt guarantees</h2>
     <ul>
