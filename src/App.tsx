@@ -54,6 +54,7 @@ import VerificationStatusesAndErrors from "./pages/docs/VerificationStatusesAndE
 import MultiStepAndMultiAgentWorkflows from "./pages/docs/MultiStepAndMultiAgentWorkflows";
 import PublicResealsAndRedactedVerification from "./pages/docs/PublicResealsAndRedactedVerification";
 import SignalsSDK from "./pages/docs/SignalsSDK";
+import Architecture from "./pages/docs/Architecture";
 
 const queryClient = new QueryClient();
 
@@ -65,11 +66,13 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/architecture" element={<Navigate to="/docs/architecture" replace />} />
           <Route path="/docs" element={<DocsLayout />}>
             <Route index element={<Navigate to="/docs/getting-started" replace />} />
             <Route path="what-is-nexart" element={<WhatIsNexArt />} />
             <Route path="getting-started" element={<GettingStarted />} />
             <Route path="quickstart" element={<Quickstart />} />
+            <Route path="architecture" element={<Architecture />} />
             <Route path="cer-protocol" element={<CERProtocol />} />
             <Route path="cer-record-management" element={<CERRecordManagement />} />
             <Route path="protocol-overview" element={<ProtocolOverview />} />

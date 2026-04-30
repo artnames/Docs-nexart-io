@@ -19,6 +19,7 @@ const routes = [
   "/docs/what-is-nexart",
   "/docs/getting-started",
   "/docs/quickstart",
+  "/docs/architecture",
   "/docs/cer-protocol",
   "/docs/cer-record-management",
   "/docs/protocol-overview",
