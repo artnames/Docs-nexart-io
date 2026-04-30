@@ -76,17 +76,23 @@ const Quickstart = () => (
 
     <h2>Path A: Single CER</h2>
 
+    <p>
+      Canonical workflow: <strong>create input → seal locally → verify → (optional) certify → verify again</strong>.
+      Sealing is offline and requires no API key. Certification is optional and adds node
+      attestation.
+    </p>
+
     <h3>1. Install the SDK</h3>
     <CodeBlock language="bash" code="npm install @nexart/ai-execution" />
     <p className="text-sm text-muted-foreground">Current version: <code>@nexart/ai-execution@0.16.1</code>.</p>
 
-    <h3>2. Create and Certify a CER</h3>
+    <h3>2. Seal a CER locally (offline)</h3>
     <CodeBlock
       language="typescript"
-      title="Certify a single AI Execution"
-      code={`import { createLangChainCer } from "@nexart/ai-execution";
+      title="Seal a CER locally — no node, no API key"
+      code={`import { sealCer, verifyAiCerBundleDetailed } from "@nexart/ai-execution";
 
-const { bundle, certificateHash } = createLangChainCer({
+const { bundle, certificateHash } = sealCer({
   provider: "openai",
   model: "gpt-4o-mini",
   input: {
@@ -98,11 +104,42 @@ const { bundle, certificateHash } = createLangChainCer({
   }
 });
 
-console.log(certificateHash);`}
-    />
-    <p>This produces a Certified Execution Record locally and returns a deterministic <code>certificateHash</code>. That hash is the canonical identity of the record.</p>
+console.log(certificateHash);
 
-    <h3>3. Verify</h3>
+// Verify locally
+const report = await verifyAiCerBundleDetailed(bundle);
+console.log(report.integrity); // PASS
+console.log(report.receipt);   // SKIPPED (no attestation yet)
+console.log(report.envelope);  // SKIPPED (no envelope yet)`}
+    />
+    <p>
+      A sealed bundle is a fully valid CER. <strong>SKIPPED</strong> for receipt and envelope is
+      expected — those layers only apply after node certification.
+    </p>
+
+    <h3>3. (Optional) Certify via the node</h3>
+    <CodeBlock
+      language="typescript"
+      title="Add node attestation"
+      code={`import { certifyLangChainRun, verifyAiCerBundleDetailed } from "@nexart/ai-execution";
+
+const { bundle, certificateHash, verificationUrl } = await certifyLangChainRun({
+  provider: "openai",
+  model: "gpt-4o-mini",
+  input:  { messages: [{ role: "user", content: "Should this report be approved?" }] },
+  output: { decision: "approve", reason: "policy_passed" },
+  nodeUrl: process.env.NEXART_NODE_URL!,
+  apiKey:  process.env.NEXART_API_KEY!,
+});
+
+const report = await verifyAiCerBundleDetailed(bundle);
+console.log(report.integrity); // PASS
+console.log(report.receipt);   // PASS
+console.log(report.envelope);  // PASS`}
+    />
+    <p>The <code>certificateHash</code> is identical whether the bundle is sealed or certified for the same input. Certification adds <code>meta.attestation</code> and <code>meta.verificationEnvelope</code>; it does not modify any hashed field.</p>
+
+    <h3>4. Verify publicly</h3>
     <p>
       Open{" "}
       <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a>{" "}
@@ -110,9 +147,11 @@ console.log(certificateHash);`}
     </p>
     <CodeBlock language="bash" code="https://verify.nexart.io/c/{certificateHash}" />
     <p>
-      Local CER creation produces a valid, verifiable artifact. Public resolution on <code>verify.nexart.io</code> depends on node attestation or availability of the record.
+      Public resolution on <code>verify.nexart.io</code> requires the bundle to have been
+      certified (or otherwise registered) by the attestation node. Sealed bundles can still be
+      verified locally with the SDK.
     </p>
-    <p>The verifier checks Bundle Integrity, Node Signature (if attested), and Receipt Consistency.</p>
+    <p>The verifier checks Bundle Integrity, Node Signature (if attested), Receipt Consistency, and Verification Envelope.</p>
 
     <h2>Path B: Project Bundle (Multi-Step Workflow)</h2>
 
