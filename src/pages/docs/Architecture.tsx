@@ -168,7 +168,12 @@ const Architecture = () => (
       reconstruct, normalize, strip, or add fields beyond the whitelist projection and JCS.
     </p>
 
-    <h3 id="stage-4">4. Node attestation (optional)</h3>
+    <h3 id="stage-4">4. Node certification (optional)</h3>
+    <p className="text-sm text-muted-foreground">
+      A sealed bundle (Stage 2) is already a valid CER. Certification is optional and adds
+      independently verifiable node attestation. After certification, the bundle is
+      <strong> certified</strong> rather than only sealed.
+    </p>
     <p>
       The producer may submit the bundle to an attestation node (
       <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">POST /v1/cer/ai/certify</code>).
