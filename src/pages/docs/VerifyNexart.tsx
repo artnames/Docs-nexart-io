@@ -92,6 +92,18 @@ const VerifyNexart = () => (
       <li>Metadata fields may be included or redacted based on the record's export settings</li>
     </ul>
 
+    <div className="not-prose my-6 rounded-lg border border-amber-500/40 bg-amber-500/5 p-4">
+      <div className="text-sm font-medium text-foreground mb-1">Public verification limitation</div>
+      <div className="text-sm text-muted-foreground">
+        Because <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">snapshot.input</code> and <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">snapshot.output</code> are redacted on public endpoints:
+        <ul className="list-disc pl-5 mt-2">
+          <li>Full envelope verification (Layer 3) is NOT possible from public data alone.</li>
+          <li>Receipt verification (Layer 2) IS possible.</li>
+          <li>certificateHash verification (Layer 1) IS possible against the public-safe representation.</li>
+        </ul>
+      </div>
+    </div>
+
     <h2 id="trust-model">Trust Model</h2>
     <p>The verifier does not ask you to trust the node. It fetches the CER data and the node's public keys, then runs all checks locally in the browser. If the hashes match and the signatures are valid, the record is verified. The node is an independent witness, not a trust authority.</p>
     <p>See <Link to="/docs/attestation-node" className="text-primary hover:underline">Attestation and Node Role</Link> for more on how the node fits into the trust model.</p>

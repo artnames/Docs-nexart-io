@@ -77,6 +77,40 @@ const Verification = () => (
       <li>Verification can happen offline (using the SDK) or at <Link to="/docs/verify-nexart" className="text-primary hover:underline">verify.nexart.io</Link>.</li>
     </ol>
 
+    <h2 id="three-layers">The Three Verification Layers</h2>
+    <p>Verification is split into three independent layers. Each layer protects a distinct property and reports its result independently. Envelope failure MUST NOT be reported as integrity failure.</p>
+
+    <h3 id="layer-1">Layer 1 — Integrity (certificateHash)</h3>
+    <p>Recomputes the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> from the strict whitelist projection of the bundle, canonicalized with JCS (RFC 8785). Proves the bundle has not been modified across covered fields.</p>
+    <p><strong>Hashed fields:</strong> <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">bundleType</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">version</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">createdAt</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">snapshot</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">context</code> (if present), <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">contextSummary</code> (if present).</p>
+    <p><strong>Not hashed:</strong> <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">certificateHash</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">meta</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">declaration</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">verificationEnvelope</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">verificationEnvelopeSignature</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">receipt</code>, any unknown fields.</p>
+
+    <h3 id="layer-2">Layer 2 — Receipt (Node stamp)</h3>
+    <p>Validates the Ed25519 signed receipt over the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>. Proves the node attested the bundle at a specific time. Receipt verification is independent of envelope verification.</p>
+
+    <h3 id="layer-3">Layer 3 — Verification Envelope (v0.16.1, v2)</h3>
+    <p>Ed25519 signature over <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">{`{ attestation, bundle }`}</code> using a strict whitelist projection. Proves full bundle integrity under the node's signature beyond the certificateHash.</p>
+    <ul>
+      <li><strong>Attestation projection (5 fields, exact):</strong> <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">attestationId</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">attestedAt</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">kid</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">nodeRuntimeHash</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">protocolVersion</code>.</li>
+      <li><strong>Bundle projection:</strong> <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">bundleType</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">version</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">createdAt</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">snapshot</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">context</code> (if present), <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">contextSummary</code> (if present).</li>
+      <li><code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">certificateHash</code> is NOT part of the signed payload.</li>
+      <li><code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">meta</code> is NOT signed by the envelope.</li>
+      <li><code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">receipt</code> is NOT signed by the envelope.</li>
+    </ul>
+    <p className="text-sm text-muted-foreground">Envelope failure indicates the signed bundle projection has been altered. It is reported separately from Layer 1 and MUST NOT be conflated with integrity failure.</p>
+
+    <div className="not-prose my-6 rounded-lg border border-amber-500/40 bg-amber-500/5 p-4">
+      <div className="text-sm font-medium text-foreground mb-1">Public verification limitation</div>
+      <div className="text-sm text-muted-foreground">
+        When using public endpoints, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">snapshot.input</code> and <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">snapshot.output</code> are redacted. Therefore:
+        <ul className="list-disc pl-5 mt-2">
+          <li>Full envelope verification is NOT possible from public data alone.</li>
+          <li>Receipt verification IS possible.</li>
+          <li>certificateHash verification IS possible (against the public-safe representation).</li>
+        </ul>
+      </div>
+    </div>
+
     <h2 id="what-it-proves">What Verification Proves</h2>
     <p>Verification answers up to four questions about a Certified Execution Record:</p>
     <ol>
@@ -85,7 +119,14 @@ const Verification = () => (
       <li>Does the receipt reference the correct <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>?</li>
       <li>Has the verification envelope been altered? (when present)</li>
     </ol>
-    <p>If all applicable checks pass, the record is intact and its attestation is trustworthy. For a detailed breakdown of the three verification layers, see <Link to="/docs/ai-cer-verification-layers" className="text-primary hover:underline">AI CER Verification Layers</Link>.</p>
+    <p>If all applicable checks pass, the record is intact and its attestation is trustworthy. For a detailed breakdown, see <Link to="/docs/ai-cer-verification-layers" className="text-primary hover:underline">AI CER Verification Layers</Link>.</p>
+
+    <div className="not-prose my-6 rounded-lg border border-border bg-muted/30 p-4">
+      <div className="text-sm font-medium text-foreground mb-1">v0.16.0 → v0.16.1 compatibility</div>
+      <div className="text-sm text-muted-foreground">
+        Bundles created with <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">@nexart/ai-execution@0.16.0</code> that include signals may fail envelope verification due to a payload alignment issue. <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">v0.16.1</code> fixes this. Re-certification may be required. Operators can use <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">POST /v1/admin/recertify-batch</code> to re-seal affected executions.
+      </div>
+    </div>
 
     <h2 id="how-to-verify">How to Verify a Record</h2>
     <p>There are three ways to verify a CER through the public verifier at <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a>. <strong>Prefer <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> for any persisted reference</strong> — it is the canonical identity of the artifact. <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">executionId</code> is convenience metadata only.</p>

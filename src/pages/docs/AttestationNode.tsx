@@ -221,6 +221,94 @@ const AttestationNode = () => (
       for the rules to apply when handling reseals.
     </p>
 
+    <h2 id="node-api">Node API Endpoints</h2>
+    <p>The canonical attestation node exposes the following endpoints. Authenticated endpoints require <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">Authorization: Bearer NEXART_API_KEY</code>.</p>
+    <div className="not-prose my-6 overflow-x-auto">
+      <table className="w-full text-sm border border-border rounded-lg">
+        <thead>
+          <tr className="bg-muted/50">
+            <th className="text-left px-4 py-3 font-medium border-b border-border">Endpoint</th>
+            <th className="text-left px-4 py-3 font-medium border-b border-border">Auth</th>
+            <th className="text-left px-4 py-3 font-medium border-b border-border">Purpose</th>
+            <th className="text-left px-4 py-3 font-medium border-b border-border">Typical use</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr className="border-b border-border">
+            <td className="px-4 py-3 font-mono text-xs">POST /v1/cer/ai/create</td>
+            <td className="px-4 py-3">API key</td>
+            <td className="px-4 py-3">Create a CER bundle without attestation.</td>
+            <td className="px-4 py-3">Deferred attestation flows.</td>
+          </tr>
+          <tr className="border-b border-border">
+            <td className="px-4 py-3 font-mono text-xs">POST /v1/cer/ai/certify</td>
+            <td className="px-4 py-3">API key</td>
+            <td className="px-4 py-3">Create and attest a CER in one call.</td>
+            <td className="px-4 py-3">Default integration path.</td>
+          </tr>
+          <tr className="border-b border-border">
+            <td className="px-4 py-3 font-mono text-xs">POST /v1/cer/verify</td>
+            <td className="px-4 py-3">Public</td>
+            <td className="px-4 py-3">Verify a single CER against the node's view.</td>
+            <td className="px-4 py-3">Server-side verification of a held bundle.</td>
+          </tr>
+          <tr className="border-b border-border">
+            <td className="px-4 py-3 font-mono text-xs">GET /v1/cer/public/:certificateHash</td>
+            <td className="px-4 py-3">Public</td>
+            <td className="px-4 py-3">Fetch the public-safe (redacted) representation of a CER.</td>
+            <td className="px-4 py-3">Backing the public verifier UI.</td>
+          </tr>
+          <tr className="border-b border-border">
+            <td className="px-4 py-3 font-mono text-xs">POST /v1/project-bundle/register</td>
+            <td className="px-4 py-3">API key</td>
+            <td className="px-4 py-3">Register a Project Bundle and obtain a project-level receipt.</td>
+            <td className="px-4 py-3">Multi-step or multi-agent workflows.</td>
+          </tr>
+          <tr className="border-b border-border">
+            <td className="px-4 py-3 font-mono text-xs">POST /v1/project-bundle/verify</td>
+            <td className="px-4 py-3">Public</td>
+            <td className="px-4 py-3">Verify a Project Bundle.</td>
+            <td className="px-4 py-3">Server-side verification of a held Project Bundle.</td>
+          </tr>
+          <tr>
+            <td className="px-4 py-3 font-mono text-xs">POST /v1/admin/recertify-batch</td>
+            <td className="px-4 py-3">Admin key</td>
+            <td className="px-4 py-3">Re-seal affected executions (e.g. v0.16.0 → v0.16.1 envelope alignment).</td>
+            <td className="px-4 py-3">Operator remediation only.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="idempotency">Idempotency and Mutation Rules</h2>
+    <ul>
+      <li>One <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">execution_id</code> maps to one <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> forever.</li>
+      <li>Re-submitting the same <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">execution_id</code> with the same content is idempotent and returns the original record.</li>
+      <li>Re-submitting the same <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">execution_id</code> with mutated content returns <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">409 EXECUTION_MUTATION_DETECTED</code>. The original record is preserved.</li>
+      <li>To represent a corrected execution, create a new record with a new <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">execution_id</code>.</li>
+    </ul>
+
+    <h2 id="error-codes">Error Codes</h2>
+    <div className="not-prose my-6 overflow-x-auto">
+      <table className="w-full text-sm border border-border rounded-lg">
+        <thead>
+          <tr className="bg-muted/50">
+            <th className="text-left px-4 py-3 font-medium border-b border-border">Code</th>
+            <th className="text-left px-4 py-3 font-medium border-b border-border">Meaning</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr className="border-b border-border"><td className="px-4 py-3 font-mono text-xs">CERTIFICATE_HASH_MISMATCH</td><td className="px-4 py-3">Recomputed certificateHash does not match the value declared in the bundle.</td></tr>
+          <tr className="border-b border-border"><td className="px-4 py-3 font-mono text-xs">BUNDLE_HASH_MISMATCH</td><td className="px-4 py-3">Bundle hash does not match the receipt or envelope reference.</td></tr>
+          <tr className="border-b border-border"><td className="px-4 py-3 font-mono text-xs">NODE_SIGNATURE_INVALID</td><td className="px-4 py-3">Ed25519 signature on the receipt fails verification against the published key.</td></tr>
+          <tr className="border-b border-border"><td className="px-4 py-3 font-mono text-xs">RECEIPT_BUNDLE_HASH_MISMATCH</td><td className="px-4 py-3">Receipt references a different certificateHash than the bundle.</td></tr>
+          <tr className="border-b border-border"><td className="px-4 py-3 font-mono text-xs">EXECUTION_MUTATION_DETECTED</td><td className="px-4 py-3">Same execution_id submitted with mutated content. Returned with HTTP 409.</td></tr>
+          <tr className="border-b border-border"><td className="px-4 py-3 font-mono text-xs">UNAUTHORIZED</td><td className="px-4 py-3">Missing, malformed, or rejected API key.</td></tr>
+          <tr><td className="px-4 py-3 font-mono text-xs">QUOTA_EXCEEDED</td><td className="px-4 py-3">Account or project quota exceeded.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
     <h2 id="self-hosted">Self-Hosted Nodes</h2>
     <p className="text-muted-foreground"><strong>Roadmap.</strong> Self-hosted attestation nodes are not currently available. This feature is planned for a future release.</p>
   </>

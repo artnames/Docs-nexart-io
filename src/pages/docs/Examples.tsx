@@ -22,7 +22,7 @@ Multiple step CERs grouped into a Project Bundle (cer.project.bundle.v1) with a 
 AI Step → NexArt Certify AI Execution → verificationUrl + receipt
 
 ## CER bundle (cer.ai.execution.v1)
-{ bundleType: "cer.ai.execution.v1", version: "1.0", createdAt: ISO 8601,
+{ bundleType: "cer.ai.execution.v1", version: "0.1", createdAt: ISO 8601,
   snapshot: { model, inputHash, outputHash, metadata }, certificateHash,
   meta: { attestation: { receipt, signature, kid } } }
 
@@ -128,7 +128,7 @@ https://verify.nexart.io/c/sha256%3A9e8d7c6b5a4f3210...`}
     <CodeBlock
       code={`{
   "bundleType": "cer.ai.execution.v1",
-  "version": "1.0",
+  "version": "0.1",
   "createdAt": "2026-03-06T12:00:00.000Z",
   "snapshot": {
     "model": "gpt-4",
@@ -180,7 +180,7 @@ https://verify.nexart.io/c/sha256%3A9e8d7c6b5a4f3210...`}
     <CodeBlock
       code={`{
   "bundleType": "cer.ai.execution.v1",
-  "version": "1.0",
+  "version": "0.1",
   "createdAt": "2026-03-06T12:00:00.000Z",
   "snapshot": {
     "model": "gpt-4",
@@ -247,7 +247,7 @@ const bundle = workflow.finish();
     <CodeBlock
       code={`{
   "bundleType": "signed-redacted-reseal",
-  "version": "1.0",
+  "version": "0.1",
   "createdAt": "2026-03-06T12:00:00.000Z",
   "snapshot": {
     "model": "gpt-4",
@@ -267,7 +267,7 @@ const bundle = workflow.finish();
     <CodeBlock
       code={`{
   "bundleType": "hash-only-timestamp",
-  "version": "1.0",
+  "version": "0.1",
   "createdAt": "2026-03-06T12:00:00.000Z",
   "snapshot": null,
   "certificateHash": "sha256:7f8e9d0c1b2a3456..."

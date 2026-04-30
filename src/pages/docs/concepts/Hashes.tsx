@@ -75,8 +75,32 @@ const Hashes = () => (
       </table>
     </div>
 
+    <h2 id="what-is-hashed">What is hashed (certificateHash)</h2>
+    <p>The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> is computed using JCS (RFC 8785) canonicalization over a strict whitelist projection. It is computed ONLY over:</p>
+    <ul>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">bundleType</code></li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">version</code></li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">createdAt</code></li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">snapshot</code></li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">context</code> (only if present)</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">contextSummary</code> (only if present)</li>
+    </ul>
+
+    <h2 id="what-is-not-hashed">What is NOT hashed</h2>
+    <p>The following fields are explicitly excluded from the certificate hash payload:</p>
+    <ul>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code></li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta</code></li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">declaration</code></li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verificationEnvelope</code></li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verificationEnvelopeSignature</code></li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">receipt</code></li>
+      <li>any unknown fields not in the whitelist</li>
+    </ul>
+    <p>Verifiers MUST apply the whitelist projection to the bundle as received. No reconstruction. No normalization beyond JCS. No field stripping or addition.</p>
+
     <h2 id="tamper-evidence">Tamper Evidence</h2>
-    <p>Both hashes are tamper-evident. Any modification to the underlying data produces a different hash, making changes immediately detectable during verification.</p>
+    <p>Both hashes are tamper-evident. Any modification to a covered field produces a different hash, making changes immediately detectable during verification.</p>
 
     <h2 id="when-to-use">When to Use Each</h2>
     <ul>

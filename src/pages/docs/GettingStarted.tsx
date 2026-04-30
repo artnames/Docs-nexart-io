@@ -85,7 +85,7 @@ const GettingStarted = () => {
 
       <h2 id="install">Install the SDK</h2>
       <CodeBlock language="bash" code="npm install @nexart/ai-execution" />
-      <p className="text-sm text-muted-foreground">Current version: <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">@nexart/ai-execution@0.15.0</code>.</p>
+      <p className="text-sm text-muted-foreground">Current version: <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">@nexart/ai-execution@0.16.1</code>.</p>
 
       <h2 id="path-a">Path A: Create a Single CER</h2>
       <p>The simplest integration. One execution produces one verifiable record.</p>
