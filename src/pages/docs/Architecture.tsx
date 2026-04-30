@@ -2,6 +2,7 @@ import PageHeader from "@/components/docs/PageHeader";
 import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import MentalModel from "@/components/docs/MentalModel";
+import TestHarness from "@/components/docs/TestHarness";
 import { Link } from "react-router-dom";
 
 const llmBlock = `# NexArt Architecture (Canonical Reference)
@@ -66,6 +67,14 @@ const Architecture = () => (
         "Bundles are immutable. State transitions live outside the bundle.",
       ]}
     />
+
+    <h2 id="copy-paste-test-harness">Copy-Paste Test Harness</h2>
+    <p>
+      The fastest way to validate an integration against the canonical pipeline. One script,
+      one set of environment variables, one expected output: three PASS lines for Integrity,
+      Receipt, and Envelope.
+    </p>
+    <TestHarness />
 
     <h2 id="audience">Audience and scope</h2>
     <p>
