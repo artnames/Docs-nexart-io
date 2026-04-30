@@ -7,7 +7,7 @@ import MentalModel from "@/components/docs/MentalModel";
 import MinimalExample from "@/components/docs/MinimalExample";
 import CommonMistakes from "@/components/docs/CommonMistakes";
 import FailureModes from "@/components/docs/FailureModes";
-import TestHarness from "@/components/docs/TestHarness";
+
 
 const llmBlock = `# Quickstart
 
@@ -55,7 +55,161 @@ const Quickstart = () => (
       <Link to="/docs/getting-started" className="text-primary hover:underline">Getting Started</Link>.
     </p>
 
-    <TestHarness />
+    <section className="not-prose my-8">
+      <div className="rounded-lg border border-primary/30 bg-primary/5 p-5">
+        <div className="text-xs font-semibold uppercase tracking-wide text-primary mb-1">
+          Verify Your First Execution (2 minutes)
+        </div>
+        <div className="text-sm text-muted-foreground mb-4">
+          Local-first. No API key, no node call, no network access. Seal a CER and verify it
+          locally with the SDK.
+        </div>
+
+        <div className="mb-4">
+          <CodeBlock
+            language="bash"
+            title="1. Install"
+            code={`npm install @nexart/ai-execution`}
+          />
+        </div>
+
+        <CodeBlock
+          language="typescript"
+          title="2. seal-and-verify.ts (single file, copy as-is)"
+          code={`import {
+  sealCer,
+  verifyAiCerBundleDetailed,
+} from "@nexart/ai-execution";
+
+async function main() {
+  // Seal locally. Fully offline.
+  const { bundle, certificateHash } = sealCer({
+    provider: "openai",
+    model: "gpt-4o-mini",
+    input:  { messages: [{ role: "user", content: "Should this refund be approved?" }] },
+    output: { decision: "approve", reason: "policy_passed" },
+  });
+
+  console.log("certificateHash :", certificateHash);
+
+  // Independent verification of the sealed bundle.
+  const report = await verifyAiCerBundleDetailed(bundle);
+
+  console.log("Integrity (Layer 1) :", report.integrity);
+  console.log("Receipt   (Layer 2) :", report.receipt);
+  console.log("Envelope  (Layer 3) :", report.envelope);
+}
+
+main().catch((err) => {
+  console.error("FAILED:", err);
+  process.exit(1);
+});`}
+        />
+
+        <div className="mt-4">
+          <CodeBlock
+            language="bash"
+            title="3. Run"
+            code={`npx tsx seal-and-verify.ts`}
+          />
+        </div>
+      </div>
+
+      <div className="mt-6 rounded-lg border border-border bg-card p-5">
+        <div className="text-xs font-semibold uppercase tracking-wide text-foreground mb-2">
+          Expected output (sealed bundle)
+        </div>
+        <CodeBlock
+          language="text"
+          code={`certificateHash : sha256:9f2b1c8e4a7d6f3b0c5e8a1d2f4b6c8e9a0d3f5b7c2e4a6d8f1b3c5e7a9d0f2b
+Integrity (Layer 1) : PASS
+Receipt   (Layer 2) : SKIPPED
+Envelope  (Layer 3) : SKIPPED`}
+        />
+        <p className="text-sm text-foreground mt-3">
+          Local sealing proves integrity. Certification adds an independent node attestation.
+        </p>
+        <p className="text-xs text-muted-foreground mt-2">
+          <strong>SKIPPED</strong> for Receipt and Envelope is expected. Those layers only apply
+          after a node certifies the bundle. SKIPPED is not a failure.
+        </p>
+      </div>
+
+      <div className="mt-8 rounded-lg border border-primary/30 bg-primary/5 p-5">
+        <div className="text-xs font-semibold uppercase tracking-wide text-primary mb-1">
+          Add node certification (optional)
+        </div>
+        <div className="text-sm text-muted-foreground mb-4">
+          Certification is optional. It submits the bundle to the attestation node, which adds an
+          Ed25519 receipt and a verification envelope, and returns a public{" "}
+          <code className="font-mono">verificationUrl</code>. The{" "}
+          <code className="font-mono">certificateHash</code> does not change.
+        </div>
+
+        <div className="mb-4">
+          <CodeBlock
+            language="bash"
+            title="1. Configure node access"
+            code={`export NEXART_NODE_URL="https://node.nexart.io"
+export NEXART_API_KEY="<your-api-key>"`}
+          />
+        </div>
+
+        <CodeBlock
+          language="typescript"
+          title="2. certify-and-verify.ts"
+          code={`import {
+  certifyLangChainRun,
+  verifyAiCerBundleDetailed,
+} from "@nexart/ai-execution";
+
+async function main() {
+  // Create + certify in one node round-trip.
+  const { bundle, certificateHash, verificationUrl } = await certifyLangChainRun({
+    provider: "openai",
+    model: "gpt-4o-mini",
+    input:  { messages: [{ role: "user", content: "Should this refund be approved?" }] },
+    output: { decision: "approve", reason: "policy_passed" },
+    nodeUrl: process.env.NEXART_NODE_URL!,
+    apiKey:  process.env.NEXART_API_KEY!,
+  });
+
+  console.log("certificateHash :", certificateHash);
+  console.log("verificationUrl :", verificationUrl);
+
+  const report = await verifyAiCerBundleDetailed(bundle);
+
+  console.log("Integrity (Layer 1) :", report.integrity);
+  console.log("Receipt   (Layer 2) :", report.receipt);
+  console.log("Envelope  (Layer 3) :", report.envelope);
+}
+
+main().catch((err) => {
+  console.error("FAILED:", err);
+  process.exit(1);
+});`}
+        />
+      </div>
+
+      <div className="mt-6 rounded-lg border border-border bg-card p-5">
+        <div className="text-xs font-semibold uppercase tracking-wide text-foreground mb-2">
+          Expected output (certified bundle)
+        </div>
+        <CodeBlock
+          language="text"
+          code={`certificateHash : sha256:9f2b1c8e4a7d6f3b0c5e8a1d2f4b6c8e9a0d3f5b7c2e4a6d8f1b3c5e7a9d0f2b
+verificationUrl : https://verify.nexart.io/c/sha256:9f2b1c8e4a7d6f3b0c5e8a1d2f4b6c8e9a0d3f5b7c2e4a6d8f1b3c5e7a9d0f2b
+Integrity (Layer 1) : PASS
+Receipt   (Layer 2) : PASS
+Envelope  (Layer 3) : PASS`}
+        />
+        <p className="text-xs text-muted-foreground mt-2">
+          With node certification, all three layers return PASS. The{" "}
+          <code className="font-mono">verificationUrl</code> is publicly resolvable at{" "}
+          verify.nexart.io.
+        </p>
+      </div>
+    </section>
 
     <MentalModel />
 
