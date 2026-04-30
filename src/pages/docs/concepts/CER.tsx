@@ -1,4 +1,5 @@
 import PageHeader from "@/components/docs/PageHeader";
+import MentalModel from "@/components/docs/MentalModel";
 import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import { Link } from "react-router-dom";
@@ -55,6 +56,8 @@ const CER = () => (
       summary="CERs are the core unit of proof in NexArt. They prove execution integrity, not just log events."
       llmBlock={llmBlock}
     />
+
+    <MentalModel lines={["Logs describe. CERs prove.", "The certificateHash is the canonical identity.", "Mutate the bundle and you break the proof."]} />
 
     <h2 id="overview">Overview</h2>
     <p>A <strong>Certified Execution Record (CER)</strong> is a portable, tamper-evident record of an execution. CERs can represent AI completions, deterministic system operations, or any execution you want to certify.</p>

@@ -1,4 +1,5 @@
 import PageHeader from "@/components/docs/PageHeader";
+import MentalModel from "@/components/docs/MentalModel";
 import DocsMeta from "@/components/docs/DocsMeta";
 import { Link } from "react-router-dom";
 
@@ -29,6 +30,8 @@ const Hashes = () => (
       summary="Two hash types, two scopes. One for single executions, one for multi-step workflows."
       llmBlock={llmBlock}
     />
+
+    <MentalModel lines={["certificateHash binds one execution.", "projectHash binds many executions into one workflow.", "Both are deterministic. Both must be recomputable."]} />
 
     <h2 id="comparison">Comparison</h2>
     <div className="not-prose my-6 overflow-x-auto">
