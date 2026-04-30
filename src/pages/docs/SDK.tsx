@@ -7,6 +7,7 @@ import MentalModel from "@/components/docs/MentalModel";
 import MinimalExample from "@/components/docs/MinimalExample";
 import CommonMistakes from "@/components/docs/CommonMistakes";
 import FailureModes from "@/components/docs/FailureModes";
+import TechnicalTruth from "@/components/docs/TechnicalTruth";
 
 const llmBlock = `# NexArt AI Execution SDK
 
@@ -87,6 +88,8 @@ const SDK = () => (
       summary="API reference for certifying AI executions, creating CER bundles, and working with CER packages."
       llmBlock={llmBlock}
     />
+
+    <TechnicalTruth />
 
     <h2 id="overview">Overview</h2>
     <p>The AI Execution SDK provides two endpoints for working with Certified Execution Records. Most builders should use the <strong>certify</strong> endpoint, which handles everything in a single request.</p>
