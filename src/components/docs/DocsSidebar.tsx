@@ -12,6 +12,7 @@ const navigation: NavItem[] = [
   { title: "What is NexArt", path: "/docs/what-is-nexart" },
   { title: "Getting Started", path: "/docs/getting-started" },
   { title: "Quickstart", path: "/docs/quickstart" },
+  { title: "Architecture", path: "/docs/architecture" },
   {
     title: "Core Concepts",
     children: [
