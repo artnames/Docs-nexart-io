@@ -154,7 +154,37 @@ const CER = () => (
     </ul>
 
     <h2 id="certificate-hash">Certificate Hash</h2>
-    <p>The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> is a SHA-256 hash derived from the canonical bundle structure. It uniquely identifies the record and is what the attestation node signs. Any modification to the CER produces a different hash, making tampering immediately evident.</p>
+    <p>The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> is a SHA-256 hash derived from a strict whitelist projection of the bundle, canonicalized using JCS (RFC 8785). It uniquely identifies the record and is what the attestation node signs. Any modification to a covered field produces a different hash.</p>
+
+    <h3 id="what-is-hashed">What is hashed</h3>
+    <p>The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> is computed ONLY over the following fields:</p>
+    <ul>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">bundleType</code></li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">version</code></li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">createdAt</code></li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">snapshot</code></li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">context</code> (only if present)</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">contextSummary</code> (only if present)</li>
+    </ul>
+
+    <h3 id="what-is-not-hashed">What is NOT hashed</h3>
+    <p>The following fields are explicitly excluded from the certificate hash payload:</p>
+    <ul>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code></li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta</code></li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">declaration</code></li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verificationEnvelope</code></li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verificationEnvelopeSignature</code></li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">receipt</code></li>
+      <li>any unknown fields not in the whitelist</li>
+    </ul>
+    <p>Rules for verifiers:</p>
+    <ul>
+      <li>No reconstruction of the payload</li>
+      <li>No normalization beyond JCS canonicalization</li>
+      <li>No field stripping or addition</li>
+      <li>The whitelist projection MUST be applied to the bundle exactly as received</li>
+    </ul>
 
     <h2 id="exports">Export Paths</h2>
     <ul>
