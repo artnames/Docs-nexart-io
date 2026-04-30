@@ -136,9 +136,15 @@ const Architecture = () => (
       was captured. It guarantees that what was captured cannot be altered without detection.
     </p>
 
-    <h3 id="stage-2">2. CER creation</h3>
+    <h3 id="stage-2">2. CER creation (local sealing)</h3>
     <p>
-      The producer assembles the canonical CER bundle. Required top-level fields:
+      The producer assembles the canonical CER bundle and computes the{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>.
+      This stage is fully offline: it requires no network access and no API key. In SDK form
+      this is <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">sealCer()</code>;
+      in CLI form it is <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">nexart ai seal</code>.
+      The output is a <strong>sealed</strong> CER bundle (integrity only; no attestation).
+      Required top-level fields:
     </p>
     <ul>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">bundleType</code> - constant string <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">"cer.ai.execution.v1"</code> for AI executions.</li>
