@@ -115,25 +115,24 @@ const TechnicalTruth = () => {
 
         <div>
           <dt className="font-semibold text-foreground">
-            Independence model: local creation, optional node certification, independent verification
+            Independence model: local sealing, optional node certification, independent verification
           </dt>
           <dd className="text-foreground/90 mt-1 space-y-2">
             <p>
-              <strong>Local creation</strong> — produced by the SDK or CLI (
+              <strong>Local sealing</strong> — produced by the SDK (
               <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">
-                @nexart/ai-execution
+                @nexart/ai-execution@0.16.1
               </code>{" "}
-              /{" "}
+              via <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">sealCer()</code>) or the
+              CLI (
               <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">
-                nexart ai create
+                @nexart/cli@0.8.0
               </code>{" "}
-              /{" "}
-              <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">
-                POST /v1/cer/ai/create
-              </code>
-              ). Builds a canonical CER bundle and computes the{" "}
-              <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">certificateHash</code>.
-              No network call to the attestation node. No receipt, no signature, no public verification URL.
+              via <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">nexart ai seal</code>).
+              Builds a canonical CER bundle and computes the{" "}
+              <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">certificateHash</code>{" "}
+              fully offline. No API key, no network call, no receipt, no verification envelope.
+              The result is a <strong>sealed</strong> bundle: integrity only.
             </p>
             <p>
               <strong>Optional node certification</strong> — performed by the attestation node (
@@ -147,13 +146,15 @@ const TechnicalTruth = () => {
               ). The node validates the bundle and issues an Ed25519-signed receipt (identified by{" "}
               <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">kid</code>) referencing
               the bundle's{" "}
-              <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">certificateHash</code>.
-              The receipt and signature are stored at{" "}
+              <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">certificateHash</code>,
+              plus a verification envelope. Receipt and signatures are stored at{" "}
               <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">
                 bundle.meta.attestation
-              </code>
-              . Certification adds an attestation layer; it does not change the{" "}
+              </code>{" "}
+              and <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">meta.verificationEnvelope</code>.
+              Certification adds attestation layers; it does not change the{" "}
               <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">certificateHash</code>.
+              The result is a <strong>certified</strong> bundle.
             </p>
             <p>
               <strong>Independent verification</strong> — performed by anyone, with no trust in
@@ -162,6 +163,8 @@ const TechnicalTruth = () => {
                 verify.nexart.io
               </Link>
               , the SDK, or the CLI. The bundle plus the node's published public keys are sufficient.
+              For sealed bundles, only Layer 1 (integrity) is applicable; Layers 2 and 3 return SKIPPED.
+              For certified bundles, all three layers return PASS.
             </p>
           </dd>
         </div>
