@@ -2,38 +2,78 @@ import PageHeader from "@/components/docs/PageHeader";
 import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import TechnicalTruth from "@/components/docs/TechnicalTruth";
+import SealedVsCertified from "@/components/docs/SealedVsCertified";
 import { Link } from "react-router-dom";
 
 const llmBlock = `# NexArt CLI
 
-The NexArt CLI (@nexart/cli@0.7.0) is a command-line tool for creating, certifying, and verifying Certified Execution Records (CERs).
+Package: @nexart/cli@0.8.0
 
-## Tasks
-- Create a CER locally (nexart ai create)
-- Certify an execution with node attestation (nexart ai certify)
-- Verify a CER bundle or CER package offline (nexart ai verify)
-- Run deterministic renders (nexart run)
+The NexArt CLI is a thin command-line surface over the AI Execution SDK
+(@nexart/ai-execution@0.16.1). It contains zero CER cryptographic logic.
+All hashing, canonicalization (JCS, RFC 8785), and verification is delegated to the SDK.
 
-## Installation
-npx @nexart/cli@0.7.0 --help
+## Canonical workflow
+1. Create execution input (JSON file matching CreateSnapshotParams).
+2. Seal locally          -> nexart ai seal     (offline, no API key)
+3. Verify locally        -> nexart ai verify   (integrity PASS, receipt/envelope SKIPPED)
+4. Optional: certify     -> nexart ai certify  (node attestation, requires NEXART_API_KEY)
+5. Verify again          -> nexart ai verify   (integrity PASS, receipt PASS, envelope PASS)
 
-## Environment Variables
-- NEXART_RENDERER_ENDPOINT: URL of the canonical renderer service
-- NEXART_API_KEY: API key for authenticated operations
+## Terminology
+- Sealed   = integrity only. Local artifact. No node attestation. Layer 1 PASS, Layers 2 and 3 SKIPPED.
+- Certified = integrity + node attestation + verification envelope. Layers 1, 2, 3 all PASS.
+SKIPPED is not a failure. It means the layer is not applicable to the bundle.
 
-## Package-aware verify (v0.7.0+)
-nexart ai verify accepts both raw CER bundles and CER packages.
-For package input, the CLI verifies the inner CER. Package-level trust layers (e.g. verification envelope) are not fully verified by this command.`;
+## Commands
+- nexart ai seal <input.json> [--out cer.json]
+    Fully offline. Delegates to SDK createSnapshot() + sealCer().
+    Output: cer.ai.execution.v1 bundle, version "0.1", with certificateHash.
+    Produces NO attestation, NO receipt, NO verification envelope.
+
+- nexart ai certify <input.json> [--out cer.json]
+    Calls POST /v1/cer/ai/certify on the attestation node.
+    Requires NEXART_API_KEY and NEXART_NODE_URL.
+    Output: certified CER bundle with meta.attestation and meta.verificationEnvelope.
+
+- nexart ai verify <bundle-or-package.json>
+    Pure delegation to verifyAiCerBundleDetailed(). The CLI performs no
+    hash recomputation, no canonicalization, no signature checks. The CLI
+    is an input router and an output formatter.
+    Top-level fields in the JSON output come from the SDK. cli.* fields are
+    additive metadata (e.g. cli.inputType, cli.cliVersion).
+
+## Bundle versions
+- Bundle version: "0.1"
+- Protocol version: 1.2.0
+- CLI version: 0.8.0
+- SDK version: 0.16.1
+
+## Verification result for a SEALED bundle
+{
+  "status": "VERIFIED",
+  "integrity": "PASS",
+  "receipt":   "SKIPPED",
+  "envelope":  "SKIPPED"
+}
+
+## Verification result for a CERTIFIED bundle
+{
+  "status": "VERIFIED",
+  "integrity": "PASS",
+  "receipt":   "PASS",
+  "envelope":  "PASS"
+}`;
 
 const NexArtCLI = () => (
   <>
     <DocsMeta
       title="NexArt CLI"
-      description="Use the NexArt CLI to certify executions, inspect CER bundles, and verify receipts from the command line."
+      description="NexArt CLI v0.8.0: seal CERs locally, certify via the node, and verify bundles. A thin delegation layer over @nexart/ai-execution."
     />
     <PageHeader
       title="NexArt CLI"
-      summary="Command-line interface for creating, certifying, and verifying Certified Execution Records."
+      summary="Command-line surface over the AI Execution SDK. Seal locally, certify optionally, verify anywhere."
       llmBlock={llmBlock}
     />
 
@@ -42,50 +82,84 @@ const NexArtCLI = () => (
     <h2>Best For</h2>
     <ul>
       <li>Local development and testing</li>
-      <li>Offline verification of CER bundles</li>
+      <li>Offline sealing of CER bundles (no network, no API key)</li>
+      <li>Offline verification of CER bundles and CER packages</li>
       <li>CI pipelines and automation scripts</li>
-      <li>Engineers who prefer command-line workflows</li>
     </ul>
 
-    <h2>Overview</h2>
+    <h2>Architecture: CLI is a delegation layer</h2>
     <p>
-      The NexArt CLI supports three distinct operations for AI execution certification:
+      As of <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/cli@0.8.0</code>,
+      the CLI contains <strong>zero CER cryptographic logic</strong>. Every operation is delegated to{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@0.16.1</code>:
     </p>
     <ul>
-      <li><strong>Local creation</strong>: generate a CER bundle and certificate hash without contacting the network</li>
-      <li><strong>Node certification</strong>: send an execution to the NexArt node for attestation and receive a signed receipt</li>
-      <li><strong>Local verification</strong>: verify a CER bundle offline by checking hash integrity and signature validity</li>
+      <li><strong>SDK owns:</strong> snapshot creation, JCS canonicalization, hashing, sealing, verification logic.</li>
+      <li><strong>CLI owns:</strong> command surface, file I/O, argument parsing, output formatting.</li>
+      <li><strong>Node owns:</strong> attestation, Ed25519 receipt signing, verification envelope signature.</li>
     </ul>
-    <p>
-      The CLI also supports deterministic rendering workflows for canvas-based executions.
+    <p className="text-sm text-muted-foreground">
+      The CLI does not recompute hashes, does not canonicalize JSON, and does not validate signatures.
+      It routes input to the SDK and prints what the SDK returns.
     </p>
 
+    <h2>Canonical workflow</h2>
+    <p>The recommended order for any new integration:</p>
+    <CodeBlock
+      language="bash"
+      title="seal -> verify -> (optional) certify -> verify"
+      code={`# 1. Seal locally (offline, no API key)
+npx @nexart/cli@0.8.0 ai seal execution.json --out cer.json
+
+# 2. Verify the sealed bundle
+npx @nexart/cli@0.8.0 ai verify cer.json
+# integrity: PASS, receipt: SKIPPED, envelope: SKIPPED
+
+# 3. (Optional) Certify via the attestation node
+export NEXART_NODE_URL="https://node.nexart.io"
+export NEXART_API_KEY="<your-api-key>"
+npx @nexart/cli@0.8.0 ai certify execution.json --out cer.certified.json
+
+# 4. Verify again (now attested)
+npx @nexart/cli@0.8.0 ai verify cer.certified.json
+# integrity: PASS, receipt: PASS, envelope: PASS`}
+    />
+
+    <SealedVsCertified />
+
     <h2>Installation</h2>
-    <CodeBlock code={`npx @nexart/cli@0.7.0 --help`} title="Install / Help" />
+    <CodeBlock code={`npx @nexart/cli@0.8.0 --help`} title="Install / Help" />
 
     <h2>Environment Variables</h2>
     <ul>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">NEXART_API_KEY</code>: API key for node certification</li>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">NEXART_RENDERER_ENDPOINT</code>: URL of the canonical renderer service (for rendering workflows)</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">NEXART_API_KEY</code>: required for <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">ai certify</code>. Not required for <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">ai seal</code> or <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">ai verify</code>.</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">NEXART_NODE_URL</code>: attestation node URL. Required for <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">ai certify</code>.</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">NEXART_RENDERER_ENDPOINT</code>: URL of the canonical renderer service (for deterministic rendering workflows).</li>
     </ul>
 
-    <h2>Create a CER Locally</h2>
-    <p>Generate a Certified Execution Record from a JSON execution input. No network call required.</p>
-    <CodeBlock code={`npx @nexart/cli@0.7.0 ai create execution.json`} title="Create a CER" />
-    <p>Example execution input:</p>
+    <h2 id="seal">nexart ai seal (v0.8.0+)</h2>
+    <p>
+      Seal an execution into a CER bundle <strong>fully offline</strong>. No node call, no API key,
+      no network access. Delegates to the SDK functions{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">createSnapshot()</code> and{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">sealCer()</code>.
+    </p>
+
+    <h3>Input contract</h3>
+    <p>
+      The input file MUST be a JSON object matching <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">CreateSnapshotParams</code> exactly,
+      as defined by <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@0.16.1</code>:
+    </p>
     <CodeBlock
       language="json"
-      title="execution.json"
+      title="execution.json (CreateSnapshotParams)"
       code={`{
   "executionId": "demo-001",
   "provider": "openai",
   "model": "gpt-4o-mini",
   "input": {
     "messages": [
-      {
-        "role": "user",
-        "content": "Should this automated report be approved?"
-      }
+      { "role": "user", "content": "Should this report be approved?" }
     ]
   },
   "output": {
@@ -94,118 +168,190 @@ const NexArtCLI = () => (
   }
 }`}
     />
-    <p>Save the bundle to a file:</p>
-    <CodeBlock code={`npx @nexart/cli@0.7.0 ai create execution.json --out cer.json`} title="Save CER Bundle" />
-    <p>This builds the canonical CER bundle, computes the certificate hash, and outputs the record.</p>
 
-    <h2>Certify an Execution</h2>
-    <p>Send an execution to the NexArt node for attestation. Returns a signed receipt and a public verification URL.</p>
-    <CodeBlock code={`npx @nexart/cli@0.7.0 ai certify execution.json`} title="Certify" />
-    <p>Example output:</p>
+    <h3>Command</h3>
+    <CodeBlock code={`npx @nexart/cli@0.8.0 ai seal execution.json --out cer.json`} title="Seal a CER" />
+
+    <h3>Output</h3>
+    <p>The command writes a CER bundle with:</p>
+    <ul>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">bundleType: "cer.ai.execution.v1"</code></li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">version: "0.1"</code></li>
+      <li>computed <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> (SHA-256 over JCS-canonicalized whitelist projection)</li>
+      <li><strong>no</strong> <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation</code></li>
+      <li><strong>no</strong> receipt</li>
+      <li><strong>no</strong> verification envelope</li>
+    </ul>
+
+    <h3>Verification result for a sealed bundle</h3>
     <CodeBlock
-      code={`CER certified\ncertificateHash: sha256:...\nverificationUrl: https://verify.nexart.io/e/demo-001`}
+      language="json"
+      title="ai verify (sealed bundle)"
+      code={`{
+  "status": "VERIFIED",
+  "integrity": "PASS",
+  "receipt":   "SKIPPED",
+  "envelope":  "SKIPPED",
+  "cli": {
+    "inputType": "bundle",
+    "cliVersion": "0.8.0"
+  }
+}`}
+    />
+    <p className="text-sm text-muted-foreground">
+      <strong>SKIPPED is not a failure.</strong> It means the layer does not apply to a sealed
+      (non-attested) bundle. The bundle is a fully valid CER; it has just not been certified by a node.
+    </p>
+
+    <h2 id="certify">nexart ai certify</h2>
+    <p>
+      Send an execution to the NexArt attestation node for certification. The node returns a
+      signed Ed25519 receipt and a verification envelope. Requires{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">NEXART_API_KEY</code> and{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">NEXART_NODE_URL</code>.
+    </p>
+    <CodeBlock code={`npx @nexart/cli@0.8.0 ai certify execution.json --out cer.certified.json`} title="Certify" />
+    <CodeBlock
+      code={`CER certified
+certificateHash: sha256:...
+verificationUrl: https://verify.nexart.io/c/sha256:...`}
       title="Certify Result"
     />
+    <p className="text-sm text-muted-foreground">
+      The certified bundle has identical <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">certificateHash</code> to a sealed bundle
+      created from the same input. Certification adds <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">meta.attestation</code> and{" "}
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">meta.verificationEnvelope</code> without modifying any hashed field.
+    </p>
 
-    <h2>Verify a CER Bundle or Package</h2>
+    <h2 id="verify">nexart ai verify</h2>
     <p>
-      As of v0.7.0, <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">nexart ai verify</code> accepts
-      both raw CER bundles and{" "}
+      As of v0.8.0, <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">nexart ai verify</code> is a{" "}
+      <strong>pure delegation</strong> to{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verifyAiCerBundleDetailed()</code> in{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@0.16.1</code>.
+      The CLI:
+    </p>
+    <ul>
+      <li>does <strong>not</strong> recompute the <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">certificateHash</code></li>
+      <li>does <strong>not</strong> canonicalize JSON</li>
+      <li>does <strong>not</strong> validate signatures</li>
+      <li>only routes the input file to the SDK and formats the SDK's result</li>
+    </ul>
+    <p>
+      The command accepts both raw CER bundles and{" "}
       <Link to="/docs/ai-cer-package-format" className="text-primary hover:underline">CER packages</Link>.
     </p>
 
-    <h3>Verify a raw CER bundle</h3>
-    <p>Checks hash integrity, signature validity, and receipt consistency.</p>
-    <CodeBlock code={`npx @nexart/cli@0.7.0 ai verify cer.json`} title="Verify Raw Bundle" />
+    <h3>Verify a sealed (local) CER bundle</h3>
+    <CodeBlock code={`npx @nexart/cli@0.8.0 ai verify cer.json`} title="Verify Sealed Bundle" />
     <CodeBlock
+      language="json"
+      title="Sealed bundle result"
       code={`{
   "status": "VERIFIED",
-  "inputType": "bundle",
-  "bundleIntegrity": "PASS",
-  "nodeSignature": "PASS",
-  "receiptConsistency": "PASS"
+  "integrity": "PASS",
+  "receipt":   "SKIPPED",
+  "envelope":  "SKIPPED",
+  "cli": {
+    "inputType": "bundle",
+    "cliVersion": "0.8.0"
+  }
 }`}
+    />
+
+    <h3>Verify a certified CER bundle</h3>
+    <CodeBlock code={`npx @nexart/cli@0.8.0 ai verify cer.certified.json`} title="Verify Certified Bundle" />
+    <CodeBlock
       language="json"
-      title="Raw Bundle Result"
+      title="Certified bundle result"
+      code={`{
+  "status": "VERIFIED",
+  "integrity": "PASS",
+  "receipt":   "PASS",
+  "envelope":  "PASS",
+  "cli": {
+    "inputType": "bundle",
+    "cliVersion": "0.8.0"
+  }
+}`}
     />
 
     <h3>Verify a CER package</h3>
     <p>
-      When the input file is a CER package, the CLI extracts and verifies the inner CER bundle.
-      Package-level trust layers (e.g. verification envelope) are not fully verified by this command.
+      When the input is a CER package, the CLI extracts and verifies the inner CER bundle through
+      the SDK. Package-level trust layers (e.g. verification envelope at the package wrapper) are
+      not fully verified by this command.
     </p>
-    <CodeBlock code={`npx @nexart/cli@0.7.0 ai verify package.json`} title="Verify CER Package" />
+    <CodeBlock code={`npx @nexart/cli@0.8.0 ai verify package.json`} title="Verify CER Package" />
     <CodeBlock
+      language="json"
+      title="Package result"
       code={`{
   "status": "VERIFIED",
-  "inputType": "package",
-  "verifiedInnerCer": true,
-  "packageTrustLayersVerified": false,
-  "bundleIntegrity": "PASS",
-  "nodeSignature": "PASS",
-  "receiptConsistency": "PASS"
+  "integrity": "PASS",
+  "receipt":   "PASS",
+  "envelope":  "PASS",
+  "cli": {
+    "inputType": "package",
+    "verifiedInnerCer": true,
+    "packageTrustLayersVerified": false,
+    "cliVersion": "0.8.0"
+  }
 }`}
-      language="json"
-      title="Package Result"
     />
     <p className="text-sm text-muted-foreground">
-      For working with CER packages programmatically, see the{" "}
-      <Link to="/docs/sdk#package-helpers" className="text-primary hover:underline">CER Package Helpers</Link> in
-      the AI Execution SDK.
+      <strong>Output schema:</strong> top-level fields (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">status</code>,{" "}
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">integrity</code>,{" "}
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">receipt</code>,{" "}
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">envelope</code>) come directly from the SDK.{" "}
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">cli.*</code> fields are additive CLI metadata and do not
+      participate in verification semantics.
     </p>
 
     <h2>Use in Automation or CI</h2>
-    <p>The CLI can be used in CI pipelines to certify and verify executions as part of automated workflows:</p>
-    <CodeBlock language="bash" title="CI Example" code={`# Certify an execution and save the bundle
-npx @nexart/cli@0.7.0 ai certify execution.json --out cer.json
+    <CodeBlock language="bash" title="CI Example" code={`# Seal locally during build (offline, no secrets)
+npx @nexart/cli@0.8.0 ai seal execution.json --out cer.json
+npx @nexart/cli@0.8.0 ai verify cer.json
 
-# Verify the bundle in a later step
-npx @nexart/cli@0.7.0 ai verify cer.json`} />
+# Certify on release (requires API key)
+npx @nexart/cli@0.8.0 ai certify execution.json --out cer.certified.json
+npx @nexart/cli@0.8.0 ai verify cer.certified.json`} />
 
     <h2>Context Signals</h2>
-    <p>Attach structured metadata to a CER using a signals file:</p>
-    <CodeBlock code={`npx @nexart/cli@0.7.0 ai create execution.json --signals-file signals.json`} title="Create with Signals" />
-    <CodeBlock code={`npx @nexart/cli@0.7.0 ai certify execution.json --signals-file signals.json`} title="Certify with Signals" />
+    <p>Attach structured metadata to a CER using a signals file. Signals are included in the certificateHash.</p>
+    <CodeBlock code={`npx @nexart/cli@0.8.0 ai seal    execution.json --signals-file signals.json
+npx @nexart/cli@0.8.0 ai certify execution.json --signals-file signals.json`} title="With Signals" />
     <p>
-      Signals are included in the certificate hash. See{" "}
-      <Link to="/docs/concepts/context-signals" className="text-primary hover:underline">Context Signals</Link> for
-      the full specification.
+      See <Link to="/docs/concepts/context-signals" className="text-primary hover:underline">Context Signals</Link> for the full specification.
     </p>
 
     <h2>Deterministic Rendering</h2>
     <p>The CLI also supports deterministic rendering workflows for canvas-based executions:</p>
     <CodeBlock
-      code={`npx @nexart/cli@0.7.0 run ./examples/sketch.js \\
+      code={`npx @nexart/cli@0.8.0 run ./examples/sketch.js \\
   --seed 12345 \\
   --vars "50,50,50,0,0,0,0,0,0,0" \\
   --include-code \\
   --out out.png`}
       title="Run a Render"
     />
-    <CodeBlock code={`npx @nexart/cli@0.7.0 verify out.snapshot.json`} title="Verify a Snapshot" />
+    <CodeBlock code={`npx @nexart/cli@0.8.0 verify out.snapshot.json`} title="Verify a Snapshot" />
+
+    <h2>Versions</h2>
+    <ul>
+      <li>CLI: <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/cli@0.8.0</code></li>
+      <li>SDK: <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@0.16.1</code></li>
+      <li>Bundle version: <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">"0.1"</code></li>
+      <li>Protocol version: <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">1.2.0</code></li>
+    </ul>
 
     <h2>Next Steps</h2>
     <ul>
-      <li>
-        <Link to="/docs/quickstart" className="text-primary hover:underline">Quickstart</Link>
-        : create your first CER in three steps
-      </li>
-      <li>
-        <Link to="/docs/verification" className="text-primary hover:underline">Verification</Link>
-        : deep dive into verification semantics
-      </li>
-      <li>
-        <Link to="/docs/examples" className="text-primary hover:underline">Examples</Link>
-        : copy-ready API requests and response shapes
-      </li>
-      <li>
-        <Link to="/docs/integrations/langchain" className="text-primary hover:underline">LangChain</Link>
-        : certify AI chain and agent executions
-      </li>
-      <li>
-        <Link to="/docs/integrations/n8n" className="text-primary hover:underline">n8n</Link>
-        : certify workflow automation results
-      </li>
+      <li><Link to="/docs/quickstart" className="text-primary hover:underline">Quickstart</Link>: seal then verify in three steps</li>
+      <li><Link to="/docs/architecture" className="text-primary hover:underline">Architecture</Link>: SDK / CLI / Node ownership boundaries</li>
+      <li><Link to="/docs/verification" className="text-primary hover:underline">Verification</Link>: layer-by-layer semantics</li>
+      <li><Link to="/docs/sdk" className="text-primary hover:underline">AI Execution SDK</Link>: programmatic seal and certify</li>
+      <li><Link to="/docs/integrations/langchain" className="text-primary hover:underline">LangChain</Link> / <Link to="/docs/integrations/n8n" className="text-primary hover:underline">n8n</Link>: framework integrations</li>
     </ul>
   </>
 );
