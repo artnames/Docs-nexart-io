@@ -365,6 +365,40 @@ const result = await verifyCerPackage(pkg);
       for the normative package structure.
     </p>
 
+    <h2 id="additional-exports">Additional Exports</h2>
+    <p>The SDK exports a number of helpers for advanced or operator-level workflows. Importable from <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution</code>.</p>
+
+    <h3 id="verify-detailed"><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verifyAiCerBundleDetailed(bundle)</code></h3>
+    <p>Returns a structured per-layer verification report covering Integrity (Layer 1), Receipt (Layer 2), and Verification Envelope (Layer 3). Each layer reports independently. Envelope failure is reported separately from integrity failure.</p>
+
+    <h3 id="seal"><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">sealCer(bundle, opts)</code></h3>
+    <p>Computes the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> over the strict whitelist projection (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">bundleType</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">version</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">createdAt</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">snapshot</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">context</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">contextSummary</code>) using JCS canonicalization.</p>
+
+    <h3 id="wrap-provider"><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">wrapProvider(provider, opts)</code></h3>
+    <p>Wraps an LLM/tool provider so each invocation is automatically certified through <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">/v1/cer/ai/certify</code>. Returns the original provider response augmented with the CER bundle and verificationUrl.</p>
+
+    <h3 id="redact"><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">redactBeforeSeal(bundle, fields)</code></h3>
+    <p>Removes specified fields from the snapshot prior to computing <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>. Use to keep sensitive content out of the hashed payload while preserving verifiability over the redacted bundle.</p>
+
+    <h3 id="sanitize-attestation"><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">sanitizeForAttestation(bundle)</code></h3>
+    <p>Returns the strict whitelist projection of a bundle suitable for attestation submission. Strips fields outside the certificateHash whitelist.</p>
+
+    <h3 id="sanitize-storage"><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">sanitizeForStorage(bundle)</code></h3>
+    <p>Returns a representation safe to store at rest. Preserves all fields required for verification while applying configured redactions.</p>
+
+    <h3 id="canonical-helpers">Canonicalization helpers</h3>
+    <ul>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">canonicalJson(value)</code> — JCS (RFC 8785) serialization.</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">hashCanonicalJson(value)</code> — SHA-256 over the JCS serialization. Used internally by <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">sealCer</code>.</li>
+    </ul>
+
+    <h3 id="project-bundle-helpers">Project Bundle helpers</h3>
+    <ul>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">createProjectBundle(steps, metadata)</code> — assembles a Project Bundle from step CERs.</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verifyProjectBundle(bundle)</code> / <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verifyProjectBundleAsync(bundle)</code> — verify a Project Bundle (sync/async).</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">computeProjectHash(bundle)</code> — recompute <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">projectHash</code> from canonical step content.</li>
+    </ul>
+
     <h2 id="agent-kit">Agent Kit</h2>
     <p>For agent workflows, <Link to="/docs/agent-kit" className="text-primary hover:underline">@nexart/agent-kit</Link> provides <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">wrapTool()</code> and <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certifyDecision()</code> as thin convenience wrappers over this SDK.</p>
 
