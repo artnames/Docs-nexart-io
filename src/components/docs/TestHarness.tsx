@@ -93,26 +93,60 @@ Envelope  (Layer 3) : PASS`}
       </p>
     </div>
 
-    <div className="mt-6 rounded-lg border border-primary/30 bg-primary/5 p-5">
-      <div className="text-xs font-semibold uppercase tracking-wide text-primary mb-2">
-        Expected verification result
+    <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="rounded-lg border border-border bg-card p-5">
+        <div className="text-xs font-semibold uppercase tracking-wide text-foreground mb-2">
+          Expected verification result — Sealed bundle (local, offline)
+        </div>
+        <dl className="text-sm font-mono space-y-1">
+          <div className="flex gap-3">
+            <dt className="w-24 text-foreground">integrity</dt>
+            <dd className="text-foreground">: PASS</dd>
+          </div>
+          <div className="flex gap-3">
+            <dt className="w-24 text-foreground">receipt</dt>
+            <dd className="text-muted-foreground">: SKIPPED</dd>
+          </div>
+          <div className="flex gap-3">
+            <dt className="w-24 text-foreground">envelope</dt>
+            <dd className="text-muted-foreground">: SKIPPED</dd>
+          </div>
+        </dl>
+        <p className="text-xs text-muted-foreground mt-3">
+          Produced by <code className="font-mono">nexart ai seal</code> or the SDK
+          <code className="font-mono ml-1">sealCer()</code>. No node call, no API key.
+        </p>
       </div>
-      <dl className="text-sm font-mono space-y-1">
-        <div className="flex gap-3">
-          <dt className="w-24 text-foreground">integrity</dt>
-          <dd className="text-foreground">: PASS</dd>
+
+      <div className="rounded-lg border border-primary/30 bg-primary/5 p-5">
+        <div className="text-xs font-semibold uppercase tracking-wide text-primary mb-2">
+          Expected verification result — Certified bundle (node-attested)
         </div>
-        <div className="flex gap-3">
-          <dt className="w-24 text-foreground">receipt</dt>
-          <dd className="text-foreground">: PASS</dd>
-        </div>
-        <div className="flex gap-3">
-          <dt className="w-24 text-foreground">envelope</dt>
-          <dd className="text-foreground">: PASS</dd>
-        </div>
-      </dl>
-      <p className="text-sm text-foreground mt-3 font-medium">
-        If any of these are not PASS, the integration is incorrect.
+        <dl className="text-sm font-mono space-y-1">
+          <div className="flex gap-3">
+            <dt className="w-24 text-foreground">integrity</dt>
+            <dd className="text-foreground">: PASS</dd>
+          </div>
+          <div className="flex gap-3">
+            <dt className="w-24 text-foreground">receipt</dt>
+            <dd className="text-foreground">: PASS</dd>
+          </div>
+          <div className="flex gap-3">
+            <dt className="w-24 text-foreground">envelope</dt>
+            <dd className="text-foreground">: PASS</dd>
+          </div>
+        </dl>
+        <p className="text-xs text-muted-foreground mt-3">
+          Produced by <code className="font-mono">nexart ai certify</code> or the SDK
+          <code className="font-mono ml-1">certifyLangChainRun()</code>. Node returns receipt + envelope.
+        </p>
+      </div>
+    </div>
+
+    <div className="mt-4 rounded-lg border border-border bg-muted/20 p-4">
+      <p className="text-sm text-foreground font-medium">
+        If any layer returns FAIL, the integration is incorrect. SKIPPED is expected for local
+        (sealed) artifacts and MUST NOT be treated as a failure.
       </p>
     </div>
 

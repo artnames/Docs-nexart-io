@@ -14,19 +14,29 @@ const llmBlock = `# NexArt AI Execution SDK
 
 Package: @nexart/ai-execution@0.16.1
 
+## Canonical workflow
+seal -> verify -> (optional) certify -> verify
+
+- Sealed bundle  = integrity only. Produced by sealCer() (local, offline). Layer 1 PASS, Layers 2 & 3 SKIPPED.
+- Certified bundle = integrity + node attestation + envelope. Produced by certifyLangChainRun() / POST /v1/cer/ai/certify. Layers 1, 2, 3 all PASS.
+SKIPPED is not a failure.
+
+## Core SDK functions
+- sealCer(params): create + seal a CER bundle locally. No network, no API key. Returns { bundle, certificateHash }.
+- createSnapshot(params): build the canonical snapshot; used internally by sealCer.
+- certifyLangChainRun(params): seal locally and submit to the attestation node. Returns { bundle, certificateHash, receipt, signatureB64Url, verificationUrl }.
+- verifyAiCerBundleDetailed(bundle): verifies a bundle and returns { integrity, receipt, envelope } each as PASS | FAIL | SKIPPED.
+
 ## API Endpoints
 
-POST /v1/cer/ai/certify (recommended)
+POST /v1/cer/ai/certify (recommended for attested artifacts)
 Creates a CER, attests it via the node, and returns certificateHash, receipt, signatureB64Url, and verificationUrl.
 
 POST /v1/cer/ai/create
-Creates a CER bundle without attestation. Returns the bundle and certificateHash but no receipt or verificationUrl.
-
-## Recommended path
-Use POST /v1/cer/ai/certify for most integrations. It handles CER creation, attestation, and receipt generation in one request.
+Creates a CER bundle without attestation. Equivalent in semantics to local sealing. Returns the bundle and certificateHash but no receipt or verificationUrl.
 
 ## Authentication
-API key via NEXART_API_KEY header.
+API key via NEXART_API_KEY header. Required for /certify only. sealCer() and verifyAiCerBundleDetailed() require no API key.
 
 ## CER Package Helpers (v0.12.0+)
 Official helpers for working with the CER package format:
@@ -74,9 +84,9 @@ The API response duplicates receipt and signature fields for convenience.
 ## Verification
 Locally using bundle + node keys from node.nexart.io/.well-known/nexart-node.json
 Or through verify.nexart.io
-Checks: Bundle Integrity, Node Signature, Receipt Consistency, Verification Envelope (when present)
-Verification statuses: VERIFIED | FAILED | NOT_FOUND (per CER Protocol). Check statuses: PASS | FAIL | SKIPPED.
-Newer uploaded AI CER bundles may include meta.verificationEnvelope and meta.verificationEnvelopeSignature for stronger verification.`;
+Checks: Bundle Integrity (Layer 1), Receipt (Layer 2), Verification Envelope (Layer 3).
+Verification statuses: VERIFIED | FAILED | NOT_FOUND. Layer results: PASS | FAIL | SKIPPED.
+Sealed bundles return integrity PASS, receipt SKIPPED, envelope SKIPPED. Certified bundles return PASS across all three.`;
 
 const SDK = () => (
   <>
@@ -93,12 +103,18 @@ const SDK = () => (
     <TechnicalTruth />
 
     <h2 id="overview">Overview</h2>
-    <p>The AI Execution SDK provides two endpoints for working with Certified Execution Records. Most builders should use the <strong>certify</strong> endpoint, which handles everything in a single request.</p>
+    <p>
+      The AI Execution SDK provides functions for sealing CERs locally and for certifying them
+      via the attestation node. The canonical workflow is:
+      <strong> seal → verify → (optional) certify → verify</strong>. Sealing is offline and
+      requires no API key. Certification adds independently verifiable node attestation without
+      changing the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>.
+    </p>
 
     <MentalModel />
 
     <h2 id="flow">Quick Implementation Flow</h2>
-    <p>Capture, create, certify, verify. The SDK exposes one function per step.</p>
+    <p>Capture, seal, verify, optionally certify, verify again. The SDK exposes one function per step.</p>
     <GoldenPath />
 
     <h2 id="minimal-example">Minimal working example</h2>

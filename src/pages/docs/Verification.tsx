@@ -4,6 +4,7 @@ import FailureModes from "@/components/docs/FailureModes";
 import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import TechnicalTruth from "@/components/docs/TechnicalTruth";
+import SealedVsCertified from "@/components/docs/SealedVsCertified";
 import { Link } from "react-router-dom";
 
 const llmBlock = `# NexArt Verification
@@ -90,14 +91,17 @@ const Verification = () => (
     </div>
 
     <h2 id="overview">How Verification Works</h2>
-    <p>Verification confirms the integrity and authenticity of a Certified Execution Record or Project Bundle. The process is:</p>
+    <p>Verification confirms the integrity and authenticity of a Certified Execution Record or Project Bundle. The canonical flow is:</p>
     <ol>
       <li>An execution happens.</li>
-      <li>A CER is created, binding execution metadata to a deterministic <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>.</li>
-      <li>Optionally, the CER is attested by a node, which adds a signed receipt.</li>
+      <li>A CER is <strong>sealed</strong> locally (SDK <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">sealCer()</code> or CLI <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">nexart ai seal</code>), binding execution metadata to a deterministic <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>. This is fully offline.</li>
+      <li>The sealed bundle can be verified immediately. Layer 1 (integrity) returns PASS; Layers 2 and 3 return SKIPPED because no node attestation is present.</li>
+      <li>Optionally, the CER is <strong>certified</strong> by an attestation node, which adds a signed receipt and a verification envelope.</li>
+      <li>A certified bundle can be verified against all three layers (PASS/PASS/PASS) and is resolvable at <Link to="/docs/verify-nexart" className="text-primary hover:underline">verify.nexart.io</Link>.</li>
       <li>Optionally, multiple CERs are collected into a <Link to="/docs/concepts/project-bundles" className="text-primary hover:underline">Project Bundle</Link> with a <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">projectHash</code>.</li>
-      <li>Verification can happen offline (using the SDK) or at <Link to="/docs/verify-nexart" className="text-primary hover:underline">verify.nexart.io</Link>.</li>
     </ol>
+
+    <SealedVsCertified />
 
     <h2 id="three-layers">The Three Verification Layers</h2>
     <p>Verification is split into three independent layers. Each layer protects a distinct property and reports its result independently. Envelope failure MUST NOT be reported as integrity failure.</p>

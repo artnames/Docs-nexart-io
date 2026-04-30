@@ -15,13 +15,21 @@ const llmBlock = `# Getting Started with NexArt
 
 NexArt creates Certified Execution Records (CERs), cryptographically bound records of AI or deterministic execution that can be independently verified.
 
+Canonical workflow: create input -> seal -> verify -> (optional) certify -> verify.
+
+Terminology:
+- Sealed   = integrity only. Local artifact produced by SDK sealCer() or CLI 'nexart ai seal'. Layer 1 PASS, Layers 2 & 3 SKIPPED.
+- Certified = integrity + node attestation + verification envelope. Produced by certifyLangChainRun() or CLI 'nexart ai certify'. Layers 1, 2, 3 all PASS.
+SKIPPED is not a failure.
+
 NexArt supports two integration paths:
 
 ## Path A - Single CER (one execution)
 For builders who want to certify one execution at a time.
 1. Run the execution
-2. Create a CER with @nexart/ai-execution
-3. (Optional) Attest via the node and verify at verify.nexart.io/c/{certificateHash}
+2. Seal the CER locally with @nexart/ai-execution (sealCer)
+3. Verify locally (integrity PASS, receipt SKIPPED, envelope SKIPPED)
+4. (Optional) Certify via the node and verify at verify.nexart.io/c/{certificateHash}
 
 ## Path B - Project Bundle (multi-step / multi-agent workflows)
 For builders with multi-step or multi-agent workflows that should be verified as a single unit.
@@ -31,8 +39,11 @@ For builders with multi-step or multi-agent workflows that should be verified as
 
 Both paths are first-class. Project Bundles are NOT required for single-execution use cases.
 
-## Install
-npm install @nexart/ai-execution
+## Versions
+- @nexart/ai-execution@0.16.1
+- @nexart/cli@0.8.0
+- Bundle version "0.1"
+- Protocol version 1.2.0
 
 ## certificateHash is the canonical identity
 Always look up records by certificateHash, not by executionId.
@@ -96,9 +107,9 @@ const GettingStarted = () => {
           <div className="text-xs text-muted-foreground mb-3">One execution, one verifiable record.</div>
           <ul className="text-sm text-foreground/90 list-disc pl-4 space-y-1">
             <li>Run the execution</li>
-            <li>Create a CER (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">@nexart/ai-execution</code>)</li>
-            <li>Optional: verify locally</li>
-            <li>Optional: attest via node and share <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">/c/{`{certificateHash}`}</code></li>
+            <li>Seal a CER locally (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">sealCer()</code>) — offline, no API key</li>
+            <li>Verify locally (integrity PASS, receipt &amp; envelope SKIPPED)</li>
+            <li>Optional: certify via node and share <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">/c/{`{certificateHash}`}</code></li>
           </ul>
         </div>
         <div className="rounded-lg border border-border bg-card p-4">
@@ -117,14 +128,17 @@ const GettingStarted = () => {
       <CodeBlock language="bash" code="npm install @nexart/ai-execution" />
       <p className="text-sm text-muted-foreground">Current version: <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">@nexart/ai-execution@0.16.1</code>.</p>
 
-      <h2 id="path-a">Path A: Create a Single CER</h2>
-      <p>The simplest integration. One execution produces one verifiable record.</p>
+      <h2 id="path-a">Path A: Seal a Single CER</h2>
+      <p>
+        The simplest integration. One execution produces one verifiable record. Sealing is fully
+        offline — no API key, no network call.
+      </p>
       <CodeBlock
         language="typescript"
-        title="Single CER"
-        code={`import { createLangChainCer } from "@nexart/ai-execution";
+        title="Seal a Single CER (offline)"
+        code={`import { sealCer, verifyAiCerBundleDetailed } from "@nexart/ai-execution";
 
-const { certificateHash } = createLangChainCer({
+const { bundle, certificateHash } = sealCer({
   provider: "openai",
   model: "gpt-4o-mini",
   input: {
@@ -135,12 +149,20 @@ const { certificateHash } = createLangChainCer({
   }
 });
 
-console.log(certificateHash);`}
+console.log(certificateHash);
+
+const report = await verifyAiCerBundleDetailed(bundle);
+// report.integrity === "PASS"
+// report.receipt   === "SKIPPED"  (no node attestation yet)
+// report.envelope  === "SKIPPED"  (no envelope yet)`}
       />
       <p>
         The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> is
-        the canonical identity of the record. Verify the CER locally with the SDK, or share the public
-        URL <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">https://verify.nexart.io/c/{`{certificateHash}`}</code>.
+        the canonical identity of the record. To make the bundle independently verifiable end-to-end
+        (Layers 2 and 3 PASS), submit it to the attestation node via{" "}
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certifyLangChainRun()</code>{" "}
+        or <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">POST /v1/cer/ai/certify</code>.
+        The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> does not change.
       </p>
       <p className="text-sm text-muted-foreground">
         Note: <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">executionId</code> is

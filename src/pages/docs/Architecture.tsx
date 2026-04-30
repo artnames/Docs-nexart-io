@@ -3,6 +3,7 @@ import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import MentalModel from "@/components/docs/MentalModel";
 import TestHarness from "@/components/docs/TestHarness";
+import SealedVsCertified from "@/components/docs/SealedVsCertified";
 import { Link } from "react-router-dom";
 
 const llmBlock = `# NexArt Architecture (Canonical Reference)
@@ -85,10 +86,41 @@ const Architecture = () => (
       RFC keywords (MUST, MUST NOT, SHOULD) appear, they carry their normal protocol meaning.
     </p>
 
+    <h2 id="ownership">Component ownership boundaries</h2>
+    <p>
+      The system has three components with strict, non-overlapping responsibilities. The CLI
+      contains <strong>zero CER cryptographic logic</strong>. All hashing, canonicalization,
+      and verification is implemented in the SDK.
+    </p>
+    <ul>
+      <li>
+        <strong>SDK</strong> (<code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@0.16.1</code>) owns:
+        snapshot creation (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">createSnapshot</code>),
+        local sealing (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">sealCer</code>),
+        JCS canonicalization (RFC 8785), SHA-256 hashing, and verification logic
+        (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">verifyAiCerBundleDetailed</code>).
+      </li>
+      <li>
+        <strong>CLI</strong> (<code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/cli@0.8.0</code>) owns:
+        the command surface (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">ai seal</code>,{" "}
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">ai certify</code>,{" "}
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">ai verify</code>),
+        file I/O, argument parsing, and output formatting. It delegates every cryptographic
+        operation to the SDK.
+      </li>
+      <li>
+        <strong>Node</strong> (attestation node) owns: bundle attestation (
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">POST /v1/cer/ai/certify</code>),
+        Ed25519 receipt signing, verification envelope signature, and public key publication at{" "}
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">/.well-known/nexart-node.json</code>.
+      </li>
+    </ul>
+
     <h2 id="end-to-end-flow">End-to-end flow</h2>
     <p>
-      The pipeline has five stages. Stages 1 to 3 are local to the producer. Stage 4 is
-      optional and adds attestation. Stage 5 is independent and may be performed by anyone.
+      The pipeline has five stages. Stages 1 to 3 are local to the producer (SDK or CLI). Stage 4
+      is optional and adds node attestation. Stage 5 is independent and may be performed by anyone.
+      The canonical workflow is: <strong>create input → seal → verify → (optional) certify → verify</strong>.
     </p>
 
     <h3 id="stage-1">1. Execution capture</h3>
@@ -105,9 +137,15 @@ const Architecture = () => (
       was captured. It guarantees that what was captured cannot be altered without detection.
     </p>
 
-    <h3 id="stage-2">2. CER creation</h3>
+    <h3 id="stage-2">2. CER creation (local sealing)</h3>
     <p>
-      The producer assembles the canonical CER bundle. Required top-level fields:
+      The producer assembles the canonical CER bundle and computes the{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>.
+      This stage is fully offline: it requires no network access and no API key. In SDK form
+      this is <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">sealCer()</code>;
+      in CLI form it is <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">nexart ai seal</code>.
+      The output is a <strong>sealed</strong> CER bundle (integrity only; no attestation).
+      Required top-level fields:
     </p>
     <ul>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">bundleType</code> - constant string <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">"cer.ai.execution.v1"</code> for AI executions.</li>
@@ -131,7 +169,12 @@ const Architecture = () => (
       reconstruct, normalize, strip, or add fields beyond the whitelist projection and JCS.
     </p>
 
-    <h3 id="stage-4">4. Node attestation (optional)</h3>
+    <h3 id="stage-4">4. Node certification (optional)</h3>
+    <p className="text-sm text-muted-foreground">
+      A sealed bundle (Stage 2) is already a valid CER. Certification is optional and adds
+      independently verifiable node attestation. After certification, the bundle is
+      <strong> certified</strong> rather than only sealed.
+    </p>
     <p>
       The producer may submit the bundle to an attestation node (
       <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">POST /v1/cer/ai/certify</code>).
@@ -325,6 +368,15 @@ const Architecture = () => (
       <Link to="/docs/verify-nexart" className="text-primary hover:underline ml-1">verify.nexart.io</Link>{" "}
       portal is a convenience layer; it runs the same checks any client can run.
     </p>
+
+    <h2 id="sealed-vs-certified">Sealed vs Certified</h2>
+    <p>
+      Two valid CER states. <strong>Sealed</strong> is produced offline by the SDK or CLI and
+      proves integrity only. <strong>Certified</strong> adds an Ed25519 receipt and a verification
+      envelope from the attestation node, making the bundle independently verifiable end-to-end.
+      Certification does not change the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>.
+    </p>
+    <SealedVsCertified />
 
     <h2 id="guarantees">What NexArt guarantees</h2>
     <ul>
