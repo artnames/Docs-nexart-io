@@ -15,13 +15,21 @@ const llmBlock = `# Getting Started with NexArt
 
 NexArt creates Certified Execution Records (CERs), cryptographically bound records of AI or deterministic execution that can be independently verified.
 
+Canonical workflow: create input -> seal -> verify -> (optional) certify -> verify.
+
+Terminology:
+- Sealed   = integrity only. Local artifact produced by SDK sealCer() or CLI 'nexart ai seal'. Layer 1 PASS, Layers 2 & 3 SKIPPED.
+- Certified = integrity + node attestation + verification envelope. Produced by certifyLangChainRun() or CLI 'nexart ai certify'. Layers 1, 2, 3 all PASS.
+SKIPPED is not a failure.
+
 NexArt supports two integration paths:
 
 ## Path A - Single CER (one execution)
 For builders who want to certify one execution at a time.
 1. Run the execution
-2. Create a CER with @nexart/ai-execution
-3. (Optional) Attest via the node and verify at verify.nexart.io/c/{certificateHash}
+2. Seal the CER locally with @nexart/ai-execution (sealCer)
+3. Verify locally (integrity PASS, receipt SKIPPED, envelope SKIPPED)
+4. (Optional) Certify via the node and verify at verify.nexart.io/c/{certificateHash}
 
 ## Path B - Project Bundle (multi-step / multi-agent workflows)
 For builders with multi-step or multi-agent workflows that should be verified as a single unit.
@@ -31,8 +39,11 @@ For builders with multi-step or multi-agent workflows that should be verified as
 
 Both paths are first-class. Project Bundles are NOT required for single-execution use cases.
 
-## Install
-npm install @nexart/ai-execution
+## Versions
+- @nexart/ai-execution@0.16.1
+- @nexart/cli@0.8.0
+- Bundle version "0.1"
+- Protocol version 1.2.0
 
 ## certificateHash is the canonical identity
 Always look up records by certificateHash, not by executionId.
