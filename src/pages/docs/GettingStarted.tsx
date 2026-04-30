@@ -195,6 +195,12 @@ const bundle = workflow.finish();
         </a>
       </div>
 
+      <h2 id="common-mistakes">Common mistakes</h2>
+      <CommonMistakes />
+
+      <h2 id="failures">What happens if it fails</h2>
+      <FailureModes />
+
       <h2 id="next">Next Steps</h2>
       <ul>
         <li>
