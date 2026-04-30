@@ -2,6 +2,11 @@ import PageHeader from "@/components/docs/PageHeader";
 import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import { Link } from "react-router-dom";
+import GoldenPath from "@/components/docs/GoldenPath";
+import MentalModel from "@/components/docs/MentalModel";
+import MinimalExample from "@/components/docs/MinimalExample";
+import CommonMistakes from "@/components/docs/CommonMistakes";
+import FailureModes from "@/components/docs/FailureModes";
 
 const llmBlock = `# NexArt AI Execution SDK
 
@@ -85,6 +90,16 @@ const SDK = () => (
 
     <h2 id="overview">Overview</h2>
     <p>The AI Execution SDK provides two endpoints for working with Certified Execution Records. Most builders should use the <strong>certify</strong> endpoint, which handles everything in a single request.</p>
+
+    <MentalModel />
+
+    <h2 id="flow">Quick Implementation Flow</h2>
+    <p>Capture, create, certify, verify. The SDK exposes one function per step.</p>
+    <GoldenPath />
+
+    <h2 id="minimal-example">Minimal working example</h2>
+    <p>The canonical example used across the docs. Use this as the starting point for any integration.</p>
+    <MinimalExample />
 
     <div className="not-prose my-6 rounded-lg border border-primary/30 bg-primary/5 p-4">
       <div className="text-sm font-medium text-primary mb-1">Recommended for most integrations</div>
@@ -401,6 +416,12 @@ const result = await verifyCerPackage(pkg);
 
     <h2 id="agent-kit">Agent Kit</h2>
     <p>For agent workflows, <Link to="/docs/agent-kit" className="text-primary hover:underline">@nexart/agent-kit</Link> provides <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">wrapTool()</code> and <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certifyDecision()</code> as thin convenience wrappers over this SDK.</p>
+
+    <h2 id="common-mistakes">Common mistakes</h2>
+    <CommonMistakes />
+
+    <h2 id="failures">What happens if it fails</h2>
+    <FailureModes />
 
     <h2 id="scope">Scope</h2>
     <p className="text-muted-foreground">The SDK API surface is still evolving. This page documents the current endpoints and data model. Check back for updates as new capabilities are added.</p>

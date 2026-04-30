@@ -1,4 +1,6 @@
 import PageHeader from "@/components/docs/PageHeader";
+import MentalModel from "@/components/docs/MentalModel";
+import FailureModes from "@/components/docs/FailureModes";
 import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import { Link } from "react-router-dom";
@@ -47,6 +49,8 @@ const AICERVerificationLayers = () => (
       summary="How NexArt verifies AI Certified Execution Records across three independent trust layers."
       llmBlock={llmBlock}
     />
+
+    <MentalModel lines={["Integrity ≠ Stamp ≠ Envelope.", "Each layer has one job and fails for one reason.", "Public/redacted records cannot satisfy Layer 3."]} />
 
     <h2 id="overview">Overview</h2>
     <p>

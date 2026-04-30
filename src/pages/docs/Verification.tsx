@@ -1,4 +1,6 @@
 import PageHeader from "@/components/docs/PageHeader";
+import MentalModel from "@/components/docs/MentalModel";
+import FailureModes from "@/components/docs/FailureModes";
 import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import { Link } from "react-router-dom";
@@ -57,6 +59,9 @@ const Verification = () => (
       llmBlock={llmBlock}
     />
 
+    <MentalModel lines={["Integrity ≠ Stamp ≠ Envelope.", "Verification does not require trust.", "Failure of one layer is not failure of all."]} />
+
+    <FailureModes />
     <div className="mb-6 rounded-lg border border-destructive/40 bg-destructive/5 p-4">
       <p className="text-sm font-medium mb-1">Local verification is not public verification.</p>
       <p className="text-sm text-muted-foreground">

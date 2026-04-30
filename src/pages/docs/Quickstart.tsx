@@ -2,6 +2,11 @@ import PageHeader from "@/components/docs/PageHeader";
 import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import { Link } from "react-router-dom";
+import GoldenPath from "@/components/docs/GoldenPath";
+import MentalModel from "@/components/docs/MentalModel";
+import MinimalExample from "@/components/docs/MinimalExample";
+import CommonMistakes from "@/components/docs/CommonMistakes";
+import FailureModes from "@/components/docs/FailureModes";
 
 const llmBlock = `# Quickstart
 
@@ -39,6 +44,16 @@ const Quickstart = () => (
       The fastest path from zero to a verified record. For a broader overview, see{" "}
       <Link to="/docs/getting-started" className="text-primary hover:underline">Getting Started</Link>.
     </p>
+
+    <MentalModel />
+
+    <h2>Quick Implementation Flow</h2>
+    <p>The four steps every NexArt integration must perform, in order.</p>
+    <GoldenPath />
+
+    <h2>Minimal working example</h2>
+    <p>The canonical example. Reuse this shape in your own integration.</p>
+    <MinimalExample />
 
     <h2>Choose a Path</h2>
     <ul>
@@ -125,6 +140,12 @@ console.log(bundle.integrity.projectHash);`}
       Always look up and share records by <code>certificateHash</code>. <code>executionId</code> is{" "}
       <strong>not</strong> a unique artifact identifier and must not be used as the primary identity for verification.
     </p>
+
+    <h2>Common mistakes</h2>
+    <CommonMistakes />
+
+    <h2>What happens if it fails</h2>
+    <FailureModes />
 
     <h2>Next Steps</h2>
     <ul>

@@ -2,6 +2,11 @@ import { Link } from "react-router-dom";
 import PageHeader from "@/components/docs/PageHeader";
 import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
+import GoldenPath from "@/components/docs/GoldenPath";
+import MentalModel from "@/components/docs/MentalModel";
+import MinimalExample from "@/components/docs/MinimalExample";
+import CommonMistakes from "@/components/docs/CommonMistakes";
+import FailureModes from "@/components/docs/FailureModes";
 
 const llmBlock = `# Getting Started with NexArt
 
@@ -42,6 +47,22 @@ const GettingStarted = () => {
         summary="Pick the path that matches your use case: a single execution CER, or a multi-step Project Bundle."
         llmBlock={llmBlock}
       />
+
+      <MentalModel />
+
+      <h2 id="flow">Quick Implementation Flow</h2>
+      <p>
+        Four steps. Each has a single responsibility. Following them in order produces a record
+        anyone can verify without trusting your infrastructure.
+      </p>
+      <GoldenPath />
+
+      <h2 id="minimal-example">Minimal working example</h2>
+      <p>
+        One execution, one CER, one certification, one verification. This is the canonical example
+        reused across the docs.
+      </p>
+      <MinimalExample />
 
       <h2 id="what">What NexArt Does</h2>
       <p>
@@ -173,6 +194,12 @@ const bundle = workflow.finish();
           <div className="text-xs text-muted-foreground/60 mt-2">github.com/artnames/nexart-n8n</div>
         </a>
       </div>
+
+      <h2 id="common-mistakes">Common mistakes</h2>
+      <CommonMistakes />
+
+      <h2 id="failures">What happens if it fails</h2>
+      <FailureModes />
 
       <h2 id="next">Next Steps</h2>
       <ul>
