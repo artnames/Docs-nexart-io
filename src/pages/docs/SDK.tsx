@@ -8,6 +8,7 @@ import MinimalExample from "@/components/docs/MinimalExample";
 import CommonMistakes from "@/components/docs/CommonMistakes";
 import FailureModes from "@/components/docs/FailureModes";
 import TechnicalTruth from "@/components/docs/TechnicalTruth";
+import TestHarness from "@/components/docs/TestHarness";
 
 const llmBlock = `# NexArt AI Execution SDK
 
@@ -103,6 +104,14 @@ const SDK = () => (
     <h2 id="minimal-example">Minimal working example</h2>
     <p>The canonical example used across the docs. Use this as the starting point for any integration.</p>
     <MinimalExample />
+
+    <h2 id="copy-paste-test-harness">Copy-Paste Test Harness</h2>
+    <p>
+      Single-file script that exercises the full SDK flow end-to-end and prints PASS / FAIL
+      per verification layer. Use it to validate an integration in under two minutes without
+      mixing APIs or guessing at parameters.
+    </p>
+    <TestHarness />
 
     <div className="not-prose my-6 rounded-lg border border-primary/30 bg-primary/5 p-4">
       <div className="text-sm font-medium text-primary mb-1">Recommended for most integrations</div>
