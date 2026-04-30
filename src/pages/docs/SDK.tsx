@@ -249,7 +249,7 @@ Authorization: Bearer NEXART_API_KEY
     <p className="text-sm text-muted-foreground">For the builder API to capture structured signals (input, tool calls, decisions, output) using <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">@nexart/signals</code>, see the <Link to="/docs/signals-sdk" className="text-primary hover:underline">Signals SDK</Link> reference and <Link to="/docs/concepts/execution-context" className="text-primary hover:underline">Execution Context and Signals</Link>.</p>
 
     <h2 id="verification">Verification</h2>
-    <p>As of <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">v0.15.0</code>, the SDK provides both sync and async verification functions:</p>
+    <p>As of <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">v0.16.1</code>, the SDK provides both sync and async verification functions:</p>
 
     <div className="not-prose my-6 overflow-x-auto">
       <table className="w-full text-sm border border-border rounded-lg">
