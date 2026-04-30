@@ -60,7 +60,7 @@ const HashTimestamping = () => (
     <CodeBlock
       code={`{
   "bundleType": "hash-only-timestamp",
-  "version": "1.0",
+  "version": "0.1",
   "createdAt": "2026-03-06T12:00:00.000Z",
   "snapshot": null,
   "certificateHash": "sha256:9e8d7c6b5a4f..."

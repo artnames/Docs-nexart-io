@@ -165,7 +165,7 @@ Authorization: Bearer NEXART_API_KEY
     <CodeBlock
       code={`{
   "bundleType": "cer.ai.execution.v1",
-  "version": "1.0",
+  "version": "0.1",
   "createdAt": "2026-03-06T12:00:00.000Z",
   "snapshot": {
     "model": "gpt-4",
@@ -191,7 +191,7 @@ Authorization: Bearer NEXART_API_KEY
     <CodeBlock
       code={`{
   "bundleType": "cer.ai.execution.v1",
-  "version": "1.0",
+  "version": "0.1",
   "createdAt": "2026-03-06T12:00:00.000Z",
   "snapshot": {
     "model": "gpt-4",

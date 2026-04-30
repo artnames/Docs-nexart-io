@@ -137,7 +137,7 @@ const AICERVerificationLayers = () => (
     <CodeBlock
       code={`{
   "bundleType": "cer.ai.execution.v1",
-  "version": "1.0",
+  "version": "0.1",
   "createdAt": "2026-03-17T10:00:00.000Z",
   "snapshot": {
     "model": "gpt-4",
