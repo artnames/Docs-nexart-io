@@ -93,6 +93,29 @@ Envelope  (Layer 3) : PASS`}
       </p>
     </div>
 
+    <div className="mt-6 rounded-lg border border-primary/30 bg-primary/5 p-5">
+      <div className="text-xs font-semibold uppercase tracking-wide text-primary mb-2">
+        Expected verification result
+      </div>
+      <dl className="text-sm font-mono space-y-1">
+        <div className="flex gap-3">
+          <dt className="w-24 text-foreground">integrity</dt>
+          <dd className="text-foreground">: PASS</dd>
+        </div>
+        <div className="flex gap-3">
+          <dt className="w-24 text-foreground">receipt</dt>
+          <dd className="text-foreground">: PASS</dd>
+        </div>
+        <div className="flex gap-3">
+          <dt className="w-24 text-foreground">envelope</dt>
+          <dd className="text-foreground">: PASS</dd>
+        </div>
+      </dl>
+      <p className="text-sm text-foreground mt-3 font-medium">
+        If any of these are not PASS, the integration is incorrect.
+      </p>
+    </div>
+
     <div className="mt-6 rounded-lg border border-destructive/30 bg-destructive/5 p-5">
       <div className="text-xs font-semibold uppercase tracking-wide text-destructive mb-2">
         If something fails
