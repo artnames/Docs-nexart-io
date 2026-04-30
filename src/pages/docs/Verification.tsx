@@ -5,6 +5,7 @@ import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import TechnicalTruth from "@/components/docs/TechnicalTruth";
 import SealedVsCertified from "@/components/docs/SealedVsCertified";
+import CanonicalFlow from "@/components/docs/CanonicalFlow";
 import { Link } from "react-router-dom";
 
 const llmBlock = `# NexArt Verification
@@ -74,6 +75,7 @@ const Verification = () => (
       summary="How to verify any NexArt record, with or without API access."
       llmBlock={llmBlock}
     />
+    <CanonicalFlow context="All verification results derive from this model." />
 
     <TechnicalTruth />
 

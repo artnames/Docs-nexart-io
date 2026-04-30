@@ -10,6 +10,7 @@ import FailureModes from "@/components/docs/FailureModes";
 import TestHarness from "@/components/docs/TestHarness";
 import TechnicalTruth from "@/components/docs/TechnicalTruth";
 import StartHere from "@/components/docs/StartHere";
+import CanonicalFlow from "@/components/docs/CanonicalFlow";
 
 const llmBlock = `# Getting Started with NexArt
 
@@ -61,6 +62,7 @@ const GettingStarted = () => {
         summary="Pick the path that matches your use case: a single execution CER, or a multi-step Project Bundle."
         llmBlock={llmBlock}
       />
+      <CanonicalFlow context="Start here. This is the canonical NexArt integration model." />
 
       <StartHere />
 
