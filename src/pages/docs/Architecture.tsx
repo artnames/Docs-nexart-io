@@ -85,10 +85,41 @@ const Architecture = () => (
       RFC keywords (MUST, MUST NOT, SHOULD) appear, they carry their normal protocol meaning.
     </p>
 
+    <h2 id="ownership">Component ownership boundaries</h2>
+    <p>
+      The system has three components with strict, non-overlapping responsibilities. The CLI
+      contains <strong>zero CER cryptographic logic</strong>. All hashing, canonicalization,
+      and verification is implemented in the SDK.
+    </p>
+    <ul>
+      <li>
+        <strong>SDK</strong> (<code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@0.16.1</code>) owns:
+        snapshot creation (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">createSnapshot</code>),
+        local sealing (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">sealCer</code>),
+        JCS canonicalization (RFC 8785), SHA-256 hashing, and verification logic
+        (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">verifyAiCerBundleDetailed</code>).
+      </li>
+      <li>
+        <strong>CLI</strong> (<code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/cli@0.8.0</code>) owns:
+        the command surface (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">ai seal</code>,{" "}
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">ai certify</code>,{" "}
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">ai verify</code>),
+        file I/O, argument parsing, and output formatting. It delegates every cryptographic
+        operation to the SDK.
+      </li>
+      <li>
+        <strong>Node</strong> (attestation node) owns: bundle attestation (
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">POST /v1/cer/ai/certify</code>),
+        Ed25519 receipt signing, verification envelope signature, and public key publication at{" "}
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">/.well-known/nexart-node.json</code>.
+      </li>
+    </ul>
+
     <h2 id="end-to-end-flow">End-to-end flow</h2>
     <p>
-      The pipeline has five stages. Stages 1 to 3 are local to the producer. Stage 4 is
-      optional and adds attestation. Stage 5 is independent and may be performed by anyone.
+      The pipeline has five stages. Stages 1 to 3 are local to the producer (SDK or CLI). Stage 4
+      is optional and adds node attestation. Stage 5 is independent and may be performed by anyone.
+      The canonical workflow is: <strong>create input → seal → verify → (optional) certify → verify</strong>.
     </p>
 
     <h3 id="stage-1">1. Execution capture</h3>
