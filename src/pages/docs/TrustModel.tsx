@@ -191,6 +191,13 @@ const TrustModel = () => (
       <li>The integrating application controls what metadata is included in the CER.</li>
       <li>Public verification uses a redacted representation. Sensitive data is not exposed.</li>
     </ul>
+
+    <div className="not-prose my-6 rounded-lg border border-border bg-muted/30 p-4">
+      <div className="text-sm font-semibold text-foreground mb-1">Important</div>
+      <p className="text-sm text-muted-foreground m-0">
+        Verification proves that a record is intact and was witnessed. It does not prove that the execution itself was correct or truthful.
+      </p>
+    </div>
   </>
 );
 
