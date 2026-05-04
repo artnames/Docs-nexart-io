@@ -55,6 +55,46 @@ const TrustModel = () => (
       <li><strong>Independent verification.</strong> Anyone can verify the record using the CER bundle and the node's published public keys. No API access is required.</li>
     </ol>
 
+    <h2 id="operational-guarantees">Operational Guarantees</h2>
+    <p>NexArt nodes enforce strict operational guarantees when certifying execution records:</p>
+    <ol>
+      <li>
+        <strong>Deterministic identity.</strong>
+        <ul>
+          <li>The same execution produces the same <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>.</li>
+          <li>Hash computation is defined by the SDK and never modified by the node.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Idempotent certification.</strong>
+        <ul>
+          <li>One <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">execution_id</code> maps to one <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> forever.</li>
+          <li>Re-submission with identical content returns the original record.</li>
+          <li>Mutated re-submissions are rejected with <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">EXECUTION_MUTATION_DETECTED</code>.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Controlled attestation.</strong>
+        <ul>
+          <li>Only authorized API keys can request certification.</li>
+          <li>Administrative operations (such as recertification) require elevated credentials.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Independent verification.</strong>
+        <ul>
+          <li>Verification logic is delegated to the SDK.</li>
+          <li>The node does not reinterpret or override verification outcomes.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Immutable attestation.</strong>
+        <ul>
+          <li>Once certified, a record cannot be altered without invalidating its <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>.</li>
+        </ul>
+      </li>
+    </ol>
+
     <h2 id="flow">Certification Flow</h2>
     <p>Here is what happens when you call <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">POST /v1/cer/ai/certify</code>:</p>
     <CodeBlock
@@ -99,19 +139,35 @@ const TrustModel = () => (
     <p>The node does not store or own the execution data. It witnesses the record and produces a cryptographic proof.</p>
 
     <h2 id="independent-verification">Independent Verification</h2>
-    <p>Verification can be performed without any NexArt API access. You need two things:</p>
+    <p>Verification can be performed independently using:</p>
     <ul>
-      <li>The CER bundle (including <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation</code>)</li>
-      <li>The node's public key (from the well-known endpoint)</li>
+      <li>the CER bundle</li>
+      <li>the node's published public keys</li>
     </ul>
-    <p>Steps:</p>
+    <p>Two levels of verification exist:</p>
     <ol>
-      <li>Recompute the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> from the CER bundle</li>
-      <li>Compare it with the certificateHash in <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation.receipt</code></li>
-      <li>Fetch the node's public key matching the receipt's <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">kid</code></li>
-      <li>Verify the Ed25519 signature over the receipt payload</li>
+      <li>
+        <strong>Full verification.</strong>
+        <ul>
+          <li>Requires access to the complete CER bundle.</li>
+          <li>Allows recomputation of the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> and validation of all signatures.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Public verification.</strong>
+        <ul>
+          <li>Uses a redacted representation of the bundle.</li>
+          <li>
+            Confirms:
+            <ul>
+              <li>the node attested a specific <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code></li>
+              <li>the receipt signature is valid</li>
+            </ul>
+          </li>
+          <li>Does not expose or allow recomputation of the original input/output data.</li>
+        </ul>
+      </li>
     </ol>
-    <p>If all steps pass, the attestation is trustworthy regardless of whether NexArt infrastructure is available.</p>
 
     <h2 id="what-attestation-proves">What Attestation Proves (and Does Not Prove)</h2>
     <p>Attestation proves that:</p>
@@ -135,6 +191,13 @@ const TrustModel = () => (
       <li>The integrating application controls what metadata is included in the CER.</li>
       <li>Public verification uses a redacted representation. Sensitive data is not exposed.</li>
     </ul>
+
+    <div className="not-prose my-6 rounded-lg border border-border bg-muted/30 p-4">
+      <div className="text-sm font-semibold text-foreground mb-1">Important</div>
+      <p className="text-sm text-muted-foreground m-0">
+        Verification proves that a record is intact and was witnessed. It does not prove that the execution itself was correct or truthful.
+      </p>
+    </div>
   </>
 );
 

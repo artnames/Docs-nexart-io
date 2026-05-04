@@ -82,12 +82,32 @@ const AttestationNode = () => (
     <p>Attestation nodes act as independent witnesses for Certified Execution Records. A node verifies the integrity of a CER bundle and signs an attestation receipt confirming that the record existed at a specific point in time.</p>
     <p>Nodes do not own or control the execution data. Their role is limited to validating bundle integrity and producing a signed receipt.</p>
 
-    <div className="not-prose my-6 rounded-lg border border-border bg-muted/30 p-4">
-      <div className="text-sm font-medium text-foreground mb-1">Where trust comes from</div>
-      <div className="text-sm text-muted-foreground">
-        Trust comes from cryptographic integrity, independent verification, and optional attestation. Not from the node itself. The node is a witness, not a trust authority.
-      </div>
-    </div>
+    <h2 id="where-trust-comes-from">Where trust comes from</h2>
+    <p>Trust in NexArt is derived from three independent properties:</p>
+    <ol>
+      <li>
+        <strong>Deterministic integrity.</strong>
+        <ul>
+          <li>The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> binds the record to its exact contents.</li>
+          <li>Any modification produces a different hash.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Node attestation.</strong>
+        <ul>
+          <li>A node signs the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> and records when it was observed.</li>
+          <li>This provides a verifiable witness, not authority over the data.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Independent verification.</strong>
+        <ul>
+          <li>Verification is performed using open algorithms and published keys.</li>
+          <li>The node does not control verification outcomes.</li>
+        </ul>
+      </li>
+    </ol>
+    <p>The node acts as a cryptographic witness, not a source of truth. Verification remains valid even if the node is unavailable, provided its public keys are known.</p>
 
     <h2 id="minimal-requirements">Minimal Node Requirements</h2>
     <p>A NexArt attestation node must satisfy the following protocol contract:</p>
@@ -167,6 +187,11 @@ const AttestationNode = () => (
       <li>Verify the Ed25519 signature over the canonical receipt payload</li>
     </ol>
     <p>Or use the public verifier at <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a>.</p>
+    <p>Verification can be performed at two levels:</p>
+    <ul>
+      <li><strong>Full verification</strong> requires access to the complete CER bundle.</li>
+      <li><strong>Public verification</strong> relies on redacted representations and confirms attestation without exposing underlying execution data.</li>
+    </ul>
 
     <h2 id="compatibility">Node Compatibility</h2>
     <p>A CER remains valid regardless of which compliant NexArt attestation node produced the receipt.</p>
