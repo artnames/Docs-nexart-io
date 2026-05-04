@@ -55,6 +55,46 @@ const TrustModel = () => (
       <li><strong>Independent verification.</strong> Anyone can verify the record using the CER bundle and the node's published public keys. No API access is required.</li>
     </ol>
 
+    <h2 id="operational-guarantees">Operational Guarantees</h2>
+    <p>NexArt nodes enforce strict operational guarantees when certifying execution records:</p>
+    <ol>
+      <li>
+        <strong>Deterministic identity.</strong>
+        <ul>
+          <li>The same execution produces the same <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>.</li>
+          <li>Hash computation is defined by the SDK and never modified by the node.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Idempotent certification.</strong>
+        <ul>
+          <li>One <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">execution_id</code> maps to one <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> forever.</li>
+          <li>Re-submission with identical content returns the original record.</li>
+          <li>Mutated re-submissions are rejected with <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">EXECUTION_MUTATION_DETECTED</code>.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Controlled attestation.</strong>
+        <ul>
+          <li>Only authorized API keys can request certification.</li>
+          <li>Administrative operations (such as recertification) require elevated credentials.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Independent verification.</strong>
+        <ul>
+          <li>Verification logic is delegated to the SDK.</li>
+          <li>The node does not reinterpret or override verification outcomes.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Immutable attestation.</strong>
+        <ul>
+          <li>Once certified, a record cannot be altered without invalidating its <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>.</li>
+        </ul>
+      </li>
+    </ol>
+
     <h2 id="flow">Certification Flow</h2>
     <p>Here is what happens when you call <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">POST /v1/cer/ai/certify</code>:</p>
     <CodeBlock
