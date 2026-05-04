@@ -139,19 +139,35 @@ const TrustModel = () => (
     <p>The node does not store or own the execution data. It witnesses the record and produces a cryptographic proof.</p>
 
     <h2 id="independent-verification">Independent Verification</h2>
-    <p>Verification can be performed without any NexArt API access. You need two things:</p>
+    <p>Verification can be performed independently using:</p>
     <ul>
-      <li>The CER bundle (including <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation</code>)</li>
-      <li>The node's public key (from the well-known endpoint)</li>
+      <li>the CER bundle</li>
+      <li>the node's published public keys</li>
     </ul>
-    <p>Steps:</p>
+    <p>Two levels of verification exist:</p>
     <ol>
-      <li>Recompute the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> from the CER bundle</li>
-      <li>Compare it with the certificateHash in <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation.receipt</code></li>
-      <li>Fetch the node's public key matching the receipt's <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">kid</code></li>
-      <li>Verify the Ed25519 signature over the receipt payload</li>
+      <li>
+        <strong>Full verification.</strong>
+        <ul>
+          <li>Requires access to the complete CER bundle.</li>
+          <li>Allows recomputation of the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> and validation of all signatures.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Public verification.</strong>
+        <ul>
+          <li>Uses a redacted representation of the bundle.</li>
+          <li>
+            Confirms:
+            <ul>
+              <li>the node attested a specific <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code></li>
+              <li>the receipt signature is valid</li>
+            </ul>
+          </li>
+          <li>Does not expose or allow recomputation of the original input/output data.</li>
+        </ul>
+      </li>
     </ol>
-    <p>If all steps pass, the attestation is trustworthy regardless of whether NexArt infrastructure is available.</p>
 
     <h2 id="what-attestation-proves">What Attestation Proves (and Does Not Prove)</h2>
     <p>Attestation proves that:</p>
