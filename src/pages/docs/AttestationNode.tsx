@@ -187,6 +187,11 @@ const AttestationNode = () => (
       <li>Verify the Ed25519 signature over the canonical receipt payload</li>
     </ol>
     <p>Or use the public verifier at <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a>.</p>
+    <p>Verification can be performed at two levels:</p>
+    <ul>
+      <li><strong>Full verification</strong> requires access to the complete CER bundle.</li>
+      <li><strong>Public verification</strong> relies on redacted representations and confirms attestation without exposing underlying execution data.</li>
+    </ul>
 
     <h2 id="compatibility">Node Compatibility</h2>
     <p>A CER remains valid regardless of which compliant NexArt attestation node produced the receipt.</p>
