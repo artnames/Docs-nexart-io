@@ -2,7 +2,7 @@
 
 > NexArt provides deterministic execution verification infrastructure. Certified Execution Records (CERs) are cryptographically bound records of AI or deterministic execution that can be independently verified. NexArt supports both single-execution CERs and Project Bundles for multi-step or multi-agent workflows.
 
-## Start Here
+## Start here
 
 - [What is NexArt](https://docs.nexart.io/docs/what-is-nexart)
 - [Getting Started](https://docs.nexart.io/docs/getting-started)
