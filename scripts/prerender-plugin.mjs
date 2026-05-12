@@ -83,14 +83,10 @@ async function waitForRouteContent(page) {
 
 function routeToFilePath(distDir, route) {
   if (route === "/") return join(distDir, "index.html");
-  if (PARENT_ROUTES.has(route)) {
-    return join(distDir, route.replace(/^\/+/, ""), "index.html");
-  }
-
-  // Lovable hosting serves exact files for deep paths before falling back to
-  // the SPA shell. Writing leaf routes as extensionless files ensures
-  // /docs/foo returns prerendered HTML instead of the root index fallback.
-  return join(distDir, route.replace(/^\/+/, ""));
+  // Always write as <route>/index.html so hosts serve it with the correct
+  // text/html content-type. Extensionless files were being served as
+  // application/octet-stream, triggering a download instead of rendering.
+  return join(distDir, route.replace(/^\/+/, ""), "index.html");
 }
 
 async function snapshot(page, baseUrl, distDir, route) {
