@@ -1,6 +1,38 @@
 import PageHeader from "@/components/docs/PageHeader";
 import DocsMeta from "@/components/docs/DocsMeta";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
+
+const faqEntries: { q: string; a: string }[] = [
+  { q: "What is NexArt?", a: "NexArt produces Certified Execution Records (CERs), portable, tamper-evident records of AI or deterministic system executions. CERs capture what happened, when, and provide cryptographic proof that the record has not been altered. Multiple CERs can be grouped into a Project Bundle for multi-step workflows." },
+  { q: "Do I need Project Bundles for every use case?", a: "No. Project Bundles are an additional capability, not a replacement for single CER flows. If you certify one execution at a time, a single CER is enough. Use a Project Bundle only when you have multiple steps or agents that should be verified as a single unit." },
+  { q: "When is a single CER enough?", a: "A single CER is enough for one LLM call you want to certify, one automated decision, one n8n step output, or any execution that stands alone as a verifiable artifact." },
+  { q: "When should I use a Project Bundle?", a: "Use a Project Bundle for multi-step agent workflows where step ordering and integrity matter, multi-agent systems where multiple actors contribute to a single outcome, or pipelines where the audit unit is the whole workflow. Each step still produces its own CER; the bundle adds a projectHash covering all step certificateHash values." },
+  { q: "What is the difference between certificateHash and executionId?", a: "certificateHash is the SHA-256 fingerprint of the canonical CER bundle and is the canonical identity used for lookup, sharing, and verification. executionId is a builder-supplied label and must not be used as the primary identity model." },
+  { q: "Why does something verify locally but not appear on verify.nexart.io?", a: "Local SDK verification only checks the bundle you hold. Public verification requires the record to be known to the node. A single CER must be attested by the node via certify; a Project Bundle must be registered on the node, otherwise the public verifier returns NOT_FOUND." },
+  { q: "Why can public resealed artifacts have a different hash?", a: "For privacy, the public verifier may serve a redacted reseal. The reseal removes sensitive fields and is re-signed by the node, so it has a new certificateHash covering the redacted contents. Provenance fields point back to the original hash. The original record is unchanged." },
+  { q: "What can NexArt verify?", a: "Three checks: Bundle Integrity, Node Signature, and Receipt Consistency. Each check returns PASS, FAIL, or SKIPPED. Verification statuses are VERIFIED, FAILED, or NOT_FOUND." },
+  { q: "What is the difference between signed receipts and hash-only timestamps?", a: "A signed receipt supports full attestation of the CER bundle and can verify as VERIFIED. A hash-only timestamp signs only the certificateHash; it proves the hash existed at a specific time but does not attest the snapshot contents." },
+  { q: "What does SKIPPED mean?", a: "A SKIPPED check means the check is not applicable to the record. The overall status can still be VERIFIED if all applicable checks pass." },
+  { q: "Are Context Signals always part of the certificateHash?", a: "Not always. Signals MAY be inside the hash scope or supplemental. A signal being outside the hash scope does not invalidate core artifact integrity." },
+  { q: "What does a redacted export prove?", a: "A redacted export contains a limited view of the original record with sensitive fields removed. A redacted reseal is signed again by the attestation node so the shared version remains verifiable. The original full bundle is not recoverable from the redacted version." },
+  { q: "What is a legacy record?", a: "A legacy record is a historical record format that may lack full attestation data, a complete bundle structure, or a signed receipt. Legacy records may verify as VERIFIED or FAILED depending on available data." },
+  { q: "Does NexArt always store the full original content?", a: "Not always. Records may be full, redacted, hash-only, or legacy depending on the source and export path. The record's bundleType indicates what kind of data is present." },
+  { q: "Where do verifiers fetch node keys?", a: "Node signing keys are published at node.nexart.io/.well-known/nexart-node.json. Verifiers use the attestorKeyId from the receipt to select the correct key for Ed25519 signature verification." },
+  { q: "Which AI models are supported?", a: "NexArt does not depend on a specific AI provider. Model identifiers can be recorded in CER metadata. NexArt can be used with many AI systems as long as valid execution records are produced." },
+  { q: "Can I self-host an attestation node?", a: "Self-hosted attestation nodes are on the roadmap but not currently available." },
+  { q: "Where can I verify a CER?", a: "Public verification is available at https://verify.nexart.io/c/{certificateHash}. Independent verification can also be performed locally using the CER bundle, signed receipt, and node keys." },
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqEntries.map((e) => ({
+    "@type": "Question",
+    name: e.q,
+    acceptedAnswer: { "@type": "Answer", text: e.a },
+  })),
+};
 
 const llmBlock = `# NexArt FAQ Summary
 
@@ -40,6 +72,9 @@ Use attestorKeyId from the receipt to select the correct key.`;
 
 const FAQ = () => (
   <>
+    <Helmet>
+      <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
+    </Helmet>
     <DocsMeta
       title="FAQ"
       description="Answers to common questions about NexArt: what verification proves, certificateHash vs projectHash, redaction, and trust model."
