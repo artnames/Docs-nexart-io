@@ -49,6 +49,7 @@ const navigation: NavItem[] = [
       { title: "CodeMode SDK", path: "/docs/codemode-sdk" },
       { title: "UI Renderer SDK", path: "/docs/ui-renderer-sdk" },
       { title: "Agent Kit", path: "/docs/agent-kit" },
+      { title: "Agent-Kit Instructions for AI Agents", path: "/docs/agent-kit-instructions" },
       { title: "NexArt CLI", path: "/docs/cli" },
     ],
   },

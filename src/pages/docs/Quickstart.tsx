@@ -313,7 +313,7 @@ console.log(report.envelope);  // PASS`}
 
     <h3>1. Install agent-kit</h3>
     <CodeBlock language="bash" code="npm install @nexart/agent-kit" />
-    <p className="text-sm text-muted-foreground">Current version: <code>@nexart/agent-kit@0.4.0</code>.</p>
+    <p className="text-sm text-muted-foreground">Current version: <code>@nexart/agent-kit@0.5.1</code>. Wiring this up with an AI assistant? See the <Link to="/docs/agent-kit-instructions" className="text-primary hover:underline">Agent-Kit Instructions for AI Agents</Link> page.</p>
 
     <h3>2. Build a workflow</h3>
     <CodeBlock
