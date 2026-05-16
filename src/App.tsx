@@ -98,6 +98,7 @@ const App = () => (
             <Route path="verification-statuses-and-errors" element={<VerificationStatusesAndErrors />} />
             <Route path="multi-step-and-multi-agent-workflows" element={<MultiStepAndMultiAgentWorkflows />} />
             <Route path="public-reseals-and-redacted-verification" element={<PublicResealsAndRedactedVerification />} />
+            <Route path="certifying-llm-conversations" element={<CertifyingLlmConversations />} />
             <Route path="verification" element={<Verification />} />
             <Route path="verify-nexart" element={<VerifyNexart />} />
             <Route path="browser-verification" element={<BrowserVerification />} />
