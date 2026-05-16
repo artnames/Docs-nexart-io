@@ -55,6 +55,7 @@ import MultiStepAndMultiAgentWorkflows from "./pages/docs/MultiStepAndMultiAgent
 import PublicResealsAndRedactedVerification from "./pages/docs/PublicResealsAndRedactedVerification";
 import SignalsSDK from "./pages/docs/SignalsSDK";
 import Architecture from "./pages/docs/Architecture";
+import CertifyingLlmConversations from "./pages/docs/CertifyingLlmConversations";
 
 const queryClient = new QueryClient();
 
@@ -97,6 +98,7 @@ const App = () => (
             <Route path="verification-statuses-and-errors" element={<VerificationStatusesAndErrors />} />
             <Route path="multi-step-and-multi-agent-workflows" element={<MultiStepAndMultiAgentWorkflows />} />
             <Route path="public-reseals-and-redacted-verification" element={<PublicResealsAndRedactedVerification />} />
+            <Route path="certifying-llm-conversations" element={<CertifyingLlmConversations />} />
             <Route path="verification" element={<Verification />} />
             <Route path="verify-nexart" element={<VerifyNexart />} />
             <Route path="browser-verification" element={<BrowserVerification />} />
