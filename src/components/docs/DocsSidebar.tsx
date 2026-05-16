@@ -90,6 +90,7 @@ const navigation: NavItem[] = [
     ],
   },
   { title: "Guides", path: "/docs/guides" },
+  { title: "Certifying LLM Conversations", path: "/docs/certifying-llm-conversations" },
   { title: "Examples", path: "/docs/examples" },
   { title: "Privacy & Data Handling", path: "/docs/privacy" },
   { title: "FAQ", path: "/docs/faq" },
