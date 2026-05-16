@@ -8,7 +8,7 @@ const llmBlock = `# @nexart/agent-kit
 A thin convenience layer for producing verifiable Certified Execution Records from agent tool calls and decisions.
 
 ## Package
-@nexart/agent-kit@0.4.0
+@nexart/agent-kit@0.5.1
 
 ## Exports
 - wrapTool(opts): returns a callable that wraps an async tool function; when invoked, executes it and produces a cer.ai.execution.v1 bundle
@@ -63,9 +63,16 @@ const AgentKit = () => (
       </div>
     </div>
 
+    <div className="not-prose my-6 rounded-lg border border-primary/30 bg-primary/5 p-4">
+      <div className="text-sm font-medium text-foreground mb-1">Setting this up with an AI coding assistant?</div>
+      <div className="text-sm text-muted-foreground">
+        The <Link to="/docs/agent-kit-instructions" className="text-primary hover:underline">Agent-Kit Instructions for AI Agents</Link> page is a prescriptive runbook you can paste directly into Cursor, Claude Code, Lovable, or Windsurf. It handles install, pattern selection, and verification end to end.
+      </div>
+    </div>
+
     <h2 id="installation">Installation</h2>
     <CodeBlock language="bash" code="npm install @nexart/agent-kit" />
-    <p className="text-sm text-muted-foreground">Current version: 0.4.0</p>
+    <p className="text-sm text-muted-foreground">Current version: 0.5.1</p>
     <p className="text-sm text-muted-foreground">
       If you also import <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">@nexart/signals</code> or <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">@nexart/ai-execution</code> directly:
     </p>
@@ -219,7 +226,7 @@ const bundle = workflow.finish();
     <div className="not-prose my-6 rounded-lg border border-border bg-muted/30 p-4">
       <div className="text-sm font-medium text-foreground mb-1">Designed for linear workflows</div>
       <div className="text-sm text-muted-foreground">
-        agent-kit v0.4.0 handles simple linear workflows. For complex DAGs or non-linear execution graphs, use the lower-level SDK helpers (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">certify</code> + <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">createProjectBundle</code>).
+        agent-kit v0.5.1 handles simple linear workflows. For complex DAGs or non-linear execution graphs, use the lower-level SDK helpers (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">certify</code> + <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">createProjectBundle</code>).
       </div>
     </div>
 

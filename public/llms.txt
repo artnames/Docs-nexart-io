@@ -40,6 +40,7 @@
 - [CodeMode SDK](https://docs.nexart.io/docs/codemode-sdk)
 - [UI Renderer SDK](https://docs.nexart.io/docs/ui-renderer-sdk)
 - [Agent Kit](https://docs.nexart.io/docs/agent-kit)
+- [Agent-Kit Instructions for AI Agents](https://docs.nexart.io/docs/agent-kit-instructions) — paste-ready runbook ([raw markdown](https://docs.nexart.io/agent-kit-instructions.md))
 - [Integration Surfaces](https://docs.nexart.io/docs/integration-surfaces)
 
 ## Workflows

@@ -56,6 +56,7 @@ import PublicResealsAndRedactedVerification from "./pages/docs/PublicResealsAndR
 import SignalsSDK from "./pages/docs/SignalsSDK";
 import Architecture from "./pages/docs/Architecture";
 import CertifyingLlmConversations from "./pages/docs/CertifyingLlmConversations";
+import AgentInstructions from "./pages/docs/AgentInstructions";
 
 const queryClient = new QueryClient();
 
@@ -118,6 +119,7 @@ const App = () => (
             <Route path="integrations/n8n" element={<N8n />} />
             <Route path="integrations/langchain" element={<LangChain />} />
             <Route path="agent-kit" element={<AgentKit />} />
+            <Route path="agent-kit-instructions" element={<AgentInstructions />} />
             <Route path="guides" element={<Guides />} />
             <Route path="faq" element={<FAQ />} />
           </Route>
