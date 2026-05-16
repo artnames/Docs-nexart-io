@@ -224,6 +224,14 @@ const AttestationNode = () => (
       the public verifier as the authoritative success signal. See{" "}
       <Link to="/docs/end-to-end-verification" className="text-primary hover:underline">End-to-End Verification</Link>.
     </p>
+    <p className="text-sm text-muted-foreground border-l-2 border-border pl-3 mt-3">
+      <strong>Note:</strong> NexArt nodes also accept{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">POST /api/stamp</code>{" "}
+      as a backward-compatible alias for{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">/api/attest</code>.
+      New integrations should use <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">/api/attest</code>.
+      The alias will remain available for at least 12 months from this documentation change.
+    </p>
 
     <h2 id="reseal">Redacted Reseal Behavior</h2>
     <p>
