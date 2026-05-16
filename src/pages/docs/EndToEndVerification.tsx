@@ -16,7 +16,7 @@ NexArt verification has THREE distinct levels. Builders MUST understand all thre
 - Does NOT prove the artifact was witnessed by an attestation node
 
 ## Level 2 - Node Certification / Registration (trust anchor)
-- POST /api/stamp                     -> attest a single CER
+- POST /api/attest                     -> attest a single CER
 - POST /v1/project-bundle/register    -> register a Project Bundle
 - The node returns a signed receipt and writes the artifact to its proof tables
 - This is what makes the artifact PUBLICLY verifiable
@@ -27,7 +27,7 @@ NexArt verification has THREE distinct levels. Builders MUST understand all thre
 - Requires a node-registered artifact. Local-only artifacts will NOT resolve.
 
 ## Required pipeline
-Execute -> certifyDecision -> (optional /api/stamp) -> createProjectBundle
+Execute -> certifyDecision -> (optional /api/attest) -> createProjectBundle
        -> verifyProjectBundle (local) -> /v1/project-bundle/register (REQUIRED for public verify)
        -> verify.nexart.io/p/{projectHash}
 
@@ -82,7 +82,7 @@ const EndToEndVerification = () => (
       language="text"
       code={`1. Execute AI step                     (your application)
 2. Create CER                          certifyDecision(...)
-3. (Optional) Attest CER on node       POST /api/stamp
+3. (Optional) Attest CER on node       POST /api/attest
 4. Build Project Bundle                createProjectBundle({ steps: [...] })
 5. Verify locally                      verifyProjectBundle(bundle)
 6. Register bundle on node  REQUIRED   POST /v1/project-bundle/register
@@ -123,7 +123,7 @@ const EndToEndVerification = () => (
     <h3 id="level-2">Level 2 - Node Certification / Registration (trust anchor)</h3>
     <p>Submits the artifact to the attestation node, which signs a receipt and writes the artifact to its proof tables.</p>
     <ul>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">POST /api/stamp</code> - attest a single CER</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">POST /api/attest</code> - attest a single CER</li>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">POST /v1/project-bundle/register</code> - register a Project Bundle</li>
     </ul>
     <p>
@@ -249,7 +249,7 @@ console.log(\`https://verify.nexart.io/p/\${encodeURIComponent(projectHash)}\`);
     <h3 id="fail-200-not-found">Node returns 200 but bundle not found later</h3>
     <p>Possible causes:</p>
     <ul>
-      <li>Wrong endpoint (e.g. calling <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">/api/stamp</code> with a project bundle instead of <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">/v1/project-bundle/register</code>).</li>
+      <li>Wrong endpoint (e.g. calling <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">/api/attest</code> with a project bundle instead of <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">/v1/project-bundle/register</code>).</li>
       <li>Wrong payload shape (sending a single CER instead of the full <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer.project.bundle.v1</code> object).</li>
       <li>Wrong environment (staging API key against production node, or vice versa).</li>
       <li>Missing or malformed <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">Authorization</code> header.</li>

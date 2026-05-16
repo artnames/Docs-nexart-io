@@ -26,7 +26,7 @@ Use when:
 - a node-signed receipt is required as a trust anchor
 
 Do not use when:
-- the flow is a single execution (use Path A and /api/stamp)
+- the flow is a single execution (use Path A and /api/attest)
 - the audit trail is internal-only and never resolved publicly
 
 ## Endpoint
@@ -85,7 +85,7 @@ const ProjectBundleRegistration = () => (
       <div className="rounded-md border border-border p-4">
         <p className="font-medium mb-2">Skip when</p>
         <ul className="m-0">
-          <li>Single execution (use Path A + <code>/api/stamp</code>)</li>
+          <li>Single execution (use Path A + <code>/api/attest</code>)</li>
           <li>Independent decisions, not a workflow</li>
           <li>Internal-only audit trail, never resolved publicly</li>
         </ul>

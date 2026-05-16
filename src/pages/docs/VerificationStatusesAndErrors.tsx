@@ -209,7 +209,7 @@ const VerificationStatusesAndErrors = () => (
             status="LOCAL_OK_PUBLIC_NOT_FOUND"
             meaning="verifyCer / verifyProjectBundle passes locally but verify.nexart.io returns NOT_FOUND."
             cause="The artifact was never registered on the node."
-            next="For single CER: call /api/stamp. For Project Bundle: call /v1/project-bundle/register."
+            next="For single CER: call /api/attest. For Project Bundle: call /v1/project-bundle/register."
           />
         </tbody>
       </table>

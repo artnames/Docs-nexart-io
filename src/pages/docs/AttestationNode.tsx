@@ -46,7 +46,7 @@ Verification must not depend on the continued availability of the original attes
 Ed25519
 
 ## Persistence and registration
-The node persists registered artifacts (single CERs via /api/stamp; Project Bundles via /v1/project-bundle/register).
+The node persists registered artifacts (single CERs via /api/attest; Project Bundles via /v1/project-bundle/register).
 Persistence is what makes an artifact resolvable on verify.nexart.io.
 Failure modes include PERSISTENCE_FAILED (write to proof tables failed) and AUTH_INVALID.
 
@@ -210,7 +210,7 @@ const AttestationNode = () => (
       <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a>.
     </p>
     <ul>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">POST /api/stamp</code> persists a single CER attestation.</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">POST /api/attest</code> persists a single CER attestation.</li>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">POST /v1/project-bundle/register</code> persists a full Project Bundle.</li>
     </ul>
     <p>Common registration failure modes:</p>
