@@ -10,7 +10,7 @@ const llmBlock = `# NexArt Agent-Kit: Implementation Instructions for AI Agents
 Add NexArt certification to the user's Node.js / TypeScript project so that every AI decision produces a verifiable, tamper-evident bundle (a CerAiExecutionBundle).
 
 Success criteria (all must be true at the end):
-1. @nexart/agent-kit@^0.5.1 and @nexart/ai-execution@^0.16.1 are installed.
+1. @nexart/agent-kit@^0.5.2 and @nexart/ai-execution@^0.16.1 are installed.
 2. At least one call site produces a CER bundle via certifyDecision, wrapTool, or startWorkflow.
 3. A verification call (verifyAiCerBundleDetailed or verifyProjectBundle) returns status: 'VERIFIED' / ok: true.
 4. You ran the project once and observed the verification pass.
@@ -115,7 +115,7 @@ const AgentInstructions = () => (
     </p>
     <p>Success criteria (all must be true at the end):</p>
     <ol>
-      <li><code>@nexart/agent-kit@^0.5.1</code> and <code>@nexart/ai-execution@^0.16.1</code> are installed.</li>
+      <li><code>@nexart/agent-kit@^0.5.2</code> and <code>@nexart/ai-execution@^0.16.1</code> are installed.</li>
       <li>At least one call site produces a CER bundle via <code>certifyDecision</code>, <code>wrapTool</code>, or <code>startWorkflow</code>.</li>
       <li>A verification call returns <code>status: 'VERIFIED'</code> / <code>ok: true</code>.</li>
       <li>You ran the project once and observed the verification pass.</li>
