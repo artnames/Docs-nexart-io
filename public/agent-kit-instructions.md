@@ -10,7 +10,7 @@ Add NexArt certification to the user's Node.js / TypeScript project so that ever
 
 Success criteria (all must be true at the end):
 
-1. `@nexart/agent-kit@^0.5.1` and `@nexart/ai-execution@^0.16.1` are installed.
+1. `@nexart/agent-kit@^0.5.2` and `@nexart/ai-execution@^0.16.1` are installed.
 2. At least one call site in the user's code produces a CER bundle via `certifyDecision`, `wrapTool`, or `startWorkflow`.
 3. A verification call (`verifyAiCerBundleDetailed` or `verifyProjectBundle`) runs against the produced bundle and returns `status: 'VERIFIED'` / `ok: true`.
 4. You ran the project once and observed the verification pass.
