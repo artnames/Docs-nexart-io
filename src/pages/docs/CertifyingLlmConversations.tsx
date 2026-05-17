@@ -299,6 +299,14 @@ async function sealConversation(conversationId: string, turnCers: unknown[]) {
       witnessed; your internal store is not certified.
     </p>
 
+    <div className="not-prose my-6 rounded-lg border border-primary/30 bg-primary/5 p-4">
+      <p className="text-sm text-muted-foreground m-0">
+        <strong className="text-foreground">Working with Python?</strong> See the{" "}
+        <Link to="/docs/python-bridge" className="text-primary hover:underline">Python Bridge</Link>{" "}
+        page for using NexArt from Python via the canonical JS SDK.
+      </p>
+    </div>
+
     <h2 id="related">Related</h2>
     <ul>
       <li><Link to="/docs/ai-execution">AI Execution CER</Link></li>
