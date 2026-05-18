@@ -149,7 +149,7 @@ Envelope  (Layer 3) : PASS`}
         </dl>
         <p className="text-xs text-muted-foreground mt-3">
           Produced by <code className="font-mono">nexart ai certify</code> or the SDK
-          <code className="font-mono ml-1">certifyLangChainRun()</code>. Node returns receipt + envelope.
+          <code className="font-mono ml-1">certifyAndAttestDecision()</code>. Node returns receipt + envelope.
         </p>
       </div>
     </div>
