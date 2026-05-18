@@ -38,6 +38,26 @@ const LangChain = () => {
         llmBlock={llmBlock}
       />
 
+      <div className="not-prose my-6 rounded-lg border border-primary/30 bg-primary/5 p-4">
+        <div className="text-sm font-medium text-primary mb-1">
+          Only use this page if you're integrating with LangChain
+        </div>
+        <p className="text-sm text-foreground/90">
+          The <code className="font-mono text-xs">createLangChainCer</code> /{" "}
+          <code className="font-mono text-xs">certifyLangChainRun</code> helpers documented here are
+          thin DTO adapters in <code className="font-mono text-xs">@nexart/ai-execution/langchain</code>{" "}
+          for inputs already shaped as a LangChain{" "}
+          <code className="font-mono text-xs">Run</code> or callback payload.
+        </p>
+        <p className="text-sm text-foreground/90 mt-2">
+          For OpenAI SDK, Anthropic SDK, raw HTTP, n8n, custom code, or any other framework, use the
+          framework-agnostic primitives <code className="font-mono text-xs">certifyDecision</code> and{" "}
+          <code className="font-mono text-xs">certifyAndAttestDecision</code> from{" "}
+          <code className="font-mono text-xs">@nexart/ai-execution</code> instead. See the{" "}
+          <Link to="/docs/sdk" className="text-primary hover:underline">AI Execution SDK</Link> page.
+        </p>
+      </div>
+
       <h2>Best For</h2>
       <ul>
         <li>AI agents that make decisions requiring audit trails</li>

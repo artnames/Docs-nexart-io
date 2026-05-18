@@ -38,6 +38,27 @@ const AgentKit = () => (
       llmBlock={llmBlock}
     />
 
+    <div className="not-prose my-6 rounded-lg border border-primary/30 bg-primary/5 p-4">
+      <div className="text-sm font-medium text-primary mb-1">
+        Naming collision: <code className="font-mono text-xs">certifyDecision</code>
+      </div>
+      <p className="text-sm text-foreground/90">
+        <code className="font-mono text-xs">@nexart/agent-kit</code> exports an{" "}
+        <strong>async</strong> <code className="font-mono text-xs">certifyDecision</code> that dispatches
+        through the workflow runner. <code className="font-mono text-xs">@nexart/ai-execution</code> also
+        exports a function named <code className="font-mono text-xs">certifyDecision</code>, but that one is{" "}
+        <strong>synchronous</strong> and seals a CER locally with no workflow context.
+      </p>
+      <p className="text-sm text-foreground/90 mt-2">
+        The two are not interchangeable. Pick agent-kit when you want workflow-aware tool wrapping and
+        decision certification inside a <code className="font-mono text-xs">startWorkflow</code> /{" "}
+        <code className="font-mono text-xs">step</code> /{" "}
+        <code className="font-mono text-xs">finish</code> structure. Pick the{" "}
+        <Link to="/docs/sdk" className="text-primary hover:underline">AI Execution SDK</Link> primitives
+        directly for one-shot CERs.
+      </p>
+    </div>
+
     <h2 id="what-it-is">What It Is</h2>
     <p>
       <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/agent-kit</code> is

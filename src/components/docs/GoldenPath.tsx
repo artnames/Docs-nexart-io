@@ -4,30 +4,30 @@ const steps = [
   {
     n: 1,
     title: "Capture execution",
-    what: "Record the model, input, output, and any structured signals.",
+    what: "Record provider, model, prompt, input, parameters, and output. All six are required on CertifyDecisionParams.",
     why: "The certificateHash is computed from this data. Capture must happen before sealing.",
-    fn: "@nexart/signals · createContext() (optional) → passed into createLangChainCer(...)",
+    fn: "@nexart/signals · createContext() (optional) → passed into certifyDecision(...)",
   },
   {
     n: 2,
     title: "Create CER",
-    what: "Build a CER bundle and compute certificateHash over the strict whitelist (JCS).",
+    what: "Seal a CER bundle and compute certificateHash over the strict whitelist (JCS).",
     why: "The hash is the canonical identity of the record. It binds the bundle to its content.",
-    fn: "createLangChainCer(...) · or sealCer(bundle) for manual sealing",
+    fn: "certifyDecision(params) · or sealCer(snapshot) for the lower-level path",
   },
   {
     n: 3,
     title: "Certify via node",
     what: "Submit the bundle to the attestation node. Receive a signed receipt and verification envelope.",
     why: "The node provides an independent witness and a public verification surface.",
-    fn: "POST /v1/cer/ai/certify",
+    fn: "certifyAndAttestDecision(params, options) · or attest(bundle, options) · POST /v1/cer/ai/certify",
   },
   {
     n: 4,
     title: "Verify independently",
     what: "Anyone can re-derive certificateHash, validate the receipt signature, and validate the envelope.",
     why: "Verification requires no trust in your infrastructure or the node beyond its published key.",
-    fn: "verifyAiCerBundleDetailed(bundle) · or https://verify.nexart.io/c/{certificateHash}",
+    fn: "verifyAiCerBundleDetailed(bundle) · or https://verify.nexart.io/c/{bundle.certificateHash}",
   },
 ];
 

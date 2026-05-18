@@ -15,19 +15,23 @@ const llmBlock = `# Quickstart
 NexArt supports two paths. Pick one. Canonical workflow: seal -> verify -> (optional) certify -> verify.
 
 Terminology:
-- Sealed   = integrity only. Produced offline by SDK sealCer() or CLI 'nexart ai seal'. Layer 1 PASS, Layers 2 & 3 SKIPPED.
-- Certified = integrity + node attestation + envelope. Produced via POST /v1/cer/ai/certify or 'nexart ai certify'. Layers 1, 2, 3 all PASS.
+- Sealed   = integrity only. Produced offline by SDK certifyDecision() / sealCer() or CLI 'nexart ai seal'. Layer 1 PASS, Layers 2 & 3 SKIPPED.
+- Certified = integrity + node attestation + envelope. Produced via certifyAndAttestDecision() / attest(bundle, options) / POST /v1/cer/ai/certify / 'nexart ai certify'. Layers 1, 2, 3 all PASS.
 SKIPPED is not a failure.
 
 ## Path A - Single CER (one execution)
 npm install @nexart/ai-execution      # SDK 0.16.1
-import { sealCer, certifyLangChainRun, verifyAiCerBundleDetailed } from "@nexart/ai-execution";
-1. Create input
-2. Seal locally        -> sealCer(...) returns { bundle, certificateHash }
-3. Verify locally      -> verifyAiCerBundleDetailed(bundle) -> integrity PASS, receipt SKIPPED, envelope SKIPPED
-4. (Optional) Certify  -> certifyLangChainRun({...}) returns attested bundle
-5. Verify again        -> integrity PASS, receipt PASS, envelope PASS
-Public verification URL: https://verify.nexart.io/c/{certificateHash}
+import { certifyDecision, certifyAndAttestDecision, verifyAiCerBundleDetailed } from "@nexart/ai-execution";
+1. Create input (provider, model, prompt, input, parameters, output - all required)
+2. Seal locally        -> certifyDecision(params) returns a sealed CerAiExecutionBundle (sync)
+3. Verify locally      -> verifyAiCerBundleDetailed(bundle) -> Layer 1 PASS, Layers 2/3 SKIPPED
+4. (Optional) Certify  -> certifyAndAttestDecision(params, { nodeUrl, apiKey }) returns { bundle, receipt }
+5. Verify again        -> Layers 1, 2, 3 all PASS
+Public verification URL: https://verify.nexart.io/c/{bundle.certificateHash}
+
+Note: certifyDecision in @nexart/ai-execution is synchronous. certifyDecision in @nexart/agent-kit is async (it dispatches through the workflow runner). They are not interchangeable.
+
+Optional LangChain adapters live in @nexart/ai-execution/langchain (createLangChainCer, certifyLangChainRun). Use only when inputs are already shaped as LangChain Run / callback payloads.
 
 ## Path B - Project Bundle (multi-step workflow)
 npm install @nexart/agent-kit
@@ -79,27 +83,29 @@ const Quickstart = () => (
           language="typescript"
           title="2. seal-and-verify.ts (single file, copy as-is)"
           code={`import {
-  sealCer,
+  certifyDecision,
   verifyAiCerBundleDetailed,
 } from "@nexart/ai-execution";
 
 async function main() {
-  // Seal locally. Fully offline.
-  const { bundle, certificateHash } = sealCer({
-    provider: "openai",
-    model: "gpt-4o-mini",
-    input:  { messages: [{ role: "user", content: "Should this refund be approved?" }] },
-    output: { decision: "approve", reason: "policy_passed" },
+  // Seal locally. Fully offline. certifyDecision is synchronous.
+  const bundle = certifyDecision({
+    provider:   "openai",
+    model:      "gpt-4o-mini",
+    prompt:     "Should this refund be approved?",
+    input:      { messages: [{ role: "user", content: "Should this refund be approved?" }] },
+    parameters: { temperature: 0 },
+    output:     { decision: "approve", reason: "policy_passed" },
   });
 
-  console.log("certificateHash :", certificateHash);
+  console.log("certificateHash :", bundle.certificateHash);
 
   // Independent verification of the sealed bundle.
   const report = await verifyAiCerBundleDetailed(bundle);
 
-  console.log("Integrity (Layer 1) :", report.integrity);
-  console.log("Receipt   (Layer 2) :", report.receipt);
-  console.log("Envelope  (Layer 3) :", report.envelope);
+  console.log("Integrity (Layer 1) :", report.checks.bundleIntegrity);
+  console.log("Receipt   (Layer 2) :", report.checks.nodeSignature);
+  console.log("Envelope  (Layer 3) :", report.checks.receiptConsistency);
 }
 
 main().catch((err) => {
@@ -161,29 +167,39 @@ export NEXART_API_KEY="<your-api-key>"`}
           language="typescript"
           title="2. certify-and-verify.ts"
           code={`import {
-  certifyLangChainRun,
+  certifyAndAttestDecision,
   verifyAiCerBundleDetailed,
 } from "@nexart/ai-execution";
 
 async function main() {
-  // Create + certify in one node round-trip.
-  const { bundle, certificateHash, verificationUrl } = await certifyLangChainRun({
-    provider: "openai",
-    model: "gpt-4o-mini",
-    input:  { messages: [{ role: "user", content: "Should this refund be approved?" }] },
-    output: { decision: "approve", reason: "policy_passed" },
-    nodeUrl: process.env.NEXART_NODE_URL!,
-    apiKey:  process.env.NEXART_API_KEY!,
-  });
+  // Seal + attest in one node round-trip. certifyAndAttestDecision is async.
+  const { bundle, receipt } = await certifyAndAttestDecision(
+    {
+      provider:   "openai",
+      model:      "gpt-4o-mini",
+      prompt:     "Should this refund be approved?",
+      input:      { messages: [{ role: "user", content: "Should this refund be approved?" }] },
+      parameters: { temperature: 0 },
+      output:     { decision: "approve", reason: "policy_passed" },
+    },
+    {
+      nodeUrl: process.env.NEXART_NODE_URL!,
+      apiKey:  process.env.NEXART_API_KEY!,
+    },
+  );
+
+  const certificateHash = bundle.certificateHash;
+  const verificationUrl = \`https://verify.nexart.io/c/\${certificateHash}\`;
 
   console.log("certificateHash :", certificateHash);
+  console.log("attestationId   :", receipt.attestationId);
   console.log("verificationUrl :", verificationUrl);
 
   const report = await verifyAiCerBundleDetailed(bundle);
 
-  console.log("Integrity (Layer 1) :", report.integrity);
-  console.log("Receipt   (Layer 2) :", report.receipt);
-  console.log("Envelope  (Layer 3) :", report.envelope);
+  console.log("Integrity (Layer 1) :", report.checks.bundleIntegrity);
+  console.log("Receipt   (Layer 2) :", report.checks.nodeSignature);
+  console.log("Envelope  (Layer 3) :", report.checks.receiptConsistency);
 }
 
 main().catch((err) => {
@@ -246,27 +262,25 @@ Envelope  (Layer 3) : PASS`}
     <CodeBlock
       language="typescript"
       title="Seal a CER locally — no node, no API key"
-      code={`import { sealCer, verifyAiCerBundleDetailed } from "@nexart/ai-execution";
+      code={`import { certifyDecision, verifyAiCerBundleDetailed } from "@nexart/ai-execution";
 
-const { bundle, certificateHash } = sealCer({
-  provider: "openai",
-  model: "gpt-4o-mini",
-  input: {
-    messages: [{ role: "user", content: "Should this report be approved?" }]
-  },
-  output: {
-    decision: "approve",
-    reason: "policy_passed"
-  }
+// certifyDecision (from @nexart/ai-execution) is synchronous.
+const bundle = certifyDecision({
+  provider:   "openai",
+  model:      "gpt-4o-mini",
+  prompt:     "Should this report be approved?",
+  input:      { messages: [{ role: "user", content: "Should this report be approved?" }] },
+  parameters: { temperature: 0 },
+  output:     { decision: "approve", reason: "policy_passed" },
 });
 
-console.log(certificateHash);
+console.log(bundle.certificateHash);
 
 // Verify locally
 const report = await verifyAiCerBundleDetailed(bundle);
-console.log(report.integrity); // PASS
-console.log(report.receipt);   // SKIPPED (no attestation yet)
-console.log(report.envelope);  // SKIPPED (no envelope yet)`}
+console.log(report.checks.bundleIntegrity);    // PASS
+console.log(report.checks.nodeSignature);      // SKIPPED (no attestation yet)
+console.log(report.checks.receiptConsistency); // SKIPPED (no envelope yet)`}
     />
     <p>
       A sealed bundle is a fully valid CER. <strong>SKIPPED</strong> for receipt and envelope is
@@ -277,21 +291,29 @@ console.log(report.envelope);  // SKIPPED (no envelope yet)`}
     <CodeBlock
       language="typescript"
       title="Add node attestation"
-      code={`import { certifyLangChainRun, verifyAiCerBundleDetailed } from "@nexart/ai-execution";
+      code={`import { certifyAndAttestDecision, verifyAiCerBundleDetailed } from "@nexart/ai-execution";
 
-const { bundle, certificateHash, verificationUrl } = await certifyLangChainRun({
-  provider: "openai",
-  model: "gpt-4o-mini",
-  input:  { messages: [{ role: "user", content: "Should this report be approved?" }] },
-  output: { decision: "approve", reason: "policy_passed" },
-  nodeUrl: process.env.NEXART_NODE_URL!,
-  apiKey:  process.env.NEXART_API_KEY!,
-});
+const { bundle, receipt } = await certifyAndAttestDecision(
+  {
+    provider:   "openai",
+    model:      "gpt-4o-mini",
+    prompt:     "Should this report be approved?",
+    input:      { messages: [{ role: "user", content: "Should this report be approved?" }] },
+    parameters: { temperature: 0 },
+    output:     { decision: "approve", reason: "policy_passed" },
+  },
+  {
+    nodeUrl: process.env.NEXART_NODE_URL!,
+    apiKey:  process.env.NEXART_API_KEY!,
+  },
+);
+
+const verificationUrl = \`https://verify.nexart.io/c/\${bundle.certificateHash}\`;
 
 const report = await verifyAiCerBundleDetailed(bundle);
-console.log(report.integrity); // PASS
-console.log(report.receipt);   // PASS
-console.log(report.envelope);  // PASS`}
+console.log(report.checks.bundleIntegrity);    // PASS
+console.log(report.checks.nodeSignature);      // PASS
+console.log(report.checks.receiptConsistency); // PASS`}
     />
     <p>The <code>certificateHash</code> is identical whether the bundle is sealed or certified for the same input. Certification adds <code>meta.attestation</code> and <code>meta.verificationEnvelope</code>; it does not modify any hashed field.</p>
 

@@ -19,8 +19,8 @@ NexArt creates Certified Execution Records (CERs), cryptographically bound recor
 Canonical workflow: create input -> seal -> verify -> (optional) certify -> verify.
 
 Terminology:
-- Sealed   = integrity only. Local artifact produced by SDK sealCer() or CLI 'nexart ai seal'. Layer 1 PASS, Layers 2 & 3 SKIPPED.
-- Certified = integrity + node attestation + verification envelope. Produced by certifyLangChainRun() or CLI 'nexart ai certify'. Layers 1, 2, 3 all PASS.
+- Sealed   = integrity only. Local artifact produced by SDK certifyDecision() / sealCer() or CLI 'nexart ai seal'. Layer 1 PASS, Layers 2 & 3 SKIPPED.
+- Certified = integrity + node attestation + verification envelope. Produced by certifyAndAttestDecision() (or attest(bundle, options)) or CLI 'nexart ai certify'. Layers 1, 2, 3 all PASS.
 SKIPPED is not a failure.
 
 NexArt supports two integration paths:
@@ -138,31 +138,32 @@ const GettingStarted = () => {
       <CodeBlock
         language="typescript"
         title="Seal a Single CER (offline)"
-        code={`import { sealCer, verifyAiCerBundleDetailed } from "@nexart/ai-execution";
+        code={`import { certifyDecision, verifyAiCerBundleDetailed } from "@nexart/ai-execution";
 
-const { bundle, certificateHash } = sealCer({
-  provider: "openai",
-  model: "gpt-4o-mini",
-  input: {
-    messages: [{ role: "user", content: "What is 2 + 2?" }]
-  },
-  output: {
-    text: "4"
-  }
+// certifyDecision (from @nexart/ai-execution) is synchronous. No network call.
+const bundle = certifyDecision({
+  provider:   "openai",
+  model:      "gpt-4o-mini",
+  prompt:     "What is 2 + 2?",
+  input:      { messages: [{ role: "user", content: "What is 2 + 2?" }] },
+  parameters: { temperature: 0 },
+  output:     { text: "4" },
 });
 
+const certificateHash = bundle.certificateHash;
 console.log(certificateHash);
 
 const report = await verifyAiCerBundleDetailed(bundle);
-// report.integrity === "PASS"
-// report.receipt   === "SKIPPED"  (no node attestation yet)
-// report.envelope  === "SKIPPED"  (no envelope yet)`}
+// report.checks.bundleIntegrity    === "PASS"
+// report.checks.nodeSignature      === "SKIPPED"  (no node attestation yet)
+// report.checks.receiptConsistency === "SKIPPED"  (no envelope yet)`}
       />
       <p>
         The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> is
         the canonical identity of the record. To make the bundle independently verifiable end-to-end
-        (Layers 2 and 3 PASS), submit it to the attestation node via{" "}
-        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certifyLangChainRun()</code>{" "}
+        (Layers 2 and 3 PASS), attest it via{" "}
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certifyAndAttestDecision()</code>,{" "}
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">attest(bundle, options)</code>,{" "}
         or <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">POST /v1/cer/ai/certify</code>.
         The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> does not change.
       </p>
