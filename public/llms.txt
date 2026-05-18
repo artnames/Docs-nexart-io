@@ -35,6 +35,21 @@
 ## SDKs and Tools
 
 - [AI Execution SDK](https://docs.nexart.io/docs/sdk)
+
+  Core SDK functions (framework-agnostic, canonical):
+  - `certifyDecision(params)` — sync. Returns a sealed `CerAiExecutionBundle`. No network call.
+  - `certifyDecisionFromProviderCall(params)` — sync. Builds a CER from a raw provider request+response.
+  - `sealCer(snapshot, options?)` — sync. Lower-level: seals a pre-built `AiExecutionSnapshotV1`.
+  - `attest(bundle, options)` — async. Submits a sealed bundle to the attestation node. Returns `AttestationResult` (`ok`, `certificateHash`, `attestationId`, `nodeRuntimeHash`, `protocolVersion`).
+  - `certifyAndAttestDecision(params, options)` — async. One-call seal + attest. Returns `{ bundle, receipt }` where `receipt` is an `AttestationReceipt`.
+  - `verifyAiCerBundleDetailed(bundle)` — async. Returns Layer 1/2/3 verification report.
+
+  Required `CertifyDecisionParams` fields: `provider`, `model`, `prompt`, `input`, `parameters`, `output`. `prompt` and `parameters` are REQUIRED, not optional.
+
+  Note: `certifyDecision` in `@nexart/ai-execution` is synchronous. `certifyDecision` exposed by `@nexart/agent-kit` is asynchronous (it dispatches through the workflow runner). The two are not interchangeable.
+
+  Optional adapters:
+  - `createLangChainCer(...)`, `certifyLangChainRun(...)` from `@nexart/ai-execution/langchain` — thin DTO adapters over `certifyDecision` / `certifyAndAttestDecision`. Use these only when you have data already shaped as LangChain inputs (e.g., from a LangChain callback). For raw OpenAI SDK, Anthropic SDK, or any other framework, use `certifyDecision` directly.
 - [Signals SDK](https://docs.nexart.io/docs/signals-sdk)
 - [NexArt CLI](https://docs.nexart.io/docs/cli)
 - [CodeMode SDK](https://docs.nexart.io/docs/codemode-sdk)
