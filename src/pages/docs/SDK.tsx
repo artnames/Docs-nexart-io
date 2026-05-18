@@ -122,6 +122,41 @@ const SDK = () => (
       changing the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>.
     </p>
 
+    <div className="not-prose my-6 rounded-lg border border-primary/30 bg-primary/5 p-4">
+      <div className="text-sm font-medium text-primary mb-1">
+        Framework-agnostic primitives (use these by default)
+      </div>
+      <ul className="text-sm text-foreground/90 space-y-1 list-disc pl-5 mt-2">
+        <li>
+          <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">certifyDecision(params)</code> — sync seal. No network.
+        </li>
+        <li>
+          <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">certifyAndAttestDecision(params, options)</code> — async seal + attest. Returns <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">{`{ bundle, receipt }`}</code>.
+        </li>
+        <li>
+          <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">attest(bundle, options)</code> — async. Attest a previously sealed bundle.
+        </li>
+        <li>
+          Required <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">CertifyDecisionParams</code>: <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">provider</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">model</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">prompt</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">input</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">parameters</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">output</code>.
+        </li>
+      </ul>
+      <p className="text-xs text-muted-foreground mt-3">
+        <strong>Sync/async asymmetry:</strong>{" "}
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">certifyDecision</code> in{" "}
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">@nexart/ai-execution</code> is{" "}
+        <strong>synchronous</strong>.{" "}
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">certifyDecision</code> exposed by{" "}
+        <Link to="/docs/agent-kit" className="text-primary hover:underline"><code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">@nexart/agent-kit</code></Link> is{" "}
+        <strong>asynchronous</strong> (dispatches through the workflow runner). The two are not interchangeable.
+      </p>
+      <p className="text-xs text-muted-foreground mt-2">
+        LangChain-specific adapters (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">createLangChainCer</code>,{" "}
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">certifyLangChainRun</code>) live in{" "}
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">@nexart/ai-execution/langchain</code> and are appropriate only when inputs are already shaped as LangChain Run / callback payloads. See the{" "}
+        <Link to="/docs/integrations/langchain" className="text-primary hover:underline">LangChain integration</Link> page.
+      </p>
+    </div>
+
     <MentalModel />
 
     <h2 id="flow">Quick Implementation Flow</h2>
