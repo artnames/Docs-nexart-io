@@ -44,7 +44,7 @@
   - `certifyAndAttestDecision(params, options)` — async. One-call seal + attest. Returns `{ bundle, receipt }` where `receipt` is an `AttestationReceipt`.
   - `verifyAiCerBundleDetailed(bundle)` — async. Returns Layer 1/2/3 verification report.
 
-  Required `CertifyDecisionParams` fields: `provider`, `model`, `prompt`, `input`, `parameters`, `output`. `prompt` and `parameters` are REQUIRED, not optional.
+  Required `CertifyDecisionParams` fields: `provider`, `model`, `prompt`, `input`, `parameters`, `output`. `prompt` and `parameters` are REQUIRED, not optional. `parameters` MUST be a full `AiExecutionParameters` object with all four keys present: `temperature: number`, `maxTokens: number`, `topP: number | null`, `seed: number | null`. `topP` and `seed` accept `null` but the keys MUST be set. A partial object like `{ temperature: 0 }` will not type-check.
 
   Note: `certifyDecision` in `@nexart/ai-execution` is synchronous. `certifyDecision` exposed by `@nexart/agent-kit` is asynchronous (it dispatches through the workflow runner). The two are not interchangeable.
 
