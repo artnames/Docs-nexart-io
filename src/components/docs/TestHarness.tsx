@@ -3,8 +3,9 @@ import CodeBlock from "@/components/docs/CodeBlock";
 /**
  * "Verify Your First Certified Execution (2 minutes)"
  *
- * One copy-paste script that exercises the full NexArt flow end-to-end:
- * certifyLangChainRun -> verifyAiCerBundleDetailed -> print PASS/FAIL per layer.
+ * One copy-paste script that exercises the full NexArt flow end-to-end using the
+ * framework-agnostic primitives:
+ *   certifyAndAttestDecision -> verifyAiCerBundleDetailed -> print PASS/FAIL per layer.
  *
  * Used at the top of Getting Started and Quickstart. Single source of truth.
  */
@@ -33,30 +34,40 @@ export NEXART_API_KEY="<your-api-key>"`}
         language="typescript"
         title="2. test-harness.ts (single file, copy as-is)"
         code={`import {
-  certifyLangChainRun,
+  certifyAndAttestDecision,
   verifyAiCerBundleDetailed,
 } from "@nexart/ai-execution";
 
 async function main() {
-  // Create + certify in one node round-trip.
-  const { bundle, certificateHash, verificationUrl } = await certifyLangChainRun({
-    provider: "openai",
-    model: "gpt-4o-mini",
-    input:  { messages: [{ role: "user", content: "Should this refund be approved?" }] },
-    output: { decision: "approve", reason: "policy_passed" },
-    nodeUrl: process.env.NEXART_NODE_URL!,
-    apiKey:  process.env.NEXART_API_KEY!,
-  });
+  // Seal + attest in one node round-trip.
+  const { bundle, receipt } = await certifyAndAttestDecision(
+    {
+      provider:   "openai",
+      model:      "gpt-4o-mini",
+      prompt:     "Should this refund be approved?",
+      input:      { messages: [{ role: "user", content: "Should this refund be approved?" }] },
+      parameters: { temperature: 0 },
+      output:     { decision: "approve", reason: "policy_passed" },
+    },
+    {
+      nodeUrl: process.env.NEXART_NODE_URL!,
+      apiKey:  process.env.NEXART_API_KEY!,
+    },
+  );
+
+  const certificateHash = bundle.certificateHash;
+  const verificationUrl = \`https://verify.nexart.io/c/\${certificateHash}\`;
 
   console.log("certificateHash :", certificateHash);
+  console.log("attestationId   :", receipt.attestationId);
   console.log("verificationUrl :", verificationUrl);
 
   // Independent verification of the returned bundle. No trust required.
   const report = await verifyAiCerBundleDetailed(bundle);
 
-  console.log("Integrity (Layer 1) :", report.integrity);
-  console.log("Receipt   (Layer 2) :", report.receipt);
-  console.log("Envelope  (Layer 3) :", report.envelope);
+  console.log("Integrity (Layer 1) :", report.checks.bundleIntegrity);
+  console.log("Receipt   (Layer 2) :", report.checks.nodeSignature);
+  console.log("Envelope  (Layer 3) :", report.checks.receiptConsistency);
 }
 
 main().catch((err) => {
