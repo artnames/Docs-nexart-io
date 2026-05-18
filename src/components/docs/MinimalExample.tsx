@@ -65,7 +65,7 @@ const { bundle, receipt } = await certifyAndAttestDecision(
     model:      "gpt-4o-mini",
     prompt:     "Should this refund be approved?",
     input:      { messages: [{ role: "user", content: "Should this refund be approved?" }] },
-    parameters: { temperature: 0 },
+    parameters: { temperature: 0, maxTokens: 1024, topP: null, seed: null },
     output:     { decision: "approve", reason: "policy_passed" },
   },
   {
@@ -102,7 +102,7 @@ const bundle = certifyDecision({
   model:      "gpt-4o-mini",
   prompt:     "Should this refund be approved?",
   input:      { messages: [{ role: "user", content: "Should this refund be approved?" }] },
-  parameters: { temperature: 0 },
+  parameters: { temperature: 0, maxTokens: 1024, topP: null, seed: null },
   output:     { decision: "approve", reason: "policy_passed" },
 });
 

@@ -146,7 +146,7 @@ const bundle = certifyDecision({
   model:      "gpt-4o-mini",
   prompt:     "What is 2 + 2?",
   input:      { messages: [{ role: "user", content: "What is 2 + 2?" }] },
-  parameters: { temperature: 0 },
+  parameters: { temperature: 0, maxTokens: 1024, topP: null, seed: null },
   output:     { text: "4" },
 });
 

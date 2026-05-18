@@ -407,7 +407,7 @@ ctx.output({ answer: '...' });`}
   model:      'gpt-4o-mini',
   input,
   output,
-  parameters: { temperature: 0 },
+  parameters: { temperature: 0, maxTokens: 1024, topP: null, seed: null },
 });
 
 // For tests or full decoupling, inject a custom certifier
