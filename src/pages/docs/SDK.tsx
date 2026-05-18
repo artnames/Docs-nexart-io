@@ -18,15 +18,24 @@ Package: @nexart/ai-execution@0.16.1
 ## Canonical workflow
 seal -> verify -> (optional) certify -> verify
 
-- Sealed bundle  = integrity only. Produced by sealCer() (local, offline). Layer 1 PASS, Layers 2 & 3 SKIPPED.
-- Certified bundle = integrity + node attestation + envelope. Produced by certifyLangChainRun() / POST /v1/cer/ai/certify. Layers 1, 2, 3 all PASS.
+- Sealed bundle  = integrity only. Produced by certifyDecision() (sync) or sealCer() (lower-level). No network. Layer 1 PASS, Layers 2 & 3 SKIPPED.
+- Certified bundle = integrity + node attestation + envelope. Produced by certifyAndAttestDecision() / attest(bundle, options) / POST /v1/cer/ai/certify. Layers 1, 2, 3 all PASS.
 SKIPPED is not a failure.
 
-## Core SDK functions
-- sealCer(params): create + seal a CER bundle locally. No network, no API key. Returns { bundle, certificateHash }.
-- createSnapshot(params): build the canonical snapshot; used internally by sealCer.
-- certifyLangChainRun(params): seal locally and submit to the attestation node. Returns { bundle, certificateHash, receipt, signatureB64Url, verificationUrl }.
-- verifyAiCerBundleDetailed(bundle): verifies a bundle and returns { integrity, receipt, envelope } each as PASS | FAIL | SKIPPED.
+## Core SDK functions (framework-agnostic, canonical)
+- certifyDecision(params) -> CerAiExecutionBundle. SYNC. Seals locally. No network.
+- certifyDecisionFromProviderCall(params) -> CerAiExecutionBundle. SYNC. Builds a CER from a raw provider request+response.
+- sealCer(snapshot, options?) -> CerAiExecutionBundle. SYNC. Lower-level: seals a pre-built AiExecutionSnapshotV1.
+- attest(bundle, options) -> AttestationResult { ok, certificateHash, attestationId, nodeRuntimeHash, protocolVersion }. ASYNC.
+- certifyAndAttestDecision(params, options) -> { bundle, receipt: AttestationReceipt }. ASYNC. One-call seal+attest.
+- verifyAiCerBundleDetailed(bundle) -> Layer 1/2/3 verification report with checks.bundleIntegrity, checks.nodeSignature, checks.receiptConsistency.
+
+Required CertifyDecisionParams fields: provider, model, prompt, input, parameters, output. prompt and parameters are REQUIRED, not optional.
+
+Sync/async asymmetry: certifyDecision in @nexart/ai-execution is synchronous. certifyDecision in @nexart/agent-kit is asynchronous (it dispatches through the workflow runner). The two are not interchangeable.
+
+## Optional framework adapters
+- createLangChainCer, certifyLangChainRun from @nexart/ai-execution/langchain. Thin DTO adapters over certifyDecision / certifyAndAttestDecision. Use only when inputs are already shaped as LangChain Run / callback payloads. For OpenAI, Anthropic, raw HTTP, n8n, custom code: use certifyDecision / certifyAndAttestDecision directly.
 
 ## API Endpoints
 
@@ -416,8 +425,8 @@ const result = await verifyCerPackage(pkg);
     <h3 id="verify-detailed"><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verifyAiCerBundleDetailed(bundle)</code></h3>
     <p>Returns a structured per-layer verification report covering Integrity (Layer 1), Receipt (Layer 2), and Verification Envelope (Layer 3). Each layer reports independently. Envelope failure is reported separately from integrity failure.</p>
 
-    <h3 id="seal"><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">sealCer(bundle, opts)</code></h3>
-    <p>Computes the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> over the strict whitelist projection (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">bundleType</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">version</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">createdAt</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">snapshot</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">context</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">contextSummary</code>) using JCS canonicalization.</p>
+    <h3 id="seal"><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">sealCer(snapshot, options?)</code></h3>
+    <p>Lower-level seal. Takes a pre-built <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">AiExecutionSnapshotV1</code> (not the high-level <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">CertifyDecisionParams</code>) and computes the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> over the strict whitelist projection (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">bundleType</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">version</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">createdAt</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">snapshot</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">context</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">contextSummary</code>) using JCS canonicalization. For most callers, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">certifyDecision(params)</code> is the recommended entry point.</p>
 
     <h3 id="wrap-provider"><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">wrapProvider(provider, opts)</code></h3>
     <p>Wraps an LLM/tool provider so each invocation is automatically certified through <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">/v1/cer/ai/certify</code>. Returns the original provider response augmented with the CER bundle and verificationUrl.</p>
