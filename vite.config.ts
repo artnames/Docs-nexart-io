@@ -21,6 +21,7 @@ export default defineConfig(({ mode }) => ({
     mode === "development" && componentTagger(),
     // Only run the headless-browser prerender on production builds.
     mode !== "development" && prerenderPlugin(),
+    mode !== "development" && staticMetaPrerender(),
   ].filter(Boolean),
   resolve: {
     alias: {
