@@ -4,6 +4,8 @@ import path from "path";
 import { componentTagger } from "lovable-tagger";
 // @ts-expect-error - JS plugin without types
 import prerenderPlugin from "./scripts/prerender-plugin.mjs";
+// @ts-expect-error - JS plugin without types
+import staticMetaPrerender from "./scripts/static-meta-prerender.mjs";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -19,6 +21,7 @@ export default defineConfig(({ mode }) => ({
     mode === "development" && componentTagger(),
     // Only run the headless-browser prerender on production builds.
     mode !== "development" && prerenderPlugin(),
+    mode !== "development" && staticMetaPrerender(),
   ].filter(Boolean),
   resolve: {
     alias: {

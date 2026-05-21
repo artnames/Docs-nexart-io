@@ -56,12 +56,12 @@ const DocsMeta = ({ title, description, breadcrumbs }: DocsMetaProps) => {
   // Auto-detect section from path for breadcrumbs
   const buildBreadcrumbs = (): BreadcrumbItem[] => {
     if (breadcrumbs) {
-      return [{ name: "Home", path: "/" }, { name: "Docs", path: "/docs/getting-started" }, ...breadcrumbs];
+      return [{ name: "Home", path: "/" }, { name: "Docs", path: "/docs" }, ...breadcrumbs];
     }
     const parts = pathname.replace(/^\/docs\//, "").split("/");
     const crumbs: BreadcrumbItem[] = [
       { name: "Home", path: "/" },
-      { name: "Docs", path: "/docs/getting-started" },
+      { name: "Docs", path: "/docs" },
     ];
     if (parts.length > 1 && sectionNames[parts[0]]) {
       const sectionPath = parts[0] === "integrations" ? "/docs/integrations" : `/docs/${parts[0]}/${parts[1]}`;

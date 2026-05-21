@@ -298,7 +298,7 @@
     <loc>https://docs.nexart.io/docs/faq</loc>
     <lastmod>2026-04-28</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.85</priority>
   </url>
   <url>
     <loc>https://docs.nexart.io/docs/certifying-llm-conversations</loc>
