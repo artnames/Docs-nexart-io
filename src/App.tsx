@@ -70,6 +70,9 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/architecture" element={<Navigate to="/docs/architecture" replace />} />
+          <Route path="/what-is-nexart" element={<Navigate to="/docs/what-is-nexart" replace />} />
+          <Route path="/getting-started" element={<Navigate to="/docs/getting-started" replace />} />
+          <Route path="/quickstart" element={<Navigate to="/docs/quickstart" replace />} />
           <Route path="/docs" element={<DocsLayout />}>
             <Route index element={<Navigate to="/docs/getting-started" replace />} />
             <Route path="what-is-nexart" element={<WhatIsNexArt />} />
