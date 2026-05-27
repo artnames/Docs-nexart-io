@@ -96,6 +96,12 @@ const navigation: NavItem[] = [
   { title: "Examples", path: "/docs/examples" },
   { title: "Privacy & Data Handling", path: "/docs/privacy" },
   { title: "FAQ", path: "/docs/faq" },
+  {
+    title: "Security",
+    children: [
+      { title: "Key Management", path: "/docs/security/key-management" },
+    ],
+  },
 ];
 
 interface Props {

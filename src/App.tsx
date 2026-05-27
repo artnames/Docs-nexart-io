@@ -58,6 +58,7 @@ import Architecture from "./pages/docs/Architecture";
 import CertifyingLlmConversations from "./pages/docs/CertifyingLlmConversations";
 import AgentInstructions from "./pages/docs/AgentInstructions";
 import PythonBridge from "./pages/docs/PythonBridge";
+import KeyManagement from "./pages/docs/KeyManagement";
 
 const queryClient = new QueryClient();
 
@@ -127,6 +128,7 @@ const App = () => (
             <Route path="python-bridge" element={<PythonBridge />} />
             <Route path="guides" element={<Guides />} />
             <Route path="faq" element={<FAQ />} />
+            <Route path="security/key-management" element={<KeyManagement />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

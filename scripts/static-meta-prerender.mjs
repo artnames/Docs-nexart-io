@@ -66,6 +66,7 @@ const ROUTE_META = {
   "/docs/python-bridge": { title: "Python Bridge", summary: "Use NexArt from Python via a thin bridge to the canonical JavaScript SDK. Shipped inside @nexart/agent-kit." },
   "/docs/guides": { title: "Builder Guides", summary: "Quick-start paths for common NexArt tasks." },
   "/docs/faq": { title: "FAQ", summary: "Common questions from builders integrating NexArt." },
+  "/docs/security/key-management": { title: "Key Management and Rotation (NexArt Node)", summary: "How NexArt Node manages Ed25519 signing keys, rotates them safely, and maintains backward-compatible verification." },
   "/": { title: "NexArt Docs", summary: "Official NexArt documentation: build, register, and verify Certified Execution Records (CERs)." },
 };
 
