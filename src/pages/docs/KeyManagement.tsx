@@ -43,6 +43,8 @@ The node exposes public keys at GET /.well-known/nexart-node.json.
 - Periodic rotation (recommended but optional).
 - During security upgrades.
 
+Deprecated public keys should be retained for at least the duration of the CER retention policy. Removing a key too early may prevent verification of historical records.
+
 ## Security considerations
 - Private keys must never be exposed.
 - Keys are stored in Railway environment variables.
