@@ -28,7 +28,7 @@ The node exposes public keys at GET /.well-known/nexart-node.json.
 - certificateHash is NOT affected by key rotation.
 - Only signatures depend on keys.
 
-The NexArt Node acts as the independent trust authority. Verification does not rely on platform storage or databases, only on the signed receipt and the node's published public keys.
+The NexArt Node acts as the independent trust authority. Verification does not rely on trusting platform storage or databases. It is performed using the signed receipt and the node's published public keys.
 
 ## Key rotation procedure
 1. Generate a new Ed25519 key pair.
@@ -138,7 +138,7 @@ const KeyManagement = () => (
       <li>Certificate hashes are NOT affected by key rotation. The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> is computed from the CER bundle content, not the signature.</li>
       <li>Only signatures depend on keys. If a key is lost, previously signed receipts may become unverifiable. This is why deprecated keys are retained.</li>
     </ul>
-    <p>The NexArt Node acts as the independent trust authority. Verification does not rely on platform storage or databases, only on the signed receipt and the node's published public keys.</p>
+    <p>The NexArt Node acts as the independent trust authority. Verification does not rely on trusting platform storage or databases. It is performed using the signed receipt and the node's published public keys.</p>
 
     <h2 id="key-rotation-process">Key Rotation Process</h2>
     <p>Follow this procedure exactly. Do not skip steps.</p>
