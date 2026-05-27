@@ -176,6 +176,7 @@ const KeyManagement = () => (
       <li><strong>Periodic rotation.</strong> Recommended but optional. A reasonable interval is 12 months. More frequent rotation adds operational burden without proportional security benefit if the key is well-protected.</li>
       <li><strong>Security upgrades.</strong> If the host infrastructure changes (new platform, new secret store, new access controls), rotation reduces blast radius from any misconfiguration.</li>
     </ul>
+    <p>Deprecated public keys should be retained for at least the duration of the CER retention policy. Removing a key too early may prevent verification of historical records.</p>
 
     <h2 id="security-considerations">Security Considerations</h2>
     <ul>
