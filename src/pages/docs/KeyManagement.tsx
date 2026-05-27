@@ -31,7 +31,10 @@ The node exposes public keys at GET /.well-known/nexart-node.json.
 ## Key rotation procedure
 1. Generate a new Ed25519 key pair.
 2. Set the new private key as NODE_ATTESTATION_PRIVATE_KEY.
-3. Move the previous private key to NODE_ATTESTATION_DEPRECATED_KEYS.
+3. Move the previous key to NODE_ATTESTATION_DEPRECATED_KEYS.
+Only the PUBLIC KEY is required for deprecated keys. Deprecated private keys must NOT be retained.
+
+Deprecated keys are used for verification only. They do not require private key material. Retaining private keys beyond their active use increases security risk and is not permitted.
 4. Deploy the node.
 5. Verify new CERs are signed with the new key.
 6. Verify old CERs still verify.
