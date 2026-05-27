@@ -28,6 +28,8 @@ The node exposes public keys at GET /.well-known/nexart-node.json.
 - certificateHash is NOT affected by key rotation.
 - Only signatures depend on keys.
 
+The NexArt Node acts as the independent trust authority. Verification does not rely on platform storage or databases, only on the signed receipt and the node's published public keys.
+
 ## Key rotation procedure
 1. Generate a new Ed25519 key pair.
 2. Set the new private key as NODE_ATTESTATION_PRIVATE_KEY.
