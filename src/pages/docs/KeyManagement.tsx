@@ -28,10 +28,15 @@ The node exposes public keys at GET /.well-known/nexart-node.json.
 - certificateHash is NOT affected by key rotation.
 - Only signatures depend on keys.
 
+The NexArt Node acts as the independent trust authority. Verification does not rely on platform storage or databases, only on the signed receipt and the node's published public keys.
+
 ## Key rotation procedure
 1. Generate a new Ed25519 key pair.
 2. Set the new private key as NODE_ATTESTATION_PRIVATE_KEY.
-3. Move the previous private key to NODE_ATTESTATION_DEPRECATED_KEYS.
+3. Move the previous key to NODE_ATTESTATION_DEPRECATED_KEYS.
+Only the PUBLIC KEY is required for deprecated keys. Deprecated private keys must NOT be retained.
+
+Deprecated keys are used for verification only. They do not require private key material. Retaining private keys beyond their active use increases security risk and is not permitted.
 4. Deploy the node.
 5. Verify new CERs are signed with the new key.
 6. Verify old CERs still verify.
@@ -42,6 +47,8 @@ The node exposes public keys at GET /.well-known/nexart-node.json.
 - Suspected compromise.
 - Periodic rotation (recommended but optional).
 - During security upgrades.
+
+Deprecated public keys should be retained for at least the duration of the CER retention policy. Removing a key too early may prevent verification of historical records.
 
 ## Security considerations
 - Private keys must never be exposed.
@@ -131,6 +138,7 @@ const KeyManagement = () => (
       <li>Certificate hashes are NOT affected by key rotation. The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> is computed from the CER bundle content, not the signature.</li>
       <li>Only signatures depend on keys. If a key is lost, previously signed receipts may become unverifiable. This is why deprecated keys are retained.</li>
     </ul>
+    <p>The NexArt Node acts as the independent trust authority. Verification does not rely on platform storage or databases, only on the signed receipt and the node's published public keys.</p>
 
     <h2 id="key-rotation-process">Key Rotation Process</h2>
     <p>Follow this procedure exactly. Do not skip steps.</p>
@@ -144,8 +152,9 @@ const KeyManagement = () => (
         <p className="text-muted-foreground mt-1">This becomes the active signing key. The node will use it for all new receipts.</p>
       </li>
       <li>
-        <strong>Move the previous private key to <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">NODE_ATTESTATION_DEPRECATED_KEYS</code>.</strong>
-        <p className="text-muted-foreground mt-1">This is a comma-separated list of private keys. Include all keys that should remain available for verification.</p>
+        <strong>Move the previous key to <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">NODE_ATTESTATION_DEPRECATED_KEYS</code>.</strong>
+        <p className="text-muted-foreground mt-1">Only the PUBLIC KEY is required for deprecated keys. Deprecated private keys must NOT be retained.</p>
+        <p className="text-muted-foreground mt-1">Deprecated keys are used for verification only. They do not require private key material. Retaining private keys beyond their active use increases security risk and is not permitted.</p>
       </li>
       <li>
         <strong>Deploy the node.</strong>
@@ -176,6 +185,7 @@ const KeyManagement = () => (
       <li><strong>Periodic rotation.</strong> Recommended but optional. A reasonable interval is 12 months. More frequent rotation adds operational burden without proportional security benefit if the key is well-protected.</li>
       <li><strong>Security upgrades.</strong> If the host infrastructure changes (new platform, new secret store, new access controls), rotation reduces blast radius from any misconfiguration.</li>
     </ul>
+    <p>Deprecated public keys should be retained for at least the duration of the CER retention policy. Removing a key too early may prevent verification of historical records.</p>
 
     <h2 id="security-considerations">Security Considerations</h2>
     <ul>
