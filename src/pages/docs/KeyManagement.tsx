@@ -144,8 +144,9 @@ const KeyManagement = () => (
         <p className="text-muted-foreground mt-1">This becomes the active signing key. The node will use it for all new receipts.</p>
       </li>
       <li>
-        <strong>Move the previous private key to <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">NODE_ATTESTATION_DEPRECATED_KEYS</code>.</strong>
-        <p className="text-muted-foreground mt-1">This is a comma-separated list of private keys. Include all keys that should remain available for verification.</p>
+        <strong>Move the previous key to <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">NODE_ATTESTATION_DEPRECATED_KEYS</code>.</strong>
+        <p className="text-muted-foreground mt-1">Only the PUBLIC KEY is required for deprecated keys. Deprecated private keys must NOT be retained.</p>
+        <p className="text-muted-foreground mt-1">Deprecated keys are used for verification only. They do not require private key material. Retaining private keys beyond their active use increases security risk and is not permitted.</p>
       </li>
       <li>
         <strong>Deploy the node.</strong>
