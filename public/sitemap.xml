@@ -290,7 +290,19 @@
   </url>
   <url>
     <loc>https://docs.nexart.io/docs/agent-kit</loc>
-    <lastmod>2026-03-23</lastmod>
+    <lastmod>2026-05-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docs.nexart.io/docs/codemode-sdk</loc>
+    <lastmod>2026-05-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docs.nexart.io/docs/ui-renderer-sdk</loc>
+    <lastmod>2026-05-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
