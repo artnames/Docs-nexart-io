@@ -20,7 +20,7 @@ Terminology:
 SKIPPED is not a failure.
 
 ## Path A - Single CER (one execution)
-npm install @nexart/ai-execution      # SDK 0.16.1
+npm install @nexart/ai-execution      # SDK 0.16.2
 import { certifyDecision, certifyAndAttestDecision, verifyAiCerBundleDetailed } from "@nexart/ai-execution";
 1. Create input (provider, model, prompt, input, parameters, output - all required)
 2. Seal locally        -> certifyDecision(params) returns a sealed CerAiExecutionBundle (sync)
@@ -256,7 +256,7 @@ Envelope  (Layer 3) : PASS`}
 
     <h3>1. Install the SDK</h3>
     <CodeBlock language="bash" code="npm install @nexart/ai-execution" />
-    <p className="text-sm text-muted-foreground">Current version: <code>@nexart/ai-execution@0.16.1</code>.</p>
+    <p className="text-sm text-muted-foreground">Current version: <code>@nexart/ai-execution@0.16.2</code>.</p>
 
     <h3>2. Seal a CER locally (offline)</h3>
     <CodeBlock
@@ -335,7 +335,7 @@ console.log(report.checks.receiptConsistency); // PASS`}
 
     <h3>1. Install agent-kit</h3>
     <CodeBlock language="bash" code="npm install @nexart/agent-kit" />
-    <p className="text-sm text-muted-foreground">Current version: <code>@nexart/agent-kit@0.5.2</code>. Wiring this up with an AI assistant? See the <Link to="/docs/agent-kit-instructions" className="text-primary hover:underline">Agent-Kit Instructions for AI Agents</Link> page.</p>
+    <p className="text-sm text-muted-foreground">Current version: <code>@nexart/agent-kit@0.5.3</code>. Wiring this up with an AI assistant? See the <Link to="/docs/agent-kit-instructions" className="text-primary hover:underline">Agent-Kit Instructions for AI Agents</Link> page.</p>
 
     <h3>2. Build a workflow</h3>
     <CodeBlock
