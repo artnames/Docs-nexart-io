@@ -8,10 +8,10 @@ import { Link } from "react-router-dom";
 
 const llmBlock = `# NexArt CLI
 
-Package: @nexart/cli@0.8.0
+Package: @nexart/cli@0.8.1
 
 The NexArt CLI is a thin command-line surface over the AI Execution SDK
-(@nexart/ai-execution@0.16.1). It contains zero CER cryptographic logic.
+(@nexart/ai-execution@0.16.2). It contains zero CER cryptographic logic.
 All hashing, canonicalization (JCS, RFC 8785), and verification is delegated to the SDK.
 
 ## Canonical workflow
@@ -47,8 +47,8 @@ SKIPPED is not a failure. It means the layer is not applicable to the bundle.
 ## Bundle versions
 - Bundle version: "0.1"
 - Protocol version: 1.2.0
-- CLI version: 0.8.0
-- SDK version: 0.16.1
+- CLI version: 0.8.1
+- SDK version: 0.16.2
 
 ## Verification result for a SEALED bundle
 {
