@@ -3,7 +3,7 @@ import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import { Link } from "react-router-dom";
 
-const llmBlock = `# Signals SDK (@nexart/signals v0.8.0)
+const llmBlock = `# Signals SDK (@nexart/signals v0.8.2)
 
 Protocol-agnostic structured execution context SDK. Captures ordered NexArtSignal[] for binding into Certified Execution Records (CERs).
 
@@ -48,7 +48,7 @@ const SignalsSDK = () => (
     />
     <PageHeader
       title="Signals SDK"
-      summary="@nexart/signals v0.8.0 — protocol-agnostic structured execution context with deterministic capture, integrity hashing, replay-safe diffing, and a builder API."
+      summary="@nexart/signals v0.8.2 — protocol-agnostic structured execution context with deterministic capture, integrity hashing, replay-safe diffing, and a builder API."
       llmBlock={llmBlock}
     />
 

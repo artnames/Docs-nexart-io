@@ -13,7 +13,7 @@ import CanonicalFlow from "@/components/docs/CanonicalFlow";
 
 const llmBlock = `# NexArt AI Execution SDK
 
-Package: @nexart/ai-execution@0.16.1
+Package: @nexart/ai-execution@0.16.2
 
 ## Canonical workflow
 seal -> verify -> (optional) certify -> verify
