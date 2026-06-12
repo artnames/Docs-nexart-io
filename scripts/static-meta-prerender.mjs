@@ -44,6 +44,8 @@ const ROUTE_META = {
   "/docs/public-reseals-and-redacted-verification": { title: "Public Reseals and Redacted Verification", summary: "A reseal is a new public artifact, not the original record. It is independently signed and does not weaken the original's integrity." },
   "/docs/certifying-llm-conversations": { title: "Certifying LLM Conversations", summary: "End-to-end pattern for producing per-message and per-conversation Certified Execution Records inside your conversational AI application." },
   "/docs/verification": { title: "Verification", summary: "How to verify any NexArt record, with or without API access." },
+  "/docs/verification-model": { title: "Verification Model", summary: "What NexArt verification proves, who can perform it, and the canonical rules every implementation must follow." },
+  "/docs/external-verification": { title: "External Verification", summary: "Verify any NexArt Certified Execution Record from scratch using only JCS, SHA-256, and Ed25519 — no NexArt SDK required." },
   "/docs/verify-nexart": { title: "verify.nexart.io", summary: "The public verification portal for CERs and Project Bundles." },
   "/docs/browser-verification": { title: "Browser Verification", summary: "Verify CERs and Project Bundles directly in the browser using the async SDK." },
   "/docs/ai-cer-verification-layers": { title: "AI CER Verification Layers", summary: "How NexArt verifies AI Certified Execution Records across three independent trust layers." },
