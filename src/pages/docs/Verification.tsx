@@ -353,13 +353,136 @@ NOT_FOUND     The requested execution record was not located.`}
     <h2 id="independent">Independent Verification (No API Required)</h2>
     <p>You can verify a CER without calling any NexArt API. No trust in NexArt infrastructure is required. All you need is the CER bundle (including <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation</code>) and access to the node's published keys:</p>
     <ol>
-      <li>Recompute the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> from the CER bundle (SHA-256)</li>
+      <li>Recompute the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> from the CER bundle (SHA-256 over the JCS-canonicalized whitelist projection)</li>
       <li>Compare it with the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> in <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation.receipt</code></li>
       <li>Fetch the node's public key from <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">node.nexart.io/.well-known/nexart-node.json</code></li>
       <li>Find the key matching the receipt's <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">kid</code></li>
       <li>Verify the Ed25519 signature over the receipt payload</li>
     </ol>
-    <p>If all steps pass, you can trust the attestation independently of NexArt infrastructure. No account, API key, or network call to NexArt is required beyond fetching the node's public key.</p>
+    <p>If all steps pass, you can trust the attestation independently of NexArt infrastructure. No account, API key, or network call to NexArt is required beyond fetching the node's public key. For a from-scratch implementation guide in any language, see <Link to="/docs/external-verification" className="text-primary hover:underline">External Verification</Link>.</p>
+
+    <h2 id="protocol-version">protocolVersion and Canonicalization</h2>
+    <p>
+      Every attested bundle declares its canonicalization profile in{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation.protocolVersion</code>.
+      Verifiers MUST select the profile by this field and MUST fail closed on unknown values.
+    </p>
+    <CodeBlock
+      language="text"
+      title="Supported profiles"
+      code={`protocolVersion = "1.2.0"   profile = "nexart-v1"   frozen, accepted (legacy records)
+protocolVersion = "1.3.0"   profile = "jcs-v1"      RFC 8785, current default`}
+    />
+    <p>
+      <strong>1.2.0 → nexart-v1</strong> is the original canonicalization scheme, frozen for
+      backward compatibility with records produced before the JCS migration. No new fields or rules
+      are added to this profile.
+    </p>
+    <p>
+      <strong>1.3.0 → jcs-v1</strong> uses JSON Canonicalization Scheme (RFC 8785) for both
+      hashing and signing. JCS defines a single deterministic byte representation for any JSON
+      value (sorted keys, fixed number formatting, fixed Unicode escaping), so every conformant
+      verifier on any platform produces the same hash for the same input.
+    </p>
+    <p>
+      Both profiles are accepted indefinitely. Verifiers MUST support both to remain compliant.
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">protocolVersion</code> is
+      part of the attestation projection signed by the verification envelope, so it cannot be
+      silently retargeted to a different profile without breaking Layer 3.
+    </p>
+
+    <h2 id="fail-closed">Fail-closed Behavior</h2>
+    <p>
+      Verification MUST fail closed. Any condition where a verifier cannot determine the correct
+      rule to apply is reported as <strong>FAILED</strong>, never silently passed. SKIPPED is
+      reserved for layers that are not applicable to the bundle as received (for example, an
+      unsigned sealed bundle has no Layer 2 to run).
+    </p>
+    <ul>
+      <li>Unknown <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">protocolVersion</code> → <strong>FAILED</strong>.</li>
+      <li>Unknown <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">bundleType</code> → <strong>FAILED</strong>.</li>
+      <li>Receipt <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">kid</code> not present in the published node key set → <strong>FAILED</strong> (Layer 2).</li>
+      <li>Envelope present but a required projection field is missing or cannot be canonicalized → <strong>FAILED</strong> (Layer 3).</li>
+      <li>Envelope absent → <strong>SKIPPED</strong> (Layer 3). Not a failure; the bundle simply does not carry that proof.</li>
+    </ul>
+
+    <h2 id="not-guaranteed">What Verification Does NOT Guarantee</h2>
+    <p>
+      A PASS result asserts exactly what the protocol attests, and nothing more. The following
+      properties are explicitly out of scope:
+    </p>
+    <ul>
+      <li>
+        <strong>Completeness.</strong> Verification does not prove that the bundle represents every
+        step of a larger workflow. Whether all relevant executions were captured is an integration
+        concern.
+      </li>
+      <li>
+        <strong>Semantic correctness.</strong> NexArt proves the bundle was produced as recorded.
+        It does not assert that the model output was correct, appropriate, or compliant.
+      </li>
+      <li>
+        <strong>Trusted timestamping.</strong>{" "}
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">attestedAt</code> is
+        asserted by the signing node and bound by the receipt signature. It is node-attested time,
+        not third-party anchored time. External anchoring (RFC 3161, transparency log, blockchain)
+        is on the roadmap and is not part of v1.3.0.
+      </li>
+      <li>
+        <strong>Deterministic replay.</strong> Recomputing the same model output from the same
+        inputs is only meaningful in controlled environments (fixed model version, seed,
+        temperature 0, deterministic decoding). NexArt attests the recorded I/O; it does not assert
+        reproducibility of the upstream model.
+      </li>
+    </ul>
+
+    <h2 id="cli-usage">CLI Usage</h2>
+    <p>
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/cli@0.8.1</code>{" "}
+      provides a verifier that runs offline against a CER bundle file. It fetches the node key set
+      only when the bundle declares an attestation.
+    </p>
+    <CodeBlock
+      language="bash"
+      title="Install"
+      code={`npm install -g @nexart/cli@0.8.1`}
+    />
+    <CodeBlock
+      language="bash"
+      title="Verify a bundle"
+      code={`nexart ai verify ./cer.json`}
+    />
+    <CodeBlock
+      language="text"
+      title="Expected output — certified bundle"
+      code={`certificateHash : sha256:7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069
+protocolVersion : 1.3.0  (profile: jcs-v1)
+Integrity (L1)  : PASS
+Receipt   (L2)  : PASS
+Envelope  (L3)  : PASS
+status          : VERIFIED`}
+    />
+    <CodeBlock
+      language="text"
+      title="Expected output — sealed (offline) bundle"
+      code={`certificateHash : sha256:9f2b1c8e4a7d6f3b0c5e8a1d2f4b6c8e9a0d3f5b7c2e4a6d8f1b3c5e7a9d0f2b
+protocolVersion : 1.3.0  (profile: jcs-v1)
+Integrity (L1)  : PASS
+Receipt   (L2)  : SKIPPED  (no attestation present)
+Envelope  (L3)  : SKIPPED  (no envelope present)
+status          : VERIFIED`}
+    />
+    <CodeBlock
+      language="text"
+      title="Error handling"
+      code={`exit 0   status = VERIFIED
+exit 1   status = FAILED      (any applicable layer failed)
+exit 2   status = NOT_FOUND   (referenced record could not be located)
+exit 3   usage error          (missing file, malformed JSON, unknown flag)
+
+Failures print a machine-readable JSON report to stderr:
+  { "status": "FAILED", "checks": { "bundleIntegrity": "FAIL", ... }, "reason": "..." }`}
+    />
     <p>For the full verification contract, see the <Link to="/docs/cer-protocol" className="text-primary hover:underline">CER Protocol specification</Link>. For SDK functions, see <Link to="/docs/sdk" className="text-primary hover:underline">AI Execution SDK</Link> (sync and async modes). For browser-specific usage, see <Link to="/docs/browser-verification" className="text-primary hover:underline">Browser Verification</Link>.</p>
   </>
 );

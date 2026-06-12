@@ -59,6 +59,8 @@ import CertifyingLlmConversations from "./pages/docs/CertifyingLlmConversations"
 import AgentInstructions from "./pages/docs/AgentInstructions";
 import PythonBridge from "./pages/docs/PythonBridge";
 import KeyManagement from "./pages/docs/KeyManagement";
+import VerificationModel from "./pages/docs/VerificationModel";
+import ExternalVerification from "./pages/docs/ExternalVerification";
 
 const queryClient = new QueryClient();
 
@@ -106,6 +108,8 @@ const App = () => (
             <Route path="public-reseals-and-redacted-verification" element={<PublicResealsAndRedactedVerification />} />
             <Route path="certifying-llm-conversations" element={<CertifyingLlmConversations />} />
             <Route path="verification" element={<Verification />} />
+            <Route path="verification-model" element={<VerificationModel />} />
+            <Route path="external-verification" element={<ExternalVerification />} />
             <Route path="verify-nexart" element={<VerifyNexart />} />
             <Route path="browser-verification" element={<BrowserVerification />} />
             <Route path="ai-cer-verification-layers" element={<AICERVerificationLayers />} />
