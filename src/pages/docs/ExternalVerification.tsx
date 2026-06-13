@@ -5,9 +5,13 @@ import { Link } from "react-router-dom";
 const llmBlock = `# External Verification (no NexArt SDK)
 Verify any CER using only:
   - HTTPS client
-  - JCS (RFC 8785) canonicalizer
+  - JSON canonicalizer matching the bundle's protocolVersion
+      (1.2.0 -> nexart-v1, default; 1.3.0 -> jcs-v1 / RFC 8785, opt-in)
   - SHA-256
   - Ed25519 signature verifier
+
+NOTE: Canonicalization is protocol-bound. RFC 8785 (JCS) is NOT universal.
+Use the profile that matches meta.attestation.protocolVersion, or recomputation will fail.
 
 ## Steps
 1. Fetch the public record:
@@ -19,36 +23,41 @@ Verify any CER using only:
    -> returns { keys: [ { kid, alg: "Ed25519", publicKeyJwk | publicKeyMultibase, ... } ] }
 
 3. Select canonicalization profile from meta.attestation.protocolVersion:
-   "1.2.0" -> nexart-v1
-   "1.3.0" -> jcs-v1 (RFC 8785)
+   "1.2.0" -> nexart-v1 (default)
+   "1.3.0" -> jcs-v1    (RFC 8785, opt-in)
    Unknown -> FAIL.
 
-4. Recompute certificateHash:
-   projection = pick(bundle, [bundleType, version, createdAt, snapshot, context?, contextSummary?])
+4. Recompute certificateHash (Integrity):
+   projection = pick(bundle, [bundleType, version, createdAt, snapshot,
+                              context?, contextSummary?, policyEvaluation?])
    bytes      = canonicalize(projection, profile)
-   recomputed = base64url(sha256(bytes))  // formatted "sha256:<hex>" per spec
-   Assert recomputed == bundle.certificateHash. Else FAIL (Layer 1).
+   recomputed = "sha256:" + hex(sha256(bytes))
+   Assert recomputed == bundle.certificateHash. Else FAIL (Integrity).
 
-5. Verify receipt signature (Layer 2):
+5. Verify receipt signature (Authenticity):
    receipt = bundle.meta.attestation.receipt
-   key     = keys.find(k => k.kid == receipt.kid)
+   key     = keys.find(k => k.kid == receipt.kid)   // FAIL if not found
    payload = canonicalize(receipt.payload, profile)
    Assert Ed25519.verify(key.public, payload, base64url_decode(receipt.signature)).
    Assert receipt.payload.certificateHash == bundle.certificateHash.
    Else FAIL.
 
-6. Verify envelope signature (Layer 3, when present):
+6. Verify envelope signature (optional layer, when present):
    env = bundle.meta.verificationEnvelope
    sig = bundle.meta.verificationEnvelopeSignature
    projection = {
      attestation: pick(env.attestation, [attestationId, attestedAt, kid, nodeRuntimeHash, protocolVersion]),
-     bundle:      pick(bundle, [bundleType, version, createdAt, snapshot, context?, contextSummary?]),
+     bundle:      pick(bundle, [bundleType, version, createdAt, snapshot,
+                                context?, contextSummary?, policyEvaluation?]),
    }
    bytes = canonicalize(projection, profile)
    Assert Ed25519.verify(key.public, bytes, base64url_decode(sig)).
    If env absent -> SKIPPED. Else FAIL.
 
-All layers report independently as PASS, FAIL, or SKIPPED.
+Integrity and Authenticity are independent properties. An unsigned bundle MAY still be
+verified for integrity (Layer 1 PASS, Layers 2/3 SKIPPED). Authenticity requires BOTH a
+valid signature AND the correct public key for the receipt's kid.
+
 Aggregate status: VERIFIED if every applicable layer is PASS, else FAILED.`;
 
 const ExternalVerification = () => (
