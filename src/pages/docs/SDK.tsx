@@ -477,8 +477,9 @@ const result = await verifyCerPackage(pkg);
 
     <h3 id="canonical-helpers">Canonicalization helpers</h3>
     <ul>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">canonicalJson(value)</code> — JCS (RFC 8785) serialization.</li>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">hashCanonicalJson(value)</code> — SHA-256 over the JCS serialization. Used internally by <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">sealCer</code>.</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">canonicalJson(value, profile?)</code> — protocol-bound canonicalization. <code>profile</code> is selected from the bundle's <code>protocolVersion</code>: <code>nexart-v1</code> for 1.2.0 (default), <code>jcs-v1</code> (RFC 8785) for 1.3.0 (opt-in).</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">hashCanonicalJson(value, profile?)</code> — SHA-256 over the canonicalized serialization. Used internally by <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">sealCer</code>.</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">deriveSignablePayload(bundle, attestation)</code> — produces the derived canonical payload that the node Ed25519-signs. The signed payload is NOT the raw bundle.</li>
     </ul>
 
     <h3 id="project-bundle-helpers">Project Bundle helpers</h3>
