@@ -349,7 +349,8 @@ npx @nexart/cli@0.11.0 ai certify execution.json --signals-file signals.json`} t
       <li>CLI: <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/cli@0.11.0</code></li>
       <li>SDK: <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@0.22.0</code></li>
       <li>Bundle version: <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">"0.1"</code></li>
-      <li>Protocol version: <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">1.2.0</code></li>
+      <li>Protocol version (default): <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">1.2.0</code> (<code>nexart-v1</code>)</li>
+      <li>Protocol version (opt-in): <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">1.3.0</code> (<code>jcs-v1</code>, RFC 8785) via <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">--protocol-version 1.3.0</code></li>
     </ul>
 
     <h2>Next Steps</h2>
