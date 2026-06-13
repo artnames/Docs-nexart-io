@@ -465,7 +465,7 @@ protocolVersion = "1.3.0"   profile = "jcs-v1"      opt-in   (RFC 8785, standard
       language="text"
       title="Expected output — certified bundle"
       code={`certificateHash : sha256:7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069
-protocolVersion : 1.3.0  (profile: jcs-v1)
+protocolVersion : 1.2.0  (profile: nexart-v1)
 Integrity (L1)  : PASS
 Receipt   (L2)  : PASS
 Envelope  (L3)  : PASS
@@ -475,7 +475,7 @@ status          : VERIFIED`}
       language="text"
       title="Expected output — sealed (offline) bundle"
       code={`certificateHash : sha256:9f2b1c8e4a7d6f3b0c5e8a1d2f4b6c8e9a0d3f5b7c2e4a6d8f1b3c5e7a9d0f2b
-protocolVersion : 1.3.0  (profile: jcs-v1)
+protocolVersion : 1.2.0  (profile: nexart-v1)
 Integrity (L1)  : PASS
 Receipt   (L2)  : SKIPPED  (no attestation present)
 Envelope  (L3)  : SKIPPED  (no envelope present)
