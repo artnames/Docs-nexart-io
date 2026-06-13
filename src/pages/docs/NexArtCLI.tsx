@@ -101,7 +101,7 @@ const NexArtCLI = () => (
       <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@0.22.0</code>:
     </p>
     <ul>
-      <li><strong>SDK owns:</strong> snapshot creation, JCS canonicalization, hashing, sealing, verification logic.</li>
+      <li><strong>SDK owns:</strong> snapshot creation, protocol-bound canonicalization (nexart-v1 / jcs-v1), hashing, sealing, verification logic.</li>
       <li><strong>CLI owns:</strong> command surface, file I/O, argument parsing, output formatting.</li>
       <li><strong>Node owns:</strong> attestation, Ed25519 receipt signing, verification envelope signature.</li>
     </ul>
