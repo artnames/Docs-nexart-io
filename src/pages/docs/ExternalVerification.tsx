@@ -230,7 +230,8 @@ if (recomputed !== cer.certificateHash) throw new Error("Integrity FAILED");`}
       title="Envelope signed projection"
       code={`{
   attestation: { attestationId, attestedAt, kid, nodeRuntimeHash, protocolVersion },
-  bundle:      { bundleType, version, createdAt, snapshot, context?, contextSummary? }
+  bundle:      { bundleType, version, createdAt, snapshot,
+                 context?, contextSummary?, policyEvaluation? }
 }`}
     />
 
