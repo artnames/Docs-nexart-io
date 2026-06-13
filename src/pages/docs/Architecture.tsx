@@ -156,6 +156,7 @@ const Architecture = () => (
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">snapshot</code> - object containing <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">model</code>, <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">inputHash</code>, <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">outputHash</code>, and <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">metadata</code> (e.g. <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">appId</code>, <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">projectId</code>).</li>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">context</code> - optional. Structured signals included in the hash when present. See <Link to="/docs/concepts/context-signals" className="text-primary hover:underline">Context Signals</Link>.</li>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">contextSummary</code> - optional, summary of context. Included in the hash when present.</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">policyEvaluation</code> - optional. Captured policy decision result. Included in the hash when present.</li>
     </ul>
 
     <h3 id="stage-3">3. Hash computation (whitelist + JCS)</h3>
