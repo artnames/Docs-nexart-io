@@ -139,15 +139,20 @@ const ExternalVerification = () => (
     </p>
     <CodeBlock
       language="text"
-      code={`"1.2.0" -> profile "nexart-v1" (frozen, legacy)
-"1.3.0" -> profile "jcs-v1"    (RFC 8785, current default)
+      code={`"1.2.0" -> profile "nexart-v1" (default, custom canonicalization)
+"1.3.0" -> profile "jcs-v1"    (opt-in, RFC 8785 / JCS, standards-based)
 other   -> FAILED`}
     />
+    <p className="text-sm text-destructive">
+      Canonicalization is protocol-bound. Do NOT assume RFC 8785 universally; records produced with
+      1.2.0 use <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">nexart-v1</code> and
+      will not recompute to the same hash under JCS.
+    </p>
 
-    <h2 id="step-4">Step 4 — Recompute certificateHash (Layer 1)</h2>
+    <h2 id="step-4">Step 4 — Recompute certificateHash (Integrity)</h2>
     <p>
-      Project the bundle to the hashed whitelist, canonicalize, and SHA-256.
-      Compare with the bundle's declared{" "}
+      Project the bundle to the hashed whitelist, canonicalize with the profile
+      selected in Step 3, and SHA-256. Compare with the bundle's declared{" "}
       <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>.
     </p>
     <CodeBlock
@@ -157,8 +162,9 @@ other   -> FAILED`}
 version
 createdAt
 snapshot
-context          (only when present)
-contextSummary   (only when present)`}
+context           (only when present)
+contextSummary    (only when present)
+policyEvaluation  (only when present)`}
     />
     <CodeBlock
       language="javascript"
