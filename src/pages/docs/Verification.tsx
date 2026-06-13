@@ -431,11 +431,19 @@ protocolVersion = "1.3.0"   profile = "jcs-v1"      opt-in   (RFC 8785, standard
         It does not assert that the model output was correct, appropriate, or compliant.
       </li>
       <li>
-        <strong>Trusted timestamping.</strong>{" "}
-        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">attestedAt</code> is
-        asserted by the signing node and bound by the receipt signature. It is node-attested time,
-        not third-party anchored time. External anchoring (RFC 3161, transparency log, blockchain)
-        is on the roadmap and is not part of v1.3.0.
+        <strong>Trusted (third-party) timestamping.</strong>{" "}
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">attestedAt</code> is a
+        node-issued timestamp, bound to the bundle's{" "}
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">certificateHash</code> by
+        the receipt signature. It provides an ordering guarantee relative to other records signed
+        by the same node; it is NOT independent proof of existence at that wall-clock time. An
+        external TSA (e.g. RFC 3161 via DigiCert) MAY be integrated alongside the receipt without
+        modifying existing records.
+      </li>
+      <li>
+        <strong>Public log inclusion.</strong> The current attestation log is node-internal. There
+        is no public Merkle tree and no external witness at this protocol version. Verifiers MUST
+        NOT infer transparency-log inclusion from a PASS result.
       </li>
       <li>
         <strong>Deterministic replay.</strong> Recomputing the same model output from the same
@@ -444,6 +452,7 @@ protocolVersion = "1.3.0"   profile = "jcs-v1"      opt-in   (RFC 8785, standard
         reproducibility of the upstream model.
       </li>
     </ul>
+
 
     <h2 id="cli-usage">CLI Usage</h2>
     <p>
