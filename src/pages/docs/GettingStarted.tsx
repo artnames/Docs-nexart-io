@@ -44,7 +44,7 @@ Both paths are first-class. Project Bundles are NOT required for single-executio
 - @nexart/ai-execution@0.22.0
 - @nexart/cli@0.11.0
 - Bundle version "0.1"
-- Protocol version 1.2.0
+- Protocol 1.2.0 (default) · Protocol 1.3.0 (RFC 8785, opt-in)
 
 ## certificateHash is the canonical identity
 Always look up records by certificateHash, not by executionId.
