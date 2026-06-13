@@ -12,7 +12,8 @@ Package: @nexart/cli@0.11.0
 
 The NexArt CLI is a thin command-line surface over the AI Execution SDK
 (@nexart/ai-execution@0.22.0). It contains zero CER cryptographic logic.
-All hashing, canonicalization (JCS, RFC 8785), and verification is delegated to the SDK.
+All hashing, canonicalization (protocol-bound: nexart-v1 for 1.2.0, jcs-v1 / RFC 8785 for 1.3.0),
+and verification is delegated to the SDK.
 
 ## Canonical workflow
 1. Create execution input (JSON file matching CreateSnapshotParams).
@@ -27,12 +28,15 @@ All hashing, canonicalization (JCS, RFC 8785), and verification is delegated to 
 SKIPPED is not a failure. It means the layer is not applicable to the bundle.
 
 ## Commands
-- nexart ai seal <input.json> [--out cer.json]
+- nexart ai seal <input.json> [--out cer.json] [--protocol-version 1.2.0|1.3.0]
     Fully offline. Delegates to SDK createSnapshot() + sealCer().
     Output: cer.ai.execution.v1 bundle, version "0.1", with certificateHash.
+    --protocol-version overrides the producer default for this invocation.
+    Default: 1.2.0 (nexart-v1). Opt into 1.3.0 (jcs-v1 / RFC 8785) only when
+    a standards-based canonicalization is required.
     Produces NO attestation, NO receipt, NO verification envelope.
 
-- nexart ai certify <input.json> [--out cer.json]
+- nexart ai certify <input.json> [--out cer.json] [--protocol-version 1.2.0|1.3.0]
     Calls POST /v1/cer/ai/certify on the attestation node.
     Requires NEXART_API_KEY and NEXART_NODE_URL.
     Output: certified CER bundle with meta.attestation and meta.verificationEnvelope.
@@ -40,13 +44,14 @@ SKIPPED is not a failure. It means the layer is not applicable to the bundle.
 - nexart ai verify <bundle-or-package.json>
     Pure delegation to verifyAiCerBundleDetailed(). The CLI performs no
     hash recomputation, no canonicalization, no signature checks. The CLI
-    is an input router and an output formatter.
-    Top-level fields in the JSON output come from the SDK. cli.* fields are
-    additive metadata (e.g. cli.inputType, cli.cliVersion).
+    is an input router and an output formatter. Verifiers select the
+    canonicalization profile from the bundle's protocolVersion; the
+    --protocol-version flag is producer-only and has no effect here.
 
 ## Bundle versions
 - Bundle version: "0.1"
-- Protocol version: 1.2.0
+- Protocol version (default): 1.2.0 (nexart-v1)
+- Protocol version (opt-in):  1.3.0 (jcs-v1 / RFC 8785)
 - CLI version: 0.11.0
 - SDK version: 0.22.0
 
