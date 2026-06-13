@@ -334,38 +334,6 @@ protocolVersion = "1.3.0"   profile = "jcs-v1"      status = opt-in  (RFC 8785, 
       </li>
     </ul>
 
-    <h2 id="not-guaranteed">What Verification Does NOT Guarantee</h2>
-    <p>
-      A PASS result asserts what the protocol provably attests, and nothing
-      more. The following properties are explicitly out of scope:
-    </p>
-    <ul>
-      <li>
-        <strong>Completeness</strong>. Verification does not prove that the
-        bundle represents every step of a larger workflow. Whether all
-        relevant executions were captured is an integration concern.
-      </li>
-      <li>
-        <strong>Semantic correctness</strong>. NexArt proves the bundle was
-        produced as recorded, not that the model output was correct,
-        appropriate, or compliant.
-      </li>
-      <li>
-        <strong>Trusted timestamping</strong>.{" "}
-        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">attestedAt</code>{" "}
-        is asserted by the signing node and bound by the receipt signature. It
-        is node-attested time, not third-party anchored time. External
-        anchoring (RFC 3161, transparency log, blockchain) is on the roadmap
-        and is not part of v1.3.0.
-      </li>
-      <li>
-        <strong>Deterministic replay</strong>. Recomputing the same model
-        output from the same inputs is only meaningful in controlled
-        environments (fixed model version, seed, temperature 0, deterministic
-        decoding). NexArt attests the recorded I/O; it does not assert
-        reproducibility of the upstream model.
-      </li>
-    </ul>
 
     <h2 id="see-also">See Also</h2>
     <ul>
