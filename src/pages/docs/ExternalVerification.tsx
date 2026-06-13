@@ -72,13 +72,19 @@ const ExternalVerification = () => (
       This guide is for implementers building a verifier in a language NexArt
       does not ship an SDK for, or for auditors who require an independent
       reference implementation. It uses only standard cryptographic primitives:
-      JCS (RFC 8785), SHA-256, and Ed25519.
+      SHA-256, Ed25519, and a JSON canonicalizer matching the bundle's{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">protocolVersion</code>.
     </p>
 
     <h2 id="prereq">Prerequisites</h2>
     <ul>
       <li>An HTTPS client.</li>
-      <li>A JCS (RFC 8785) JSON canonicalizer.</li>
+      <li>
+        A JSON canonicalizer matching the bundle's{" "}
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">protocolVersion</code>
+        (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">nexart-v1</code> for 1.2.0,{" "}
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">jcs-v1</code> / RFC 8785 for 1.3.0).
+      </li>
       <li>SHA-256.</li>
       <li>An Ed25519 signature verifier.</li>
       <li>
@@ -87,6 +93,7 @@ const ExternalVerification = () => (
         <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">sha256:&lt;hex&gt;</code>).
       </li>
     </ul>
+
 
     <h2 id="step-1">Step 1 — Fetch the Public Record</h2>
     <p>
