@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const llmBlock = `# Browser Verification Example
 
-@nexart/ai-execution@0.16.1 provides async, browser-safe verification functions.
+@nexart/ai-execution@0.22.0 provides async, browser-safe verification functions.
 No need to write your own browser verifier.
 
 ## Functions
@@ -28,7 +28,7 @@ const BrowserVerification = () => (
     />
 
     <h2 id="overview">Overview</h2>
-    <p>As of <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@0.16.1</code>, the SDK provides async, browser-safe verification functions. You no longer need to write your own browser verifier.</p>
+    <p>As of <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@0.22.0</code>, the SDK provides async, browser-safe verification functions. You no longer need to write your own browser verifier.</p>
     <p>These functions use the Web Crypto API internally and have no Node.js dependencies.</p>
 
     <div className="not-prose my-6 rounded-lg border border-amber-500/40 bg-amber-500/5 p-4">

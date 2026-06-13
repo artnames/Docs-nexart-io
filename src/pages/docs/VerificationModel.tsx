@@ -63,7 +63,7 @@ const VerificationModel = () => (
         <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">
           nexart ai verify &lt;bundle.json&gt;
         </code>{" "}
-        from <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/cli@0.8.1</code>.
+        from <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/cli@0.11.0</code>.
         Runs offline; only fetches the node key set when the bundle declares an
         attestation.
       </li>
@@ -73,7 +73,7 @@ const VerificationModel = () => (
         (Node) or{" "}
         <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verifyCerAsync</code>{" "}
         (browser / Edge) from{" "}
-        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@0.16.2</code>.
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@0.22.0</code>.
       </li>
       <li>
         <strong>Public endpoint</strong> —{" "}

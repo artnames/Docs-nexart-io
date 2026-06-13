@@ -13,7 +13,7 @@ import CanonicalFlow from "@/components/docs/CanonicalFlow";
 
 const llmBlock = `# NexArt AI Execution SDK
 
-Package: @nexart/ai-execution@0.16.2
+Package: @nexart/ai-execution@0.22.0
 
 ## Canonical workflow
 seal -> verify -> (optional) certify -> verify
@@ -385,7 +385,7 @@ Authorization: Bearer NEXART_API_KEY
 
     <h2 id="package-helpers">CER Package Helpers</h2>
     <p>
-      As of <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@0.12.0</code>,
+      As of <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@0.22.0</code>,
       the SDK includes official helpers for working with the{" "}
       <Link to="/docs/ai-cer-package-format" className="text-primary hover:underline">CER package format</Link>.
       A CER package is a transport/export wrapper around the inner <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer</code> bundle.

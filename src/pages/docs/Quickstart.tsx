@@ -256,7 +256,7 @@ Envelope  (Layer 3) : PASS`}
 
     <h3>1. Install the SDK</h3>
     <CodeBlock language="bash" code="npm install @nexart/ai-execution" />
-    <p className="text-sm text-muted-foreground">Current version: <code>@nexart/ai-execution@0.16.2</code>.</p>
+    <p className="text-sm text-muted-foreground">Current version: <code>@nexart/ai-execution@0.22.0</code>.</p>
 
     <h3>2. Seal a CER locally (offline)</h3>
     <CodeBlock

@@ -96,14 +96,14 @@ const Architecture = () => (
     </p>
     <ul>
       <li>
-        <strong>SDK</strong> (<code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@0.16.1</code>) owns:
+        <strong>SDK</strong> (<code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@0.22.0</code>) owns:
         snapshot creation (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">createSnapshot</code>),
         local sealing (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">sealCer</code>),
         JCS canonicalization (RFC 8785), SHA-256 hashing, and verification logic
         (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">verifyAiCerBundleDetailed</code>).
       </li>
       <li>
-        <strong>CLI</strong> (<code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/cli@0.8.0</code>) owns:
+        <strong>CLI</strong> (<code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/cli@0.11.0</code>) owns:
         the command surface (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">ai seal</code>,{" "}
         <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">ai certify</code>,{" "}
         <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">ai verify</code>),

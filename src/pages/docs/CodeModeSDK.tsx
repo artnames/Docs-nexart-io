@@ -73,7 +73,7 @@ const CodeModeSDK = () => (
     <h2 id="install">Install</h2>
     <CodeBlock language="bash" code={`npm install @nexart/codemode-sdk`} title="Install" />
     <p className="text-sm text-muted-foreground">
-      Current version: <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">@nexart/codemode-sdk@1.10.2</code>.
+      Current version: <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">@nexart/codemode-sdk@1.12.0</code>.
     </p>
 
     <h2 id="execution-model">Execution model</h2>

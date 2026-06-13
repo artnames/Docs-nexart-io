@@ -197,7 +197,7 @@ const Verification = () => (
       </li>
       <li>
         <strong>v0.16.0 signals payload alignment bug.</strong> Bundles created with
-        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono ml-1">@nexart/ai-execution@0.16.0</code>{" "}
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono ml-1">@nexart/ai-execution@0.22.0</code>{" "}
         that include signals MAY fail envelope verification due to a payload alignment issue fixed
         in <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">v0.16.1</code>. Operators
         SHOULD re-certify affected executions via{" "}
@@ -256,7 +256,7 @@ const Verification = () => (
     <div className="not-prose my-6 rounded-lg border border-border bg-muted/30 p-4">
       <div className="text-sm font-medium text-foreground mb-1">v0.16.0 → v0.16.1 compatibility</div>
       <div className="text-sm text-muted-foreground">
-        Bundles created with <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">@nexart/ai-execution@0.16.0</code> that include signals may fail envelope verification due to a payload alignment issue. <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">v0.16.1</code> fixes this. Re-certification may be required. Operators can use <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">POST /v1/admin/recertify-batch</code> to re-seal affected executions.
+        Bundles created with <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">@nexart/ai-execution@0.22.0</code> that include signals may fail envelope verification due to a payload alignment issue. <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">v0.16.1</code> fixes this. Re-certification may be required. Operators can use <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">POST /v1/admin/recertify-batch</code> to re-seal affected executions.
       </div>
     </div>
 
@@ -438,14 +438,14 @@ protocolVersion = "1.3.0"   profile = "jcs-v1"      RFC 8785, current default`}
 
     <h2 id="cli-usage">CLI Usage</h2>
     <p>
-      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/cli@0.8.1</code>{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/cli@0.11.0</code>{" "}
       provides a verifier that runs offline against a CER bundle file. It fetches the node key set
       only when the bundle declares an attestation.
     </p>
     <CodeBlock
       language="bash"
       title="Install"
-      code={`npm install -g @nexart/cli@0.8.1`}
+      code={`npm install -g @nexart/cli@0.11.0`}
     />
     <CodeBlock
       language="bash"
