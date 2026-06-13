@@ -370,19 +370,27 @@ NOT_FOUND     The requested execution record was not located.`}
     <CodeBlock
       language="text"
       title="Supported profiles"
-      code={`protocolVersion = "1.2.0"   profile = "nexart-v1"   frozen, accepted (legacy records)
-protocolVersion = "1.3.0"   profile = "jcs-v1"      RFC 8785, current default`}
+      code={`protocolVersion = "1.2.0"   profile = "nexart-v1"   default  (custom canonicalization)
+protocolVersion = "1.3.0"   profile = "jcs-v1"      opt-in   (RFC 8785, standards-based)`}
     />
     <p>
-      <strong>1.2.0 → nexart-v1</strong> is the original canonicalization scheme, frozen for
-      backward compatibility with records produced before the JCS migration. No new fields or rules
-      are added to this profile.
+      <strong>Canonicalisation is protocol-bound.</strong> There is no universal default. Verifiers
+      MUST use the canonicalisation corresponding to the bundle's{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">protocolVersion</code>{" "}
+      or hash recomputation will fail. Do NOT assume RFC 8785 universally.
     </p>
     <p>
-      <strong>1.3.0 → jcs-v1</strong> uses JSON Canonicalization Scheme (RFC 8785) for both
-      hashing and signing. JCS defines a single deterministic byte representation for any JSON
-      value (sorted keys, fixed number formatting, fixed Unicode escaping), so every conformant
-      verifier on any platform produces the same hash for the same input.
+      <strong>1.2.0 → nexart-v1</strong> is the current default canonicalization profile. All SDK
+      and CLI calls produce 1.2.0 bundles unless the producer explicitly opts into a different
+      version.
+    </p>
+    <p>
+      <strong>1.3.0 → jcs-v1</strong> is opt-in. It uses JSON Canonicalization Scheme (RFC 8785)
+      for both hashing and signing, providing a published, standards-based deterministic byte
+      representation. Producers select it via{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">createSnapshot({"{ protocolVersion: \"1.3.0\" }"})</code>{" "}
+      or the CLI flag{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">--protocol-version 1.3.0</code>.
     </p>
     <p>
       Both profiles are accepted indefinitely. Verifiers MUST support both to remain compliant.
@@ -390,6 +398,7 @@ protocolVersion = "1.3.0"   profile = "jcs-v1"      RFC 8785, current default`}
       part of the attestation projection signed by the verification envelope, so it cannot be
       silently retargeted to a different profile without breaking Layer 3.
     </p>
+
 
     <h2 id="fail-closed">Fail-closed Behavior</h2>
     <p>
