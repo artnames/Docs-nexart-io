@@ -362,12 +362,19 @@ const Architecture = () => (
       as the deduplication key for downstream systems.
     </p>
 
-    <h3 id="canonicalization">Canonicalization (JCS)</h3>
+    <h3 id="canonicalization">Canonicalization (protocol-bound)</h3>
     <p>
-      All hashing uses JSON Canonicalization Scheme (RFC 8785). This pins object key order,
-      number representation, and string escaping. Verifiers MUST apply the whitelist projection
-      to the bundle as received and canonicalize without further normalization. There is no
-      tolerant parsing.
+      Canonicalization is bound to the bundle's{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">protocolVersion</code>.{" "}
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">1.2.0</code> uses{" "}
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">nexart-v1</code> (current
+      default, custom canonicalization).{" "}
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">1.3.0</code> uses{" "}
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">jcs-v1</code> (RFC 8785,
+      opt-in, standards-based). Verifiers MUST select the profile by{" "}
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">protocolVersion</code>, apply
+      the whitelist projection to the bundle as received, and canonicalize without further
+      normalization. There is no tolerant parsing and no universal default.
     </p>
 
     <h3 id="independence">Independence of verification</h3>
