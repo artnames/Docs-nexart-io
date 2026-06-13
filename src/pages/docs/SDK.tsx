@@ -461,7 +461,25 @@ const result = await verifyCerPackage(pkg);
     <p>Returns a structured per-layer verification report covering Integrity (Layer 1), Receipt (Layer 2), and Verification Envelope (Layer 3). Each layer reports independently. Envelope failure is reported separately from integrity failure.</p>
 
     <h3 id="seal"><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">sealCer(snapshot, options?)</code></h3>
-    <p>Lower-level seal. Takes a pre-built <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">AiExecutionSnapshotV1</code> (not the high-level <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">CertifyDecisionParams</code>) and computes the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> over the strict whitelist projection (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">bundleType</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">version</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">createdAt</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">snapshot</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">context</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">contextSummary</code>) using JCS canonicalization. For most callers, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">certifyDecision(params)</code> is the recommended entry point.</p>
+    <p>Lower-level seal. Takes a pre-built <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">AiExecutionSnapshotV1</code> (not the high-level <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">CertifyDecisionParams</code>) and computes the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> over the strict whitelist projection (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">bundleType</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">version</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">createdAt</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">snapshot</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">context</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">contextSummary</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">policyEvaluation</code>) using the canonicalization profile bound to <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">snapshot.protocolVersion</code> (<code>1.2.0</code> → <code>nexart-v1</code> by default; <code>1.3.0</code> → <code>jcs-v1</code> / RFC 8785 when explicitly set). For most callers, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">certifyDecision(params)</code> is the recommended entry point.</p>
+
+    <CodeBlock
+      language="typescript"
+      title="Opting into protocolVersion 1.3.0 (jcs-v1, RFC 8785)"
+      code={`import { createSnapshot, sealCer } from "@nexart/ai-execution";
+
+const snapshot = createSnapshot({
+  model: "gpt-4o",
+  input,
+  output,
+  // Default is "1.2.0" (nexart-v1). Explicitly opt in to RFC 8785:
+  protocolVersion: "1.3.0",
+});
+
+const cer = sealCer(snapshot);
+// cer.meta.attestation.protocolVersion === "1.3.0"
+// Verifiers MUST canonicalize with jcs-v1 for this bundle.`}
+    />
 
     <h3 id="wrap-provider"><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">wrapProvider(provider, opts)</code></h3>
     <p>Wraps an LLM/tool provider so each invocation is automatically certified through <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">/v1/cer/ai/certify</code>. Returns the original provider response augmented with the CER bundle and verificationUrl.</p>
