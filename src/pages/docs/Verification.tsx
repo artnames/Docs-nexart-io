@@ -176,10 +176,11 @@ const Verification = () => (
         Editing one of those fields breaks Layer 3 while Layer 1 still passes.
       </li>
       <li>
-        <strong>Re-serialization that breaks JCS.</strong> Layer 3 requires the exact JCS (RFC 8785)
-        canonicalization of the whitelist projection. Tools that pretty-print, reorder keys, change
-        number formatting, or alter Unicode escaping invalidate the signature even when content is
-        semantically identical.
+        <strong>Re-serialization that breaks canonicalization.</strong> Layer 3 requires the exact
+        canonicalization profile bound to the bundle's <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">protocolVersion</code>
+        (<code>nexart-v1</code> for 1.2.0, <code>jcs-v1</code> / RFC 8785 for 1.3.0). Tools that pretty-print,
+        reorder keys, change number formatting, or alter Unicode escaping invalidate the signature even when
+        content is semantically identical.
       </li>
       <li>
         <strong>Key mismatch (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">kid</code>).</strong>{" "}
