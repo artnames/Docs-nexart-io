@@ -469,17 +469,36 @@ const result = await verifyCerPackage(pkg);
       code={`import { createSnapshot, sealCer } from "@nexart/ai-execution";
 
 const snapshot = createSnapshot({
+  // protocolVersion MUST be set at creation time. Default is "1.2.0"
+  // (nexart-v1) for backward compatibility. Set "1.3.0" explicitly to
+  // use RFC 8785 JCS canonicalization for the certificateHash.
+  protocolVersion: "1.3.0",
   model: "gpt-4o",
   input,
   output,
-  // Default is "1.2.0" (nexart-v1). Explicitly opt in to RFC 8785:
-  protocolVersion: "1.3.0",
 });
 
 const cer = sealCer(snapshot);
-// cer.meta.attestation.protocolVersion === "1.3.0"
-// Verifiers MUST canonicalize with jcs-v1 for this bundle.`}
+// cer.snapshot.protocolVersion              === "1.3.0"
+// cer.meta.attestation.protocolVersion      === "1.3.0" (mirrored by the node)
+// verificationEnvelope attestation.protocolVersion === "1.3.0"
+//
+// Verifiers MUST canonicalize with jcs-v1 for this bundle.
+// Do NOT mutate protocolVersion after sealing — it is inside the
+// whitelist projection that produces the certificateHash.`}
     />
+
+    <div className="not-prose my-4 rounded-lg border-l-2 border-destructive bg-destructive/5 px-4 py-3 text-sm">
+      <strong>Callout.</strong> If <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">protocolVersion</code>{" "}
+      is omitted or <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">null</code>,
+      NexArt defaults to <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">1.2.0</code>{" "}
+      (nexart-v1) for backward compatibility. RFC 8785 JCS canonicalization
+      is used <strong>only</strong> when you explicitly pass{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">"1.3.0"</code>{" "}
+      at creation/sealing/certification time. Unsupported explicit values
+      (for example <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">"2.0.0"</code>)
+      are rejected by the node before signing and fail closed at verification.
+    </div>
 
     <h3 id="wrap-provider"><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">wrapProvider(provider, opts)</code></h3>
     <p>Wraps an LLM/tool provider so each invocation is automatically certified through <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">/v1/cer/ai/certify</code>. Returns the original provider response augmented with the CER bundle and verificationUrl.</p>

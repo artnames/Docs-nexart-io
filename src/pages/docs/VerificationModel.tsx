@@ -212,9 +212,12 @@ protocolVersion = "1.3.0"   profile = "jcs-v1"      status = opt-in  (RFC 8785, 
     <h3 id="defaults-and-opt-in">Defaults and Opt-in</h3>
     <ul>
       <li>
-        <strong>1.2.0 (nexart-v1)</strong> is the current default. All SDK and
-        CLI calls produce 1.2.0 bundles unless the producer explicitly opts
-        in to a different version.
+        <strong>1.2.0 (nexart-v1)</strong> is the current default. If{" "}
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">protocolVersion</code>{" "}
+        is omitted, <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">null</code>,
+        or not set on the snapshot, the SDK, CLI, and node all treat the
+        record as <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">1.2.0</code>{" "}
+        for backward compatibility with pre-1.3.0 clients and historical records.
       </li>
       <li>
         <strong>1.3.0 (jcs-v1)</strong> is opt-in. Producers select it via{" "}
@@ -231,7 +234,29 @@ protocolVersion = "1.3.0"   profile = "jcs-v1"      status = opt-in  (RFC 8785, 
         is part of the attestation projection signed by the verification
         envelope; it cannot be silently retargeted to a different profile.
       </li>
+      <li>
+        The node mirrors <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">protocolVersion</code>{" "}
+        from the sealed snapshot into the receipt and the verification envelope
+        attestation. A 1.3.0 record MUST carry{" "}
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">"1.3.0"</code>{" "}
+        in all three signed surfaces (snapshot, receipt, envelope). If the
+        full bundle is not present at verification time, a verifier MAY still
+        check the receipt signature but cannot recompute full bundle integrity.
+      </li>
     </ul>
+
+    <div className="not-prose my-4 rounded-lg border-l-2 border-destructive bg-destructive/5 px-4 py-3 text-sm">
+      <strong>Callout.</strong> If <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">protocolVersion</code>{" "}
+      is omitted, NexArt defaults to <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">1.2.0</code>{" "}
+      for backward compatibility. That means RFC 8785 JCS canonicalization
+      will NOT be used unless you explicitly set{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">protocolVersion: "1.3.0"</code>{" "}
+      at creation/sealing/certification time. Do not add or change{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">protocolVersion</code>{" "}
+      after sealing — it is inside the strict whitelist projection that
+      produces the <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">certificateHash</code>{" "}
+      and altering it post-seal invalidates the record.
+    </div>
 
     <h2 id="signature-model">Signature Model</h2>
     <p>
