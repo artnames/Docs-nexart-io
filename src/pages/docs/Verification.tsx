@@ -501,6 +501,16 @@ exit 3   usage error          (missing file, malformed JSON, unknown flag)
 Failures print a machine-readable JSON report to stderr:
   { "status": "FAILED", "checks": { "bundleIntegrity": "FAIL", ... }, "reason": "..." }`}
     />
+    <CodeBlock
+      language="bash"
+      title="Producing a 1.3.0 (JCS) bundle — opt-in"
+      code={`# Default is 1.2.0 (nexart-v1). Opt into 1.3.0 (jcs-v1, RFC 8785):
+npx @nexart/cli@0.11.0 ai seal input.json --protocol-version 1.3.0 --out cer.json
+npx @nexart/cli@0.11.0 ai verify cer.json
+# --protocol-version overrides the producer default for this invocation only.
+# Verifiers select the canonicalization profile from the bundle's protocolVersion;
+# the flag does not change verification behavior.`}
+    />
     <p>For the full verification contract, see the <Link to="/docs/cer-protocol" className="text-primary hover:underline">CER Protocol specification</Link>. For SDK functions, see <Link to="/docs/sdk" className="text-primary hover:underline">AI Execution SDK</Link> (sync and async modes). For browser-specific usage, see <Link to="/docs/browser-verification" className="text-primary hover:underline">Browser Verification</Link>.</p>
   </>
 );
