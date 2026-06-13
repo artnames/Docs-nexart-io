@@ -7,32 +7,58 @@ Verification of a Certified Execution Record (CER) does NOT require NexArt.
 A record is verifiable by anyone in possession of:
   1. The CER bundle (JSON, as produced by the SDK/CLI/node)
   2. The signing node's public key set (published at /.well-known/nexart-node.json)
-  3. A JCS (RFC 8785) JSON canonicalizer and an Ed25519 verifier
+  3. SHA-256, Ed25519, and a canonicalizer matching the bundle's protocolVersion
+
+## Two independent properties
+- Integrity   = SHA-256 hash recomputation over the whitelist projection.
+                Proves the covered fields have not been modified.
+- Authenticity = Ed25519 signature verification against the node's public key.
+                 Proves a specific node attested this specific certificateHash.
+A bundle MAY have integrity without authenticity (sealed, unsigned). Integrity
+is verifiable on its own. Authenticity requires BOTH a valid signature AND the
+correct public key for the receipt's kid.
+
+## Aggregate status is additive, not authoritative
+\`status: VERIFIED\` from the SDK reports the aggregate of applicable layers.
+Integrity and signature MUST be evaluated as independent checks; the SDK
+provides classification, not the primary verdict. The attestation node
+recomputes verification independently for every certified record.
 
 ## Four verification surfaces
-1. CLI            — \`nexart ai verify <bundle.json>\` (@nexart/cli)
-2. SDK            — \`verifyCer\` / \`verifyCerAsync\` (@nexart/ai-execution)
+1. CLI            — \`nexart ai verify <bundle.json>\` (@nexart/cli@0.11.0)
+2. SDK            — \`verifyCer\` / \`verifyCerAsync\` (@nexart/ai-execution@0.22.0)
 3. Public endpoint — https://verify.nexart.io/c/<certificateHash>
 4. External impl   — any implementation conformant to the AI CER Package Format spec
 
 All four MUST produce identical PASS/FAIL/SKIPPED outcomes for the same bundle
 and the same node key set. NexArt's hosted infrastructure is not in the trust path.
 
-## protocolVersion
+## protocolVersion → canonicalization profile (protocol-bound)
 \`meta.attestation.protocolVersion\` declares the canonicalization profile used
-for hashing and signing.
-  - "1.2.0" -> profile "nexart-v1" (frozen, legacy, accepted for historical records)
-  - "1.3.0" -> profile "jcs-v1"    (RFC 8785, current default)
+for hashing and signing. Canonicalization is protocol-bound: there is no
+universal default. Verifiers MUST use the profile corresponding to the
+bundle's protocolVersion or hash recomputation WILL fail.
+  - "1.2.0" -> profile "nexart-v1" (default, custom canonicalization)
+  - "1.3.0" -> profile "jcs-v1"    (opt-in, RFC 8785 / JCS, standards-based)
 
-Verifiers MUST select the canonicalization profile by protocolVersion and MUST
-fail-closed on unknown versions. There is no implicit fallback.
+Default is 1.2.0. 1.3.0 is opt-in via \`createSnapshot({ protocolVersion: "1.3.0" })\`
+or the CLI \`--protocol-version 1.3.0\` flag. Both profiles are accepted
+indefinitely. Verifiers MUST support both. Unknown protocolVersion MUST FAIL.
+
+## certificateHash whitelist
+SHA-256 over the canonicalized projection of:
+  bundleType, version, createdAt, snapshot,
+  context           (optional, only when present),
+  contextSummary    (optional, only when present),
+  policyEvaluation  (optional, only when present)
+All other fields are excluded and MAY change without invalidating the hash.
 
 ## Fail-closed
 - Unknown protocolVersion         -> FAILED
 - Unknown bundleType              -> FAILED
-- Unresolvable kid                -> FAILED (receipt layer)
+- Unresolvable kid                -> FAILED (signature layer)
 - Missing required projection field with envelope present -> FAILED (envelope layer)
-- Missing optional projection field with envelope absent  -> SKIPPED (envelope layer)
+- Envelope absent                                         -> SKIPPED (envelope layer)
 Verification never silently passes when a required input is missing or unknown.`;
 
 const VerificationModel = () => (
