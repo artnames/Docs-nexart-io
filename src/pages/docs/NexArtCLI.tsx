@@ -47,8 +47,8 @@ SKIPPED is not a failure. It means the layer is not applicable to the bundle.
 ## Bundle versions
 - Bundle version: "0.1"
 - Protocol version: 1.2.0
-- CLI version: 0.8.1
-- SDK version: 0.16.2
+- CLI version: 0.11.0
+- SDK version: 0.22.0
 
 ## Verification result for a SEALED bundle
 {
