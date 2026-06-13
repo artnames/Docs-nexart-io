@@ -85,7 +85,9 @@ const TechnicalTruth = () => {
             <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">verificationEnvelopeSignature</code>,{" "}
             <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">receipt</code>,
             and any unknown fields not in the whitelist. Verifiers MUST apply the whitelist
-            projection to the bundle as received; no reconstruction or normalization beyond JCS.
+            projection to the bundle as received; no reconstruction beyond the canonicalization
+            profile bound to the bundle's protocolVersion.
+
           </dd>
         </div>
 
