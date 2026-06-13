@@ -267,7 +267,7 @@ const Architecture = () => (
     </ul>
 
     <h2 id="hash-whitelist">Hash whitelist (normative)</h2>
-    <p>The certificateHash input is the JCS canonicalization of an object containing only:</p>
+    <p>The certificateHash input is the canonicalization (profile selected by <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">protocolVersion</code>: <code>nexart-v1</code> for 1.2.0, <code>jcs-v1</code> / RFC 8785 for 1.3.0) of an object containing only:</p>
     <ul>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">bundleType</code></li>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">version</code></li>
@@ -275,6 +275,7 @@ const Architecture = () => (
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">snapshot</code></li>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">context</code> (only if present in bundle)</li>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">contextSummary</code> (only if present in bundle)</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">policyEvaluation</code> (only if present in bundle)</li>
     </ul>
 
     <h3 id="hash-exclusions">Excluded from the hash input</h3>
