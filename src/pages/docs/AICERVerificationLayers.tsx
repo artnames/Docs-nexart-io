@@ -67,7 +67,7 @@ const AICERVerificationLayers = () => (
 
     <h2 id="bundle-integrity">Layer 1: Integrity (certificateHash)</h2>
     <p>
-      The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> is computed as a SHA-256 digest over a strict whitelist projection of the CER bundle, canonicalized using JCS (RFC 8785).
+      The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> is computed as a SHA-256 digest over a strict whitelist projection of the CER bundle, canonicalized per the profile selected by <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">protocolVersion</code> (1.2.0 → nexart-v1, default; 1.3.0 → jcs-v1 / RFC 8785, opt-in).
     </p>
     <p><strong>Hashed fields (whitelist):</strong></p>
     <ul>
@@ -77,9 +77,10 @@ const AICERVerificationLayers = () => (
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">snapshot</code></li>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">context</code> (only if present)</li>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">contextSummary</code> (only if present)</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">policyEvaluation</code> (only if present)</li>
     </ul>
     <p><strong>NOT hashed:</strong> <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">certificateHash</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">meta</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">declaration</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">verificationEnvelope</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">verificationEnvelopeSignature</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">receipt</code>, and any unknown fields.</p>
-    <p>Verifiers MUST apply the whitelist projection to the bundle exactly as received. No reconstruction. No normalization beyond JCS. No field stripping.</p>
+    <p>Canonicalization is protocol-bound. Verifiers MUST apply the whitelist projection to the bundle exactly as received and use the canonicalization profile corresponding to the bundle's <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">protocolVersion</code>. No reconstruction. No field stripping.</p>
     <p><strong>What it protects:</strong> execution snapshot, context signals (when included in <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">context</code>), and bundle metadata fields covered by the whitelist.</p>
 
     <h2 id="signed-receipt">Layer 2: Signed Attestation Receipt</h2>
