@@ -48,18 +48,27 @@ const TechnicalTruth = () => {
         <div>
           <dt className="font-semibold text-foreground">Fields covered by certificateHash (whitelist)</dt>
           <dd className="text-foreground/90 mt-1">
-            The hash is computed using{" "}
-            <strong>JCS canonicalization (RFC 8785)</strong> over a strict whitelist projection:
+            The hash is SHA-256 over a strict whitelist projection,
+            canonicalized per the profile selected by{" "}
+            <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">protocolVersion</code>{" "}
+            (<code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">1.2.0</code> →{" "}
+            <strong>nexart-v1</strong>, default;{" "}
+            <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">1.3.0</code> →{" "}
+            <strong>jcs-v1</strong>, RFC 8785, opt-in). Whitelist:
             <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono ml-1">bundleType</code>,{" "}
             <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">version</code>,{" "}
             <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">createdAt</code>,{" "}
             <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">snapshot</code>,{" "}
             and (only when present){" "}
             <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">context</code>,{" "}
-            <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">contextSummary</code>.
-            Any modification to a covered field changes the hash.
+            <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">contextSummary</code>,{" "}
+            <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">policyEvaluation</code>.
+            Any modification to a covered field changes the hash. Canonicalization
+            is protocol-bound: verifiers MUST use the profile corresponding to the
+            bundle's <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">protocolVersion</code>.
           </dd>
         </div>
+
 
         <div>
           <dt className="font-semibold text-foreground">Fields excluded from hashing</dt>
