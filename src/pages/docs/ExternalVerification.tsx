@@ -168,21 +168,26 @@ policyEvaluation  (only when present)`}
     />
     <CodeBlock
       language="javascript"
-      title="Reference (pseudo-code)"
-      code={`import { canonicalize } from "rfc8785";        // any JCS impl
+      title="Reference (pseudo-code) — example assumes a 1.3.0 (jcs-v1) bundle"
+      code={`import { canonicalize as jcs } from "rfc8785";       // for protocolVersion 1.3.0
+import { canonicalize as nexart } from "./nexart-v1";  // for protocolVersion 1.2.0
 import { createHash } from "node:crypto";
 
 const cer = JSON.parse(fs.readFileSync("cer.json", "utf8"));
+const profile = cer.meta?.attestation?.protocolVersion === "1.3.0" ? jcs
+              : cer.meta?.attestation?.protocolVersion === "1.2.0" ? nexart
+              : (() => { throw new Error("Unknown protocolVersion — FAILED"); })();
 
-const whitelist = ["bundleType", "version", "createdAt", "snapshot", "context", "contextSummary"];
+const whitelist = ["bundleType", "version", "createdAt", "snapshot",
+                   "context", "contextSummary", "policyEvaluation"];
 const projection = Object.fromEntries(
   whitelist.filter(k => cer[k] !== undefined).map(k => [k, cer[k]])
 );
 
-const bytes      = canonicalize(projection);                  // RFC 8785
+const bytes      = profile(projection);
 const recomputed = "sha256:" + createHash("sha256").update(bytes).digest("hex");
 
-if (recomputed !== cer.certificateHash) throw new Error("Layer 1 FAILED");`}
+if (recomputed !== cer.certificateHash) throw new Error("Integrity FAILED");`}
     />
 
     <h2 id="step-5">Step 5 — Verify the Receipt Signature (Layer 2)</h2>
