@@ -15,6 +15,7 @@ const ROUTES = [
   "/docs/what-is-nexart",
   "/docs/getting-started",
   "/docs/quickstart",
+  "/docs/architecture",
   "/docs/cer-protocol",
   "/docs/cer-record-management",
   "/docs/protocol-overview",
@@ -39,7 +40,10 @@ const ROUTES = [
   "/docs/verification-statuses-and-errors",
   "/docs/multi-step-and-multi-agent-workflows",
   "/docs/public-reseals-and-redacted-verification",
+  "/docs/certifying-llm-conversations",
   "/docs/verification",
+  "/docs/verification-model",
+  "/docs/external-verification",
   "/docs/verify-nexart",
   "/docs/browser-verification",
   "/docs/ai-cer-verification-layers",
@@ -58,8 +62,11 @@ const ROUTES = [
   "/docs/integrations/n8n",
   "/docs/integrations/langchain",
   "/docs/agent-kit",
+  "/docs/agent-kit-instructions",
+  "/docs/python-bridge",
   "/docs/guides",
   "/docs/faq",
+  "/docs/security/key-management",
 ];
 
 const PARENT_ROUTES = new Set(
