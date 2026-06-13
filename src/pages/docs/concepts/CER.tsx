@@ -185,7 +185,7 @@ const CER = () => (
     <p>Rules for verifiers:</p>
     <ul>
       <li>No reconstruction of the payload</li>
-      <li>No normalization beyond JCS canonicalization</li>
+      <li>No normalization beyond the canonicalization profile bound to the bundle's <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">protocolVersion</code> (<code>nexart-v1</code> for 1.2.0, <code>jcs-v1</code> / RFC 8785 for 1.3.0)</li>
       <li>No field stripping or addition</li>
       <li>The whitelist projection MUST be applied to the bundle exactly as received</li>
     </ul>
