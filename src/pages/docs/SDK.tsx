@@ -13,7 +13,7 @@ import CanonicalFlow from "@/components/docs/CanonicalFlow";
 
 const llmBlock = `# NexArt AI Execution SDK
 
-Package: @nexart/ai-execution@0.16.2
+Package: @nexart/ai-execution@0.22.0
 
 ## Canonical workflow
 seal -> verify -> (optional) certify -> verify
@@ -385,7 +385,7 @@ Authorization: Bearer NEXART_API_KEY
 
     <h2 id="package-helpers">CER Package Helpers</h2>
     <p>
-      As of <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@0.12.0</code>,
+      As of <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@0.22.0</code>,
       the SDK includes official helpers for working with the{" "}
       <Link to="/docs/ai-cer-package-format" className="text-primary hover:underline">CER package format</Link>.
       A CER package is a transport/export wrapper around the inner <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer</code> bundle.
@@ -461,7 +461,25 @@ const result = await verifyCerPackage(pkg);
     <p>Returns a structured per-layer verification report covering Integrity (Layer 1), Receipt (Layer 2), and Verification Envelope (Layer 3). Each layer reports independently. Envelope failure is reported separately from integrity failure.</p>
 
     <h3 id="seal"><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">sealCer(snapshot, options?)</code></h3>
-    <p>Lower-level seal. Takes a pre-built <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">AiExecutionSnapshotV1</code> (not the high-level <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">CertifyDecisionParams</code>) and computes the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> over the strict whitelist projection (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">bundleType</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">version</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">createdAt</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">snapshot</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">context</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">contextSummary</code>) using JCS canonicalization. For most callers, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">certifyDecision(params)</code> is the recommended entry point.</p>
+    <p>Lower-level seal. Takes a pre-built <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">AiExecutionSnapshotV1</code> (not the high-level <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">CertifyDecisionParams</code>) and computes the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> over the strict whitelist projection (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">bundleType</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">version</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">createdAt</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">snapshot</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">context</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">contextSummary</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">policyEvaluation</code>) using the canonicalization profile bound to <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">snapshot.protocolVersion</code> (<code>1.2.0</code> → <code>nexart-v1</code> by default; <code>1.3.0</code> → <code>jcs-v1</code> / RFC 8785 when explicitly set). For most callers, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">certifyDecision(params)</code> is the recommended entry point.</p>
+
+    <CodeBlock
+      language="typescript"
+      title="Opting into protocolVersion 1.3.0 (jcs-v1, RFC 8785)"
+      code={`import { createSnapshot, sealCer } from "@nexart/ai-execution";
+
+const snapshot = createSnapshot({
+  model: "gpt-4o",
+  input,
+  output,
+  // Default is "1.2.0" (nexart-v1). Explicitly opt in to RFC 8785:
+  protocolVersion: "1.3.0",
+});
+
+const cer = sealCer(snapshot);
+// cer.meta.attestation.protocolVersion === "1.3.0"
+// Verifiers MUST canonicalize with jcs-v1 for this bundle.`}
+    />
 
     <h3 id="wrap-provider"><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">wrapProvider(provider, opts)</code></h3>
     <p>Wraps an LLM/tool provider so each invocation is automatically certified through <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">/v1/cer/ai/certify</code>. Returns the original provider response augmented with the CER bundle and verificationUrl.</p>
@@ -477,8 +495,9 @@ const result = await verifyCerPackage(pkg);
 
     <h3 id="canonical-helpers">Canonicalization helpers</h3>
     <ul>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">canonicalJson(value)</code> — JCS (RFC 8785) serialization.</li>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">hashCanonicalJson(value)</code> — SHA-256 over the JCS serialization. Used internally by <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">sealCer</code>.</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">canonicalJson(value, profile?)</code> — protocol-bound canonicalization. <code>profile</code> is selected from the bundle's <code>protocolVersion</code>: <code>nexart-v1</code> for 1.2.0 (default), <code>jcs-v1</code> (RFC 8785) for 1.3.0 (opt-in).</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">hashCanonicalJson(value, profile?)</code> — SHA-256 over the canonicalized serialization. Used internally by <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">sealCer</code>.</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">deriveSignablePayload(bundle, attestation)</code> — produces the derived canonical payload that the node Ed25519-signs. The signed payload is NOT the raw bundle.</li>
     </ul>
 
     <h3 id="project-bundle-helpers">Project Bundle helpers</h3>

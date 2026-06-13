@@ -79,7 +79,7 @@ const Hashes = () => (
     </div>
 
     <h2 id="what-is-hashed">What is hashed (certificateHash)</h2>
-    <p>The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> is computed using JCS (RFC 8785) canonicalization over a strict whitelist projection. It is computed ONLY over:</p>
+    <p>The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> is computed as SHA-256 over a strict whitelist projection, canonicalized per the profile selected by <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">protocolVersion</code> (<code>1.2.0</code> → <code>nexart-v1</code>, default; <code>1.3.0</code> → <code>jcs-v1</code> / RFC 8785, opt-in). It is computed ONLY over:</p>
     <ul>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">bundleType</code></li>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">version</code></li>
@@ -87,6 +87,7 @@ const Hashes = () => (
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">snapshot</code></li>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">context</code> (only if present)</li>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">contextSummary</code> (only if present)</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">policyEvaluation</code> (only if present)</li>
     </ul>
 
     <h2 id="what-is-not-hashed">What is NOT hashed</h2>
@@ -100,7 +101,7 @@ const Hashes = () => (
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">receipt</code></li>
       <li>any unknown fields not in the whitelist</li>
     </ul>
-    <p>Verifiers MUST apply the whitelist projection to the bundle as received. No reconstruction. No normalization beyond JCS. No field stripping or addition.</p>
+    <p>Canonicalization is protocol-bound. Verifiers MUST apply the whitelist projection to the bundle as received and use the canonicalization profile corresponding to the bundle's <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">protocolVersion</code>. No reconstruction. No field stripping or addition.</p>
 
     <h2 id="tamper-evidence">Tamper Evidence</h2>
     <p>Both hashes are tamper-evident. Any modification to a covered field produces a different hash, making changes immediately detectable during verification.</p>

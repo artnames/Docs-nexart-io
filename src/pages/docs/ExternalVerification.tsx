@@ -5,9 +5,13 @@ import { Link } from "react-router-dom";
 const llmBlock = `# External Verification (no NexArt SDK)
 Verify any CER using only:
   - HTTPS client
-  - JCS (RFC 8785) canonicalizer
+  - JSON canonicalizer matching the bundle's protocolVersion
+      (1.2.0 -> nexart-v1, default; 1.3.0 -> jcs-v1 / RFC 8785, opt-in)
   - SHA-256
   - Ed25519 signature verifier
+
+NOTE: Canonicalization is protocol-bound. RFC 8785 (JCS) is NOT universal.
+Use the profile that matches meta.attestation.protocolVersion, or recomputation will fail.
 
 ## Steps
 1. Fetch the public record:
@@ -19,36 +23,41 @@ Verify any CER using only:
    -> returns { keys: [ { kid, alg: "Ed25519", publicKeyJwk | publicKeyMultibase, ... } ] }
 
 3. Select canonicalization profile from meta.attestation.protocolVersion:
-   "1.2.0" -> nexart-v1
-   "1.3.0" -> jcs-v1 (RFC 8785)
+   "1.2.0" -> nexart-v1 (default)
+   "1.3.0" -> jcs-v1    (RFC 8785, opt-in)
    Unknown -> FAIL.
 
-4. Recompute certificateHash:
-   projection = pick(bundle, [bundleType, version, createdAt, snapshot, context?, contextSummary?])
+4. Recompute certificateHash (Integrity):
+   projection = pick(bundle, [bundleType, version, createdAt, snapshot,
+                              context?, contextSummary?, policyEvaluation?])
    bytes      = canonicalize(projection, profile)
-   recomputed = base64url(sha256(bytes))  // formatted "sha256:<hex>" per spec
-   Assert recomputed == bundle.certificateHash. Else FAIL (Layer 1).
+   recomputed = "sha256:" + hex(sha256(bytes))
+   Assert recomputed == bundle.certificateHash. Else FAIL (Integrity).
 
-5. Verify receipt signature (Layer 2):
+5. Verify receipt signature (Authenticity):
    receipt = bundle.meta.attestation.receipt
-   key     = keys.find(k => k.kid == receipt.kid)
+   key     = keys.find(k => k.kid == receipt.kid)   // FAIL if not found
    payload = canonicalize(receipt.payload, profile)
    Assert Ed25519.verify(key.public, payload, base64url_decode(receipt.signature)).
    Assert receipt.payload.certificateHash == bundle.certificateHash.
    Else FAIL.
 
-6. Verify envelope signature (Layer 3, when present):
+6. Verify envelope signature (optional layer, when present):
    env = bundle.meta.verificationEnvelope
    sig = bundle.meta.verificationEnvelopeSignature
    projection = {
      attestation: pick(env.attestation, [attestationId, attestedAt, kid, nodeRuntimeHash, protocolVersion]),
-     bundle:      pick(bundle, [bundleType, version, createdAt, snapshot, context?, contextSummary?]),
+     bundle:      pick(bundle, [bundleType, version, createdAt, snapshot,
+                                context?, contextSummary?, policyEvaluation?]),
    }
    bytes = canonicalize(projection, profile)
    Assert Ed25519.verify(key.public, bytes, base64url_decode(sig)).
    If env absent -> SKIPPED. Else FAIL.
 
-All layers report independently as PASS, FAIL, or SKIPPED.
+Integrity and Authenticity are independent properties. An unsigned bundle MAY still be
+verified for integrity (Layer 1 PASS, Layers 2/3 SKIPPED). Authenticity requires BOTH a
+valid signature AND the correct public key for the receipt's kid.
+
 Aggregate status: VERIFIED if every applicable layer is PASS, else FAILED.`;
 
 const ExternalVerification = () => (
@@ -63,13 +72,19 @@ const ExternalVerification = () => (
       This guide is for implementers building a verifier in a language NexArt
       does not ship an SDK for, or for auditors who require an independent
       reference implementation. It uses only standard cryptographic primitives:
-      JCS (RFC 8785), SHA-256, and Ed25519.
+      SHA-256, Ed25519, and a JSON canonicalizer matching the bundle's{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">protocolVersion</code>.
     </p>
 
     <h2 id="prereq">Prerequisites</h2>
     <ul>
       <li>An HTTPS client.</li>
-      <li>A JCS (RFC 8785) JSON canonicalizer.</li>
+      <li>
+        A JSON canonicalizer matching the bundle's{" "}
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">protocolVersion</code>
+        (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">nexart-v1</code> for 1.2.0,{" "}
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">jcs-v1</code> / RFC 8785 for 1.3.0).
+      </li>
       <li>SHA-256.</li>
       <li>An Ed25519 signature verifier.</li>
       <li>
@@ -78,6 +93,7 @@ const ExternalVerification = () => (
         <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">sha256:&lt;hex&gt;</code>).
       </li>
     </ul>
+
 
     <h2 id="step-1">Step 1 — Fetch the Public Record</h2>
     <p>
@@ -123,15 +139,20 @@ const ExternalVerification = () => (
     </p>
     <CodeBlock
       language="text"
-      code={`"1.2.0" -> profile "nexart-v1" (frozen, legacy)
-"1.3.0" -> profile "jcs-v1"    (RFC 8785, current default)
+      code={`"1.2.0" -> profile "nexart-v1" (default, custom canonicalization)
+"1.3.0" -> profile "jcs-v1"    (opt-in, RFC 8785 / JCS, standards-based)
 other   -> FAILED`}
     />
+    <p className="text-sm text-destructive">
+      Canonicalization is protocol-bound. Do NOT assume RFC 8785 universally; records produced with
+      1.2.0 use <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">nexart-v1</code> and
+      will not recompute to the same hash under JCS.
+    </p>
 
-    <h2 id="step-4">Step 4 — Recompute certificateHash (Layer 1)</h2>
+    <h2 id="step-4">Step 4 — Recompute certificateHash (Integrity)</h2>
     <p>
-      Project the bundle to the hashed whitelist, canonicalize, and SHA-256.
-      Compare with the bundle's declared{" "}
+      Project the bundle to the hashed whitelist, canonicalize with the profile
+      selected in Step 3, and SHA-256. Compare with the bundle's declared{" "}
       <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>.
     </p>
     <CodeBlock
@@ -141,26 +162,32 @@ other   -> FAILED`}
 version
 createdAt
 snapshot
-context          (only when present)
-contextSummary   (only when present)`}
+context           (only when present)
+contextSummary    (only when present)
+policyEvaluation  (only when present)`}
     />
     <CodeBlock
       language="javascript"
-      title="Reference (pseudo-code)"
-      code={`import { canonicalize } from "rfc8785";        // any JCS impl
+      title="Reference (pseudo-code) — example assumes a 1.3.0 (jcs-v1) bundle"
+      code={`import { canonicalize as jcs } from "rfc8785";       // for protocolVersion 1.3.0
+import { canonicalize as nexart } from "./nexart-v1";  // for protocolVersion 1.2.0
 import { createHash } from "node:crypto";
 
 const cer = JSON.parse(fs.readFileSync("cer.json", "utf8"));
+const profile = cer.meta?.attestation?.protocolVersion === "1.3.0" ? jcs
+              : cer.meta?.attestation?.protocolVersion === "1.2.0" ? nexart
+              : (() => { throw new Error("Unknown protocolVersion — FAILED"); })();
 
-const whitelist = ["bundleType", "version", "createdAt", "snapshot", "context", "contextSummary"];
+const whitelist = ["bundleType", "version", "createdAt", "snapshot",
+                   "context", "contextSummary", "policyEvaluation"];
 const projection = Object.fromEntries(
   whitelist.filter(k => cer[k] !== undefined).map(k => [k, cer[k]])
 );
 
-const bytes      = canonicalize(projection);                  // RFC 8785
+const bytes      = profile(projection);
 const recomputed = "sha256:" + createHash("sha256").update(bytes).digest("hex");
 
-if (recomputed !== cer.certificateHash) throw new Error("Layer 1 FAILED");`}
+if (recomputed !== cer.certificateHash) throw new Error("Integrity FAILED");`}
     />
 
     <h2 id="step-5">Step 5 — Verify the Receipt Signature (Layer 2)</h2>
@@ -203,7 +230,8 @@ if (recomputed !== cer.certificateHash) throw new Error("Layer 1 FAILED");`}
       title="Envelope signed projection"
       code={`{
   attestation: { attestationId, attestedAt, kid, nodeRuntimeHash, protocolVersion },
-  bundle:      { bundleType, version, createdAt, snapshot, context?, contextSummary? }
+  bundle:      { bundleType, version, createdAt, snapshot,
+                 context?, contextSummary?, policyEvaluation? }
 }`}
     />
 

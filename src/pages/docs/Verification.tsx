@@ -109,7 +109,7 @@ const Verification = () => (
     <p>Verification is split into three independent layers. Each layer protects a distinct property and reports its result independently. Envelope failure MUST NOT be reported as integrity failure.</p>
 
     <h3 id="layer-1">Layer 1 — Integrity (certificateHash)</h3>
-    <p>Recomputes the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> from the strict whitelist projection of the bundle, canonicalized with JCS (RFC 8785). Proves the bundle has not been modified across covered fields.</p>
+    <p>Recomputes the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> from the strict whitelist projection of the bundle, canonicalized per the profile selected by <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">protocolVersion</code> (1.2.0 → nexart-v1; 1.3.0 → jcs-v1 / RFC 8785). Proves the bundle has not been modified across covered fields.</p>
     <p><strong>Hashed fields:</strong> <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">bundleType</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">version</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">createdAt</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">snapshot</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">context</code> (if present), <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">contextSummary</code> (if present).</p>
     <p><strong>Not hashed:</strong> <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">certificateHash</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">meta</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">declaration</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">verificationEnvelope</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">verificationEnvelopeSignature</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">receipt</code>, any unknown fields.</p>
 
@@ -176,10 +176,11 @@ const Verification = () => (
         Editing one of those fields breaks Layer 3 while Layer 1 still passes.
       </li>
       <li>
-        <strong>Re-serialization that breaks JCS.</strong> Layer 3 requires the exact JCS (RFC 8785)
-        canonicalization of the whitelist projection. Tools that pretty-print, reorder keys, change
-        number formatting, or alter Unicode escaping invalidate the signature even when content is
-        semantically identical.
+        <strong>Re-serialization that breaks canonicalization.</strong> Layer 3 requires the exact
+        canonicalization profile bound to the bundle's <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">protocolVersion</code>
+        (<code>nexart-v1</code> for 1.2.0, <code>jcs-v1</code> / RFC 8785 for 1.3.0). Tools that pretty-print,
+        reorder keys, change number formatting, or alter Unicode escaping invalidate the signature even when
+        content is semantically identical.
       </li>
       <li>
         <strong>Key mismatch (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">kid</code>).</strong>{" "}
@@ -197,7 +198,7 @@ const Verification = () => (
       </li>
       <li>
         <strong>v0.16.0 signals payload alignment bug.</strong> Bundles created with
-        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono ml-1">@nexart/ai-execution@0.16.0</code>{" "}
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono ml-1">@nexart/ai-execution@0.22.0</code>{" "}
         that include signals MAY fail envelope verification due to a payload alignment issue fixed
         in <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">v0.16.1</code>. Operators
         SHOULD re-certify affected executions via{" "}
@@ -256,7 +257,7 @@ const Verification = () => (
     <div className="not-prose my-6 rounded-lg border border-border bg-muted/30 p-4">
       <div className="text-sm font-medium text-foreground mb-1">v0.16.0 → v0.16.1 compatibility</div>
       <div className="text-sm text-muted-foreground">
-        Bundles created with <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">@nexart/ai-execution@0.16.0</code> that include signals may fail envelope verification due to a payload alignment issue. <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">v0.16.1</code> fixes this. Re-certification may be required. Operators can use <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">POST /v1/admin/recertify-batch</code> to re-seal affected executions.
+        Bundles created with <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">@nexart/ai-execution@0.22.0</code> that include signals may fail envelope verification due to a payload alignment issue. <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">v0.16.1</code> fixes this. Re-certification may be required. Operators can use <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">POST /v1/admin/recertify-batch</code> to re-seal affected executions.
       </div>
     </div>
 
@@ -370,19 +371,27 @@ NOT_FOUND     The requested execution record was not located.`}
     <CodeBlock
       language="text"
       title="Supported profiles"
-      code={`protocolVersion = "1.2.0"   profile = "nexart-v1"   frozen, accepted (legacy records)
-protocolVersion = "1.3.0"   profile = "jcs-v1"      RFC 8785, current default`}
+      code={`protocolVersion = "1.2.0"   profile = "nexart-v1"   default  (custom canonicalization)
+protocolVersion = "1.3.0"   profile = "jcs-v1"      opt-in   (RFC 8785, standards-based)`}
     />
     <p>
-      <strong>1.2.0 → nexart-v1</strong> is the original canonicalization scheme, frozen for
-      backward compatibility with records produced before the JCS migration. No new fields or rules
-      are added to this profile.
+      <strong>Canonicalisation is protocol-bound.</strong> There is no universal default. Verifiers
+      MUST use the canonicalisation corresponding to the bundle's{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">protocolVersion</code>{" "}
+      or hash recomputation will fail. Do NOT assume RFC 8785 universally.
     </p>
     <p>
-      <strong>1.3.0 → jcs-v1</strong> uses JSON Canonicalization Scheme (RFC 8785) for both
-      hashing and signing. JCS defines a single deterministic byte representation for any JSON
-      value (sorted keys, fixed number formatting, fixed Unicode escaping), so every conformant
-      verifier on any platform produces the same hash for the same input.
+      <strong>1.2.0 → nexart-v1</strong> is the current default canonicalization profile. All SDK
+      and CLI calls produce 1.2.0 bundles unless the producer explicitly opts into a different
+      version.
+    </p>
+    <p>
+      <strong>1.3.0 → jcs-v1</strong> is opt-in. It uses JSON Canonicalization Scheme (RFC 8785)
+      for both hashing and signing, providing a published, standards-based deterministic byte
+      representation. Producers select it via{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">createSnapshot({"{ protocolVersion: \"1.3.0\" }"})</code>{" "}
+      or the CLI flag{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">--protocol-version 1.3.0</code>.
     </p>
     <p>
       Both profiles are accepted indefinitely. Verifiers MUST support both to remain compliant.
@@ -390,6 +399,7 @@ protocolVersion = "1.3.0"   profile = "jcs-v1"      RFC 8785, current default`}
       part of the attestation projection signed by the verification envelope, so it cannot be
       silently retargeted to a different profile without breaking Layer 3.
     </p>
+
 
     <h2 id="fail-closed">Fail-closed Behavior</h2>
     <p>
@@ -422,11 +432,19 @@ protocolVersion = "1.3.0"   profile = "jcs-v1"      RFC 8785, current default`}
         It does not assert that the model output was correct, appropriate, or compliant.
       </li>
       <li>
-        <strong>Trusted timestamping.</strong>{" "}
-        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">attestedAt</code> is
-        asserted by the signing node and bound by the receipt signature. It is node-attested time,
-        not third-party anchored time. External anchoring (RFC 3161, transparency log, blockchain)
-        is on the roadmap and is not part of v1.3.0.
+        <strong>Trusted (third-party) timestamping.</strong>{" "}
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">attestedAt</code> is a
+        node-issued timestamp, bound to the bundle's{" "}
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">certificateHash</code> by
+        the receipt signature. It provides an ordering guarantee relative to other records signed
+        by the same node; it is NOT independent proof of existence at that wall-clock time. An
+        external TSA (e.g. RFC 3161 via DigiCert) MAY be integrated alongside the receipt without
+        modifying existing records.
+      </li>
+      <li>
+        <strong>Public log inclusion.</strong> The current attestation log is node-internal. There
+        is no public Merkle tree and no external witness at this protocol version. Verifiers MUST
+        NOT infer transparency-log inclusion from a PASS result.
       </li>
       <li>
         <strong>Deterministic replay.</strong> Recomputing the same model output from the same
@@ -436,16 +454,17 @@ protocolVersion = "1.3.0"   profile = "jcs-v1"      RFC 8785, current default`}
       </li>
     </ul>
 
+
     <h2 id="cli-usage">CLI Usage</h2>
     <p>
-      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/cli@0.8.1</code>{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/cli@0.11.0</code>{" "}
       provides a verifier that runs offline against a CER bundle file. It fetches the node key set
       only when the bundle declares an attestation.
     </p>
     <CodeBlock
       language="bash"
       title="Install"
-      code={`npm install -g @nexart/cli@0.8.1`}
+      code={`npm install -g @nexart/cli@0.11.0`}
     />
     <CodeBlock
       language="bash"
@@ -456,7 +475,7 @@ protocolVersion = "1.3.0"   profile = "jcs-v1"      RFC 8785, current default`}
       language="text"
       title="Expected output — certified bundle"
       code={`certificateHash : sha256:7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069
-protocolVersion : 1.3.0  (profile: jcs-v1)
+protocolVersion : 1.2.0  (profile: nexart-v1)
 Integrity (L1)  : PASS
 Receipt   (L2)  : PASS
 Envelope  (L3)  : PASS
@@ -466,7 +485,7 @@ status          : VERIFIED`}
       language="text"
       title="Expected output — sealed (offline) bundle"
       code={`certificateHash : sha256:9f2b1c8e4a7d6f3b0c5e8a1d2f4b6c8e9a0d3f5b7c2e4a6d8f1b3c5e7a9d0f2b
-protocolVersion : 1.3.0  (profile: jcs-v1)
+protocolVersion : 1.2.0  (profile: nexart-v1)
 Integrity (L1)  : PASS
 Receipt   (L2)  : SKIPPED  (no attestation present)
 Envelope  (L3)  : SKIPPED  (no envelope present)
@@ -482,6 +501,16 @@ exit 3   usage error          (missing file, malformed JSON, unknown flag)
 
 Failures print a machine-readable JSON report to stderr:
   { "status": "FAILED", "checks": { "bundleIntegrity": "FAIL", ... }, "reason": "..." }`}
+    />
+    <CodeBlock
+      language="bash"
+      title="Producing a 1.3.0 (JCS) bundle — opt-in"
+      code={`# Default is 1.2.0 (nexart-v1). Opt into 1.3.0 (jcs-v1, RFC 8785):
+npx @nexart/cli@0.11.0 ai seal input.json --protocol-version 1.3.0 --out cer.json
+npx @nexart/cli@0.11.0 ai verify cer.json
+# --protocol-version overrides the producer default for this invocation only.
+# Verifiers select the canonicalization profile from the bundle's protocolVersion;
+# the flag does not change verification behavior.`}
     />
     <p>For the full verification contract, see the <Link to="/docs/cer-protocol" className="text-primary hover:underline">CER Protocol specification</Link>. For SDK functions, see <Link to="/docs/sdk" className="text-primary hover:underline">AI Execution SDK</Link> (sync and async modes). For browser-specific usage, see <Link to="/docs/browser-verification" className="text-primary hover:underline">Browser Verification</Link>.</p>
   </>

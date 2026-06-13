@@ -157,7 +157,7 @@ const CER = () => (
     </ul>
 
     <h2 id="certificate-hash">Certificate Hash</h2>
-    <p>The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> is a SHA-256 hash derived from a strict whitelist projection of the bundle, canonicalized using JCS (RFC 8785). It uniquely identifies the record and is what the attestation node signs. Any modification to a covered field produces a different hash.</p>
+    <p>The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> is a SHA-256 hash derived from a strict whitelist projection of the bundle, canonicalized per the profile bound to <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">protocolVersion</code> (1.2.0 → nexart-v1, default; 1.3.0 → jcs-v1 / RFC 8785, opt-in). It uniquely identifies the record and is what the attestation node signs. Any modification to a covered field produces a different hash.</p>
 
     <h3 id="what-is-hashed">What is hashed</h3>
     <p>The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> is computed ONLY over the following fields:</p>
@@ -168,6 +168,7 @@ const CER = () => (
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">snapshot</code></li>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">context</code> (only if present)</li>
       <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">contextSummary</code> (only if present)</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">policyEvaluation</code> (only if present)</li>
     </ul>
 
     <h3 id="what-is-not-hashed">What is NOT hashed</h3>
@@ -184,7 +185,7 @@ const CER = () => (
     <p>Rules for verifiers:</p>
     <ul>
       <li>No reconstruction of the payload</li>
-      <li>No normalization beyond JCS canonicalization</li>
+      <li>No normalization beyond the canonicalization profile bound to the bundle's <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">protocolVersion</code> (<code>nexart-v1</code> for 1.2.0, <code>jcs-v1</code> / RFC 8785 for 1.3.0)</li>
       <li>No field stripping or addition</li>
       <li>The whitelist projection MUST be applied to the bundle exactly as received</li>
     </ul>
