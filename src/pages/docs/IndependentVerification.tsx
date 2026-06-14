@@ -101,7 +101,10 @@ const IndependentVerification = () => (
         RFC 8785 for 1.3.0).
       </li>
     </ul>
-    <p>No NexArt runtime, SDK, account, or network call back to NexArt is required.</p>
+    <p>
+      No NexArt runtime or SDK is required for verification. The record and
+      public keys can be obtained once and verified offline.
+    </p>
 
     <h2 id="steps">2. Verification Steps</h2>
 
