@@ -61,6 +61,7 @@ import PythonBridge from "./pages/docs/PythonBridge";
 import KeyManagement from "./pages/docs/KeyManagement";
 import VerificationModel from "./pages/docs/VerificationModel";
 import ExternalVerification from "./pages/docs/ExternalVerification";
+import IndependentVerification from "./pages/docs/IndependentVerification";
 
 const queryClient = new QueryClient();
 
@@ -110,6 +111,7 @@ const App = () => (
             <Route path="verification" element={<Verification />} />
             <Route path="verification-model" element={<VerificationModel />} />
             <Route path="external-verification" element={<ExternalVerification />} />
+            <Route path="independent-verification" element={<IndependentVerification />} />
             <Route path="verify-nexart" element={<VerifyNexart />} />
             <Route path="browser-verification" element={<BrowserVerification />} />
             <Route path="ai-cer-verification-layers" element={<AICERVerificationLayers />} />

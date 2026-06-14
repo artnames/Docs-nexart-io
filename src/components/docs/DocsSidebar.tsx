@@ -32,6 +32,7 @@ const navigation: NavItem[] = [
     children: [
       { title: "Verification Model", path: "/docs/verification-model" },
       { title: "External Verification", path: "/docs/external-verification" },
+      { title: "Independent Verification", path: "/docs/independent-verification" },
       { title: "End-to-End Verification Flow", path: "/docs/end-to-end-verification" },
       { title: "How Verification Works", path: "/docs/verification" },
       { title: "Verification Semantics", path: "/docs/verification-semantics" },
