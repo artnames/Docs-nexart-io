@@ -44,6 +44,7 @@ const ROUTES = [
   "/docs/verification",
   "/docs/verification-model",
   "/docs/external-verification",
+  "/docs/independent-verification",
   "/docs/verify-nexart",
   "/docs/browser-verification",
   "/docs/ai-cer-verification-layers",
