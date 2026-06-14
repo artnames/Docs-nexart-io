@@ -269,13 +269,14 @@ policyEvaluation  (only when present)`}
     </p>
     <CodeBlock
       language="text"
-      code={`Unknown / missing protocolVersion              -> FAIL
-Canonicalization profile mismatch              -> FAIL (hash will not match)
-Recomputed certificateHash != bundle value     -> FAIL
-receipt.kid not in published key set           -> FAIL
-Invalid Ed25519 signature on receipt           -> FAIL
-receipt.payload.certificateHash != bundle hash -> FAIL
-Invalid Ed25519 signature on envelope (if present) -> FAIL`}
+      code={`Unknown / missing snapshot.protocolVersion                     -> FAIL
+meta.attestation.protocolVersion != snapshot.protocolVersion   -> FAIL
+Canonicalization profile mismatch                              -> FAIL (hash will not match)
+Recomputed certificateHash != bundle value                     -> FAIL
+receipt.kid not in published key set                           -> FAIL
+Invalid Ed25519 signature on receipt                           -> FAIL
+receipt.payload.certificateHash != bundle hash                 -> FAIL
+Invalid Ed25519 signature on envelope (if present)             -> FAIL`}
     />
     <p>
       See{" "}
