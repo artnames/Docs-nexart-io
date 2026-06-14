@@ -27,17 +27,23 @@ unknown -> FAIL (fail-closed; no fallback, no coercion)
    (or implement the four checks below in any language.)
 
 ## What the verifier does
-A. Reads meta.attestation.protocolVersion and selects the canonicalization profile.
+A. Reads snapshot.protocolVersion (source of truth) and selects the canonicalization
+   profile. MUST assert meta.attestation.protocolVersion == snapshot.protocolVersion;
+   mismatch -> FAIL.
 B. Recomputes certificateHash:
      projection = pick(bundle, [bundleType, version, createdAt, snapshot,
                                 context?, contextSummary?, policyEvaluation?])
      recomputed = "sha256:" + hex(sha256(canonicalize(projection, profile)))
-   Assert recomputed == bundle.certificateHash.
-C. Verifies the Ed25519 signature on meta.attestation.receipt.payload using the
-   node public key matched by receipt.kid. Asserts payload.certificateHash ==
-   bundle.certificateHash.
+   Assert recomputed == bundle.certificateHash. The canonicalized byte sequence
+   MUST be identical; any variation in field order, encoding, or whitespace
+   produces a different hash.
+C. Verifies the Ed25519 signature over the canonicalized receipt payload
+   (meta.attestation.receipt.payload) using meta.attestation.receiptSignature and
+   the node public key matched by receipt.kid. Asserts
+   payload.certificateHash == bundle.certificateHash.
 D. (Optional) Verifies the Ed25519 signature on the verificationEnvelope when
-   present.
+   present. The envelope signature is independent from the receipt signature and
+   covers a different field set.
 
 ## Data model
 snapshot              - execution data (or SHA-256 digests when public/redacted)
