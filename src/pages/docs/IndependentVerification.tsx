@@ -27,17 +27,23 @@ unknown -> FAIL (fail-closed; no fallback, no coercion)
    (or implement the four checks below in any language.)
 
 ## What the verifier does
-A. Reads meta.attestation.protocolVersion and selects the canonicalization profile.
+A. Reads snapshot.protocolVersion (source of truth) and selects the canonicalization
+   profile. MUST assert meta.attestation.protocolVersion == snapshot.protocolVersion;
+   mismatch -> FAIL.
 B. Recomputes certificateHash:
      projection = pick(bundle, [bundleType, version, createdAt, snapshot,
                                 context?, contextSummary?, policyEvaluation?])
      recomputed = "sha256:" + hex(sha256(canonicalize(projection, profile)))
-   Assert recomputed == bundle.certificateHash.
-C. Verifies the Ed25519 signature on meta.attestation.receipt.payload using the
-   node public key matched by receipt.kid. Asserts payload.certificateHash ==
-   bundle.certificateHash.
+   Assert recomputed == bundle.certificateHash. The canonicalized byte sequence
+   MUST be identical; any variation in field order, encoding, or whitespace
+   produces a different hash.
+C. Verifies the Ed25519 signature over the canonicalized receipt payload
+   (meta.attestation.receipt.payload) using meta.attestation.receiptSignature and
+   the node public key matched by receipt.kid. Asserts
+   payload.certificateHash == bundle.certificateHash.
 D. (Optional) Verifies the Ed25519 signature on the verificationEnvelope when
-   present.
+   present. The envelope signature is independent from the receipt signature and
+   covers a different field set.
 
 ## Data model
 snapshot              - execution data (or SHA-256 digests when public/redacted)
@@ -95,7 +101,10 @@ const IndependentVerification = () => (
         RFC 8785 for 1.3.0).
       </li>
     </ul>
-    <p>No NexArt runtime, SDK, account, or network call back to NexArt is required.</p>
+    <p>
+      No NexArt runtime or SDK is required for verification. The record and
+      public keys can be obtained once and verified offline.
+    </p>
 
     <h2 id="steps">2. Verification Steps</h2>
 
@@ -138,8 +147,17 @@ const IndependentVerification = () => (
       <li>
         <strong>Selects the canonicalization profile</strong> from{" "}
         <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">
+          snapshot.protocolVersion
+        </code>{" "}
+        (the source of truth). The verifier MUST also assert that{" "}
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">
           meta.attestation.protocolVersion
-        </code>:
+        </code>{" "}
+        equals{" "}
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">
+          snapshot.protocolVersion
+        </code>; any mismatch fails closed. Anchoring on the attestation alone
+        would mean trusting the signer instead of verifying the record.
       </li>
     </ol>
     <CodeBlock
@@ -158,6 +176,8 @@ other   -> FAIL`}
         <strong>Recomputes the SHA-256 over the whitelist projection</strong>{" "}
         and compares with{" "}
         <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">bundle.certificateHash</code>.
+        The canonicalized byte sequence must be identical: any variation in
+        field order, encoding, or whitespace produces a different hash.
       </li>
     </ol>
     <CodeBlock
@@ -173,11 +193,15 @@ policyEvaluation  (only when present)`}
     />
     <ol start={3}>
       <li>
-        <strong>Verifies the Ed25519 signature</strong> on{" "}
+        <strong>Verifies the Ed25519 signature</strong> over the canonicalized{" "}
         <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">
-          meta.attestation.receipt
+          meta.attestation.receipt.payload
         </code>{" "}
-        using the public key whose{" "}
+        using{" "}
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">
+          meta.attestation.receiptSignature
+        </code>{" "}
+        and the public key whose{" "}
         <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">kid</code>{" "}
         matches{" "}
         <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">receipt.kid</code>,
@@ -188,7 +212,9 @@ policyEvaluation  (only when present)`}
       </li>
       <li>
         <strong>(Optional)</strong> Verifies the Ed25519 signature on the
-        verification envelope when present. If absent, the layer is{" "}
+        verification envelope when present. The envelope signature is
+        independent from the receipt signature and covers a different field
+        set. If the envelope is absent, the layer is{" "}
         <strong>SKIPPED</strong>, not failed.
       </li>
     </ol>
@@ -243,13 +269,14 @@ policyEvaluation  (only when present)`}
     </p>
     <CodeBlock
       language="text"
-      code={`Unknown / missing protocolVersion              -> FAIL
-Canonicalization profile mismatch              -> FAIL (hash will not match)
-Recomputed certificateHash != bundle value     -> FAIL
-receipt.kid not in published key set           -> FAIL
-Invalid Ed25519 signature on receipt           -> FAIL
-receipt.payload.certificateHash != bundle hash -> FAIL
-Invalid Ed25519 signature on envelope (if present) -> FAIL`}
+      code={`Unknown / missing snapshot.protocolVersion                     -> FAIL
+meta.attestation.protocolVersion != snapshot.protocolVersion   -> FAIL
+Canonicalization profile mismatch                              -> FAIL (hash will not match)
+Recomputed certificateHash != bundle value                     -> FAIL
+receipt.kid not in published key set                           -> FAIL
+Invalid Ed25519 signature on receipt                           -> FAIL
+receipt.payload.certificateHash != bundle hash                 -> FAIL
+Invalid Ed25519 signature on envelope (if present)             -> FAIL`}
     />
     <p>
       See{" "}
