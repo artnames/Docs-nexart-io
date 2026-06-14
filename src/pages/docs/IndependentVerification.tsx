@@ -147,8 +147,17 @@ const IndependentVerification = () => (
       <li>
         <strong>Selects the canonicalization profile</strong> from{" "}
         <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">
+          snapshot.protocolVersion
+        </code>{" "}
+        (the source of truth). The verifier MUST also assert that{" "}
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">
           meta.attestation.protocolVersion
-        </code>:
+        </code>{" "}
+        equals{" "}
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">
+          snapshot.protocolVersion
+        </code>; any mismatch fails closed. Anchoring on the attestation alone
+        would mean trusting the signer instead of verifying the record.
       </li>
     </ol>
     <CodeBlock
@@ -167,6 +176,8 @@ other   -> FAIL`}
         <strong>Recomputes the SHA-256 over the whitelist projection</strong>{" "}
         and compares with{" "}
         <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">bundle.certificateHash</code>.
+        The canonicalized byte sequence must be identical: any variation in
+        field order, encoding, or whitespace produces a different hash.
       </li>
     </ol>
     <CodeBlock
@@ -182,11 +193,15 @@ policyEvaluation  (only when present)`}
     />
     <ol start={3}>
       <li>
-        <strong>Verifies the Ed25519 signature</strong> on{" "}
+        <strong>Verifies the Ed25519 signature</strong> over the canonicalized{" "}
         <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">
-          meta.attestation.receipt
+          meta.attestation.receipt.payload
         </code>{" "}
-        using the public key whose{" "}
+        using{" "}
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">
+          meta.attestation.receiptSignature
+        </code>{" "}
+        and the public key whose{" "}
         <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">kid</code>{" "}
         matches{" "}
         <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">receipt.kid</code>,
@@ -197,7 +212,9 @@ policyEvaluation  (only when present)`}
       </li>
       <li>
         <strong>(Optional)</strong> Verifies the Ed25519 signature on the
-        verification envelope when present. If absent, the layer is{" "}
+        verification envelope when present. The envelope signature is
+        independent from the receipt signature and covers a different field
+        set. If the envelope is absent, the layer is{" "}
         <strong>SKIPPED</strong>, not failed.
       </li>
     </ol>
