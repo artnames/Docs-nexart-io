@@ -294,7 +294,48 @@ policyEvaluation  (only when present)`}
       </li>
     </ul>
 
-    <h2 id="fail-closed">5. Fail-Closed Behaviour</h2>
+    <h2 id="signer-model">5. Signer Model and Key Lifecycle</h2>
+    <p>
+      A NexArt CER is signed by an attestation node using an Ed25519 key. The
+      node publishes its public key set at{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">
+        https://node.nexart.io/.well-known/nexart-node.json
+      </code>.
+    </p>
+    <p>Each key includes:</p>
+    <ul>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">kid</code> — key identifier;</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">algorithm</code> — signing algorithm (Ed25519);</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">status</code> — <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">active</code> | <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">deprecated</code> | <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">revoked</code>;</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">validFrom</code> — start of validity window;</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">validTo</code> — end of validity window (if present);</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">publicKey</code> — raw base64url key;</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">publicKeyJwk</code> — JWK representation;</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">publicKeySpkiB64</code> — SPKI representation.</li>
+    </ul>
+    <p>Verification MUST enforce key lifecycle:</p>
+    <ul>
+      <li>
+        The{" "}
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">receipt.kid</code>{" "}
+        must exist in the published key set;
+      </li>
+      <li>The key must not be revoked;</li>
+      <li>
+        The verification timestamp must be within{" "}
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">[validFrom, validTo]</code>{" "}
+        (if <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">validTo</code> is present);
+      </li>
+      <li>Unknown or invalid keys MUST fail verification.</li>
+    </ul>
+    <p>No fallback key resolution is allowed.</p>
+    <p>
+      The signer is independent of the execution system. The node acts as an
+      attestation authority and signs the receipt over the{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>.
+    </p>
+
+    <h2 id="fail-closed">6. Fail-Closed Behaviour</h2>
     <p>
       Every check fails closed. There is no fallback, no coercion, and no
       silent downgrade.
