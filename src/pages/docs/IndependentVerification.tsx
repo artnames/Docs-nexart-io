@@ -235,6 +235,14 @@ policyEvaluation  (only when present)`}
         </code>.
       </li>
       <li>
+        <strong>Validates signer key lifecycle.</strong> Resolves{" "}
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">receipt.kid</code>{" "}
+        against the published key set, enforces the{" "}
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">validFrom</code> /{" "}
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">validTo</code>{" "}
+        window, rejects revoked keys, and rejects unknown key identifiers.
+      </li>
+      <li>
         <strong>(Optional)</strong> Verifies the Ed25519 signature on the
         verification envelope when present. The envelope signature is
         independent from the receipt signature and covers a different field
