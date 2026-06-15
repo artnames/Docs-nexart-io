@@ -401,7 +401,7 @@ Invalid Ed25519 signature on envelope (if present)             -> FAIL`}
       </li>
     </ul>
 
-    <h2 id="reproducibility">7. Reproducibility</h2>
+    <h2 id="reproducibility">8. Reproducibility</h2>
     <p>
       Every operation specified on this page is deterministic and uses only
       standard cryptographic primitives. A developer can implement an
