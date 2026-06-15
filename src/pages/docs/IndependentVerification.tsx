@@ -347,6 +347,9 @@ meta.attestation.protocolVersion != snapshot.protocolVersion   -> FAIL
 Canonicalization profile mismatch                              -> FAIL (hash will not match)
 Recomputed certificateHash != bundle value                     -> FAIL
 receipt.kid not in published key set                           -> FAIL
+Unknown key identifier (receipt.kid not found)                 -> FAIL
+Key revoked                                                    -> FAIL
+Key outside validity window                                    -> FAIL
 Invalid Ed25519 signature on receipt                           -> FAIL
 receipt.payload.certificateHash != bundle hash                 -> FAIL
 Invalid Ed25519 signature on envelope (if present)             -> FAIL`}
