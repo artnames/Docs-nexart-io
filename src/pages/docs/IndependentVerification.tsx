@@ -24,7 +24,9 @@ unknown -> FAIL (fail-closed; no fallback, no coercion)
    curl "https://node.nexart.io/.well-known/nexart-node.json"        > keys.json
 3. Verify:
    npx @nexart/cli verify-bundle record.json --public-key keys.json
-   (or implement the four checks below in any language.)
+   The verifier MUST also resolve receipt.kid against the node key set,
+   enforce key lifecycle (validity window, revocation status), and fail
+   closed on unknown or invalid keys.
 
 ## What the verifier does
 A. Reads snapshot.protocolVersion (source of truth) and selects the canonicalization
@@ -34,16 +36,25 @@ B. Recomputes certificateHash:
      projection = pick(bundle, [bundleType, version, createdAt, snapshot,
                                 context?, contextSummary?, policyEvaluation?])
      recomputed = "sha256:" + hex(sha256(canonicalize(projection, profile)))
-   Assert recomputed == bundle.certificateHash. The canonicalized byte sequence
-   MUST be identical; any variation in field order, encoding, or whitespace
-   produces a different hash.
+   Assert recomputed == bundle.certificateHash.
 C. Verifies the Ed25519 signature over the canonicalized receipt payload
    (meta.attestation.receipt.payload) using meta.attestation.receiptSignature and
    the node public key matched by receipt.kid. Asserts
    payload.certificateHash == bundle.certificateHash.
-D. (Optional) Verifies the Ed25519 signature on the verificationEnvelope when
-   present. The envelope signature is independent from the receipt signature and
-   covers a different field set.
+D. Validates signer key lifecycle:
+     - resolves receipt.kid against published keys
+     - enforces validFrom / validTo window
+     - rejects revoked keys
+     - rejects unknown key identifiers
+E. (Optional) Verifies the Ed25519 signature on the verificationEnvelope when
+   present. The envelope signature is independent from the receipt signature.
+
+## Signer model and key lifecycle
+The signer is independent of the execution system. The node acts as an
+attestation authority and signs the receipt over the certificateHash.
+Each published key carries: kid, algorithm, status (active|deprecated|revoked),
+validFrom, validTo (optional), publicKey, publicKeyJwk, publicKeySpkiB64.
+No fallback key resolution is allowed.
 
 ## Data model
 snapshot              - execution data (or SHA-256 digests when public/redacted)
@@ -55,17 +66,20 @@ verificationEnvelope  - additional signed metadata layer (optional)
 Unknown protocolVersion -> FAIL
 Hash mismatch           -> FAIL
 Missing kid in key set  -> FAIL
+Key revoked             -> FAIL
+Key outside validity    -> FAIL
 Invalid signature       -> FAIL
 No fallback. No coercion. No silent downgrade.
 
 ## Trust boundaries
 Independent verification proves:
-  - INTEGRITY     (the bundle was not altered after sealing)
-  - AUTHENTICITY  (a node holding the private key for receipt.kid signed it)
+  - INTEGRITY       (the bundle was not altered after sealing)
+  - AUTHENTICITY    (a node holding the private key for receipt.kid signed it)
+  - SIGNER VALIDITY (the signing key was valid and not revoked at verification time)
 It does NOT prove:
-  - independent (third-party) trusted timestamp
+  - node-issued timestamp providing ordering, not independent proof of existence
   - completeness of any external workflow
-  - inclusion in a public transparency log (no public Merkle log today)
+  - inclusion in a public transparency log (none currently enforced)
   - semantic correctness of the underlying AI execution`;
 
 const IndependentVerification = () => (
