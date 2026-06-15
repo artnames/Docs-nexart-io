@@ -147,7 +147,7 @@ const IndependentVerification = () => (
       code={`npx @nexart/cli verify-bundle record.json --public-key keys.json`}
     />
     <p>
-      The CLI is a thin wrapper around the four checks defined below. Any
+      The CLI is a thin wrapper around the checks defined below. Any
       reimplementation in another language is equivalent, provided it follows
       the same rules. See{" "}
       <Link to="/docs/external-verification" className="text-primary hover:underline">
@@ -155,6 +155,16 @@ const IndependentVerification = () => (
       </Link>{" "}
       for a reference pseudo-code implementation.
     </p>
+    <p>The verifier must also:</p>
+    <ul>
+      <li>
+        Resolve{" "}
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">receipt.kid</code>{" "}
+        against the node key set;
+      </li>
+      <li>Enforce key lifecycle (validity window, revocation status);</li>
+      <li>Fail closed on unknown or invalid keys.</li>
+    </ul>
 
     <h2 id="what-the-verifier-does">3. What the Verifier Does</h2>
     <ol>
