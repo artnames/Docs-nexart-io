@@ -24,7 +24,9 @@ unknown -> FAIL (fail-closed; no fallback, no coercion)
    curl "https://node.nexart.io/.well-known/nexart-node.json"        > keys.json
 3. Verify:
    npx @nexart/cli verify-bundle record.json --public-key keys.json
-   (or implement the four checks below in any language.)
+   The verifier MUST also resolve receipt.kid against the node key set,
+   enforce key lifecycle (validity window, revocation status), and fail
+   closed on unknown or invalid keys.
 
 ## What the verifier does
 A. Reads snapshot.protocolVersion (source of truth) and selects the canonicalization
@@ -34,16 +36,25 @@ B. Recomputes certificateHash:
      projection = pick(bundle, [bundleType, version, createdAt, snapshot,
                                 context?, contextSummary?, policyEvaluation?])
      recomputed = "sha256:" + hex(sha256(canonicalize(projection, profile)))
-   Assert recomputed == bundle.certificateHash. The canonicalized byte sequence
-   MUST be identical; any variation in field order, encoding, or whitespace
-   produces a different hash.
+   Assert recomputed == bundle.certificateHash.
 C. Verifies the Ed25519 signature over the canonicalized receipt payload
    (meta.attestation.receipt.payload) using meta.attestation.receiptSignature and
    the node public key matched by receipt.kid. Asserts
    payload.certificateHash == bundle.certificateHash.
-D. (Optional) Verifies the Ed25519 signature on the verificationEnvelope when
-   present. The envelope signature is independent from the receipt signature and
-   covers a different field set.
+D. Validates signer key lifecycle:
+     - resolves receipt.kid against published keys
+     - enforces validFrom / validTo window
+     - rejects revoked keys
+     - rejects unknown key identifiers
+E. (Optional) Verifies the Ed25519 signature on the verificationEnvelope when
+   present. The envelope signature is independent from the receipt signature.
+
+## Signer model and key lifecycle
+The signer is independent of the execution system. The node acts as an
+attestation authority and signs the receipt over the certificateHash.
+Each published key carries: kid, algorithm, status (active|deprecated|revoked),
+validFrom, validTo (optional), publicKey, publicKeyJwk, publicKeySpkiB64.
+No fallback key resolution is allowed.
 
 ## Data model
 snapshot              - execution data (or SHA-256 digests when public/redacted)
@@ -55,17 +66,20 @@ verificationEnvelope  - additional signed metadata layer (optional)
 Unknown protocolVersion -> FAIL
 Hash mismatch           -> FAIL
 Missing kid in key set  -> FAIL
+Key revoked             -> FAIL
+Key outside validity    -> FAIL
 Invalid signature       -> FAIL
 No fallback. No coercion. No silent downgrade.
 
 ## Trust boundaries
 Independent verification proves:
-  - INTEGRITY     (the bundle was not altered after sealing)
-  - AUTHENTICITY  (a node holding the private key for receipt.kid signed it)
+  - INTEGRITY       (the bundle was not altered after sealing)
+  - AUTHENTICITY    (a node holding the private key for receipt.kid signed it)
+  - SIGNER VALIDITY (the signing key was valid and not revoked at verification time)
 It does NOT prove:
-  - independent (third-party) trusted timestamp
+  - node-issued timestamp providing ordering, not independent proof of existence
   - completeness of any external workflow
-  - inclusion in a public transparency log (no public Merkle log today)
+  - inclusion in a public transparency log (none currently enforced)
   - semantic correctness of the underlying AI execution`;
 
 const IndependentVerification = () => (
@@ -133,7 +147,7 @@ const IndependentVerification = () => (
       code={`npx @nexart/cli verify-bundle record.json --public-key keys.json`}
     />
     <p>
-      The CLI is a thin wrapper around the four checks defined below. Any
+      The CLI is a thin wrapper around the checks defined below. Any
       reimplementation in another language is equivalent, provided it follows
       the same rules. See{" "}
       <Link to="/docs/external-verification" className="text-primary hover:underline">
@@ -141,6 +155,16 @@ const IndependentVerification = () => (
       </Link>{" "}
       for a reference pseudo-code implementation.
     </p>
+    <p>The verifier must also:</p>
+    <ul>
+      <li>
+        Resolve{" "}
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">receipt.kid</code>{" "}
+        against the node key set;
+      </li>
+      <li>Enforce key lifecycle (validity window, revocation status);</li>
+      <li>Fail closed on unknown or invalid keys.</li>
+    </ul>
 
     <h2 id="what-the-verifier-does">3. What the Verifier Does</h2>
     <ol>
@@ -211,6 +235,14 @@ policyEvaluation  (only when present)`}
         </code>.
       </li>
       <li>
+        <strong>Validates signer key lifecycle.</strong> Resolves{" "}
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">receipt.kid</code>{" "}
+        against the published key set, enforces the{" "}
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">validFrom</code> /{" "}
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">validTo</code>{" "}
+        window, rejects revoked keys, and rejects unknown key identifiers.
+      </li>
+      <li>
         <strong>(Optional)</strong> Verifies the Ed25519 signature on the
         verification envelope when present. The envelope signature is
         independent from the receipt signature and covers a different field
@@ -262,7 +294,48 @@ policyEvaluation  (only when present)`}
       </li>
     </ul>
 
-    <h2 id="fail-closed">5. Fail-Closed Behaviour</h2>
+    <h2 id="signer-model">5. Signer Model and Key Lifecycle</h2>
+    <p>
+      A NexArt CER is signed by an attestation node using an Ed25519 key. The
+      node publishes its public key set at{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">
+        https://node.nexart.io/.well-known/nexart-node.json
+      </code>.
+    </p>
+    <p>Each key includes:</p>
+    <ul>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">kid</code> — key identifier;</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">algorithm</code> — signing algorithm (Ed25519);</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">status</code> — <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">active</code> | <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">deprecated</code> | <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">revoked</code>;</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">validFrom</code> — start of validity window;</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">validTo</code> — end of validity window (if present);</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">publicKey</code> — raw base64url key;</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">publicKeyJwk</code> — JWK representation;</li>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">publicKeySpkiB64</code> — SPKI representation.</li>
+    </ul>
+    <p>Verification MUST enforce key lifecycle:</p>
+    <ul>
+      <li>
+        The{" "}
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">receipt.kid</code>{" "}
+        must exist in the published key set;
+      </li>
+      <li>The key must not be revoked;</li>
+      <li>
+        The verification timestamp must be within{" "}
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">[validFrom, validTo]</code>{" "}
+        (if <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">validTo</code> is present);
+      </li>
+      <li>Unknown or invalid keys MUST fail verification.</li>
+    </ul>
+    <p>No fallback key resolution is allowed.</p>
+    <p>
+      The signer is independent of the execution system. The node acts as an
+      attestation authority and signs the receipt over the{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>.
+    </p>
+
+    <h2 id="fail-closed">6. Fail-Closed Behaviour</h2>
     <p>
       Every check fails closed. There is no fallback, no coercion, and no
       silent downgrade.
@@ -274,6 +347,9 @@ meta.attestation.protocolVersion != snapshot.protocolVersion   -> FAIL
 Canonicalization profile mismatch                              -> FAIL (hash will not match)
 Recomputed certificateHash != bundle value                     -> FAIL
 receipt.kid not in published key set                           -> FAIL
+Unknown key identifier (receipt.kid not found)                 -> FAIL
+Key revoked                                                    -> FAIL
+Key outside validity window                                    -> FAIL
 Invalid Ed25519 signature on receipt                           -> FAIL
 receipt.payload.certificateHash != bundle hash                 -> FAIL
 Invalid Ed25519 signature on envelope (if present)             -> FAIL`}
@@ -286,16 +362,21 @@ Invalid Ed25519 signature on envelope (if present)             -> FAIL`}
       for the full status table.
     </p>
 
-    <h2 id="trust-boundaries">6. Trust Boundaries</h2>
+    <h2 id="trust-boundaries">7. Trust Boundaries</h2>
     <p>Independent verification of a NexArt CER proves:</p>
     <ul>
       <li>
         <strong>Integrity</strong> — the bundle was not altered after sealing.
       </li>
       <li>
-        <strong>Authenticity</strong> — a node holding the private key for{" "}
+        <strong>Authenticity</strong> — a node holding the private key
+        corresponding to{" "}
         <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">receipt.kid</code>{" "}
-        signed it.
+        signed the record.
+      </li>
+      <li>
+        <strong>Signer validity</strong> — the signing key was valid and not
+        revoked at verification time.
       </li>
     </ul>
     <p>It does not prove:</p>
@@ -303,25 +384,24 @@ Invalid Ed25519 signature on envelope (if present)             -> FAIL`}
       <li>
         <strong>Independent timestamp</strong> —{" "}
         <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">attestedAt</code>{" "}
-        is issued by the node itself; it provides ordering, not third-party
-        time-stamping.
+        is a node-issued timestamp providing ordering, not independent proof
+        of existence.
       </li>
       <li>
-        <strong>Completeness</strong> — the CER attests one execution snapshot,
-        not the full surrounding workflow or any external state.
+        <strong>Completeness</strong> — only the recorded execution is
+        attested; the surrounding workflow and external state are not.
       </li>
       <li>
-        <strong>Transparency log inclusion</strong> — NexArt does not currently
-        publish a public Merkle log; absence from a public log is not a failure
-        and presence cannot be asserted from a CER alone.
+        <strong>Transparency log inclusion</strong> — no public append-only log
+        is currently enforced.
       </li>
       <li>
-        <strong>Semantic correctness</strong> — verification proves what was
-        executed, not whether the result was correct.
+        <strong>Semantic correctness</strong> — verification proves what
+        executed, not whether it was correct.
       </li>
     </ul>
 
-    <h2 id="reproducibility">7. Reproducibility</h2>
+    <h2 id="reproducibility">8. Reproducibility</h2>
     <p>
       Every operation specified on this page is deterministic and uses only
       standard cryptographic primitives. A developer can implement an
