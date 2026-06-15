@@ -362,16 +362,21 @@ Invalid Ed25519 signature on envelope (if present)             -> FAIL`}
       for the full status table.
     </p>
 
-    <h2 id="trust-boundaries">6. Trust Boundaries</h2>
+    <h2 id="trust-boundaries">7. Trust Boundaries</h2>
     <p>Independent verification of a NexArt CER proves:</p>
     <ul>
       <li>
         <strong>Integrity</strong> — the bundle was not altered after sealing.
       </li>
       <li>
-        <strong>Authenticity</strong> — a node holding the private key for{" "}
+        <strong>Authenticity</strong> — a node holding the private key
+        corresponding to{" "}
         <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">receipt.kid</code>{" "}
-        signed it.
+        signed the record.
+      </li>
+      <li>
+        <strong>Signer validity</strong> — the signing key was valid and not
+        revoked at verification time.
       </li>
     </ul>
     <p>It does not prove:</p>
@@ -379,21 +384,20 @@ Invalid Ed25519 signature on envelope (if present)             -> FAIL`}
       <li>
         <strong>Independent timestamp</strong> —{" "}
         <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">attestedAt</code>{" "}
-        is issued by the node itself; it provides ordering, not third-party
-        time-stamping.
+        is a node-issued timestamp providing ordering, not independent proof
+        of existence.
       </li>
       <li>
-        <strong>Completeness</strong> — the CER attests one execution snapshot,
-        not the full surrounding workflow or any external state.
+        <strong>Completeness</strong> — only the recorded execution is
+        attested; the surrounding workflow and external state are not.
       </li>
       <li>
-        <strong>Transparency log inclusion</strong> — NexArt does not currently
-        publish a public Merkle log; absence from a public log is not a failure
-        and presence cannot be asserted from a CER alone.
+        <strong>Transparency log inclusion</strong> — no public append-only log
+        is currently enforced.
       </li>
       <li>
-        <strong>Semantic correctness</strong> — verification proves what was
-        executed, not whether the result was correct.
+        <strong>Semantic correctness</strong> — verification proves what
+        executed, not whether it was correct.
       </li>
     </ul>
 
