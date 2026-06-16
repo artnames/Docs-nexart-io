@@ -72,15 +72,43 @@ Invalid signature       -> FAIL
 No fallback. No coercion. No silent downgrade.
 
 ## Trust boundaries
-Independent verification proves:
-  - INTEGRITY       (the bundle was not altered after sealing)
-  - AUTHENTICITY    (a node holding the private key for receipt.kid signed it)
-  - SIGNER VALIDITY (the signing key was valid and not revoked at verification time)
-It does NOT prove:
-  - node-issued timestamp providing ordering, not independent proof of existence
+NexArt proves:
+  - what executed              (the canonical snapshot)
+  - that it was not modified   (SHA-256 integrity)
+  - when it existed            (only if an RFC 3161 TSA token is present and verifies)
+NexArt does NOT prove:
+  - correctness of output
+  - legal validity
+  - identity authenticity (identity fields are claims, not independently verifiable yet)
   - completeness of any external workflow
   - inclusion in a public transparency log (none currently enforced)
-  - semantic correctness of the underlying AI execution`;
+
+## Trusted timestamps (RFC 3161, node v0.18.1+)
+External RFC 3161 timestamps are obtained from a third-party TSA (default FreeTSA)
+and bound to certificateHash via the message imprint. The TSA token is:
+  - stored alongside the bundle
+  - NOT in certificateHash
+  - NOT in the signed receipt payload
+  - NOT part of canonicalization (nexart-v1 or jcs-v1 / RFC 8785)
+Time anchoring is an OPTIONAL third verification layer. Base verification
+(integrity + attestation) does not depend on the TSA. TSA failure does NOT
+invalidate the CER.
+
+## Timestamp types
+Node-issued (attestedAt)     - deterministic, ordering only, always available
+RFC 3161 (external)          - non-deterministic, proves existence in time,
+                               requires trusted TSA roots
+
+## Versioning
+"1.3.0" - DEFAULT for new CERs; jcs-v1 (RFC 8785) required
+"1.2.0" - supported for backward compatibility; nexart-v1 custom profile
+other   - FAIL
+
+## CLI verification
+The NexArt CLI verifier supports:
+  - bundle integrity
+  - signature verification (with signer key lifecycle)
+  - (soon) RFC 3161 TSA token verification`;
 
 const IndependentVerification = () => (
   <>
@@ -414,6 +442,108 @@ Invalid Ed25519 signature on envelope (if present)             -> FAIL`}
         Verification Model
       </Link>{" "}
       for the normative rules.
+    </p>
+
+    <h2 id="trusted-timestamps">9. Trusted Timestamps (RFC 3161)</h2>
+    <p>
+      As of node v0.18.1, NexArt supports external <strong>RFC 3161</strong>{" "}
+      timestamps in addition to the node-issued timestamp. External timestamps
+      are obtained from a third-party Time Stamp Authority (TSA). The current
+      default TSA is{" "}
+      <a href="https://freetsa.org" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">FreeTSA</a>.
+    </p>
+    <p>
+      The timestamp is cryptographically bound to the{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>{" "}
+      via the RFC 3161 <em>message imprint</em>. The TSA token is:
+    </p>
+    <ul>
+      <li>stored and returned alongside the bundle in the certify response;</li>
+      <li><strong>NOT</strong> included in the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>;</li>
+      <li><strong>NOT</strong> part of the signed receipt payload;</li>
+      <li><strong>NOT</strong> part of canonicalization (neither <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">nexart-v1</code> nor <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">jcs-v1</code> / RFC 8785).</li>
+    </ul>
+    <p>
+      This preserves determinism, reproducibility, and backward compatibility.
+      External timestamps are an <strong>additive</strong> verification layer,
+      not part of the signed record. A verifier that does not implement RFC
+      3161 still produces the same integrity and authenticity result.
+    </p>
+
+    <h3 id="verification-layers">9.1 Verification layers</h3>
+    <p>Independent verification is composed of three layers:</p>
+    <ol>
+      <li><strong>Integrity</strong> — recompute SHA-256 over the canonicalized whitelist projection (sections 3 and 4).</li>
+      <li><strong>Attestation</strong> — verify the Ed25519 signature on the receipt and validate the signer key lifecycle (section 5).</li>
+      <li><strong>Time anchoring (optional)</strong> — verify the RFC 3161 TSA token against trusted TSA roots and confirm the message imprint equals the bundle <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>.</li>
+    </ol>
+    <p>
+      Base verification (Layers 1 and 2) does <strong>not</strong> depend on
+      the TSA. Layer 3 is optional and additive. Failure to verify the TSA
+      token does <strong>not</strong> invalidate the CER; it only means the
+      external time anchor could not be confirmed.
+    </p>
+
+    <h3 id="timestamp-types">9.2 Timestamp types</h3>
+    <ul>
+      <li>
+        <strong>Node-issued</strong> (<code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">attestedAt</code>) —
+        deterministic, always available, proves ordering only. Not independent proof of existence.
+      </li>
+      <li>
+        <strong>RFC 3161 (external)</strong> — non-deterministic, proves
+        existence in time via a third party, requires the verifier to maintain
+        a set of trusted TSA roots.
+      </li>
+    </ul>
+
+    <h2 id="what-proves">10. What NexArt Proves vs Does Not Prove</h2>
+    <p>NexArt proves:</p>
+    <ul>
+      <li><strong>what executed</strong> — the canonical snapshot;</li>
+      <li><strong>that it was not modified</strong> — integrity via SHA-256;</li>
+      <li><strong>when it existed</strong> — only if an RFC 3161 TSA token is present and verifies against trusted roots.</li>
+    </ul>
+    <p>NexArt does NOT prove:</p>
+    <ul>
+      <li><strong>correctness of output</strong> — verification is not validation;</li>
+      <li><strong>legal validity</strong> — no jurisdictional claims are made;</li>
+      <li>
+        <strong>identity authenticity</strong> — identity fields are claims
+        captured at execution time, not independently verifiable (see{" "}
+        <Link to="/docs/concepts/cer#identity-binding" className="text-primary hover:underline">Identity Binding</Link>).
+      </li>
+    </ul>
+
+    <h2 id="versioning">11. Versioning</h2>
+    <ul>
+      <li>
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">protocolVersion: "1.3.0"</code>{" "}
+        is the <strong>default</strong> for all new CERs. RFC 8785 JCS
+        (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">jcs-v1</code>) is required for canonicalization.
+      </li>
+      <li>
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">protocolVersion: "1.2.0"</code>{" "}
+        remains supported for backward compatibility and uses the{" "}
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">nexart-v1</code> custom canonicalization profile.
+      </li>
+      <li>Any other value MUST fail closed.</li>
+    </ul>
+
+    <h2 id="cli-verification">12. CLI Verification</h2>
+    <p>The NexArt CLI verifier supports:</p>
+    <ul>
+      <li>bundle integrity (Layer 1);</li>
+      <li>signature verification, including signer key lifecycle (Layer 2);</li>
+      <li><strong>(soon)</strong> RFC 3161 TSA token verification (Layer 3).</li>
+    </ul>
+    <p>
+      Until TSA verification ships in the CLI, Layer 3 can be verified
+      out-of-band using any RFC 3161-compatible tool (for example{" "}
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">openssl ts -verify</code>)
+      against the stored TSA token and the bundle{" "}
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">certificateHash</code>{" "}
+      as the message imprint.
     </p>
   </>
 );
