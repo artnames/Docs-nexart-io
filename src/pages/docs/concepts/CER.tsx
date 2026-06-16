@@ -190,6 +190,60 @@ const CER = () => (
       <li>The whitelist projection MUST be applied to the bundle exactly as received</li>
     </ul>
 
+    <h2 id="identity-binding">Identity Binding (PII-Safe)</h2>
+    <p>A CER MAY include an optional <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">identity</code> object inside the execution <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">snapshot</code>. When present, it is part of the protected payload, included in the whitelist projection, and covered by the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>. Any modification to identity fields invalidates the record. Available in <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution</code> v0.23.0 and later.</p>
+
+    <h3 id="identity-structure">Structure</h3>
+    <CodeBlock
+      code={`{
+  "snapshot": {
+    "model": "gpt-4",
+    "inputHash": "sha256:...",
+    "outputHash": "sha256:...",
+    "identity": {
+      "provider": "https://accounts.google.com",
+      "sub": "user_1234567890",
+      "verified": true,
+      "emailHash": "sha256:...",
+      "assertionHash": "sha256:..."
+    }
+  }
+}`}
+      title="Identity object inside snapshot"
+    />
+
+    <h3 id="identity-fields">Fields</h3>
+    <ul>
+      <li><strong>provider</strong>: identity provider URL or identifier (e.g. <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">https://accounts.google.com</code>, Okta issuer).</li>
+      <li><strong>sub</strong>: stable subject identifier issued by the IdP.</li>
+      <li><strong>verified</strong>: boolean indicating that the application verified the identity assertion before sealing the CER.</li>
+      <li><strong>emailHash</strong>: SHA-256 hash of the user's email address. Optional, PII-safe.</li>
+      <li><strong>assertionHash</strong>: SHA-256 hash of the original identity assertion (e.g. the raw JWT). Allows later re-verification against an out-of-band copy of the assertion.</li>
+    </ul>
+
+    <h3 id="identity-pii">PII Handling</h3>
+    <p>Raw personal data (email address, name, profile attributes) is NOT stored in the CER by default. Only hashed or derived identifiers are included in the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">identity</code> object. This allows an identity to be cryptographically bound to an execution without exposing sensitive data in the sealed record or in any public verification view.</p>
+
+    <h3 id="identity-trust-boundary">Trust Boundary</h3>
+    <p>NexArt does NOT verify identity providers and does NOT validate IdP assertions. Identity verification (token validation, signature checks, audience and expiry checks) happens in the application layer before the CER is sealed. NexArt seals the provided <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">identity</code> object as tamper-evident evidence of what the application asserted at execution time. The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verified</code> flag reflects the application's claim, not an independent NexArt check.</p>
+
+    <h3 id="identity-verification-impact">Verification Impact</h3>
+    <ul>
+      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">identity</code> is part of the canonical <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">snapshot</code>.</li>
+      <li>It is included in the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> computation under the existing whitelist projection.</li>
+      <li>It is independently verifiable using the standard verification flow (SHA-256 over the canonicalized whitelist, Ed25519 over the receipt). No additional dependencies or IdP calls are required.</li>
+    </ul>
+
+    <h3 id="identity-tamper">Tamper Detection</h3>
+    <p>Because <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">identity</code> is covered by <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>, modifying any field (for example changing <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">identity.sub</code> or <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">identity.emailHash</code>) recomputes to a different hash and produces a verification failure. There is no partial validation: the record either matches the sealed bytes or fails.</p>
+
+    <div className="not-prose my-6 rounded-lg border border-border bg-muted/30 p-4">
+      <div className="text-sm font-medium text-foreground mb-1">Optional</div>
+      <div className="text-sm text-muted-foreground">
+        Identity binding is optional. Records without an <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">identity</code> object remain fully valid and verifiable under the same protocol rules.
+      </div>
+    </div>
+
     <h2 id="exports">Export Paths</h2>
     <ul>
       <li><strong>Full export</strong>: the complete CER with all snapshot data intact.</li>
