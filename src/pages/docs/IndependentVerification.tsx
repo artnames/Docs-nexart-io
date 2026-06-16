@@ -72,15 +72,43 @@ Invalid signature       -> FAIL
 No fallback. No coercion. No silent downgrade.
 
 ## Trust boundaries
-Independent verification proves:
-  - INTEGRITY       (the bundle was not altered after sealing)
-  - AUTHENTICITY    (a node holding the private key for receipt.kid signed it)
-  - SIGNER VALIDITY (the signing key was valid and not revoked at verification time)
-It does NOT prove:
-  - node-issued timestamp providing ordering, not independent proof of existence
+NexArt proves:
+  - what executed              (the canonical snapshot)
+  - that it was not modified   (SHA-256 integrity)
+  - when it existed            (only if an RFC 3161 TSA token is present and verifies)
+NexArt does NOT prove:
+  - correctness of output
+  - legal validity
+  - identity authenticity (identity fields are claims, not independently verifiable yet)
   - completeness of any external workflow
   - inclusion in a public transparency log (none currently enforced)
-  - semantic correctness of the underlying AI execution`;
+
+## Trusted timestamps (RFC 3161, node v0.18.1+)
+External RFC 3161 timestamps are obtained from a third-party TSA (default FreeTSA)
+and bound to certificateHash via the message imprint. The TSA token is:
+  - stored alongside the bundle
+  - NOT in certificateHash
+  - NOT in the signed receipt payload
+  - NOT part of canonicalization (nexart-v1 or jcs-v1 / RFC 8785)
+Time anchoring is an OPTIONAL third verification layer. Base verification
+(integrity + attestation) does not depend on the TSA. TSA failure does NOT
+invalidate the CER.
+
+## Timestamp types
+Node-issued (attestedAt)     - deterministic, ordering only, always available
+RFC 3161 (external)          - non-deterministic, proves existence in time,
+                               requires trusted TSA roots
+
+## Versioning
+"1.3.0" - DEFAULT for new CERs; jcs-v1 (RFC 8785) required
+"1.2.0" - supported for backward compatibility; nexart-v1 custom profile
+other   - FAIL
+
+## CLI verification
+The NexArt CLI verifier supports:
+  - bundle integrity
+  - signature verification (with signer key lifecycle)
+  - (soon) RFC 3161 TSA token verification`;
 
 const IndependentVerification = () => (
   <>
