@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const llmBlock = `# Browser Verification Example
 
-@nexart/ai-execution@0.22.0 provides async, browser-safe verification functions.
+@nexart/ai-execution@0.23.0 provides async, browser-safe verification functions.
 No need to write your own browser verifier.
 
 ## Functions
@@ -28,13 +28,18 @@ const BrowserVerification = () => (
     />
 
     <h2 id="overview">Overview</h2>
-    <p>As of <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@0.22.0</code>, the SDK provides async, browser-safe verification functions. You no longer need to write your own browser verifier.</p>
+    <p>
+      As of <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@0.23.0</code>, the
+      SDK provides async, browser-safe verification functions. You no longer need to write your own browser verifier.
+    </p>
     <p>These functions use the Web Crypto API internally and have no Node.js dependencies.</p>
 
     <div className="not-prose my-6 rounded-lg border border-amber-500/40 bg-amber-500/5 p-4">
       <div className="text-sm font-medium text-foreground mb-1">Public verification limitation</div>
       <div className="text-sm text-muted-foreground">
-        When verifying via public endpoints in the browser, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">snapshot.input</code> and <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">snapshot.output</code> are redacted.
+        When verifying via public endpoints in the browser,{" "}
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">snapshot.input</code> and{" "}
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">snapshot.output</code> are redacted.
         <ul className="list-disc pl-5 mt-2">
           <li>Full envelope verification (Layer 3) is NOT possible from public data alone.</li>
           <li>Receipt verification (Layer 2) IS possible.</li>
@@ -118,7 +123,11 @@ const result = await verifySnapshotAsync(snapshot);
     </div>
 
     <p className="text-sm text-muted-foreground">
-      See <Link to="/docs/sdk" className="text-primary hover:underline">AI Execution SDK</Link> for the full API reference.
+      See{" "}
+      <Link to="/docs/sdk" className="text-primary hover:underline">
+        AI Execution SDK
+      </Link>{" "}
+      for the full API reference.
     </p>
   </>
 );

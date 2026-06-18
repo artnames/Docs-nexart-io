@@ -13,7 +13,7 @@ import CanonicalFlow from "@/components/docs/CanonicalFlow";
 
 const llmBlock = `# NexArt AI Execution SDK
 
-Package: @nexart/ai-execution@0.22.0
+Package: @nexart/ai-execution@0.23.0
 
 ## Canonical workflow
 seal -> verify -> (optional) certify -> verify
@@ -115,29 +115,39 @@ const SDK = () => (
 
     <h2 id="overview">Overview</h2>
     <p>
-      The AI Execution SDK provides functions for sealing CERs locally and for certifying them
-      via the attestation node. The canonical workflow is:
-      <strong> seal → verify → (optional) certify → verify</strong>. Sealing is offline and
-      requires no API key. Certification adds independently verifiable node attestation without
-      changing the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>.
+      The AI Execution SDK provides functions for sealing CERs locally and for certifying them via the attestation node.
+      The canonical workflow is:
+      <strong> seal → verify → (optional) certify → verify</strong>. Sealing is offline and requires no API key.
+      Certification adds independently verifiable node attestation without changing the{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>.
     </p>
 
     <div className="not-prose my-6 rounded-lg border border-primary/30 bg-primary/5 p-4">
-      <div className="text-sm font-medium text-primary mb-1">
-        Framework-agnostic primitives (use these by default)
-      </div>
+      <div className="text-sm font-medium text-primary mb-1">Framework-agnostic primitives (use these by default)</div>
       <ul className="text-sm text-foreground/90 space-y-1 list-disc pl-5 mt-2">
         <li>
-          <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">certifyDecision(params)</code> — sync seal. No network.
+          <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">certifyDecision(params)</code> — sync seal.
+          No network.
         </li>
         <li>
-          <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">certifyAndAttestDecision(params, options)</code> — async seal + attest. Returns <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">{`{ bundle, receipt }`}</code>.
+          <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">
+            certifyAndAttestDecision(params, options)
+          </code>{" "}
+          — async seal + attest. Returns{" "}
+          <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">{`{ bundle, receipt }`}</code>.
         </li>
         <li>
-          <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">attest(bundle, options)</code> — async. Attest a previously sealed bundle.
+          <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">attest(bundle, options)</code> — async.
+          Attest a previously sealed bundle.
         </li>
         <li>
-          Required <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">CertifyDecisionParams</code>: <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">provider</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">model</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">prompt</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">input</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">parameters</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">output</code>.
+          Required <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">CertifyDecisionParams</code>:{" "}
+          <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">provider</code>,{" "}
+          <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">model</code>,{" "}
+          <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">prompt</code>,{" "}
+          <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">input</code>,{" "}
+          <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">parameters</code>,{" "}
+          <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">output</code>.
         </li>
       </ul>
       <p className="text-xs text-muted-foreground mt-3">
@@ -146,14 +156,21 @@ const SDK = () => (
         <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">@nexart/ai-execution</code> is{" "}
         <strong>synchronous</strong>.{" "}
         <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">certifyDecision</code> exposed by{" "}
-        <Link to="/docs/agent-kit" className="text-primary hover:underline"><code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">@nexart/agent-kit</code></Link> is{" "}
-        <strong>asynchronous</strong> (dispatches through the workflow runner). The two are not interchangeable.
+        <Link to="/docs/agent-kit" className="text-primary hover:underline">
+          <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">@nexart/agent-kit</code>
+        </Link>{" "}
+        is <strong>asynchronous</strong> (dispatches through the workflow runner). The two are not interchangeable.
       </p>
       <p className="text-xs text-muted-foreground mt-2">
-        LangChain-specific adapters (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">createLangChainCer</code>,{" "}
+        LangChain-specific adapters (
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">createLangChainCer</code>,{" "}
         <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">certifyLangChainRun</code>) live in{" "}
-        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">@nexart/ai-execution/langchain</code> and are appropriate only when inputs are already shaped as LangChain Run / callback payloads. See the{" "}
-        <Link to="/docs/integrations/langchain" className="text-primary hover:underline">LangChain integration</Link> page.
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">@nexart/ai-execution/langchain</code> and are
+        appropriate only when inputs are already shaped as LangChain Run / callback payloads. See the{" "}
+        <Link to="/docs/integrations/langchain" className="text-primary hover:underline">
+          LangChain integration
+        </Link>{" "}
+        page.
       </p>
     </div>
 
@@ -169,24 +186,29 @@ const SDK = () => (
 
     <h2 id="copy-paste-test-harness">Copy-Paste Test Harness</h2>
     <p>
-      Single-file script that exercises the full SDK flow end-to-end and prints PASS / FAIL
-      per verification layer. Use it to validate an integration in under two minutes without
-      mixing APIs or guessing at parameters.
+      Single-file script that exercises the full SDK flow end-to-end and prints PASS / FAIL per verification layer. Use
+      it to validate an integration in under two minutes without mixing APIs or guessing at parameters.
     </p>
     <TestHarness />
 
     <div className="not-prose my-6 rounded-lg border border-primary/30 bg-primary/5 p-4">
       <div className="text-sm font-medium text-primary mb-1">Recommended for most integrations</div>
       <div className="text-sm text-foreground">
-        Use <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">POST /v1/cer/ai/certify</code> to create a CER, get node attestation, and receive a verification URL in one call.
+        Use <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">POST /v1/cer/ai/certify</code> to create
+        a CER, get node attestation, and receive a verification URL in one call.
       </div>
     </div>
 
     <h2 id="endpoints">API Endpoints</h2>
 
     <h3 id="certify">POST /v1/cer/ai/certify</h3>
-    <p>Creates a Certified Execution Record, attests it through the node, and returns a signed receipt with a verification URL. This is the simplest way to get a verifiable proof of an AI execution.</p>
-    <p><strong>What it does:</strong></p>
+    <p>
+      Creates a Certified Execution Record, attests it through the node, and returns a signed receipt with a
+      verification URL. This is the simplest way to get a verifiable proof of an AI execution.
+    </p>
+    <p>
+      <strong>What it does:</strong>
+    </p>
     <ul>
       <li>Creates a CER bundle with execution metadata</li>
       <li>Computes the certificateHash (SHA-256)</li>
@@ -224,11 +246,20 @@ Authorization: Bearer NEXART_API_KEY
 }`}
       title="Certify Response"
     />
-    <p className="text-sm text-muted-foreground">The API response includes receipt and signature fields for convenience. The canonical location for attestation data within the CER bundle is <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">bundle.meta.attestation</code>.</p>
+    <p className="text-sm text-muted-foreground">
+      The API response includes receipt and signature fields for convenience. The canonical location for attestation
+      data within the CER bundle is{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">bundle.meta.attestation</code>.
+    </p>
 
     <h3 id="create">POST /v1/cer/ai/create</h3>
-    <p>Creates a CER bundle without attestation. The bundle is returned with a certificateHash, but no receipt or verification URL is generated.</p>
-    <p><strong>When to use this:</strong></p>
+    <p>
+      Creates a CER bundle without attestation. The bundle is returned with a certificateHash, but no receipt or
+      verification URL is generated.
+    </p>
+    <p>
+      <strong>When to use this:</strong>
+    </p>
     <ul>
       <li>You want to generate the CER bundle for your own records</li>
       <li>You plan to submit the bundle for attestation separately</li>
@@ -269,7 +300,12 @@ Authorization: Bearer NEXART_API_KEY
 }`}
       title="Create Response"
     />
-    <p>Note: the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">create</code> response returns the CER bundle directly. There is no receipt, signature, or verification URL. The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation</code> field is absent. To get attestation, use <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">/certify</code> instead.</p>
+    <p>
+      Note: the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">create</code> response returns the
+      CER bundle directly. There is no receipt, signature, or verification URL. The{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation</code> field is absent. To get
+      attestation, use <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">/certify</code> instead.
+    </p>
 
     <h2 id="authentication">Authentication</h2>
     <p>Both endpoints require an API key passed as a Bearer token:</p>
@@ -307,17 +343,36 @@ Authorization: Bearer NEXART_API_KEY
 }`}
       title="CER Bundle (Certified)"
     />
-    <p>The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">snapshot</code> contains execution metadata. Input and output content is hashed (SHA-256) rather than stored directly. Attestation data lives under <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation</code>.</p>
+    <p>
+      The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">snapshot</code> contains execution
+      metadata. Input and output content is hashed (SHA-256) rather than stored directly. Attestation data lives under{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation</code>.
+    </p>
 
     <h2 id="key-terms">Key Terms</h2>
     <ul>
-      <li><strong>create vs certify.</strong> <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">create</code> produces a CER bundle. <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certify</code> produces a CER bundle and gets it attested by the node in one step.</li>
-      <li><strong>Attestation vs verification.</strong> Attestation is when the node signs a record. Verification is when anyone checks that the signature and bundle are valid.</li>
-      <li><strong>Signed receipt vs hash-only timestamp.</strong> A signed receipt attests the full CER bundle. A hash-only timestamp attests only the certificateHash, without the snapshot contents.</li>
+      <li>
+        <strong>create vs certify.</strong>{" "}
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">create</code> produces a CER bundle.{" "}
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certify</code> produces a CER bundle and gets
+        it attested by the node in one step.
+      </li>
+      <li>
+        <strong>Attestation vs verification.</strong> Attestation is when the node signs a record. Verification is when
+        anyone checks that the signature and bundle are valid.
+      </li>
+      <li>
+        <strong>Signed receipt vs hash-only timestamp.</strong> A signed receipt attests the full CER bundle. A
+        hash-only timestamp attests only the certificateHash, without the snapshot contents.
+      </li>
     </ul>
 
     <h2 id="signals">Context Signals</h2>
-    <p>Both endpoints accept an optional <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">signals</code> parameter - an array of structured metadata objects recorded alongside the execution.</p>
+    <p>
+      Both endpoints accept an optional{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">signals</code> parameter - an array of
+      structured metadata objects recorded alongside the execution.
+    </p>
     <CodeBlock
       code={`{
   "model": "gpt-4",
@@ -333,12 +388,35 @@ Authorization: Bearer NEXART_API_KEY
 }`}
       title="Request with Signals"
     />
-    <p>When signals are present, they are included in the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> computation. This makes them part of the tamper-evidence chain - any modification to a signal after certification will cause verification to fail.</p>
-    <p className="text-sm text-muted-foreground">Signals are backward-compatible. Requests without the <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">signals</code> field behave exactly as before. Existing CER bundles without signals remain valid and verifiable.</p>
-    <p className="text-sm text-muted-foreground">For the builder API to capture structured signals (input, tool calls, decisions, output) using <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">@nexart/signals</code>, see the <Link to="/docs/signals-sdk" className="text-primary hover:underline">Signals SDK</Link> reference and <Link to="/docs/concepts/execution-context" className="text-primary hover:underline">Execution Context and Signals</Link>.</p>
+    <p>
+      When signals are present, they are included in the{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> computation. This makes
+      them part of the tamper-evidence chain - any modification to a signal after certification will cause verification
+      to fail.
+    </p>
+    <p className="text-sm text-muted-foreground">
+      Signals are backward-compatible. Requests without the{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">signals</code> field behave exactly as before.
+      Existing CER bundles without signals remain valid and verifiable.
+    </p>
+    <p className="text-sm text-muted-foreground">
+      For the builder API to capture structured signals (input, tool calls, decisions, output) using{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">@nexart/signals</code>, see the{" "}
+      <Link to="/docs/signals-sdk" className="text-primary hover:underline">
+        Signals SDK
+      </Link>{" "}
+      reference and{" "}
+      <Link to="/docs/concepts/execution-context" className="text-primary hover:underline">
+        Execution Context and Signals
+      </Link>
+      .
+    </p>
 
     <h2 id="verification">Verification</h2>
-    <p>As of <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">v0.16.1</code>, the SDK provides both sync and async verification functions:</p>
+    <p>
+      As of <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">v0.16.1</code>, the SDK provides both
+      sync and async verification functions:
+    </p>
 
     <div className="not-prose my-6 overflow-x-auto">
       <table className="w-full text-sm border border-border rounded-lg">
@@ -375,41 +453,100 @@ Authorization: Bearer NEXART_API_KEY
 
     <p>CERs produced by the certify endpoint can be verified across multiple layers:</p>
     <ul>
-      <li><strong>Bundle Integrity.</strong> The CER bundle hashes are internally consistent.</li>
-      <li><strong>Node Signature.</strong> The receipt signature is valid against the node's published Ed25519 key.</li>
-      <li><strong>Receipt Consistency.</strong> The receipt's <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> matches the CER bundle.</li>
-      <li><strong>Verification Envelope.</strong> When present, <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.verificationEnvelopeSignature</code> validates the authoritative displayed verification surface.</li>
+      <li>
+        <strong>Bundle Integrity.</strong> The CER bundle hashes are internally consistent.
+      </li>
+      <li>
+        <strong>Node Signature.</strong> The receipt signature is valid against the node's published Ed25519 key.
+      </li>
+      <li>
+        <strong>Receipt Consistency.</strong> The receipt's{" "}
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> matches the CER
+        bundle.
+      </li>
+      <li>
+        <strong>Verification Envelope.</strong> When present,{" "}
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.verificationEnvelopeSignature</code>{" "}
+        validates the authoritative displayed verification surface.
+      </li>
     </ul>
-    <p>Verification statuses: <strong>VERIFIED</strong>, <strong>FAILED</strong>, or <strong>NOT_FOUND</strong>. Each check returns <strong>PASS</strong>, <strong>FAIL</strong>, or <strong>SKIPPED</strong>.</p>
-    <p>Verify at <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a> or locally using the bundle and node keys from <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">node.nexart.io/.well-known/nexart-node.json</code>. For a full breakdown of verification layers, see <Link to="/docs/ai-cer-verification-layers" className="text-primary hover:underline">AI CER Verification Layers</Link>. For browser examples, see <Link to="/docs/browser-verification" className="text-primary hover:underline">Browser Verification</Link>.</p>
+    <p>
+      Verification statuses: <strong>VERIFIED</strong>, <strong>FAILED</strong>, or <strong>NOT_FOUND</strong>. Each
+      check returns <strong>PASS</strong>, <strong>FAIL</strong>, or <strong>SKIPPED</strong>.
+    </p>
+    <p>
+      Verify at{" "}
+      <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">
+        verify.nexart.io
+      </a>{" "}
+      or locally using the bundle and node keys from{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">
+        node.nexart.io/.well-known/nexart-node.json
+      </code>
+      . For a full breakdown of verification layers, see{" "}
+      <Link to="/docs/ai-cer-verification-layers" className="text-primary hover:underline">
+        AI CER Verification Layers
+      </Link>
+      . For browser examples, see{" "}
+      <Link to="/docs/browser-verification" className="text-primary hover:underline">
+        Browser Verification
+      </Link>
+      .
+    </p>
 
     <h2 id="package-helpers">CER Package Helpers</h2>
     <p>
-      As of <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@0.22.0</code>,
-      the SDK includes official helpers for working with the{" "}
-      <Link to="/docs/ai-cer-package-format" className="text-primary hover:underline">CER package format</Link>.
-      A CER package is a transport/export wrapper around the inner <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer</code> bundle.
-      The inner <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer</code> remains the actual execution artifact.
+      As of <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@0.23.0</code>, the
+      SDK includes official helpers for working with the{" "}
+      <Link to="/docs/ai-cer-package-format" className="text-primary hover:underline">
+        CER package format
+      </Link>
+      . A CER package is a transport/export wrapper around the inner{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer</code> bundle. The inner{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer</code> remains the actual execution
+      artifact.
     </p>
 
     <h3 id="package-helper-api">API</h3>
     <ul>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">isCerPackage(value)</code> - type guard; returns <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">true</code> if the value conforms to the CER package shape</li>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">createCerPackage(params)</code> - creates a CER package from a bundle, receipt, signature, and optional verification artifacts</li>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">getCerFromPackage(pkg)</code> - extracts the inner <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer</code> bundle from a package</li>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">exportCerPackage(pkg)</code> - serializes a CER package to JSON</li>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">importCerPackage(json)</code> - deserializes and validates a CER package from JSON</li>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verifyCerPackage(pkg)</code> - verifies the inner CER bundle within a package</li>
+      <li>
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">isCerPackage(value)</code> - type guard;
+        returns <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">true</code> if the value conforms to
+        the CER package shape
+      </li>
+      <li>
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">createCerPackage(params)</code> - creates a
+        CER package from a bundle, receipt, signature, and optional verification artifacts
+      </li>
+      <li>
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">getCerFromPackage(pkg)</code> - extracts the
+        inner <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">cer</code> bundle from a package
+      </li>
+      <li>
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">exportCerPackage(pkg)</code> - serializes a
+        CER package to JSON
+      </li>
+      <li>
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">importCerPackage(json)</code> - deserializes
+        and validates a CER package from JSON
+      </li>
+      <li>
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verifyCerPackage(pkg)</code> - verifies the
+        inner CER bundle within a package
+      </li>
     </ul>
 
     <div className="not-prose my-6 rounded-lg border border-border bg-muted/30 p-4">
       <div className="text-sm font-medium text-foreground mb-1">Scope of verifyCerPackage()</div>
       <div className="text-sm text-muted-foreground">
-        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">verifyCerPackage()</code> verifies
-        the inner CER bundle (hash integrity, node signature, receipt consistency). It does not fully verify
-        all package-level trust layers such as the verification envelope. For full package-level verification,
-        use the verification layers documented in the{" "}
-        <Link to="/docs/ai-cer-verification-layers" className="text-primary hover:underline">AI CER Verification Layers</Link> spec.
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">verifyCerPackage()</code> verifies the inner
+        CER bundle (hash integrity, node signature, receipt consistency). It does not fully verify all package-level
+        trust layers such as the verification envelope. For full package-level verification, use the verification layers
+        documented in the{" "}
+        <Link to="/docs/ai-cer-verification-layers" className="text-primary hover:underline">
+          AI CER Verification Layers
+        </Link>{" "}
+        spec.
       </div>
     </div>
 
@@ -449,19 +586,50 @@ const result = await verifyCerPackage(pkg);
     />
 
     <p className="text-sm text-muted-foreground">
-      Package helpers are additive only. They do not change CER hashing, attestation, or verification semantics.
-      See the <Link to="/docs/ai-cer-package-format" className="text-primary hover:underline">AI CER Package Format</Link> specification
-      for the normative package structure.
+      Package helpers are additive only. They do not change CER hashing, attestation, or verification semantics. See the{" "}
+      <Link to="/docs/ai-cer-package-format" className="text-primary hover:underline">
+        AI CER Package Format
+      </Link>{" "}
+      specification for the normative package structure.
     </p>
 
     <h2 id="additional-exports">Additional Exports</h2>
-    <p>The SDK exports a number of helpers for advanced or operator-level workflows. Importable from <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution</code>.</p>
+    <p>
+      The SDK exports a number of helpers for advanced or operator-level workflows. Importable from{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution</code>.
+    </p>
 
-    <h3 id="verify-detailed"><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verifyAiCerBundleDetailed(bundle)</code></h3>
-    <p>Returns a structured per-layer verification report covering Integrity (Layer 1), Receipt (Layer 2), and Verification Envelope (Layer 3). Each layer reports independently. Envelope failure is reported separately from integrity failure.</p>
+    <h3 id="verify-detailed">
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verifyAiCerBundleDetailed(bundle)</code>
+    </h3>
+    <p>
+      Returns a structured per-layer verification report covering Integrity (Layer 1), Receipt (Layer 2), and
+      Verification Envelope (Layer 3). Each layer reports independently. Envelope failure is reported separately from
+      integrity failure.
+    </p>
 
-    <h3 id="seal"><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">sealCer(snapshot, options?)</code></h3>
-    <p>Lower-level seal. Takes a pre-built <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">AiExecutionSnapshotV1</code> (not the high-level <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">CertifyDecisionParams</code>) and computes the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> over the strict whitelist projection (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">bundleType</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">version</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">createdAt</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">snapshot</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">context</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">contextSummary</code>, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">policyEvaluation</code>) using the canonicalization profile bound to <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">snapshot.protocolVersion</code> (<code>1.2.0</code> → <code>nexart-v1</code> by default; <code>1.3.0</code> → <code>jcs-v1</code> / RFC 8785 when explicitly set). For most callers, <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">certifyDecision(params)</code> is the recommended entry point.</p>
+    <h3 id="seal">
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">sealCer(snapshot, options?)</code>
+    </h3>
+    <p>
+      Lower-level seal. Takes a pre-built{" "}
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">AiExecutionSnapshotV1</code> (not the high-level{" "}
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">CertifyDecisionParams</code>) and computes the{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> over the strict
+      whitelist projection (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">bundleType</code>,{" "}
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">version</code>,{" "}
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">createdAt</code>,{" "}
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">snapshot</code>,{" "}
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">context</code>,{" "}
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">contextSummary</code>,{" "}
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">policyEvaluation</code>) using the
+      canonicalization profile bound to{" "}
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">snapshot.protocolVersion</code> (
+      <code>1.2.0</code> → <code>nexart-v1</code> by default; <code>1.3.0</code> → <code>jcs-v1</code> / RFC 8785 when
+      explicitly set). For most callers,{" "}
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">certifyDecision(params)</code> is the recommended
+      entry point.
+    </p>
 
     <CodeBlock
       language="typescript"
@@ -489,45 +657,98 @@ const cer = sealCer(snapshot);
     />
 
     <div className="not-prose my-4 rounded-lg border-l-2 border-destructive bg-destructive/5 px-4 py-3 text-sm">
-      <strong>Callout.</strong> If <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">protocolVersion</code>{" "}
-      is omitted or <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">null</code>,
-      NexArt defaults to <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">1.2.0</code>{" "}
-      (nexart-v1) for backward compatibility. RFC 8785 JCS canonicalization
-      is used <strong>only</strong> when you explicitly pass{" "}
-      <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">"1.3.0"</code>{" "}
-      at creation/sealing/certification time. Unsupported explicit values
-      (for example <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">"2.0.0"</code>)
-      are rejected by the node before signing and fail closed at verification.
+      <strong>Callout.</strong> If{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">protocolVersion</code> is omitted or{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">null</code>, NexArt defaults to{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">1.2.0</code> (nexart-v1) for backward
+      compatibility. RFC 8785 JCS canonicalization is used <strong>only</strong> when you explicitly pass{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">"1.3.0"</code> at
+      creation/sealing/certification time. Unsupported explicit values (for example{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">"2.0.0"</code>) are rejected by the node before
+      signing and fail closed at verification.
     </div>
 
-    <h3 id="wrap-provider"><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">wrapProvider(provider, opts)</code></h3>
-    <p>Wraps an LLM/tool provider so each invocation is automatically certified through <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">/v1/cer/ai/certify</code>. Returns the original provider response augmented with the CER bundle and verificationUrl.</p>
+    <h3 id="wrap-provider">
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">wrapProvider(provider, opts)</code>
+    </h3>
+    <p>
+      Wraps an LLM/tool provider so each invocation is automatically certified through{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">/v1/cer/ai/certify</code>. Returns the original
+      provider response augmented with the CER bundle and verificationUrl.
+    </p>
 
-    <h3 id="redact"><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">redactBeforeSeal(bundle, fields)</code></h3>
-    <p>Removes specified fields from the snapshot prior to computing <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>. Use to keep sensitive content out of the hashed payload while preserving verifiability over the redacted bundle.</p>
+    <h3 id="redact">
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">redactBeforeSeal(bundle, fields)</code>
+    </h3>
+    <p>
+      Removes specified fields from the snapshot prior to computing{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>. Use to keep sensitive
+      content out of the hashed payload while preserving verifiability over the redacted bundle.
+    </p>
 
-    <h3 id="sanitize-attestation"><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">sanitizeForAttestation(bundle)</code></h3>
-    <p>Returns the strict whitelist projection of a bundle suitable for attestation submission. Strips fields outside the certificateHash whitelist.</p>
+    <h3 id="sanitize-attestation">
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">sanitizeForAttestation(bundle)</code>
+    </h3>
+    <p>
+      Returns the strict whitelist projection of a bundle suitable for attestation submission. Strips fields outside the
+      certificateHash whitelist.
+    </p>
 
-    <h3 id="sanitize-storage"><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">sanitizeForStorage(bundle)</code></h3>
-    <p>Returns a representation safe to store at rest. Preserves all fields required for verification while applying configured redactions.</p>
+    <h3 id="sanitize-storage">
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">sanitizeForStorage(bundle)</code>
+    </h3>
+    <p>
+      Returns a representation safe to store at rest. Preserves all fields required for verification while applying
+      configured redactions.
+    </p>
 
     <h3 id="canonical-helpers">Canonicalization helpers</h3>
     <ul>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">canonicalJson(value, profile?)</code> — protocol-bound canonicalization. <code>profile</code> is selected from the bundle's <code>protocolVersion</code>: <code>nexart-v1</code> for 1.2.0 (default), <code>jcs-v1</code> (RFC 8785) for 1.3.0 (opt-in).</li>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">hashCanonicalJson(value, profile?)</code> — SHA-256 over the canonicalized serialization. Used internally by <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">sealCer</code>.</li>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">deriveSignablePayload(bundle, attestation)</code> — produces the derived canonical payload that the node Ed25519-signs. The signed payload is NOT the raw bundle.</li>
+      <li>
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">canonicalJson(value, profile?)</code> —
+        protocol-bound canonicalization. <code>profile</code> is selected from the bundle's <code>protocolVersion</code>
+        : <code>nexart-v1</code> for 1.2.0 (default), <code>jcs-v1</code> (RFC 8785) for 1.3.0 (opt-in).
+      </li>
+      <li>
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">hashCanonicalJson(value, profile?)</code> —
+        SHA-256 over the canonicalized serialization. Used internally by{" "}
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">sealCer</code>.
+      </li>
+      <li>
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">
+          deriveSignablePayload(bundle, attestation)
+        </code>{" "}
+        — produces the derived canonical payload that the node Ed25519-signs. The signed payload is NOT the raw bundle.
+      </li>
     </ul>
 
     <h3 id="project-bundle-helpers">Project Bundle helpers</h3>
     <ul>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">createProjectBundle(steps, metadata)</code> — assembles a Project Bundle from step CERs.</li>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verifyProjectBundle(bundle)</code> / <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verifyProjectBundleAsync(bundle)</code> — verify a Project Bundle (sync/async).</li>
-      <li><code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">computeProjectHash(bundle)</code> — recompute <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">projectHash</code> from canonical step content.</li>
+      <li>
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">createProjectBundle(steps, metadata)</code> —
+        assembles a Project Bundle from step CERs.
+      </li>
+      <li>
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verifyProjectBundle(bundle)</code> /{" "}
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verifyProjectBundleAsync(bundle)</code> —
+        verify a Project Bundle (sync/async).
+      </li>
+      <li>
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">computeProjectHash(bundle)</code> — recompute{" "}
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">projectHash</code> from canonical step content.
+      </li>
     </ul>
 
     <h2 id="agent-kit">Agent Kit</h2>
-    <p>For agent workflows, <Link to="/docs/agent-kit" className="text-primary hover:underline">@nexart/agent-kit</Link> provides <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">wrapTool()</code> and <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certifyDecision()</code> as thin convenience wrappers over this SDK.</p>
+    <p>
+      For agent workflows,{" "}
+      <Link to="/docs/agent-kit" className="text-primary hover:underline">
+        @nexart/agent-kit
+      </Link>{" "}
+      provides <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">wrapTool()</code> and{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certifyDecision()</code> as thin convenience
+      wrappers over this SDK.
+    </p>
 
     <h2 id="common-mistakes">Common mistakes</h2>
     <CommonMistakes />
@@ -536,7 +757,10 @@ const cer = sealCer(snapshot);
     <FailureModes />
 
     <h2 id="scope">Scope</h2>
-    <p className="text-muted-foreground">The SDK API surface is still evolving. This page documents the current endpoints and data model. Check back for updates as new capabilities are added.</p>
+    <p className="text-muted-foreground">
+      The SDK API surface is still evolving. This page documents the current endpoints and data model. Check back for
+      updates as new capabilities are added.
+    </p>
   </>
 );
 
