@@ -745,11 +745,11 @@ protocolVersion = "1.3.0"   profile = "jcs-v1"      opt-in   (RFC 8785, standard
 
     <h2 id="cli-usage">CLI Usage</h2>
     <p>
-      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/cli@0.11.0</code> provides a verifier
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/cli@0.17.0</code> provides a verifier
       that runs offline against a CER bundle file. It fetches the node key set only when the bundle declares an
       attestation.
     </p>
-    <CodeBlock language="bash" title="Install" code={`npm install -g @nexart/cli@0.11.0`} />
+    <CodeBlock language="bash" title="Install" code={`npm install -g @nexart/cli@0.17.0`} />
     <CodeBlock language="bash" title="Verify a bundle" code={`nexart ai verify ./cer.json`} />
     <CodeBlock
       language="text"

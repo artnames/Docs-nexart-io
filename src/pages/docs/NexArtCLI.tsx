@@ -96,7 +96,7 @@ const NexArtCLI = () => (
 
     <h2>Architecture: CLI is a delegation layer</h2>
     <p>
-      As of <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/cli@0.16.1</code>, the CLI
+      As of <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/cli@0.17.0</code>, the CLI
       contains <strong>zero CER cryptographic logic</strong>. Every operation is delegated to{" "}
       <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@0.23.0</code>:
     </p>
@@ -294,7 +294,7 @@ verificationUrl: https://verify.nexart.io/c/sha256:...`}
     </p>
 
     <h3>Verify a sealed (local) CER bundle</h3>
-    <CodeBlock code={`npx @nexart/cli@0.11.0 ai verify cer.json`} title="Verify Sealed Bundle" />
+    <CodeBlock code={`npx @nexart/cli@0.17.0 ai verify cer.json`} title="Verify Sealed Bundle" />
     <CodeBlock
       language="json"
       title="Sealed bundle result"
@@ -311,7 +311,7 @@ verificationUrl: https://verify.nexart.io/c/sha256:...`}
     />
 
     <h3>Verify a certified CER bundle</h3>
-    <CodeBlock code={`npx @nexart/cli@0.11.0 ai verify cer.certified.json`} title="Verify Certified Bundle" />
+    <CodeBlock code={`npx @nexart/cli@0.17.0 ai verify cer.certified.json`} title="Verify Certified Bundle" />
     <CodeBlock
       language="json"
       title="Certified bundle result"
@@ -332,7 +332,7 @@ verificationUrl: https://verify.nexart.io/c/sha256:...`}
       When the input is a CER package, the CLI extracts and verifies the inner CER bundle through the SDK. Package-level
       trust layers (e.g. verification envelope at the package wrapper) are not fully verified by this command.
     </p>
-    <CodeBlock code={`npx @nexart/cli@0.11.0 ai verify package.json`} title="Verify CER Package" />
+    <CodeBlock code={`npx @nexart/cli@0.17.0 ai verify package.json`} title="Verify CER Package" />
     <CodeBlock
       language="json"
       title="Package result"
@@ -364,19 +364,19 @@ verificationUrl: https://verify.nexart.io/c/sha256:...`}
       language="bash"
       title="CI Example"
       code={`# Seal locally during build (offline, no secrets)
-npx @nexart/cli@0.11.0 ai seal execution.json --out cer.json
-npx @nexart/cli@0.11.0 ai verify cer.json
+npx @nexart/cli@0.17.0 ai seal execution.json --out cer.json
+npx @nexart/cli@0.17.0 ai verify cer.json
 
 # Certify on release (requires API key)
-npx @nexart/cli@0.11.0 ai certify execution.json --out cer.certified.json
-npx @nexart/cli@0.11.0 ai verify cer.certified.json`}
+npx @nexart/cli@0.17.0 ai certify execution.json --out cer.certified.json
+npx @nexart/cli@0.17.0 ai verify cer.certified.json`}
     />
 
     <h2>Context Signals</h2>
     <p>Attach structured metadata to a CER using a signals file. Signals are included in the certificateHash.</p>
     <CodeBlock
-      code={`npx @nexart/cli@0.11.0 ai seal    execution.json --signals-file signals.json
-npx @nexart/cli@0.11.0 ai certify execution.json --signals-file signals.json`}
+      code={`npx @nexart/cli@0.17.0 ai seal    execution.json --signals-file signals.json
+npx @nexart/cli@0.17.0 ai certify execution.json --signals-file signals.json`}
       title="With Signals"
     />
     <p>
@@ -390,19 +390,19 @@ npx @nexart/cli@0.11.0 ai certify execution.json --signals-file signals.json`}
     <h2>Deterministic Rendering</h2>
     <p>The CLI also supports deterministic rendering workflows for canvas-based executions:</p>
     <CodeBlock
-      code={`npx @nexart/cli@0.11.0 run ./examples/sketch.js \\
+      code={`npx @nexart/cli@0.17.0 run ./examples/sketch.js \\
   --seed 12345 \\
   --vars "50,50,50,0,0,0,0,0,0,0" \\
   --include-code \\
   --out out.png`}
       title="Run a Render"
     />
-    <CodeBlock code={`npx @nexart/cli@0.11.0 verify out.snapshot.json`} title="Verify a Snapshot" />
+    <CodeBlock code={`npx @nexart/cli@0.17.0 verify out.snapshot.json`} title="Verify a Snapshot" />
 
     <h2>Versions</h2>
     <ul>
       <li>
-        CLI: <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/cli@0.11.0</code>
+        CLI: <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/cli@0.17.0</code>
       </li>
       <li>
         SDK: <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@0.23.0</code>
