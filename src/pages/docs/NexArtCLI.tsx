@@ -98,7 +98,7 @@ const NexArtCLI = () => (
     <p>
       As of <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/cli@0.11.0</code>, the CLI
       contains <strong>zero CER cryptographic logic</strong>. Every operation is delegated to{" "}
-      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@0.22.0</code>:
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@0.23.0</code>:
     </p>
     <ul>
       <li>
@@ -174,7 +174,7 @@ npx @nexart/cli@0.11.0 ai verify cer.certified.json
     <p>
       The input file MUST be a JSON object matching{" "}
       <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">CreateSnapshotParams</code> exactly, as defined
-      by <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@0.22.0</code>:
+      by <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@0.23.0</code>:
     </p>
     <CodeBlock
       language="json"
@@ -270,7 +270,7 @@ verificationUrl: https://verify.nexart.io/c/sha256:...`}
       As of v0.8.1, <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">nexart ai verify</code> is a{" "}
       <strong>pure delegation</strong> to{" "}
       <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verifyAiCerBundleDetailed()</code> in{" "}
-      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@0.22.0</code>. The CLI:
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@0.23.0</code>. The CLI:
     </p>
     <ul>
       <li>

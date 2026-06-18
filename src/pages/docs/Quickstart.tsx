@@ -9,7 +9,6 @@ import CommonMistakes from "@/components/docs/CommonMistakes";
 import FailureModes from "@/components/docs/FailureModes";
 import CanonicalFlow from "@/components/docs/CanonicalFlow";
 
-
 const llmBlock = `# Quickstart
 
 NexArt supports two paths. Pick one. Canonical workflow: seal -> verify -> (optional) certify -> verify.
@@ -58,7 +57,10 @@ const Quickstart = () => (
 
     <p>
       The fastest path from zero to a verified record. For a broader overview, see{" "}
-      <Link to="/docs/getting-started" className="text-primary hover:underline">Getting Started</Link>.
+      <Link to="/docs/getting-started" className="text-primary hover:underline">
+        Getting Started
+      </Link>
+      .
     </p>
 
     <section className="not-prose my-8">
@@ -67,16 +69,11 @@ const Quickstart = () => (
           Verify Your First Execution (2 minutes)
         </div>
         <div className="text-sm text-muted-foreground mb-4">
-          Local-first. No API key, no node call, no network access. Seal a CER and verify it
-          locally with the SDK.
+          Local-first. No API key, no node call, no network access. Seal a CER and verify it locally with the SDK.
         </div>
 
         <div className="mb-4">
-          <CodeBlock
-            language="bash"
-            title="1. Install"
-            code={`npm install @nexart/ai-execution`}
-          />
+          <CodeBlock language="bash" title="1. Install" code={`npm install @nexart/ai-execution`} />
         </div>
 
         <CodeBlock
@@ -115,11 +112,7 @@ main().catch((err) => {
         />
 
         <div className="mt-4">
-          <CodeBlock
-            language="bash"
-            title="3. Run"
-            code={`npx tsx seal-and-verify.ts`}
-          />
+          <CodeBlock language="bash" title="3. Run" code={`npx tsx seal-and-verify.ts`} />
         </div>
       </div>
 
@@ -138,8 +131,8 @@ Envelope  (Layer 3) : SKIPPED`}
           Local sealing proves integrity. Certification adds an independent node attestation.
         </p>
         <p className="text-xs text-muted-foreground mt-2">
-          <strong>SKIPPED</strong> for Receipt and Envelope is expected. Those layers only apply
-          after a node certifies the bundle. SKIPPED is not a failure.
+          <strong>SKIPPED</strong> for Receipt and Envelope is expected. Those layers only apply after a node certifies
+          the bundle. SKIPPED is not a failure.
         </p>
       </div>
 
@@ -148,9 +141,8 @@ Envelope  (Layer 3) : SKIPPED`}
           Add node certification (optional)
         </div>
         <div className="text-sm text-muted-foreground mb-4">
-          Certification is optional. It submits the bundle to the attestation node, which adds an
-          Ed25519 receipt and a verification envelope, and returns a public{" "}
-          <code className="font-mono">verificationUrl</code>. The{" "}
+          Certification is optional. It submits the bundle to the attestation node, which adds an Ed25519 receipt and a
+          verification envelope, and returns a public <code className="font-mono">verificationUrl</code>. The{" "}
           <code className="font-mono">certificateHash</code> does not change.
         </div>
 
@@ -222,9 +214,8 @@ Receipt   (Layer 2) : PASS
 Envelope  (Layer 3) : PASS`}
         />
         <p className="text-xs text-muted-foreground mt-2">
-          With node certification, all three layers return PASS. The{" "}
-          <code className="font-mono">verificationUrl</code> is publicly resolvable at{" "}
-          verify.nexart.io.
+          With node certification, all three layers return PASS. The <code className="font-mono">verificationUrl</code>{" "}
+          is publicly resolvable at verify.nexart.io.
         </p>
       </div>
     </section>
@@ -241,22 +232,30 @@ Envelope  (Layer 3) : PASS`}
 
     <h2>Choose a Path</h2>
     <ul>
-      <li><strong>Path A - Single CER</strong>: certify one execution. The most common starting point.</li>
-      <li><strong>Path B - Project Bundle</strong>: certify a multi-step or multi-agent workflow as a single verifiable unit.</li>
+      <li>
+        <strong>Path A - Single CER</strong>: certify one execution. The most common starting point.
+      </li>
+      <li>
+        <strong>Path B - Project Bundle</strong>: certify a multi-step or multi-agent workflow as a single verifiable
+        unit.
+      </li>
     </ul>
-    <p>Project Bundles are <strong>not</strong> required for single-execution use cases.</p>
+    <p>
+      Project Bundles are <strong>not</strong> required for single-execution use cases.
+    </p>
 
     <h2>Path A: Single CER</h2>
 
     <p>
       Canonical workflow: <strong>create input → seal locally → verify → (optional) certify → verify again</strong>.
-      Sealing is offline and requires no API key. Certification is optional and adds node
-      attestation.
+      Sealing is offline and requires no API key. Certification is optional and adds node attestation.
     </p>
 
     <h3>1. Install the SDK</h3>
     <CodeBlock language="bash" code="npm install @nexart/ai-execution" />
-    <p className="text-sm text-muted-foreground">Current version: <code>@nexart/ai-execution@0.22.0</code>.</p>
+    <p className="text-sm text-muted-foreground">
+      Current version: <code>@nexart/ai-execution@0.23.0</code>.
+    </p>
 
     <h3>2. Seal a CER locally (offline)</h3>
     <CodeBlock
@@ -283,8 +282,8 @@ console.log(report.checks.nodeSignature);      // SKIPPED (no attestation yet)
 console.log(report.checks.receiptConsistency); // SKIPPED (no envelope yet)`}
     />
     <p>
-      A sealed bundle is a fully valid CER. <strong>SKIPPED</strong> for receipt and envelope is
-      expected — those layers only apply after node certification.
+      A sealed bundle is a fully valid CER. <strong>SKIPPED</strong> for receipt and envelope is expected — those layers
+      only apply after node certification.
     </p>
 
     <h3>3. (Optional) Certify via the node</h3>
@@ -315,27 +314,41 @@ console.log(report.checks.bundleIntegrity);    // PASS
 console.log(report.checks.nodeSignature);      // PASS
 console.log(report.checks.receiptConsistency); // PASS`}
     />
-    <p>The <code>certificateHash</code> is identical whether the bundle is sealed or certified for the same input. Certification adds <code>meta.attestation</code> and <code>meta.verificationEnvelope</code>; it does not modify any hashed field.</p>
+    <p>
+      The <code>certificateHash</code> is identical whether the bundle is sealed or certified for the same input.
+      Certification adds <code>meta.attestation</code> and <code>meta.verificationEnvelope</code>; it does not modify
+      any hashed field.
+    </p>
 
     <h3>4. Verify publicly</h3>
     <p>
       Open{" "}
-      <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a>{" "}
+      <a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">
+        verify.nexart.io
+      </a>{" "}
       and paste the <code>certificateHash</code>, or open the URL directly:
     </p>
     <CodeBlock language="bash" code="https://verify.nexart.io/c/{certificateHash}" />
     <p>
-      Public resolution on <code>verify.nexart.io</code> requires the bundle to have been
-      certified (or otherwise registered) by the attestation node. Sealed bundles can still be
-      verified locally with the SDK.
+      Public resolution on <code>verify.nexart.io</code> requires the bundle to have been certified (or otherwise
+      registered) by the attestation node. Sealed bundles can still be verified locally with the SDK.
     </p>
-    <p>The verifier checks Bundle Integrity, Node Signature (if attested), Receipt Consistency, and Verification Envelope.</p>
+    <p>
+      The verifier checks Bundle Integrity, Node Signature (if attested), Receipt Consistency, and Verification
+      Envelope.
+    </p>
 
     <h2>Path B: Project Bundle (Multi-Step Workflow)</h2>
 
     <h3>1. Install agent-kit</h3>
     <CodeBlock language="bash" code="npm install @nexart/agent-kit" />
-    <p className="text-sm text-muted-foreground">Current version: <code>@nexart/agent-kit@0.5.3</code>. Wiring this up with an AI assistant? See the <Link to="/docs/agent-kit-instructions" className="text-primary hover:underline">Agent-Kit Instructions for AI Agents</Link> page.</p>
+    <p className="text-sm text-muted-foreground">
+      Current version: <code>@nexart/agent-kit@0.5.3</code>. Wiring this up with an AI assistant? See the{" "}
+      <Link to="/docs/agent-kit-instructions" className="text-primary hover:underline">
+        Agent-Kit Instructions for AI Agents
+      </Link>{" "}
+      page.
+    </p>
 
     <h3>2. Build a workflow</h3>
     <CodeBlock
@@ -360,14 +373,16 @@ console.log(bundle.integrity.projectHash);`}
     <h3>3. Register on the node and verify publicly</h3>
     <p>
       To make the bundle verifiable on <code>verify.nexart.io</code>, register it on the node. See{" "}
-      <Link to="/docs/end-to-end-verification" className="text-primary hover:underline">End-to-End Verification</Link> for
-      the registration flow and node behavior.
+      <Link to="/docs/end-to-end-verification" className="text-primary hover:underline">
+        End-to-End Verification
+      </Link>{" "}
+      for the registration flow and node behavior.
     </p>
 
     <h2>Important: certificateHash, not executionId</h2>
     <p>
-      Always look up and share records by <code>certificateHash</code>. <code>executionId</code> is{" "}
-      <strong>not</strong> a unique artifact identifier and must not be used as the primary identity for verification.
+      Always look up and share records by <code>certificateHash</code>. <code>executionId</code> is <strong>not</strong>{" "}
+      a unique artifact identifier and must not be used as the primary identity for verification.
     </p>
 
     <h2>Common mistakes</h2>
@@ -378,11 +393,36 @@ console.log(bundle.integrity.projectHash);`}
 
     <h2>Next Steps</h2>
     <ul>
-      <li><Link to="/docs/integrations/langchain" className="text-primary hover:underline">LangChain Integration</Link>: certify chain and agent executions</li>
-      <li><Link to="/docs/integrations/n8n" className="text-primary hover:underline">n8n Integration</Link>: certify workflow automation results</li>
-      <li><Link to="/docs/concepts/project-bundles" className="text-primary hover:underline">Project Bundles</Link>: deeper look at multi-step verification</li>
-      <li><Link to="/docs/cli" className="text-primary hover:underline">CLI</Link>: create and verify CERs from the command line</li>
-      <li><Link to="/docs/verification" className="text-primary hover:underline">Verification</Link>: deep dive into verification semantics</li>
+      <li>
+        <Link to="/docs/integrations/langchain" className="text-primary hover:underline">
+          LangChain Integration
+        </Link>
+        : certify chain and agent executions
+      </li>
+      <li>
+        <Link to="/docs/integrations/n8n" className="text-primary hover:underline">
+          n8n Integration
+        </Link>
+        : certify workflow automation results
+      </li>
+      <li>
+        <Link to="/docs/concepts/project-bundles" className="text-primary hover:underline">
+          Project Bundles
+        </Link>
+        : deeper look at multi-step verification
+      </li>
+      <li>
+        <Link to="/docs/cli" className="text-primary hover:underline">
+          CLI
+        </Link>
+        : create and verify CERs from the command line
+      </li>
+      <li>
+        <Link to="/docs/verification" className="text-primary hover:underline">
+          Verification
+        </Link>
+        : deep dive into verification semantics
+      </li>
     </ul>
   </div>
 );
