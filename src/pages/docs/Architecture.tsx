@@ -95,7 +95,7 @@ const Architecture = () => (
     <ul>
       <li>
         <strong>SDK</strong> (
-        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@0.23.0</code>) owns:
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@1.0.0</code>) owns:
         snapshot creation (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">createSnapshot</code>),
         local sealing (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">sealCer</code>), protocol-bound
         canonicalization (nexart-v1 / jcs-v1), SHA-256 hashing, and verification logic (
@@ -103,7 +103,7 @@ const Architecture = () => (
       </li>
       <li>
         <strong>CLI</strong> (
-        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/cli@0.17.0</code>) owns: the command
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/cli@1.0.0</code>) owns: the command
         surface (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">ai seal</code>,{" "}
         <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">ai certify</code>,{" "}
         <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">ai verify</code>), file I/O, argument parsing,

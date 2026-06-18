@@ -25,8 +25,8 @@ provides classification, not the primary verdict. The attestation node
 recomputes verification independently for every certified record.
 
 ## Four verification surfaces
-1. CLI            — \`nexart ai verify <bundle.json>\` (@nexart/cli@0.17.0)
-2. SDK            — \`verifyCer\` / \`verifyCerAsync\` (@nexart/ai-execution@0.23.0)
+1. CLI            — \`nexart ai verify <bundle.json>\` (@nexart/cli@1.0.0)
+2. SDK            — \`verifyCer\` / \`verifyCerAsync\` (@nexart/ai-execution@1.0.0)
 3. Public endpoint — https://verify.nexart.io/c/<certificateHash>
 4. External impl   — any implementation conformant to the AI CER Package Format spec
 
@@ -116,13 +116,13 @@ const VerificationModel = () => (
       <li>
         <strong>CLI</strong> —{" "}
         <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">nexart ai verify &lt;bundle.json&gt;</code>{" "}
-        from <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/cli@0.17.0</code>. Runs offline;
+        from <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/cli@1.0.0</code>. Runs offline;
         only fetches the node key set when the bundle declares an attestation.
       </li>
       <li>
         <strong>SDK</strong> — <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verifyCer</code>{" "}
         (Node) or <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verifyCerAsync</code> (browser /
-        Edge) from <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@0.23.0</code>
+        Edge) from <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@1.0.0</code>
         .
       </li>
       <li>

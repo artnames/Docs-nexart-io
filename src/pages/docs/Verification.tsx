@@ -303,7 +303,7 @@ const Verification = () => (
       </li>
       <li>
         <strong>v0.16.0 signals payload alignment bug.</strong> Bundles created with
-        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono ml-1">@nexart/ai-execution@0.23.0</code> that
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono ml-1">@nexart/ai-execution@1.0.0</code> that
         include signals MAY fail envelope verification due to a payload alignment issue fixed in{" "}
         <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">v0.16.1</code>. Operators SHOULD re-certify
         affected executions via{" "}
@@ -374,7 +374,7 @@ const Verification = () => (
       <div className="text-sm font-medium text-foreground mb-1">v0.16.0 → v0.16.1 compatibility</div>
       <div className="text-sm text-muted-foreground">
         Bundles created with{" "}
-        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">@nexart/ai-execution@0.23.0</code> that include
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">@nexart/ai-execution@1.0.0</code> that include
         signals may fail envelope verification due to a payload alignment issue.{" "}
         <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">v0.16.1</code> fixes this. Re-certification may
         be required. Operators can use{" "}
@@ -745,11 +745,11 @@ protocolVersion = "1.3.0"   profile = "jcs-v1"      opt-in   (RFC 8785, standard
 
     <h2 id="cli-usage">CLI Usage</h2>
     <p>
-      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/cli@0.17.0</code> provides a verifier
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/cli@1.0.0</code> provides a verifier
       that runs offline against a CER bundle file. It fetches the node key set only when the bundle declares an
       attestation.
     </p>
-    <CodeBlock language="bash" title="Install" code={`npm install -g @nexart/cli@0.17.0`} />
+    <CodeBlock language="bash" title="Install" code={`npm install -g @nexart/cli@1.0.0`} />
     <CodeBlock language="bash" title="Verify a bundle" code={`nexart ai verify ./cer.json`} />
     <CodeBlock
       language="text"
@@ -786,8 +786,8 @@ Failures print a machine-readable JSON report to stderr:
       language="bash"
       title="Producing a 1.3.0 (JCS) bundle — opt-in"
       code={`# Default is 1.2.0 (nexart-v1). Opt into 1.3.0 (jcs-v1, RFC 8785):
-npx @nexart/cli@0.17.0 ai seal input.json --protocol-version 1.3.0 --out cer.json
-npx @nexart/cli@0.17.0 ai verify cer.json
+npx @nexart/cli@1.0.0 ai seal input.json --protocol-version 1.3.0 --out cer.json
+npx @nexart/cli@1.0.0 ai verify cer.json
 # --protocol-version overrides the producer default for this invocation only.
 # Verifiers select the canonicalization profile from the bundle's protocolVersion;
 # the flag does not change verification behavior.`}

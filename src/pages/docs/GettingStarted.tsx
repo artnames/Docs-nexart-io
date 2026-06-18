@@ -41,8 +41,8 @@ For builders with multi-step or multi-agent workflows that should be verified as
 Both paths are first-class. Project Bundles are NOT required for single-execution use cases.
 
 ## Versions
-- @nexart/ai-execution@0.23.0
-- @nexart/cli@0.17.0
+- @nexart/ai-execution@1.0.0
+- @nexart/cli@1.0.0
 - Bundle version "0.1"
 - Protocol 1.2.0 (default) · Protocol 1.3.0 (RFC 8785, opt-in)
 
@@ -147,7 +147,7 @@ const GettingStarted = () => {
       <CodeBlock language="bash" code="npm install @nexart/ai-execution" />
       <p className="text-sm text-muted-foreground">
         Current version:{" "}
-        <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">@nexart/ai-execution@0.23.0</code>.
+        <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">@nexart/ai-execution@1.0.0</code>.
       </p>
 
       <h2 id="path-a">Path A: Seal a Single CER</h2>
