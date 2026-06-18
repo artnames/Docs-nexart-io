@@ -139,7 +139,7 @@ console.log(result.certificateHash);`}
     <CodeBlock
       language="bash"
       title="Attach signals via CLI"
-      code={`npx @nexart/cli@0.17.0 ai create execution.json --signals-file signals.json`}
+      code={`npx @nexart/cli@1.0.0 ai create execution.json --signals-file signals.json`}
     />
     <p>
       Example <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">signals.json</code>:
