@@ -42,7 +42,7 @@ Both paths are first-class. Project Bundles are NOT required for single-executio
 
 ## Versions
 - @nexart/ai-execution@0.23.0
-- @nexart/cli@0.11.0
+- @nexart/cli@0.16.1
 - Bundle version "0.1"
 - Protocol 1.2.0 (default) · Protocol 1.3.0 (RFC 8785, opt-in)
 
