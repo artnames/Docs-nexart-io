@@ -117,7 +117,7 @@ const TechnicalTruth = () => {
               <strong>Local sealing</strong> — produced by the SDK (
               <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">@nexart/ai-execution@0.23.0</code> via{" "}
               <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">sealCer()</code>) or the CLI (
-              <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">@nexart/cli@0.16.1</code> via{" "}
+              <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">@nexart/cli@0.17.0</code> via{" "}
               <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">nexart ai seal</code>). Builds a
               canonical CER bundle and computes the{" "}
               <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">certificateHash</code> fully offline.

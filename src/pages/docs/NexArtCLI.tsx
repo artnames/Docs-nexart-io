@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 
 const llmBlock = `# NexArt CLI
 
-Package: @nexart/cli@0.16.1
+Package: @nexart/cli@0.17.0
 
 The NexArt CLI is a thin command-line surface over the AI Execution SDK
 (@nexart/ai-execution@0.23.0). It contains zero CER cryptographic logic.
@@ -123,26 +123,26 @@ const NexArtCLI = () => (
       language="bash"
       title="seal -> verify -> (optional) certify -> verify"
       code={`# 1. Seal locally (offline, no API key)
-npx @nexart/cli@0.16.1 ai seal execution.json --out cer.json
+npx @nexart/cli@0.17.0 ai seal execution.json --out cer.json
 
 # 2. Verify the sealed bundle
-npx @nexart/cli@0.16.1 ai verify cer.json
+npx @nexart/cli@0.17.0 ai verify cer.json
 # integrity: PASS, receipt: SKIPPED, envelope: SKIPPED
 
 # 3. (Optional) Certify via the attestation node
 export NEXART_NODE_URL="https://node.nexart.io"
 export NEXART_API_KEY="<your-api-key>"
-npx @nexart/cli@0.16.1 ai certify execution.json --out cer.certified.json
+npx @nexart/cli@0.17.0 ai certify execution.json --out cer.certified.json
 
 # 4. Verify again (now attested)
-npx @nexart/cli@0.16.1 ai verify cer.certified.json
+npx @nexart/cli@0.17.0 ai verify cer.certified.json
 # integrity: PASS, receipt: PASS, envelope: PASS`}
     />
 
     <SealedVsCertified />
 
     <h2>Installation</h2>
-    <CodeBlock code={`npx @nexart/cli@0.16.1 --help`} title="Install / Help" />
+    <CodeBlock code={`npx @nexart/cli@0.17.0 --help`} title="Install / Help" />
 
     <h2>Environment Variables</h2>
     <ul>
@@ -196,7 +196,7 @@ npx @nexart/cli@0.16.1 ai verify cer.certified.json
     />
 
     <h3>Command</h3>
-    <CodeBlock code={`npx @nexart/cli@0.16.1 ai seal execution.json --out cer.json`} title="Seal a CER" />
+    <CodeBlock code={`npx @nexart/cli@0.17.0 ai seal execution.json --out cer.json`} title="Seal a CER" />
 
     <h3>Output</h3>
     <p>The command writes a CER bundle with:</p>
@@ -249,7 +249,7 @@ npx @nexart/cli@0.16.1 ai verify cer.certified.json
       <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">NEXART_API_KEY</code> and{" "}
       <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">NEXART_NODE_URL</code>.
     </p>
-    <CodeBlock code={`npx @nexart/cli@0.16.1 ai certify execution.json --out cer.certified.json`} title="Certify" />
+    <CodeBlock code={`npx @nexart/cli@0.17.0 ai certify execution.json --out cer.certified.json`} title="Certify" />
     <CodeBlock
       code={`CER certified
 certificateHash: sha256:...

@@ -786,8 +786,8 @@ Failures print a machine-readable JSON report to stderr:
       language="bash"
       title="Producing a 1.3.0 (JCS) bundle — opt-in"
       code={`# Default is 1.2.0 (nexart-v1). Opt into 1.3.0 (jcs-v1, RFC 8785):
-npx @nexart/cli@0.11.0 ai seal input.json --protocol-version 1.3.0 --out cer.json
-npx @nexart/cli@0.11.0 ai verify cer.json
+npx @nexart/cli@0.17.0 ai seal input.json --protocol-version 1.3.0 --out cer.json
+npx @nexart/cli@0.17.0 ai verify cer.json
 # --protocol-version overrides the producer default for this invocation only.
 # Verifiers select the canonicalization profile from the bundle's protocolVersion;
 # the flag does not change verification behavior.`}
