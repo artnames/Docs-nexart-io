@@ -260,7 +260,7 @@ console.log('Steps:       ', projectBundle.totalSteps);`}
       title="finishAndRegister"
       code={`const { projectBundle, projectHash, registration } = await wf.finishAndRegister({
   register: {
-    nodeUrl: process.env.NEXART_NODE_URL!,
+    nodeUrl: process.env.NEXART_NODE_ENDPOINT!,
     apiKey:  process.env.NEXART_API_KEY!,
   },
 });

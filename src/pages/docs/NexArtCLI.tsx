@@ -37,7 +37,7 @@ SKIPPED is not a failure. It means the layer is not applicable to the bundle.
 
 - nexart ai certify <input.json> [--out cer.json] [--protocol-version 1.2.0|1.3.0]
     Calls POST /v1/cer/ai/certify on the attestation node.
-    Requires NEXART_API_KEY and NEXART_NODE_URL.
+    Requires NEXART_API_KEY and NEXART_NODE_ENDPOINT.
     Output: certified CER bundle with meta.attestation and meta.verificationEnvelope.
 
 - nexart ai verify <bundle-or-package.json>
@@ -125,7 +125,7 @@ npx @nexart/cli@1.0.0 ai verify cer.json
 # integrity: PASS, receipt: SKIPPED, envelope: SKIPPED
 
 # 3. (Optional) Certify via the attestation node
-export NEXART_NODE_URL="https://node.nexart.io"
+export NEXART_NODE_ENDPOINT="https://node.nexart.io"
 export NEXART_API_KEY="<your-api-key>"
 npx @nexart/cli@1.0.0 ai certify execution.json --out cer.certified.json
 
@@ -148,7 +148,7 @@ npx @nexart/cli@1.0.0 ai verify cer.certified.json
         <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">ai verify</code>.
       </li>
       <li>
-        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">NEXART_NODE_URL</code>: attestation node URL.
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">NEXART_NODE_ENDPOINT</code>: attestation node URL.
         Required for <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">ai certify</code>.
       </li>
       <li>
@@ -242,7 +242,7 @@ npx @nexart/cli@1.0.0 ai verify cer.certified.json
       Send an execution to the NexArt attestation node for certification. The node returns a signed Ed25519 receipt and
       a verification envelope. Requires{" "}
       <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">NEXART_API_KEY</code> and{" "}
-      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">NEXART_NODE_URL</code>.
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">NEXART_NODE_ENDPOINT</code>.
     </p>
     <CodeBlock code={`npx @nexart/cli@1.0.0 ai certify execution.json --out cer.certified.json`} title="Certify" />
     <CodeBlock
