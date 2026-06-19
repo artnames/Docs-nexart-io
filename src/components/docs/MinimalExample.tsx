@@ -69,7 +69,7 @@ const { bundle, receipt } = await certifyAndAttestDecision(
     output:     { decision: "approve", reason: "policy_passed" },
   },
   {
-    nodeUrl: process.env.NEXART_NODE_URL!,
+    nodeUrl: process.env.NEXART_NODE_ENDPOINT!,
     apiKey:  process.env.NEXART_API_KEY!,
   },
 );

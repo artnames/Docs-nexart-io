@@ -25,7 +25,7 @@ const TestHarness = () => (
           language="bash"
           title="1. Install"
           code={`npm install @nexart/ai-execution
-export NEXART_NODE_URL="https://node.nexart.io"
+export NEXART_NODE_ENDPOINT="https://node.nexart.io"
 export NEXART_API_KEY="<your-api-key>"`}
         />
       </div>
@@ -50,7 +50,7 @@ async function main() {
       output:     { decision: "approve", reason: "policy_passed" },
     },
     {
-      nodeUrl: process.env.NEXART_NODE_URL!,
+      nodeUrl: process.env.NEXART_NODE_ENDPOINT!,
       apiKey:  process.env.NEXART_API_KEY!,
     },
   );
@@ -186,7 +186,7 @@ Envelope  (Layer 3) : PASS`}
           </div>
           <div className="text-foreground/90 mt-1">
             Node or auth issue. The receipt signature did not validate against the node key.
-            Cause: wrong <code className="font-mono text-xs">NEXART_NODE_URL</code>, missing or
+            Cause: wrong <code className="font-mono text-xs">NEXART_NODE_ENDPOINT</code>, missing or
             invalid <code className="font-mono text-xs">NEXART_API_KEY</code>, or the node key
             published at <code className="font-mono text-xs">/.well-known/nexart-node.json</code>{" "}
             does not match the receipt <code className="font-mono text-xs">kid</code>.

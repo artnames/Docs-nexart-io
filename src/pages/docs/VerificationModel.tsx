@@ -131,7 +131,7 @@ const VerificationModel = () => (
           verify.nexart.io
         </a>{" "}
         and the JSON API at{" "}
-        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">/v1/cer/public/&lt;certificateHash&gt;</code>
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">/v1/cer/public?certificate_hash=&lt;certificateHash&gt;</code>
         . Convenience surface; not a trust anchor.
       </li>
       <li>

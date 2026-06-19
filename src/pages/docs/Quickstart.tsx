@@ -145,7 +145,7 @@ Envelope  (Layer 3) : SKIPPED`}
           <CodeBlock
             language="bash"
             title="1. Configure node access"
-            code={`export NEXART_NODE_URL="https://node.nexart.io"
+            code={`export NEXART_NODE_ENDPOINT="https://node.nexart.io"
 export NEXART_API_KEY="<your-api-key>"`}
           />
         </div>
@@ -170,7 +170,7 @@ async function main() {
       output:     { decision: "approve", reason: "policy_passed" },
     },
     {
-      nodeUrl: process.env.NEXART_NODE_URL!,
+      nodeUrl: process.env.NEXART_NODE_ENDPOINT!,
       apiKey:  process.env.NEXART_API_KEY!,
     },
   );
@@ -297,7 +297,7 @@ const { bundle, receipt } = await certifyAndAttestDecision(
     output:     { decision: "approve", reason: "policy_passed" },
   },
   {
-    nodeUrl: process.env.NEXART_NODE_URL!,
+    nodeUrl: process.env.NEXART_NODE_ENDPOINT!,
     apiKey:  process.env.NEXART_API_KEY!,
   },
 );

@@ -161,7 +161,7 @@ If the user has a NexArt node URL and an API key, replace `wf.finish()` with:
 ```ts
 const { projectBundle, projectHash, registration } = await wf.finishAndRegister({
   register: {
-    nodeUrl: process.env.NEXART_NODE_URL!,
+    nodeUrl: process.env.NEXART_NODE_ENDPOINT!,
     apiKey:  process.env.NEXART_API_KEY!,
   },
 });
