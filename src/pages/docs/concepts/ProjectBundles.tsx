@@ -1,5 +1,4 @@
 import PageHeader from "@/components/docs/PageHeader";
-import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import { Link } from "react-router-dom";
 
@@ -28,10 +27,6 @@ Verification checks each embedded CER and the overall project hash.`;
 
 const ProjectBundles = () => (
   <>
-    <DocsMeta
-      title="Project Bundles"
-      description="Group related CERs under a single projectHash for multi-step verification. Optional and never required for single-CER use cases."
-    />
     <PageHeader
       title="Project Bundles"
       summary="Structured collections of CERs for multi-step workflows."

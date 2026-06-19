@@ -1,5 +1,4 @@
 import PageHeader from "@/components/docs/PageHeader";
-import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import { Link } from "react-router-dom";
 
@@ -68,10 +67,6 @@ Roadmap only. Not currently available.`;
 
 const AttestationNode = () => (
   <>
-    <DocsMeta
-      title="Attestation Node"
-      description="The independent attestation node signs Certified Execution Records with Ed25519 keys and acts as a neutral witness for verification."
-    />
     <PageHeader
       title="Attestation Node"
       summary="The server-side component that signs CERs and issues receipts."

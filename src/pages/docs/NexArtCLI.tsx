@@ -1,5 +1,4 @@
 import PageHeader from "@/components/docs/PageHeader";
-import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import TechnicalTruth from "@/components/docs/TechnicalTruth";
 import SealedVsCertified from "@/components/docs/SealedVsCertified";
@@ -73,10 +72,6 @@ SKIPPED is not a failure. It means the layer is not applicable to the bundle.
 
 const NexArtCLI = () => (
   <>
-    <DocsMeta
-      title="NexArt CLI"
-      description="NexArt CLI v0.8.1: seal CERs locally, certify via the node, and verify bundles. A thin delegation layer over @nexart/ai-execution."
-    />
     <PageHeader
       title="NexArt CLI"
       summary="Command-line surface over the AI Execution SDK. Seal locally, certify optionally, verify anywhere."

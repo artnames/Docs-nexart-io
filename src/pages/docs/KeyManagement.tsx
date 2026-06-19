@@ -1,5 +1,4 @@
 import PageHeader from "@/components/docs/PageHeader";
-import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 
 const llmBlock = `# NexArt Node Key Management and Rotation
@@ -63,10 +62,6 @@ Deprecated public keys should be retained for at least the duration of the CER r
 
 const KeyManagement = () => (
   <>
-    <DocsMeta
-      title="Key Management and Rotation (NexArt Node)"
-      description="How NexArt Node manages Ed25519 signing keys, rotates them safely, and maintains backward-compatible verification."
-    />
     <PageHeader
       title="Key Management and Rotation (NexArt Node)"
       summary="How NexArt Node manages Ed25519 signing keys, rotates them safely, and maintains backward-compatible verification."

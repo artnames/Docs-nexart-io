@@ -1,5 +1,4 @@
 import PageHeader from "@/components/docs/PageHeader";
-import DocsMeta from "@/components/docs/DocsMeta";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 
@@ -80,10 +79,6 @@ const FAQ = () => (
     <Helmet>
       <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
     </Helmet>
-    <DocsMeta
-      title="FAQ"
-      description="Answers to common questions about NexArt: what verification proves, certificateHash vs projectHash, redaction, and trust model."
-    />
     <PageHeader
       title="FAQ"
       summary="Common questions from builders integrating NexArt."

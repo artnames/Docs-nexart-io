@@ -168,36 +168,121 @@ export default function prerenderPlugin(options = {}) {
             console.log(
               `[prerender]   ✓ ${route} → ${out.replace(resolvedDistDir + "/", "")}`,
             );
-            // Extract plain text + title for llms-full.txt
+            // Extract structured markdown for llms-full.txt — preserves
+            // heading hierarchy (H1 page title, H2/H3+ subsections), GFM
+            // pipe tables, and fenced code blocks. Plain DOM textContent
+            // mangles tables (run-on cells) and loses code fences, which
+            // makes the file useless to LLMs ingesting it.
             try {
               const extracted = await page.evaluate(() => {
-                const title =
+                const pageTitle =
+                  document.querySelector("main h1, [class*='docs-prose'] h1")
+                    ?.textContent?.trim() ||
                   document.querySelector("h1")?.textContent?.trim() ||
                   document.title ||
                   "";
-                const main =
-                  document.querySelector("main") || document.body;
-                // Strip nav/aside/script/style/footer noise
+                const main = document.querySelector("main") || document.body;
                 const clone = main.cloneNode(true);
                 clone
-                  .querySelectorAll("nav, aside, script, style, footer, button")
+                  .querySelectorAll("nav, aside, script, style, footer, button, [aria-hidden='true']")
                   .forEach((n) => n.remove());
-                const text = (clone.textContent || "")
-                  .replace(/\u00a0/g, " ")
-                  .replace(/[ \t]+/g, " ")
-                  .replace(/\n[ \t]+/g, "\n")
+
+                const norm = (s) =>
+                  (s || "")
+                    .replace(/\u00a0/g, " ")
+                    .replace(/\s+/g, " ")
+                    .trim();
+
+                const renderTable = (table) => {
+                  const rows = Array.from(table.querySelectorAll("tr"));
+                  if (!rows.length) return "";
+                  const cells = rows.map((tr) =>
+                    Array.from(tr.querySelectorAll("th,td")).map((c) =>
+                      norm(c.textContent).replace(/\|/g, "\\|"),
+                    ),
+                  );
+                  const width = Math.max(...cells.map((r) => r.length));
+                  const pad = (r) => {
+                    while (r.length < width) r.push("");
+                    return r;
+                  };
+                  const header = pad(cells[0]);
+                  const body = cells.slice(1).map(pad);
+                  const sep = header.map(() => "---");
+                  return [
+                    "| " + header.join(" | ") + " |",
+                    "| " + sep.join(" | ") + " |",
+                    ...body.map((r) => "| " + r.join(" | ") + " |"),
+                  ].join("\n");
+                };
+
+                const skipFirstH1 = { done: false };
+                const walk = (node) => {
+                  if (node.nodeType === Node.TEXT_NODE) {
+                    return node.textContent.replace(/\u00a0/g, " ");
+                  }
+                  if (node.nodeType !== Node.ELEMENT_NODE) return "";
+                  const tag = node.tagName.toLowerCase();
+                  if (tag === "pre") {
+                    const code = node.querySelector("code");
+                    const lang =
+                      (code &&
+                        [...code.classList]
+                          .find((c) => c.startsWith("language-"))
+                          ?.slice(9)) ||
+                      "";
+                    const text = (code || node).textContent.replace(/\n+$/, "");
+                    return `\n\n\`\`\`${lang}\n${text}\n\`\`\`\n\n`;
+                  }
+                  if (tag === "code" && node.parentElement?.tagName !== "PRE") {
+                    return "`" + node.textContent + "`";
+                  }
+                  if (tag === "table") {
+                    return "\n\n" + renderTable(node) + "\n\n";
+                  }
+                  if (/^h[1-6]$/.test(tag)) {
+                    const level = Number(tag[1]);
+                    const text = norm(node.textContent);
+                    if (!text) return "";
+                    if (level === 1 && !skipFirstH1.done) {
+                      skipFirstH1.done = true;
+                      return "";
+                    }
+                    // Demote: page title is H1, everything else >= H2.
+                    const demoted = Math.max(2, level);
+                    return `\n\n${"#".repeat(demoted)} ${text}\n\n`;
+                  }
+                  if (tag === "li") {
+                    const inner = Array.from(node.childNodes)
+                      .map(walk)
+                      .join("")
+                      .trim();
+                    return `- ${inner}\n`;
+                  }
+                  if (tag === "br") return "\n";
+                  if (["p", "ul", "ol", "section", "div", "blockquote"].includes(tag)) {
+                    const inner = Array.from(node.childNodes).map(walk).join("");
+                    return inner + (["p", "blockquote"].includes(tag) ? "\n\n" : "\n");
+                  }
+                  return Array.from(node.childNodes).map(walk).join("");
+                };
+
+                let md = walk(clone);
+                md = md
+                  .replace(/[ \t]+\n/g, "\n")
                   .replace(/\n{3,}/g, "\n\n")
                   .trim();
-                return { title, text };
+                return { title: pageTitle, md };
               });
               const url = `https://docs.nexart.io${route === "/" ? "" : route}`;
               llmsFullSections.push(
-                `# ${extracted.title}\n\nURL: ${url}\n\n${extracted.text}`,
+                `# ${extracted.title}\n\nURL: ${url}\n\n${extracted.md}`,
               );
             } catch (err) {
               console.warn(
                 `[prerender]   (llms-full extract failed for ${route}: ${err.message})`,
               );
+
             }
           } catch (err) {
             failed++;

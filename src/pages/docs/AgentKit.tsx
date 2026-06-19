@@ -1,5 +1,4 @@
 import PageHeader from "@/components/docs/PageHeader";
-import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import { Link } from "react-router-dom";
 
@@ -28,10 +27,6 @@ Bundles produced by @nexart/agent-kit are standard cer.ai.execution.v1 artifacts
 
 const AgentKit = () => (
   <>
-    <DocsMeta
-      title="Agent Kit"
-      description="@nexart/agent-kit: linear workflow API with startWorkflow, step, and finish. Build verifiable multi-step agents quickly."
-    />
     <PageHeader
       title="Agent Kit"
       summary="A thin convenience layer for producing verifiable execution records from agent tool calls and decisions."

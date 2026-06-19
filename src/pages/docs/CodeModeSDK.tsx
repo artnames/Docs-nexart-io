@@ -1,5 +1,4 @@
 import PageHeader from "@/components/docs/PageHeader";
-import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import { Link } from "react-router-dom";
 
@@ -46,10 +45,6 @@ snapshot is reproducible. CodeMode snapshots can be wrapped in a CER via
 
 const CodeModeSDK = () => (
   <>
-    <DocsMeta
-      title="CodeMode SDK"
-      description="@nexart/codemode-sdk v1.10.2: deterministic generative execution runtime. Same code + seed produces bit-identical, independently verifiable visual output."
-    />
     <PageHeader
       title="CodeMode SDK"
       summary="@nexart/codemode-sdk v1.10.2 — deterministic generative execution environment for verifiable visual outputs."
