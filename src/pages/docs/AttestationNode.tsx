@@ -281,7 +281,7 @@ const AttestationNode = () => (
             <td className="px-4 py-3">Server-side verification of a held bundle.</td>
           </tr>
           <tr className="border-b border-border">
-            <td className="px-4 py-3 font-mono text-xs">GET /v1/cer/public/:certificateHash</td>
+            <td className="px-4 py-3 font-mono text-xs">GET /v1/cer/public?certificate_hash=&lt;hash&gt;</td>
             <td className="px-4 py-3">Public</td>
             <td className="px-4 py-3">Fetch the public-safe (redacted) representation of a CER.</td>
             <td className="px-4 py-3">Backing the public verifier UI.</td>

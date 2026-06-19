@@ -15,7 +15,7 @@ Use the profile that matches meta.attestation.protocolVersion, or recomputation 
 
 ## Steps
 1. Fetch the public record:
-   GET https://node.nexart.io/v1/cer/public/<certificateHash>
+   GET https://node.nexart.io/v1/cer/public?certificate_hash=<certificateHash>
    -> returns the CER bundle JSON (redacted; snapshot.input/output are SHA-256 digests)
 
 2. Fetch the node key set:
@@ -106,7 +106,7 @@ const ExternalVerification = () => (
       language="bash"
       title="Fetch public CER"
       code={`curl -fsS \\
-  "https://node.nexart.io/v1/cer/public/sha256:7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069" \\
+  "https://node.nexart.io/v1/cer/public?certificate_hash=sha256:7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069" \\
   -o cer.json`}
     />
 
