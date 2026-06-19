@@ -1,5 +1,4 @@
 import PageHeader from "@/components/docs/PageHeader";
-import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 
 const llmBlock = `# NexArt Audit Exports
@@ -25,10 +24,6 @@ verification_status, stamp_status, protocol_version, sdk_version`;
 
 const AuditExports = () => (
   <>
-    <DocsMeta
-      title="Dashboard: Audit Exports"
-      description="Export Evidence Packs of CERs and receipts for auditors. Choose date ranges, scope, and inclusion of redacted reseals."
-    />
     <PageHeader
       title="Audit Exports"
       summary="Export verification and attestation information for audit review, analysis, and reporting."

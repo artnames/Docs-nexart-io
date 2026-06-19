@@ -1,5 +1,4 @@
 import PageHeader from "@/components/docs/PageHeader";
-import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import { Link } from "react-router-dom";
 import GoldenPath from "@/components/docs/GoldenPath";
@@ -100,10 +99,6 @@ Sealed bundles return integrity PASS, receipt SKIPPED, envelope SKIPPED. Certifi
 
 const SDK = () => (
   <>
-    <DocsMeta
-      title="AI Execution SDK"
-      description="@nexart/ai-execution Node SDK: certify executions, create CER bundles, and obtain attested receipts via POST /v1/cer/ai/certify."
-    />
     <PageHeader
       title="AI Execution SDK"
       summary="API reference for certifying AI executions, creating CER bundles, and working with CER packages."

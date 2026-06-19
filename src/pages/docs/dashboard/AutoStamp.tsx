@@ -1,6 +1,4 @@
 import PageHeader from "@/components/docs/PageHeader";
-
-import DocsMeta from "@/components/docs/DocsMeta";
 const llmBlock = `# NexArt Auto-Stamp
 Auto-stamp is a project-level ingestion setting.
 
@@ -26,10 +24,6 @@ Even with auto-stamp disabled, records can be manually stamped later:
 
 const AutoStamp = () => (
   <>
-    <DocsMeta
-      title="Dashboard: Auto-Stamp"
-      description="Auto-Stamp automatically attests every CER created against an App, removing the need for explicit attestation calls."
-    />
     <PageHeader
       title="Auto-stamp"
       summary="Project-level setting that controls automatic attestation during CER ingestion."

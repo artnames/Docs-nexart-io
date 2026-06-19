@@ -1,5 +1,4 @@
 import PageHeader from "@/components/docs/PageHeader";
-import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import { Link } from "react-router-dom";
 
@@ -112,10 +111,6 @@ The NexArt CLI verifier supports:
 
 const IndependentVerification = () => (
   <>
-    <DocsMeta
-      title="Independent Verification"
-      description="Verify any NexArt CER without NexArt SDKs using only the bundle, the node public keys, SHA-256, and Ed25519."
-    />
     <PageHeader
       title="Independent Verification"
       summary="Reproduce the full verification of a NexArt CER using only the bundle, the node's public keys, SHA-256, Ed25519, and a protocol-matched JSON canonicalizer. No NexArt runtime required."

@@ -1,5 +1,4 @@
 import PageHeader from "@/components/docs/PageHeader";
-import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import { Link } from "react-router-dom";
 
@@ -36,10 +35,6 @@ the output hash matches. Artifacts can be wrapped in a CER via @nexart/ai-execut
 
 const UIRendererSDK = () => (
   <>
-    <DocsMeta
-      title="UI Renderer SDK"
-      description="@nexart/ui-renderer v0.9.1: deterministic UI rendering. Compile and preview systems, bridge to CodeMode, produce verifiable HTML and image artifacts."
-    />
     <PageHeader
       title="UI Renderer SDK"
       summary="@nexart/ui-renderer v0.9.1 — deterministic UI rendering for verifiable interface artifacts."

@@ -1,5 +1,4 @@
 import PageHeader from "@/components/docs/PageHeader";
-import DocsMeta from "@/components/docs/DocsMeta";
 import CodeBlock from "@/components/docs/CodeBlock";
 import MentalModel from "@/components/docs/MentalModel";
 import TestHarness from "@/components/docs/TestHarness";
@@ -48,14 +47,6 @@ verification layers, and the system-wide invariants.
 
 const Architecture = () => (
   <>
-    <DocsMeta
-      title="NexArt Architecture"
-      description="Canonical reference for the NexArt architecture: end-to-end flow, CER payload contract, hash whitelist, verification layers, and system invariants."
-      breadcrumbs={[
-        { name: "Docs", path: "/docs" },
-        { name: "Architecture", path: "/docs/architecture" },
-      ]}
-    />
     <PageHeader
       title="NexArt Architecture"
       summary="Canonical, normative reference for the NexArt protocol pipeline: capture, create, hash, attest, verify."
