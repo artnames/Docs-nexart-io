@@ -62,6 +62,7 @@ import KeyManagement from "./pages/docs/KeyManagement";
 import VerificationModel from "./pages/docs/VerificationModel";
 import ExternalVerification from "./pages/docs/ExternalVerification";
 import IndependentVerification from "./pages/docs/IndependentVerification";
+import ConfidentialMode from "./pages/docs/ConfidentialMode";
 
 const queryClient = new QueryClient();
 
@@ -126,6 +127,7 @@ const App = () => (
             <Route path="dashboard/retention" element={<Retention />} />
             <Route path="dashboard/audit-exports" element={<AuditExports />} />
             <Route path="privacy" element={<PrivacyDataHandling />} />
+            <Route path="confidential-mode" element={<ConfidentialMode />} />
             <Route path="examples" element={<Examples />} />
             <Route path="integrations/n8n" element={<N8n />} />
             <Route path="integrations/langchain" element={<LangChain />} />

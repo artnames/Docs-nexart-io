@@ -55,6 +55,7 @@ const navigation: NavItem[] = [
       { title: "Agent-Kit Instructions for AI Agents", path: "/docs/agent-kit-instructions" },
       { title: "Python Bridge", path: "/docs/python-bridge" },
       { title: "NexArt CLI", path: "/docs/cli" },
+      { title: "Confidential Execution Mode", path: "/docs/confidential-mode" },
     ],
   },
   {
