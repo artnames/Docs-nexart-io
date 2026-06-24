@@ -58,6 +58,9 @@
 - [UI Renderer SDK](https://docs.nexart.io/docs/ui-renderer-sdk)
 - [Agent Kit](https://docs.nexart.io/docs/agent-kit)
 - [Agent-Kit Instructions for AI Agents](https://docs.nexart.io/docs/agent-kit-instructions) — paste-ready runbook ([raw markdown](https://docs.nexart.io/agent-kit-instructions.md))
+- [Confidential Execution Mode](https://docs.nexart.io/docs/confidential-mode)
+- [Python Bridge](https://docs.nexart.io/docs/python-bridge)
+- [Key Management](https://docs.nexart.io/docs/security/key-management)
 - [Integration Surfaces](https://docs.nexart.io/docs/integration-surfaces)
 
 ## Workflows
