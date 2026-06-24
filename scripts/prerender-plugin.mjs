@@ -68,6 +68,7 @@ const ROUTES = [
   "/docs/guides",
   "/docs/faq",
   "/docs/security/key-management",
+  "/docs/confidential-mode",
 ];
 
 const PARENT_ROUTES = new Set(
