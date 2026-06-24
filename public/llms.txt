@@ -7,9 +7,11 @@
 - [What is NexArt](https://docs.nexart.io/docs/what-is-nexart)
 - [Getting Started](https://docs.nexart.io/docs/getting-started)
 - [Quickstart](https://docs.nexart.io/docs/quickstart)
+- [Architecture](https://docs.nexart.io/docs/architecture)
 - [FAQ](https://docs.nexart.io/docs/faq)
 - [Examples](https://docs.nexart.io/docs/examples)
 - [Guides](https://docs.nexart.io/docs/guides)
+- [Certifying LLM Conversations](https://docs.nexart.io/docs/certifying-llm-conversations)
 
 ## Protocol
 
