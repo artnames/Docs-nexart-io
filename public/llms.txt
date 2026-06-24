@@ -75,8 +75,11 @@
 ## Verification
 
 - [Verification](https://docs.nexart.io/docs/verification)
+- [Verification Model](https://docs.nexart.io/docs/verification-model)
 - [Verification Semantics](https://docs.nexart.io/docs/verification-semantics)
 - [Verification Statuses & Errors](https://docs.nexart.io/docs/verification-statuses-and-errors)
+- [Independent Verification](https://docs.nexart.io/docs/independent-verification)
+- [External Verification](https://docs.nexart.io/docs/external-verification)
 - [verify.nexart.io](https://docs.nexart.io/docs/verify-nexart)
 - [Browser Verification](https://docs.nexart.io/docs/browser-verification)
 
