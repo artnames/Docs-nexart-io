@@ -7,9 +7,11 @@
 - [What is NexArt](https://docs.nexart.io/docs/what-is-nexart)
 - [Getting Started](https://docs.nexart.io/docs/getting-started)
 - [Quickstart](https://docs.nexart.io/docs/quickstart)
+- [Architecture](https://docs.nexart.io/docs/architecture)
 - [FAQ](https://docs.nexart.io/docs/faq)
 - [Examples](https://docs.nexart.io/docs/examples)
 - [Guides](https://docs.nexart.io/docs/guides)
+- [Certifying LLM Conversations](https://docs.nexart.io/docs/certifying-llm-conversations)
 
 ## Protocol
 
@@ -56,6 +58,9 @@
 - [UI Renderer SDK](https://docs.nexart.io/docs/ui-renderer-sdk)
 - [Agent Kit](https://docs.nexart.io/docs/agent-kit)
 - [Agent-Kit Instructions for AI Agents](https://docs.nexart.io/docs/agent-kit-instructions) — paste-ready runbook ([raw markdown](https://docs.nexart.io/agent-kit-instructions.md))
+- [Confidential Execution Mode](https://docs.nexart.io/docs/confidential-mode)
+- [Python Bridge](https://docs.nexart.io/docs/python-bridge)
+- [Key Management](https://docs.nexart.io/docs/security/key-management)
 - [Integration Surfaces](https://docs.nexart.io/docs/integration-surfaces)
 
 ## Workflows
@@ -70,8 +75,11 @@
 ## Verification
 
 - [Verification](https://docs.nexart.io/docs/verification)
+- [Verification Model](https://docs.nexart.io/docs/verification-model)
 - [Verification Semantics](https://docs.nexart.io/docs/verification-semantics)
 - [Verification Statuses & Errors](https://docs.nexart.io/docs/verification-statuses-and-errors)
+- [Independent Verification](https://docs.nexart.io/docs/independent-verification)
+- [External Verification](https://docs.nexart.io/docs/external-verification)
 - [verify.nexart.io](https://docs.nexart.io/docs/verify-nexart)
 - [Browser Verification](https://docs.nexart.io/docs/browser-verification)
 
