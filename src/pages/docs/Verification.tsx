@@ -508,21 +508,40 @@ const Verification = () => (
       :
     </p>
     <CodeBlock
-      code={`VERIFIED      All applicable checks pass. The CER is intact and,
-              if attested, has a valid signed receipt.
+      code={`VERIFIED               All applicable checks pass. The CER is intact and,
+                       if attested, has a valid signed receipt.
 
-FAILED        One or more checks fail. The record may have been
-              modified or the signature does not match.
+VERIFIED_CONFIDENTIAL  Returned by the node for protocolVersion 1.3.1
+                       (confidential) bundles whose commitments verify.
 
-NOT_FOUND     The requested execution record was not located.`}
-      title="Verification Statuses"
+FAILED                 One or more checks fail. The record may have been
+                       modified or the signature does not match.
+
+NOT_FOUND              Lookup result, not a verification check: the
+                       certificateHash was not located on the node.`}
+      title="Verification Statuses (human)"
     />
+    <p className="text-sm text-muted-foreground">
+      Machine codes: the SDK additionally exposes a richer{" "}
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">CerVerifyCode</code> set (e.g.{" "}
+      <code>OK</code>, <code>CERTIFICATE_HASH_MISMATCH</code>, <code>ATTESTATION_*</code>,{" "}
+      <code>KEY_REVOKED</code>, <code>SCHEMA_ERROR</code>) and a{" "}
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">ReasonCode</code> set (e.g.{" "}
+      <code>RECORD_NOT_FOUND</code>, <code>SCHEMA_VERSION_UNSUPPORTED</code>,{" "}
+      <code>BUNDLE_CORRUPTED</code>) on the structured report returned by{" "}
+      <code>verifyAiCerBundleDetailed</code>. Treat these as the authoritative machine surface; the strings above are
+      the human rollup.
+    </p>
 
     <h2 id="result-classes">Reading Verification Results</h2>
-    <p>The verifier reports four distinct outcome classes. They are not all failures:</p>
+    <p>The verifier reports the following outcome classes. They are not all failures:</p>
     <ul>
       <li>
         <strong>VERIFIED</strong>: all applicable checks pass.
+      </li>
+      <li>
+        <strong>VERIFIED_CONFIDENTIAL</strong>: 1.3.1 bundle whose commitments and signatures verify. The plaintext
+        of <code>input</code>/<code>output</code> is not present; equality of the openings is what is proven.
       </li>
       <li>
         <strong>VERIFIED (supplemental)</strong>: core integrity passes, but supplemental context (e.g.{" "}
@@ -536,7 +555,8 @@ NOT_FOUND     The requested execution record was not located.`}
         <strong>FAILED</strong>: one or more applicable checks fail.
       </li>
       <li>
-        <strong>NOT_FOUND</strong>: the artifact was never registered on the node. See{" "}
+        <strong>NOT_FOUND</strong>: lookup result, not a verification check — the artifact was never registered on
+        the node. See{" "}
         <Link to="/docs/end-to-end-verification" className="text-primary hover:underline">
           End-to-End Verification
         </Link>
