@@ -274,9 +274,10 @@ const Verification = () => (
       <li>
         <strong>Re-serialization that breaks canonicalization.</strong> Layer 3 requires the exact canonicalization
         profile bound to the bundle's{" "}
-        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">protocolVersion</code>(<code>nexart-v1</code>{" "}
-        for 1.2.0, <code>jcs-v1</code> / RFC 8785 for 1.3.0). Tools that pretty-print, reorder keys, change number
-        formatting, or alter Unicode escaping invalidate the signature even when content is semantically identical.
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">snapshot.protocolVersion</code> (
+        <code>nexart-v1</code> for 1.2.0, <code>jcs-v1</code> / RFC 8785 for 1.3.0 and 1.3.1). Tools that pretty-print,
+        reorder keys, change number formatting, or alter Unicode escaping invalidate the signature even when content
+        is semantically identical.
       </li>
       <li>
         <strong>
