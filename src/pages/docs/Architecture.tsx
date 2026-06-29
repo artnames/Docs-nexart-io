@@ -506,7 +506,7 @@ const Architecture = () => (
       </li>
       <li>
         <strong>Tamper detection</strong> — any change to a hashed field is detectable by recomputation against the
-        JCS-canonicalized whitelist projection.
+        canonicalized whitelist projection (per the bundle's protocol profile).
       </li>
       <li>
         <strong>Independent verification</strong> — any party can verify a bundle using only the bundle and the node's
