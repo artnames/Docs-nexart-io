@@ -15,7 +15,7 @@ verification layers, and the system-wide invariants.
 ## End-to-End Flow
 1. Execution capture - producer runs an AI or deterministic execution and captures inputs, outputs, and parameters.
 2. CER creation - producer builds a canonical Certified Execution Record (CER) bundle with bundleType "cer.ai.execution.v1".
-3. Hash computation - certificateHash = SHA-256 over JCS-canonicalized whitelist projection.
+3. Hash computation - certificateHash = SHA-256 over the canonicalized whitelist projection. Canonicalization is protocol-bound: nexart-v1 for snapshot.protocolVersion = 1.2.0 (default); jcs-v1 (RFC 8785) for 1.3.0 and 1.3.1.
 4. Node attestation (optional) - attestation node issues an Ed25519-signed receipt referencing certificateHash, stored at meta.attestation.
 5. Verification - any party recomputes the hash, validates the receipt signature, checks receipt consistency, and (when present) validates the verification envelope.
 
