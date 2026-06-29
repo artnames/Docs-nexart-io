@@ -611,7 +611,7 @@ NOT_FOUND     The requested execution record was not located.`}
     <ol>
       <li>
         Recompute the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> from the
-        CER bundle (SHA-256 over the JCS-canonicalized whitelist projection)
+        CER bundle (SHA-256 over the canonicalized whitelist projection — nexart-v1 for 1.2.0, jcs-v1 for 1.3.x)
       </li>
       <li>
         Compare it with the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> in{" "}
