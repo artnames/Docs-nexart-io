@@ -84,6 +84,7 @@ const App = () => (
             <Route path="what-is-nexart" element={<WhatIsNexArt />} />
             <Route path="getting-started" element={<GettingStarted />} />
             <Route path="quickstart" element={<Quickstart />} />
+            <Route path="builder-integration-guide" element={<BuilderIntegrationGuide />} />
             <Route path="architecture" element={<Architecture />} />
             <Route path="cer-protocol" element={<CERProtocol />} />
             <Route path="cer-record-management" element={<CERRecordManagement />} />
