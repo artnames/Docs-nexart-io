@@ -42,7 +42,7 @@ verification layers, and the system-wide invariants.
 ## System invariants
 - No mutation: a CER bundle MUST NOT be mutated after creation. Lifecycle state changes (Active, Archived, Hidden, Deleted) are stored outside the bundle.
 - Idempotency: identical inputs to the canonicalization and hashing pipeline MUST produce the same certificateHash.
-- Canonicalization is protocol-bound: profile is selected by protocolVersion (1.2.0 -> nexart-v1, default; 1.3.0 -> jcs-v1 / RFC 8785, opt-in). Verifiers MUST apply the whitelist projection to the bundle as received and use the matching profile. No reconstruction.
+- Canonicalization is protocol-bound: profile is selected by snapshot.protocolVersion (1.2.0 -> nexart-v1, legacy default; 1.3.0 -> jcs-v1 / RFC 8785, opt-in; 1.3.1 -> jcs-v1 / RFC 8785, confidential execution, node's advertised default). Verifiers MUST apply the whitelist projection to the bundle as received and use the matching profile. No reconstruction.
 - Independence: verification MUST be possible without trusting NexArt infrastructure, using only the bundle and the node's published public keys.`;
 
 const Architecture = () => (
