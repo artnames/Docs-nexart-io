@@ -655,11 +655,12 @@ const cer = sealCer(snapshot);
     <div className="not-prose my-4 rounded-lg border-l-2 border-destructive bg-destructive/5 px-4 py-3 text-sm">
       <strong>Callout.</strong> If{" "}
       <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">protocolVersion</code> is omitted or{" "}
-      <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">null</code>, NexArt defaults to{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">null</code>, the SDK defaults to{" "}
       <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">1.2.0</code> (nexart-v1) for backward
-      compatibility. RFC 8785 JCS canonicalization is used <strong>only</strong> when you explicitly pass{" "}
-      <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">"1.3.0"</code> at
-      creation/sealing/certification time. Unsupported explicit values (for example{" "}
+      compatibility. RFC 8785 JCS canonicalization applies when you explicitly pass{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">"1.3.0"</code> or{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">"1.3.1"</code> (confidential execution; the
+      node's advertised default) at creation/sealing/certification time. Unsupported explicit values (for example{" "}
       <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">"2.0.0"</code>) are rejected by the node before
       signing and fail closed at verification.
     </div>
