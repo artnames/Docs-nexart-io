@@ -1,60 +1,135 @@
 import PageHeader from "@/components/docs/PageHeader";
 import CodeBlock from "@/components/docs/CodeBlock";
 
-const llmBlock = `# Confidential Execution Mode (SDK v1.1.0)
-Confidential mode replaces sensitive CER fields (input, output) with
-HMAC-SHA256 commitments. Plaintext stays client-side; the NexArt node
-never receives raw input or output.
+const llmBlock = `# Confidential Execution (Protocol 1.3.1)
+Protocol 1.3.1 introduces commitment-based confidentiality, replacing the
+hash-bound omission model used in 1.2.0.
 
-- Scheme: hmac-sha256-v1
-- commitment = HMAC(salt, value)
-- Salts (openings) are generated client-side and never sent to the node.
-- Two verification modes:
-  1. Authenticity (default) - confirms record integrity, no content disclosed.
-  2. Equality (with openings) - proves a plaintext matches the commitment.
-- Fail-closed: invalid scheme, missing salt, or unsupported field -> throw.
-- Prompt remains plaintext in protocol 1.3.0.
-- Node pipeline is unchanged; commitments are treated as standard snapshot data.
+Model:
+- The client sends raw prompt, input, output, and parameters to the node.
+- The node converts input and output into commitment envelopes using
+  HMAC-SHA256 (sealConfidential) with deterministically derived per-field salts.
+- Raw input and output are NEVER stored, NEVER included in the certified
+  record, and NEVER persisted in proof_json.
+- The certified CER contains only commitments and hashes.
+- Verification operates on commitments, not plaintext.
 
-API: sealConfidential(), generateSalt() from @nexart/ai-execution.`;
+Envelope shape:
+{ "_redacted": true, "scheme": "hmac-sha256-v1", "commitment": "sha256:..." }
+
+Compatibility:
+- 1.2.0 (nexart-v1, default) - hash-bound omission, legacy.
+- 1.3.0 (jcs-v1)             - RFC 8785 canonicalization, plaintext snapshot.
+- 1.3.1 (jcs-v1)             - RFC 8785 + node-side commitment envelopes for
+                                input and output. prompt and parameters remain
+                                plaintext in the snapshot.
+
+The client MUST NOT pre-hash or pre-redact input/output for 1.3.1. Sealing is
+performed exclusively by the node.`;
 
 const ConfidentialMode = () => (
   <>
     <PageHeader
-      title="Confidential Execution Mode"
-      summary="SDK v1.1.0. Replace sensitive CER fields with cryptographic commitments while keeping plaintext client-side."
+      title="Confidential Execution (Protocol 1.3.1)"
+      summary="Node-side commitment envelopes for input and output. Raw plaintext is never stored, never certified, never persisted."
       llmBlock={llmBlock}
     />
 
+    <h2 id="summary">Summary</h2>
+    <p className="rounded-md border border-primary/30 bg-primary/5 p-3 text-sm">
+      Protocol 1.3.1 introduces commitment-based confidentiality, replacing the
+      hash-bound omission model used in 1.2.0.
+    </p>
+
     <h2 id="overview">Overview</h2>
     <p>
-      Confidential mode allows developers to:
+      In protocol <code>1.3.1</code> the client sends raw execution data to the
+      attestation node during certification. The node converts the sensitive
+      fields into <strong>commitment envelopes</strong> before building the CER.
     </p>
     <ul>
-      <li>Replace sensitive fields (<code>input</code>, <code>output</code>) with cryptographic commitments.</li>
-      <li>Keep plaintext data entirely client-side.</li>
-      <li>Still produce a verifiable Certified Execution Record (CER).</li>
+      <li>Raw <code>input</code> and <code>output</code> are sent to the node over TLS during certification.</li>
+      <li>The node seals them into commitment envelopes using <code>sealConfidential</code> (HMAC-SHA256).</li>
+      <li>Per-field salts are derived deterministically inside the node and are not exposed.</li>
+      <li>Raw <code>input</code> and <code>output</code> are NEVER:
+        <ul>
+          <li>stored,</li>
+          <li>included in the certified record,</li>
+          <li>persisted in <code>proof_json</code>.</li>
+        </ul>
+      </li>
+      <li>The resulting CER contains only commitments and hashes.</li>
+      <li>Verification operates on commitments, not plaintext.</li>
     </ul>
-    <p className="rounded-md border border-primary/30 bg-primary/5 p-3 text-sm">
-      The NexArt node never receives raw input or output in confidential mode.
-    </p>
 
-    <h2 id="what-changes">What Changes</h2>
-    <p>The difference is local to the execution snapshot.</p>
-
+    <h2 id="envelope">Commitment Envelope</h2>
+    <p>Each committed field is replaced in the snapshot by an envelope:</p>
     <CodeBlock
-      title="Plain mode (snapshot excerpt)"
+      title="Commitment envelope"
       language="json"
       code={`{
-  "input":  "Should this refund be approved?",
-  "output": "approve: policy_passed"
+  "_redacted": true,
+  "scheme": "hmac-sha256-v1",
+  "commitment": "sha256:<hex>"
+}`}
+    />
+    <ul>
+      <li><strong>Scheme:</strong> <code>hmac-sha256-v1</code>.</li>
+      <li><strong>Computation:</strong> <code>commitment = HMAC_SHA256(salt, value)</code>.</li>
+      <li><strong>Properties:</strong> not reversible, not guessable without the salt, deterministic for a given <code>(salt, value)</code> pair.</li>
+    </ul>
+
+    <h2 id="certification-flow">Certification Flow (1.3.1)</h2>
+    <p>For <code>protocolVersion: "1.3.1"</code>:</p>
+    <p><strong>Client sends:</strong></p>
+    <ul>
+      <li><code>prompt</code></li>
+      <li><code>input</code> (raw)</li>
+      <li><code>output</code> (raw)</li>
+      <li><code>parameters</code> (full object)</li>
+    </ul>
+    <p><strong>Node:</strong></p>
+    <ul>
+      <li>seals <code>input</code> and <code>output</code> into commitment envelopes,</li>
+      <li>derives deterministic per-field salts internally,</li>
+      <li>builds the CER snapshot with the envelopes in place of plaintext,</li>
+      <li>computes <code>certificateHash</code>, signs the receipt, and returns the attested bundle.</li>
+    </ul>
+    <p className="rounded-md border border-destructive/30 bg-destructive/5 p-3 text-sm">
+      The client MUST NOT pre-hash or pre-redact <code>input</code>/<code>output</code> for 1.3.1.
+      Sealing is performed exclusively by the node. The hash-bound omission pattern from 1.2.0
+      is no longer the confidentiality model.
+    </p>
+
+    <h2 id="request-example">Request Example</h2>
+    <CodeBlock
+      title="POST /v1/cer/ai/certify - protocolVersion 1.3.1"
+      language="json"
+      code={`{
+  "executionId": "exec_123",
+  "provider": "openai",
+  "model": "gpt-4o",
+  "prompt": "You are a financial analyst.",
+  "input": "Summarize the risks.",
+  "output": "Revenue decline...",
+  "parameters": {
+    "temperature": 0,
+    "maxTokens": 1024,
+    "topP": 1,
+    "seed": null
+  },
+  "protocolVersion": "1.3.1",
+  "appId": "example-app"
 }`}
     />
 
+    <h2 id="resulting-snapshot">Resulting Snapshot (excerpt)</h2>
     <CodeBlock
-      title="Confidential mode (snapshot excerpt)"
+      title="Certified CER snapshot - input/output replaced by commitments"
       language="json"
       code={`{
+  "prompt": "You are a financial analyst.",
+  "parameters": { "temperature": 0, "maxTokens": 1024, "topP": 1, "seed": null },
   "input": {
     "_redacted": true,
     "scheme": "hmac-sha256-v1",
@@ -68,97 +143,71 @@ const ConfidentialMode = () => (
 }`}
     />
 
-    <h2 id="commitment-model">Commitment Model</h2>
+    <h2 id="verification">Verification</h2>
     <ul>
-      <li><strong>Scheme:</strong> <code>hmac-sha256-v1</code></li>
-      <li>Each committed field uses an independently generated salt (the <em>opening</em>).</li>
-      <li><code>commitment = HMAC_SHA256(salt, value)</code></li>
-    </ul>
-    <p>Properties:</p>
-    <ul>
-      <li><strong>Not reversible.</strong> The commitment does not disclose the value.</li>
-      <li><strong>Not guessable</strong> without the salt, even for low-entropy values.</li>
-      <li><strong>Deterministic</strong> for the same <code>(value, salt)</code> pair.</li>
-    </ul>
-
-    <h2 id="openings">Openings</h2>
-    <p>Openings are the per-field salts. They are:</p>
-    <ul>
-      <li>Generated client-side at sealing time.</li>
-      <li>Never transmitted to the node.</li>
-      <li>Required to later prove equality between a plaintext and a commitment.</li>
-    </ul>
-    <p className="rounded-md border border-destructive/30 bg-destructive/5 p-3 text-sm">
-      If you lose the openings, you cannot prove the original content. The commitment alone is not sufficient.
-    </p>
-
-    <h2 id="verification-modes">Verification Modes</h2>
-    <ol>
       <li>
-        <strong>Authenticity verification (default).</strong> Confirms record integrity, signature,
-        and envelope. Does not reveal or disclose committed content.
+        <strong>Authenticity (default).</strong> Confirms bundle integrity,
+        receipt signature, and envelope. No plaintext is required and none is
+        disclosed.
       </li>
       <li>
-        <strong>Equality verification (with openings).</strong> Given a candidate plaintext and the
-        corresponding opening, recomputes <code>HMAC(salt, value)</code> and checks it against the
-        commitment. Proves that the supplied plaintext is the value originally committed.
+        <strong>Equality (optional).</strong> A party that independently holds
+        the original plaintext can recompute the commitment and compare it to
+        the value in the snapshot. The node does not perform this check and does
+        not retain the data required to perform it.
       </li>
-    </ol>
-
-    <h2 id="fail-closed">Fail-Closed Behavior</h2>
-    <ul>
-      <li>Invalid scheme &rarr; throw.</li>
-      <li>Missing salt for a committed field &rarr; throw.</li>
-      <li>Attempt to commit unsupported fields &rarr; throw.</li>
-      <li><code>prompt</code> remains plaintext in protocol <code>1.3.0</code> and MUST NOT be committed.</li>
     </ul>
+
+    <h2 id="protocol-matrix">Protocol Version Matrix</h2>
+    <div className="not-prose my-6 overflow-x-auto">
+      <table className="w-full text-sm border border-border rounded-lg">
+        <thead>
+          <tr className="bg-muted/50">
+            <th className="text-left px-4 py-3 border-b border-border">protocolVersion</th>
+            <th className="text-left px-4 py-3 border-b border-border">Canonicalization</th>
+            <th className="text-left px-4 py-3 border-b border-border">Confidentiality model</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr className="border-b border-border">
+            <td className="px-4 py-3 font-mono text-xs">1.2.0</td>
+            <td className="px-4 py-3">nexart-v1 (default)</td>
+            <td className="px-4 py-3">Hash-bound omission (legacy).</td>
+          </tr>
+          <tr className="border-b border-border">
+            <td className="px-4 py-3 font-mono text-xs">1.3.0</td>
+            <td className="px-4 py-3">jcs-v1 (RFC 8785)</td>
+            <td className="px-4 py-3">Plaintext snapshot. No node-side sealing.</td>
+          </tr>
+          <tr>
+            <td className="px-4 py-3 font-mono text-xs">1.3.1</td>
+            <td className="px-4 py-3">jcs-v1 (RFC 8785)</td>
+            <td className="px-4 py-3">Node-side commitment envelopes for <code>input</code> and <code>output</code>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <h2 id="security-model">Security Model</h2>
     <p>Confidential mode guarantees:</p>
     <ul>
-      <li>The node cannot read the committed sensitive fields.</li>
-      <li>Third parties cannot reconstruct data from commitments alone.</li>
+      <li>The node does not store raw <code>input</code> or <code>output</code>.</li>
+      <li>The certified record and <code>proof_json</code> contain only commitments.</li>
+      <li>Third parties cannot reconstruct plaintext from commitments alone.</li>
     </ul>
     <p>It does NOT guarantee:</p>
     <ul>
-      <li>Confidentiality of non-committed fields (e.g. <code>prompt</code>, <code>provider</code>, <code>model</code>, <code>parameters</code>).</li>
-      <li>Protection if openings are leaked. Anyone with the opening and the commitment can verify, and in low-entropy cases, brute-force the value.</li>
-    </ul>
-
-    <h2 id="implementation">Implementation (SDK)</h2>
-    <CodeBlock
-      title="Minimal usage"
-      language="typescript"
-      code={`import { sealConfidential, generateSalt } from "@nexart/ai-execution";
-
-const inputSalt  = generateSalt();
-const outputSalt = generateSalt();
-
-const bundle = sealConfidential({
-  provider:   "openai",
-  model:      "gpt-4o-mini",
-  prompt:     "Should this refund be approved?", // plaintext (not committed)
-  parameters: { temperature: 0, maxTokens: 1024, topP: null, seed: null },
-  input:      { value: { messages: [/* ... */] }, salt: inputSalt },
-  output:     { value: { decision: "approve" },   salt: outputSalt },
-});
-
-// Persist (inputSalt, outputSalt) securely. They are the openings.`}
-    />
-
-    <h2 id="node-compatibility">Node Compatibility</h2>
-    <ul>
-      <li>No node changes are required.</li>
-      <li>Commitments are treated as standard snapshot data by the node.</li>
-      <li>Certification and verification pipelines remain unchanged.</li>
+      <li>Confidentiality of non-committed fields. <code>prompt</code> and <code>parameters</code> remain plaintext in the snapshot.</li>
+      <li>Protection against parties who already hold the plaintext. Equality verification is by design available to them.</li>
+      <li>Transport confidentiality beyond TLS to the node.</li>
     </ul>
 
     <h2 id="best-practices">Best Practices</h2>
     <ul>
-      <li>Only commit fields that are genuinely sensitive.</li>
-      <li>Store openings in a secure secret store, scoped to the same retention boundary as the plaintext.</li>
-      <li>Share openings only out-of-band, to parties that already have legitimate access to the plaintext.</li>
-      <li>Never log openings. Never embed them in CERs, traces, or telemetry.</li>
+      <li>Only place genuinely sensitive content in <code>input</code>/<code>output</code>.</li>
+      <li>Avoid embedding secrets in <code>prompt</code> or <code>parameters</code>; they are not committed.</li>
+      <li>If your audit workflow requires equality verification, retain the original plaintext in your own system of record. The node does not.</li>
+      <li>Do not log raw <code>input</code>/<code>output</code> alongside the resulting <code>certificateHash</code> unless your retention policy permits it.</li>
     </ul>
   </>
 );

@@ -249,6 +249,47 @@ const AttestationNode = () => (
       for the rules to apply when handling reseals.
     </p>
 
+    <h2 id="certification-flow">Certification Flow (protocolVersion 1.3.1)</h2>
+    <p>
+      Protocol <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">1.3.1</code>
+      enables first-class confidential execution. The client submits raw fields to{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">POST /v1/cer/ai/certify</code>{" "}
+      and the node performs sealing. See{" "}
+      <Link to="/docs/confidential-mode" className="text-primary hover:underline">Confidential Execution</Link>{" "}
+      for the full model.
+    </p>
+    <ul>
+      <li><strong>Client sends:</strong> <code>prompt</code>, raw <code>input</code>, raw <code>output</code>, and full <code>parameters</code>.</li>
+      <li><strong>Node seals:</strong> <code>input</code> and <code>output</code> into commitment envelopes via <code>sealConfidential</code> (HMAC-SHA256) using deterministically derived per-field salts.</li>
+      <li><strong>Node builds the CER</strong> with envelopes in place of plaintext, computes <code>certificateHash</code>, and returns the attested bundle.</li>
+      <li><strong>Raw <code>input</code>/<code>output</code> are never stored, never included in the certified record, and never persisted in <code>proof_json</code>.</strong></li>
+    </ul>
+    <p>Canonical request body:</p>
+    <CodeBlock
+      title="POST /v1/cer/ai/certify - protocolVersion 1.3.1"
+      language="json"
+      code={`{
+  "executionId": "exec_123",
+  "provider": "openai",
+  "model": "gpt-4o",
+  "prompt": "You are a financial analyst.",
+  "input": "Summarize the risks.",
+  "output": "Revenue decline...",
+  "parameters": {
+    "temperature": 0,
+    "maxTokens": 1024,
+    "topP": 1,
+    "seed": null
+  },
+  "protocolVersion": "1.3.1",
+  "appId": "example-app"
+}`}
+    />
+    <p className="rounded-md border border-destructive/30 bg-destructive/5 p-3 text-sm">
+      Clients MUST NOT pre-hash or pre-redact <code>input</code>/<code>output</code> for 1.3.1.
+      The hash-bound omission pattern from 1.2.0 is no longer the confidentiality model.
+    </p>
+
     <h2 id="node-api">Node API Endpoints</h2>
     <p>The canonical attestation node exposes the following endpoints. Authenticated endpoints require <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">Authorization: Bearer NEXART_API_KEY</code>.</p>
     <div className="not-prose my-6 overflow-x-auto">
