@@ -61,6 +61,7 @@
 - [Confidential Execution Mode](https://docs.nexart.io/docs/confidential-mode)
 - [Python Bridge](https://docs.nexart.io/docs/python-bridge)
 - [Key Management](https://docs.nexart.io/docs/security/key-management)
+- [Builder Integration Guide](https://docs.nexart.io/docs/builder-integration-guide)
 - [Integration Surfaces](https://docs.nexart.io/docs/integration-surfaces)
 
 ## Workflows
