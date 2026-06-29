@@ -408,10 +408,24 @@ const Architecture = () => (
       Newer bundles MAY include
       <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono ml-1">meta.verificationEnvelope</code> and
       <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono ml-1">meta.verificationEnvelopeSignature</code>.
-      The verifier validates the signature against the envelope content. Failure of the envelope MUST NOT be reported as
-      failure of bundle integrity. Historical artifacts without an envelope return
+      The envelope signature covers the signable payload{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">{`{ attestation, bundle }`}</code>, where{" "}
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">attestation</code> ={" "}
+      <code>{`{ attestationId, attestedAt, kid, nodeRuntimeHash, protocolVersion }`}</code> and{" "}
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">bundle</code> ={" "}
+      <code>{`{ bundleType, version, createdAt, snapshot, context?, contextSummary? }`}</code> (the bundle whitelist
+      projection used by Layer 1, minus <code>policyEvaluation</code>). Mutating any field in either projection — not
+      only the 5 attestation fields — invalidates the envelope. Excluded from envelope coverage:{" "}
+      <code>certificateHash</code>, <code>meta</code>, <code>receipt</code>,{" "}
+      <code>verificationEnvelope*</code>, and unknown keys. Failure of the envelope MUST NOT be reported as failure of
+      bundle integrity. Historical artifacts without an envelope return
       <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono ml-1">SKIPPED</code> for this layer
       (compatibility fallback).
+    </p>
+    <p className="text-sm text-muted-foreground">
+      Note: <code>policyEvaluation</code> is covered by Layer 1 (it contributes to{" "}
+      <code>certificateHash</code>) but is NOT part of the Layer 3 bundle projection. The two projections are not
+      identical; verifier authors MUST NOT assume <code>policyEvaluation</code> is envelope-signed.
     </p>
 
     <p className="text-sm text-muted-foreground">
