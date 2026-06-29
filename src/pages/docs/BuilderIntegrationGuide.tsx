@@ -216,6 +216,60 @@ const BuilderIntegrationGuide = () => (
   }'`}
     />
 
+    <h2 id="bind-identity">5.1 Binding Identity / PII into the Certificate (Where It Must Go)</h2>
+    <p>
+      A common requirement is to bind a person's identity (name, email, customer id, or any PII) to the
+      certificate so the proof is provably about that subject - without storing the PII in plaintext.
+    </p>
+    <p>
+      The node builds the certified snapshot from a fixed set of fields. Any unknown top-level field you
+      invent (e.g. <code>identity</code>) is silently dropped - it will NOT be bound by
+      <code> certificateHash</code>, and it will NOT raise an error. That silent drop is the trap: it
+      looks like it worked, but the binding is fake.
+    </p>
+    <p>Here is exactly where each field lands under <code>1.3.1</code>:</p>
+    <div className="not-prose my-6 overflow-x-auto">
+      <table className="w-full text-sm border border-border rounded-lg">
+        <thead><tr className="bg-muted/50"><th className="text-left px-4 py-3 border-b border-border">Where you put it</th><th className="text-left px-4 py-3 border-b border-border">Bound by <code>certificateHash</code>?</th><th className="text-left px-4 py-3 border-b border-border">Stored / visible?</th><th className="text-left px-4 py-3 border-b border-border">Use for PII?</th></tr></thead>
+        <tbody>
+          <tr className="border-b border-border"><td className="px-4 py-3 font-mono text-xs">input / output</td><td className="px-4 py-3">Yes (via the sealed commitment)</td><td className="px-4 py-3">Never stored raw - confidential</td><td className="px-4 py-3"><strong>Yes - put PII here</strong></td></tr>
+          <tr className="border-b border-border"><td className="px-4 py-3 font-mono text-xs">prompt, provider, model, parameters, executionId, context</td><td className="px-4 py-3">Yes</td><td className="px-4 py-3">Plaintext (stored and echoed)</td><td className="px-4 py-3">No</td></tr>
+          <tr><td className="px-4 py-3 font-mono text-xs">metadata</td><td className="px-4 py-3">No (outside the hash perimeter)</td><td className="px-4 py-3">Plaintext</td><td className="px-4 py-3">No</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      <strong>Rule of thumb:</strong> the only slot that is both bound by <code>certificateHash</code>
+      and confidential is <code>input</code> / <code>output</code>. To bind PII, embed it inside
+      <code> input</code> (or <code>output</code>) - typically as a JSON-encoded string so it stays
+      structured and deterministic:
+    </p>
+    <CodeBlock
+      title="Binding identity into the sealed input (1.3.1)"
+      language="json"
+      code={`{
+  "protocolVersion": "1.3.1",
+  "provider": "openai",
+  "model": "gpt-4o",
+  "executionId": "exec-2026-06-29-user-7f3a",
+  "prompt": "Generate the onboarding summary.",
+  "input": "{\\"identity\\":{\\"name\\":\\"Jane Doe\\",\\"email\\":\\"jane@example.com\\"},\\"content\\":\\"<the actual model input>\\"}",
+  "output": "<the raw model output>",
+  "parameters": { "temperature": 0.2, "maxTokens": 1024, "topP": 0.95, "seed": 42 }
+}`}
+    />
+    <p>
+      Result: the identity is sealed into the commitment, bound by <code>certificateHash</code>, and
+      never stored or logged in plaintext. There is no separate sealed <code>identity</code> slot in the
+      <code> 1.3.1</code> schema - <code>input</code> / <code>output</code> is the mechanism. Keep
+      <code> prompt</code> non-empty and PII-free; it is bound by the hash but stored in plaintext.
+    </p>
+    <p className="rounded-md border border-destructive/30 bg-destructive/5 p-3 text-sm">
+      Do NOT put PII in <code>prompt</code>, <code>context</code>, or <code>metadata</code>.
+      <code> prompt</code>/<code>context</code> are bound by the hash but stored in plaintext;
+      <code> metadata</code> is not bound at all, so it provides no real cryptographic binding.
+    </p>
+
     <h2 id="ai-confidential">6. AI Execution - Confidential Certification (1.3.1)</h2>
     <p>
       Use this when the raw input/output must never be stored, but you still want a verifiable certificate.
