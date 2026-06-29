@@ -620,8 +620,9 @@ const result = await verifyCerPackage(pkg);
       <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">policyEvaluation</code>) using the
       canonicalization profile bound to{" "}
       <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">snapshot.protocolVersion</code> (
-      <code>1.2.0</code> → <code>nexart-v1</code> by default; <code>1.3.0</code> → <code>jcs-v1</code> / RFC 8785 when
-      explicitly set). For most callers,{" "}
+      <code>1.2.0</code> → <code>nexart-v1</code> (legacy default); <code>1.3.0</code> and <code>1.3.1</code> →{" "}
+      <code>jcs-v1</code> / RFC 8785). 1.3.1 is the confidential-execution profile and is the node's advertised
+      default. For most callers,{" "}
       <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">certifyDecision(params)</code> is the recommended
       entry point.
     </p>
