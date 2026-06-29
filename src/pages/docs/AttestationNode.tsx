@@ -372,7 +372,11 @@ const AttestationNode = () => (
           <tr className="border-b border-border"><td className="px-4 py-3 font-mono text-xs">NODE_SIGNATURE_INVALID</td><td className="px-4 py-3">Ed25519 signature on the receipt fails verification against the published key.</td></tr>
           <tr className="border-b border-border"><td className="px-4 py-3 font-mono text-xs">RECEIPT_BUNDLE_HASH_MISMATCH</td><td className="px-4 py-3">Receipt references a different certificateHash than the bundle.</td></tr>
           <tr className="border-b border-border"><td className="px-4 py-3 font-mono text-xs">EXECUTION_MUTATION_DETECTED</td><td className="px-4 py-3">Same execution_id submitted with mutated content. Returned with HTTP 409.</td></tr>
+          <tr className="border-b border-border"><td className="px-4 py-3 font-mono text-xs">VALIDATION_ERROR</td><td className="px-4 py-3">Missing or malformed field. Response carries <code>details[]</code>. HTTP 400.</td></tr>
+          <tr className="border-b border-border"><td className="px-4 py-3 font-mono text-xs">LOOP_MODE_ERROR</td><td className="px-4 py-3">Code Mode: <code>totalFrames</code> outside 2..MAX_TOTAL_FRAMES (default 1800) or loop with no <code>draw()</code>. HTTP 400.</td></tr>
+          <tr className="border-b border-border"><td className="px-4 py-3 font-mono text-xs">PROTOCOL_SCHEMA_UNSATISFIED</td><td className="px-4 py-3">Content fails the requested protocol's SDK check. HTTP 422.</td></tr>
           <tr className="border-b border-border"><td className="px-4 py-3 font-mono text-xs">UNAUTHORIZED</td><td className="px-4 py-3">Missing, malformed, or rejected API key.</td></tr>
+          <tr className="border-b border-border"><td className="px-4 py-3 font-mono text-xs">SERVICE_UNAVAILABLE</td><td className="px-4 py-3">Database temporarily unavailable. Node fails closed and never waves the request through. HTTP 503.</td></tr>
           <tr><td className="px-4 py-3 font-mono text-xs">QUOTA_EXCEEDED</td><td className="px-4 py-3">Account or project quota exceeded.</td></tr>
         </tbody>
       </table>
