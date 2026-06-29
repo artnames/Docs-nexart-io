@@ -145,8 +145,10 @@ const Architecture = () => (
         executions.
       </li>
       <li>
-        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">version</code> - protocol version of the
-        bundle (currently <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">"0.1"</code>).
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">version</code> - bundle schema/format
+        version (currently <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">"0.1"</code>). This is
+        NOT the canonicalization protocol; that is{" "}
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">snapshot.protocolVersion</code>.
       </li>
       <li>
         <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">createdAt</code> - ISO 8601 timestamp in UTC.
