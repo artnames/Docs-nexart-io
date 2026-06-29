@@ -649,16 +649,18 @@ NOT_FOUND     The requested execution record was not located.`}
       language="text"
       title="Supported profiles"
       code={`protocolVersion = "1.2.0"   profile = "nexart-v1"   default  (custom canonicalization)
-protocolVersion = "1.3.0"   profile = "jcs-v1"      opt-in   (RFC 8785, standards-based)`}
+protocolVersion = "1.3.0"   profile = "jcs-v1"      opt-in   (RFC 8785, standards-based)
+protocolVersion = "1.3.1"   profile = "jcs-v1"      opt-in   (RFC 8785, confidential execution; server-side sealing)`}
     />
     <p>
       <strong>Canonicalisation is protocol-bound.</strong> There is no universal default. Verifiers MUST use the
       canonicalisation corresponding to the bundle's{" "}
-      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">protocolVersion</code> or hash recomputation
-      will fail. Do NOT assume RFC 8785 universally.
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">snapshot.protocolVersion</code> (note: it
+      lives under <code>snapshot</code>, not at the top level) or hash recomputation will fail. Do NOT assume RFC 8785
+      universally.
     </p>
     <p>
-      <strong>1.2.0 → nexart-v1</strong> is the current default canonicalization profile. All SDK and CLI calls produce
+      <strong>1.2.0 → nexart-v1</strong> is the legacy default canonicalization profile. SDK and CLI calls produce
       1.2.0 bundles unless the producer explicitly opts into a different version.
     </p>
     <p>
@@ -668,6 +670,16 @@ protocolVersion = "1.3.0"   profile = "jcs-v1"      opt-in   (RFC 8785, standard
         createSnapshot({'{ protocolVersion: "1.3.0" }'})
       </code>{" "}
       or the CLI flag <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">--protocol-version 1.3.0</code>
+      .
+    </p>
+    <p>
+      <strong>1.3.1 → jcs-v1</strong> is the confidential-execution protocol and is now the node's advertised default
+      (<code>/version</code> exposes <code>protocol.default: "1.3.1"</code>). Canonicalization is identical to 1.3.0;
+      the difference is server-side sealing of the input/output commitments. Confidential bundles return{" "}
+      <strong>VERIFIED_CONFIDENTIAL</strong> rather than <strong>VERIFIED</strong>. See{" "}
+      <Link to="/docs/confidential-mode" className="text-primary hover:underline">
+        Confidential Execution Mode
+      </Link>
       .
     </p>
     <p>
