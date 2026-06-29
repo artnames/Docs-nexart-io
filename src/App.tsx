@@ -63,6 +63,7 @@ import VerificationModel from "./pages/docs/VerificationModel";
 import ExternalVerification from "./pages/docs/ExternalVerification";
 import IndependentVerification from "./pages/docs/IndependentVerification";
 import ConfidentialMode from "./pages/docs/ConfidentialMode";
+import BuilderIntegrationGuide from "./pages/docs/BuilderIntegrationGuide";
 
 const queryClient = new QueryClient();
 
@@ -83,6 +84,7 @@ const App = () => (
             <Route path="what-is-nexart" element={<WhatIsNexArt />} />
             <Route path="getting-started" element={<GettingStarted />} />
             <Route path="quickstart" element={<Quickstart />} />
+            <Route path="builder-integration-guide" element={<BuilderIntegrationGuide />} />
             <Route path="architecture" element={<Architecture />} />
             <Route path="cer-protocol" element={<CERProtocol />} />
             <Route path="cer-record-management" element={<CERRecordManagement />} />

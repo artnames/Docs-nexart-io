@@ -176,7 +176,7 @@ const ConfidentialMode = () => (
           </tr>
           <tr className="border-b border-border">
             <td className="px-4 py-3 font-mono text-xs">1.3.0</td>
-            <td className="px-4 py-3">jcs-v1 (RFC 8785)</td>
+            <td className="px-4 py-3">jcs-v1 (RFC 8785) - transitional</td>
             <td className="px-4 py-3">Plaintext snapshot. No node-side sealing.</td>
           </tr>
           <tr>

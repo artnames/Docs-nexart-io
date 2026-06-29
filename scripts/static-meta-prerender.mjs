@@ -70,6 +70,7 @@ const ROUTE_META = {
   "/docs/guides": { title: "Builder Guides", summary: "Quick-start paths for common NexArt tasks." },
   "/docs/faq": { title: "FAQ", summary: "Common questions from builders integrating NexArt." },
   "/docs/security/key-management": { title: "Key Management and Rotation (NexArt Node)", summary: "How NexArt Node manages Ed25519 signing keys, rotates them safely, and maintains backward-compatible verification." },
+  "/docs/builder-integration-guide": { title: "Builder Integration Guide (NexArt Canonical Node)", summary: "Which endpoint to call, how to shape the payload, and how to read the response so your execution gets a permanent, verifiable certificateHash." },
   "/": { title: "NexArt Docs", summary: "Official NexArt documentation: build, register, and verify Certified Execution Records (CERs)." },
 };
 
