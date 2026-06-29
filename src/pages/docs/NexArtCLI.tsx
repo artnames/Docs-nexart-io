@@ -203,8 +203,8 @@ npx @nexart/cli@1.0.0 ai verify cer.certified.json
         <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">version: "0.1"</code>
       </li>
       <li>
-        computed <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> (SHA-256 over
-        JCS-canonicalized whitelist projection)
+        computed <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> (SHA-256
+        over the canonicalized whitelist projection, profile bound to <code>snapshot.protocolVersion</code>)
       </li>
       <li>
         <strong>no</strong> <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation</code>
