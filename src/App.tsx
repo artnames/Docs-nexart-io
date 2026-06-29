@@ -63,6 +63,7 @@ import VerificationModel from "./pages/docs/VerificationModel";
 import ExternalVerification from "./pages/docs/ExternalVerification";
 import IndependentVerification from "./pages/docs/IndependentVerification";
 import ConfidentialMode from "./pages/docs/ConfidentialMode";
+import BuilderIntegrationGuide from "./pages/docs/BuilderIntegrationGuide";
 
 const queryClient = new QueryClient();
 
