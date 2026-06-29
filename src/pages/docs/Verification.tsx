@@ -150,8 +150,9 @@ const Verification = () => (
     <p>
       Recomputes the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> from the
       strict whitelist projection of the bundle, canonicalized per the profile selected by{" "}
-      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">protocolVersion</code> (1.2.0 → nexart-v1;
-      1.3.0 → jcs-v1 / RFC 8785). Proves the bundle has not been modified across covered fields.
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">snapshot.protocolVersion</code> (1.2.0 →
+      nexart-v1; 1.3.0 and 1.3.1 → jcs-v1 / RFC 8785). Layer 1 is NOT unconditionally JCS; the profile is
+      protocol-bound. Proves the bundle has not been modified across covered fields.
     </p>
     <p>
       <strong>Hashed fields:</strong> <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">bundleType</code>
