@@ -703,8 +703,9 @@ const cer = sealCer(snapshot);
     <ul>
       <li>
         <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">canonicalJson(value, profile?)</code> —
-        protocol-bound canonicalization. <code>profile</code> is selected from the bundle's <code>protocolVersion</code>
-        : <code>nexart-v1</code> for 1.2.0 (default), <code>jcs-v1</code> (RFC 8785) for 1.3.0 (opt-in).
+        protocol-bound canonicalization. <code>profile</code> is selected from the bundle's{" "}
+        <code>snapshot.protocolVersion</code>: <code>nexart-v1</code> for 1.2.0 (legacy default),{" "}
+        <code>jcs-v1</code> (RFC 8785) for 1.3.0 and 1.3.1.
       </li>
       <li>
         <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">hashCanonicalJson(value, profile?)</code> —
