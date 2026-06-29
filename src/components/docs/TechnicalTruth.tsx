@@ -80,8 +80,11 @@ const TechnicalTruth = () => {
           <dd className="text-foreground/90 mt-1">
             <ul className="list-disc pl-5 space-y-1">
               <li>
-                <strong>certificateHash (integrity)</strong> — recompute SHA-256 over the JCS-canonicalized whitelist
-                projection and compare with the bundle's{" "}
+                <strong>certificateHash (integrity)</strong> — recompute SHA-256 over the canonicalized whitelist
+                projection (profile bound to{" "}
+                <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">snapshot.protocolVersion</code>:{" "}
+                <code>nexart-v1</code> for 1.2.0; <code>jcs-v1</code> / RFC 8785 for 1.3.0 and 1.3.1) and compare
+                with the bundle's{" "}
                 <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">certificateHash</code>.
               </li>
               <li>
@@ -115,7 +118,7 @@ const TechnicalTruth = () => {
           <dd className="text-foreground/90 mt-1 space-y-2">
             <p>
               <strong>Local sealing</strong> — produced by the SDK (
-              <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">@nexart/ai-execution@1.0.0</code> via{" "}
+              <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">@nexart/ai-execution@1.2.0</code> via{" "}
               <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">sealCer()</code>) or the CLI (
               <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">@nexart/cli@1.0.0</code> via{" "}
               <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">nexart ai seal</code>). Builds a

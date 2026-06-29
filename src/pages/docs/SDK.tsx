@@ -12,7 +12,7 @@ import CanonicalFlow from "@/components/docs/CanonicalFlow";
 
 const llmBlock = `# NexArt AI Execution SDK
 
-Package: @nexart/ai-execution@1.0.0
+Package: @nexart/ai-execution@1.2.0
 
 ## Canonical workflow
 seal -> verify -> (optional) certify -> verify
@@ -491,7 +491,7 @@ Authorization: Bearer NEXART_API_KEY
 
     <h2 id="package-helpers">CER Package Helpers</h2>
     <p>
-      As of <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@1.0.0</code>, the
+      As of <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@1.2.0</code>, the
       SDK includes official helpers for working with the{" "}
       <Link to="/docs/ai-cer-package-format" className="text-primary hover:underline">
         CER package format
@@ -620,8 +620,9 @@ const result = await verifyCerPackage(pkg);
       <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">policyEvaluation</code>) using the
       canonicalization profile bound to{" "}
       <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">snapshot.protocolVersion</code> (
-      <code>1.2.0</code> → <code>nexart-v1</code> by default; <code>1.3.0</code> → <code>jcs-v1</code> / RFC 8785 when
-      explicitly set). For most callers,{" "}
+      <code>1.2.0</code> → <code>nexart-v1</code> (legacy default); <code>1.3.0</code> and <code>1.3.1</code> →{" "}
+      <code>jcs-v1</code> / RFC 8785). 1.3.1 is the confidential-execution profile and is the node's advertised
+      default. For most callers,{" "}
       <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">certifyDecision(params)</code> is the recommended
       entry point.
     </p>
@@ -654,11 +655,12 @@ const cer = sealCer(snapshot);
     <div className="not-prose my-4 rounded-lg border-l-2 border-destructive bg-destructive/5 px-4 py-3 text-sm">
       <strong>Callout.</strong> If{" "}
       <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">protocolVersion</code> is omitted or{" "}
-      <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">null</code>, NexArt defaults to{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">null</code>, the SDK defaults to{" "}
       <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">1.2.0</code> (nexart-v1) for backward
-      compatibility. RFC 8785 JCS canonicalization is used <strong>only</strong> when you explicitly pass{" "}
-      <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">"1.3.0"</code> at
-      creation/sealing/certification time. Unsupported explicit values (for example{" "}
+      compatibility. RFC 8785 JCS canonicalization applies when you explicitly pass{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">"1.3.0"</code> or{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">"1.3.1"</code> (confidential execution; the
+      node's advertised default) at creation/sealing/certification time. Unsupported explicit values (for example{" "}
       <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">"2.0.0"</code>) are rejected by the node before
       signing and fail closed at verification.
     </div>
@@ -701,8 +703,9 @@ const cer = sealCer(snapshot);
     <ul>
       <li>
         <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">canonicalJson(value, profile?)</code> —
-        protocol-bound canonicalization. <code>profile</code> is selected from the bundle's <code>protocolVersion</code>
-        : <code>nexart-v1</code> for 1.2.0 (default), <code>jcs-v1</code> (RFC 8785) for 1.3.0 (opt-in).
+        protocol-bound canonicalization. <code>profile</code> is selected from the bundle's{" "}
+        <code>snapshot.protocolVersion</code>: <code>nexart-v1</code> for 1.2.0 (legacy default),{" "}
+        <code>jcs-v1</code> (RFC 8785) for 1.3.0 and 1.3.1.
       </li>
       <li>
         <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">hashCanonicalJson(value, profile?)</code> —

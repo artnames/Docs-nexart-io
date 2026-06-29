@@ -15,7 +15,7 @@ verification layers, and the system-wide invariants.
 ## End-to-End Flow
 1. Execution capture - producer runs an AI or deterministic execution and captures inputs, outputs, and parameters.
 2. CER creation - producer builds a canonical Certified Execution Record (CER) bundle with bundleType "cer.ai.execution.v1".
-3. Hash computation - certificateHash = SHA-256 over JCS-canonicalized whitelist projection.
+3. Hash computation - certificateHash = SHA-256 over the canonicalized whitelist projection. Canonicalization is protocol-bound: nexart-v1 for snapshot.protocolVersion = 1.2.0 (default); jcs-v1 (RFC 8785) for 1.3.0 and 1.3.1.
 4. Node attestation (optional) - attestation node issues an Ed25519-signed receipt referencing certificateHash, stored at meta.attestation.
 5. Verification - any party recomputes the hash, validates the receipt signature, checks receipt consistency, and (when present) validates the verification envelope.
 
@@ -42,7 +42,7 @@ verification layers, and the system-wide invariants.
 ## System invariants
 - No mutation: a CER bundle MUST NOT be mutated after creation. Lifecycle state changes (Active, Archived, Hidden, Deleted) are stored outside the bundle.
 - Idempotency: identical inputs to the canonicalization and hashing pipeline MUST produce the same certificateHash.
-- Canonicalization is protocol-bound: profile is selected by protocolVersion (1.2.0 -> nexart-v1, default; 1.3.0 -> jcs-v1 / RFC 8785, opt-in). Verifiers MUST apply the whitelist projection to the bundle as received and use the matching profile. No reconstruction.
+- Canonicalization is protocol-bound: profile is selected by snapshot.protocolVersion (1.2.0 -> nexart-v1, legacy default; 1.3.0 -> jcs-v1 / RFC 8785, opt-in; 1.3.1 -> jcs-v1 / RFC 8785, confidential execution, node's advertised default). Verifiers MUST apply the whitelist projection to the bundle as received and use the matching profile. No reconstruction.
 - Independence: verification MUST be possible without trusting NexArt infrastructure, using only the bundle and the node's published public keys.`;
 
 const Architecture = () => (
@@ -86,7 +86,7 @@ const Architecture = () => (
     <ul>
       <li>
         <strong>SDK</strong> (
-        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@1.0.0</code>) owns:
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@1.2.0</code>) owns:
         snapshot creation (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">createSnapshot</code>),
         local sealing (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">sealCer</code>), protocol-bound
         canonicalization (nexart-v1 / jcs-v1), SHA-256 hashing, and verification logic (
@@ -145,8 +145,10 @@ const Architecture = () => (
         executions.
       </li>
       <li>
-        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">version</code> - protocol version of the
-        bundle (currently <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">"0.1"</code>).
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">version</code> - bundle schema/format
+        version (currently <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">"0.1"</code>). This is
+        NOT the canonicalization protocol; that is{" "}
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">snapshot.protocolVersion</code>.
       </li>
       <li>
         <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">createdAt</code> - ISO 8601 timestamp in UTC.
@@ -182,18 +184,19 @@ const Architecture = () => (
     <p>
       The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> is computed as
       SHA-256 over the canonicalized projection of the bundle to a strict whitelist. The canonicalization profile is
-      selected by <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">protocolVersion</code>(
+      selected by <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">snapshot.protocolVersion</code> (
       <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">1.2.0</code> →{" "}
-      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">nexart-v1</code> (default);{" "}
-      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">1.3.0</code> →{" "}
-      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">jcs-v1</code> (RFC 8785, opt-in)). The result is
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">nexart-v1</code> (legacy default);{" "}
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">1.3.0</code> and{" "}
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">1.3.1</code> →{" "}
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">jcs-v1</code> (RFC 8785)). The result is
       written into the bundle as
       <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono ml-1">certificateHash</code>. The hash field
       itself is excluded from its own input.
     </p>
     <p>
-      Producers and verifiers MUST use identical canonicalization. Implementations MUST NOT reconstruct, normalize,
-      strip, or add fields beyond the whitelist projection and JCS.
+      Producers and verifiers MUST use identical canonicalization for the bundle's protocol profile. Implementations
+      MUST NOT reconstruct, normalize, strip, or add fields beyond the whitelist projection.
     </p>
 
     <h3 id="stage-4">4. Node certification (optional)</h3>
@@ -312,8 +315,9 @@ const Architecture = () => (
     <h2 id="hash-whitelist">Hash whitelist (normative)</h2>
     <p>
       The certificateHash input is the canonicalization (profile selected by{" "}
-      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">protocolVersion</code>: <code>nexart-v1</code>{" "}
-      for 1.2.0, <code>jcs-v1</code> / RFC 8785 for 1.3.0) of an object containing only:
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">snapshot.protocolVersion</code>:{" "}
+      <code>nexart-v1</code> for 1.2.0; <code>jcs-v1</code> / RFC 8785 for 1.3.0 and 1.3.1) of an object containing
+      only:
     </p>
     <ul>
       <li>
@@ -404,10 +408,24 @@ const Architecture = () => (
       Newer bundles MAY include
       <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono ml-1">meta.verificationEnvelope</code> and
       <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono ml-1">meta.verificationEnvelopeSignature</code>.
-      The verifier validates the signature against the envelope content. Failure of the envelope MUST NOT be reported as
-      failure of bundle integrity. Historical artifacts without an envelope return
+      The envelope signature covers the signable payload{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">{`{ attestation, bundle }`}</code>, where{" "}
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">attestation</code> ={" "}
+      <code>{`{ attestationId, attestedAt, kid, nodeRuntimeHash, protocolVersion }`}</code> and{" "}
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">bundle</code> ={" "}
+      <code>{`{ bundleType, version, createdAt, snapshot, context?, contextSummary? }`}</code> (the bundle whitelist
+      projection used by Layer 1, minus <code>policyEvaluation</code>). Mutating any field in either projection — not
+      only the 5 attestation fields — invalidates the envelope. Excluded from envelope coverage:{" "}
+      <code>certificateHash</code>, <code>meta</code>, <code>receipt</code>,{" "}
+      <code>verificationEnvelope*</code>, and unknown keys. Failure of the envelope MUST NOT be reported as failure of
+      bundle integrity. Historical artifacts without an envelope return
       <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono ml-1">SKIPPED</code> for this layer
       (compatibility fallback).
+    </p>
+    <p className="text-sm text-muted-foreground">
+      Note: <code>policyEvaluation</code> is covered by Layer 1 (it contributes to{" "}
+      <code>certificateHash</code>) but is NOT part of the Layer 3 bundle projection. The two projections are not
+      identical; verifier authors MUST NOT assume <code>policyEvaluation</code> is envelope-signed.
     </p>
 
     <p className="text-sm text-muted-foreground">
@@ -449,15 +467,16 @@ const Architecture = () => (
     <h3 id="canonicalization">Canonicalization (protocol-bound)</h3>
     <p>
       Canonicalization is bound to the bundle's{" "}
-      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">protocolVersion</code>.{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">snapshot.protocolVersion</code>.{" "}
       <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">1.2.0</code> uses{" "}
-      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">nexart-v1</code> (current default, custom
-      canonicalization). <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">1.3.0</code> uses{" "}
-      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">jcs-v1</code> (RFC 8785, opt-in,
-      standards-based). Verifiers MUST select the profile by{" "}
-      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">protocolVersion</code>, apply the whitelist
-      projection to the bundle as received, and canonicalize without further normalization. There is no tolerant parsing
-      and no universal default.
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">nexart-v1</code> (legacy default, custom
+      canonicalization). <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">1.3.0</code> and{" "}
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">1.3.1</code> both use{" "}
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">jcs-v1</code> (RFC 8785, standards-based);
+      1.3.1 is the confidential-execution protocol and is the node's advertised default. Verifiers MUST select the
+      profile by <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">snapshot.protocolVersion</code>,
+      apply the whitelist projection to the bundle as received, and canonicalize without further normalization. There
+      is no tolerant parsing and no universal default.
     </p>
 
     <h3 id="independence">Independence of verification</h3>
@@ -487,7 +506,7 @@ const Architecture = () => (
       </li>
       <li>
         <strong>Tamper detection</strong> — any change to a hashed field is detectable by recomputation against the
-        JCS-canonicalized whitelist projection.
+        canonicalized whitelist projection (per the bundle's protocol profile).
       </li>
       <li>
         <strong>Independent verification</strong> — any party can verify a bundle using only the bundle and the node's

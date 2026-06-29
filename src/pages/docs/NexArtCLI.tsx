@@ -10,7 +10,7 @@ const llmBlock = `# NexArt CLI
 Package: @nexart/cli@1.0.0
 
 The NexArt CLI is a thin command-line surface over the AI Execution SDK
-(@nexart/ai-execution@1.0.0). It contains zero CER cryptographic logic.
+(@nexart/ai-execution@1.2.0). It contains zero CER cryptographic logic.
 All hashing, canonicalization (protocol-bound: nexart-v1 for 1.2.0, jcs-v1 / RFC 8785 for 1.3.0),
 and verification is delegated to the SDK.
 
@@ -93,7 +93,7 @@ const NexArtCLI = () => (
     <p>
       As of <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/cli@1.0.0</code>, the CLI
       contains <strong>zero CER cryptographic logic</strong>. Every operation is delegated to{" "}
-      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@1.0.0</code>:
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@1.2.0</code>:
     </p>
     <ul>
       <li>
@@ -169,7 +169,7 @@ npx @nexart/cli@1.0.0 ai verify cer.certified.json
     <p>
       The input file MUST be a JSON object matching{" "}
       <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">CreateSnapshotParams</code> exactly, as defined
-      by <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@1.0.0</code>:
+      by <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@1.2.0</code>:
     </p>
     <CodeBlock
       language="json"
@@ -203,8 +203,8 @@ npx @nexart/cli@1.0.0 ai verify cer.certified.json
         <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">version: "0.1"</code>
       </li>
       <li>
-        computed <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> (SHA-256 over
-        JCS-canonicalized whitelist projection)
+        computed <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> (SHA-256
+        over the canonicalized whitelist projection, profile bound to <code>snapshot.protocolVersion</code>)
       </li>
       <li>
         <strong>no</strong> <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">meta.attestation</code>
@@ -265,7 +265,7 @@ verificationUrl: https://verify.nexart.io/c/sha256:...`}
       As of v0.8.1, <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">nexart ai verify</code> is a{" "}
       <strong>pure delegation</strong> to{" "}
       <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verifyAiCerBundleDetailed()</code> in{" "}
-      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@1.0.0</code>. The CLI:
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@1.2.0</code>. The CLI:
     </p>
     <ul>
       <li>
@@ -400,7 +400,7 @@ npx @nexart/cli@1.0.0 ai certify execution.json --signals-file signals.json`}
         CLI: <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/cli@1.0.0</code>
       </li>
       <li>
-        SDK: <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@1.0.0</code>
+        SDK: <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@1.2.0</code>
       </li>
       <li>
         Bundle version: <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">"0.1"</code>

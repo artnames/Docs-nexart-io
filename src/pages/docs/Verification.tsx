@@ -38,19 +38,20 @@ Each check returns PASS, FAIL, or SKIPPED.
 
 ## Verification statuses (per CER Protocol)
 VERIFIED: all applicable checks pass
+VERIFIED_CONFIDENTIAL: returned by the node for protocolVersion 1.3.1 (confidential) bundles whose commitments verify
 FAILED: one or more checks fail
-NOT_FOUND: record not located
+NOT_FOUND: lookup result; the certificateHash is not registered on the node (distinct from a verification check failure)
 
 ## Verification layers
 AI CER bundles support up to three layers: Bundle Integrity, Signed Attestation Receipt, and Verification Envelope.
-- Layer 1 (Integrity): SHA-256 over JCS-canonicalized whitelist projection (bundleType, version, createdAt, snapshot, context?, contextSummary?). Recomputes certificateHash.
+- Layer 1 (Integrity): SHA-256 over the canonicalized whitelist projection (bundleType, version, createdAt, snapshot, context?, contextSummary?, policyEvaluation?). Canonicalization is protocol-bound: nexart-v1 for snapshot.protocolVersion = 1.2.0; jcs-v1 (RFC 8785) for 1.3.0 and 1.3.1. Recomputes certificateHash.
 - Layer 2 (Receipt): validates Ed25519 receipt over certificateHash. Independent of envelope.
-- Layer 3 (Envelope, v0.16.1): Ed25519 over { attestation projection (attestationId, attestedAt, kid, nodeRuntimeHash, protocolVersion), bundle projection (bundleType, version, createdAt, snapshot, context?, contextSummary?) }. certificateHash, meta, and receipt are NOT signed by the envelope.
+- Layer 3 (Envelope, v0.16.1): Ed25519 over { attestation, bundle } where attestation = { attestationId, attestedAt, kid, nodeRuntimeHash, protocolVersion } and bundle = { bundleType, version, createdAt, snapshot, context?, contextSummary? } (the whitelist projection used by Layer 1, minus policyEvaluation). certificateHash, meta, and receipt are NOT signed by the envelope.
 
 ## Why envelope verification may fail
-- Envelope FAIL with Integrity PASS: the bundle's hashed content is intact, but a signed-but-unhashed attestation field (attestationId, attestedAt, kid, nodeRuntimeHash, protocolVersion) was modified.
+- Envelope FAIL with Integrity PASS: the bundle's hashed content is intact, but a signed field was modified. Both the attestation projection (attestationId, attestedAt, kid, nodeRuntimeHash, protocolVersion) AND any signed bundle field (bundleType, version, createdAt, snapshot, context, contextSummary) are covered by the envelope signature.
 - Envelope SKIPPED: bundle does not include verificationEnvelope/verificationEnvelopeSignature, or the projection cannot be reconstructed (e.g. redacted public bundle).
-- Re-serialization that breaks JCS canonicalization invalidates the envelope even when content is semantically equivalent.
+- Re-serialization that breaks the bundle's canonicalization profile (nexart-v1 for 1.2.0; jcs-v1 for 1.3.x) invalidates the envelope even when content is semantically equivalent.
 - kid mismatch: the node key referenced by kid is not in the published key set at node.nexart.io/.well-known/nexart-node.json.
 - v0.16.0 signals alignment bug: fixed in v0.16.1; affected executions can be re-certified via POST /v1/admin/recertify-batch.
 - Pre-envelope artifacts predate v0.16.1; Layer 3 returns SKIPPED by compatibility fallback.
@@ -149,8 +150,9 @@ const Verification = () => (
     <p>
       Recomputes the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> from the
       strict whitelist projection of the bundle, canonicalized per the profile selected by{" "}
-      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">protocolVersion</code> (1.2.0 → nexart-v1;
-      1.3.0 → jcs-v1 / RFC 8785). Proves the bundle has not been modified across covered fields.
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">snapshot.protocolVersion</code> (1.2.0 →
+      nexart-v1; 1.3.0 and 1.3.1 → jcs-v1 / RFC 8785). Layer 1 is NOT unconditionally JCS; the profile is
+      protocol-bound. Proves the bundle has not been modified across covered fields.
     </p>
     <p>
       <strong>Hashed fields:</strong> <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">bundleType</code>
@@ -272,9 +274,10 @@ const Verification = () => (
       <li>
         <strong>Re-serialization that breaks canonicalization.</strong> Layer 3 requires the exact canonicalization
         profile bound to the bundle's{" "}
-        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">protocolVersion</code>(<code>nexart-v1</code>{" "}
-        for 1.2.0, <code>jcs-v1</code> / RFC 8785 for 1.3.0). Tools that pretty-print, reorder keys, change number
-        formatting, or alter Unicode escaping invalidate the signature even when content is semantically identical.
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">snapshot.protocolVersion</code> (
+        <code>nexart-v1</code> for 1.2.0, <code>jcs-v1</code> / RFC 8785 for 1.3.0 and 1.3.1). Tools that pretty-print,
+        reorder keys, change number formatting, or alter Unicode escaping invalidate the signature even when content
+        is semantically identical.
       </li>
       <li>
         <strong>
@@ -298,7 +301,7 @@ const Verification = () => (
       </li>
       <li>
         <strong>v0.16.0 signals payload alignment bug.</strong> Bundles created with
-        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono ml-1">@nexart/ai-execution@1.0.0</code> that
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono ml-1">@nexart/ai-execution@1.2.0</code> that
         include signals MAY fail envelope verification due to a payload alignment issue fixed in{" "}
         <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">v0.16.1</code>. Operators SHOULD re-certify
         affected executions via{" "}
@@ -369,7 +372,7 @@ const Verification = () => (
       <div className="text-sm font-medium text-foreground mb-1">v0.16.0 → v0.16.1 compatibility</div>
       <div className="text-sm text-muted-foreground">
         Bundles created with{" "}
-        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">@nexart/ai-execution@1.0.0</code> that include
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">@nexart/ai-execution@1.2.0</code> that include
         signals may fail envelope verification due to a payload alignment issue.{" "}
         <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">v0.16.1</code> fixes this. Re-certification may
         be required. Operators can use{" "}
@@ -505,21 +508,40 @@ const Verification = () => (
       :
     </p>
     <CodeBlock
-      code={`VERIFIED      All applicable checks pass. The CER is intact and,
-              if attested, has a valid signed receipt.
+      code={`VERIFIED               All applicable checks pass. The CER is intact and,
+                       if attested, has a valid signed receipt.
 
-FAILED        One or more checks fail. The record may have been
-              modified or the signature does not match.
+VERIFIED_CONFIDENTIAL  Returned by the node for protocolVersion 1.3.1
+                       (confidential) bundles whose commitments verify.
 
-NOT_FOUND     The requested execution record was not located.`}
-      title="Verification Statuses"
+FAILED                 One or more checks fail. The record may have been
+                       modified or the signature does not match.
+
+NOT_FOUND              Lookup result, not a verification check: the
+                       certificateHash was not located on the node.`}
+      title="Verification Statuses (human)"
     />
+    <p className="text-sm text-muted-foreground">
+      Machine codes: the SDK additionally exposes a richer{" "}
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">CerVerifyCode</code> set (e.g.{" "}
+      <code>OK</code>, <code>CERTIFICATE_HASH_MISMATCH</code>, <code>ATTESTATION_*</code>,{" "}
+      <code>KEY_REVOKED</code>, <code>SCHEMA_ERROR</code>) and a{" "}
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">ReasonCode</code> set (e.g.{" "}
+      <code>RECORD_NOT_FOUND</code>, <code>SCHEMA_VERSION_UNSUPPORTED</code>,{" "}
+      <code>BUNDLE_CORRUPTED</code>) on the structured report returned by{" "}
+      <code>verifyAiCerBundleDetailed</code>. Treat these as the authoritative machine surface; the strings above are
+      the human rollup.
+    </p>
 
     <h2 id="result-classes">Reading Verification Results</h2>
-    <p>The verifier reports four distinct outcome classes. They are not all failures:</p>
+    <p>The verifier reports the following outcome classes. They are not all failures:</p>
     <ul>
       <li>
         <strong>VERIFIED</strong>: all applicable checks pass.
+      </li>
+      <li>
+        <strong>VERIFIED_CONFIDENTIAL</strong>: 1.3.1 bundle whose commitments and signatures verify. The plaintext
+        of <code>input</code>/<code>output</code> is not present; equality of the openings is what is proven.
       </li>
       <li>
         <strong>VERIFIED (supplemental)</strong>: core integrity passes, but supplemental context (e.g.{" "}
@@ -533,7 +555,8 @@ NOT_FOUND     The requested execution record was not located.`}
         <strong>FAILED</strong>: one or more applicable checks fail.
       </li>
       <li>
-        <strong>NOT_FOUND</strong>: the artifact was never registered on the node. See{" "}
+        <strong>NOT_FOUND</strong>: lookup result, not a verification check — the artifact was never registered on
+        the node. See{" "}
         <Link to="/docs/end-to-end-verification" className="text-primary hover:underline">
           End-to-End Verification
         </Link>
@@ -609,7 +632,7 @@ NOT_FOUND     The requested execution record was not located.`}
     <ol>
       <li>
         Recompute the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> from the
-        CER bundle (SHA-256 over the JCS-canonicalized whitelist projection)
+        CER bundle (SHA-256 over the canonicalized whitelist projection — nexart-v1 for 1.2.0, jcs-v1 for 1.3.x)
       </li>
       <li>
         Compare it with the <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> in{" "}
@@ -647,16 +670,18 @@ NOT_FOUND     The requested execution record was not located.`}
       language="text"
       title="Supported profiles"
       code={`protocolVersion = "1.2.0"   profile = "nexart-v1"   default  (custom canonicalization)
-protocolVersion = "1.3.0"   profile = "jcs-v1"      opt-in   (RFC 8785, standards-based)`}
+protocolVersion = "1.3.0"   profile = "jcs-v1"      opt-in   (RFC 8785, standards-based)
+protocolVersion = "1.3.1"   profile = "jcs-v1"      opt-in   (RFC 8785, confidential execution; server-side sealing)`}
     />
     <p>
       <strong>Canonicalisation is protocol-bound.</strong> There is no universal default. Verifiers MUST use the
       canonicalisation corresponding to the bundle's{" "}
-      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">protocolVersion</code> or hash recomputation
-      will fail. Do NOT assume RFC 8785 universally.
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">snapshot.protocolVersion</code> (note: it
+      lives under <code>snapshot</code>, not at the top level) or hash recomputation will fail. Do NOT assume RFC 8785
+      universally.
     </p>
     <p>
-      <strong>1.2.0 → nexart-v1</strong> is the current default canonicalization profile. All SDK and CLI calls produce
+      <strong>1.2.0 → nexart-v1</strong> is the legacy default canonicalization profile. SDK and CLI calls produce
       1.2.0 bundles unless the producer explicitly opts into a different version.
     </p>
     <p>
@@ -666,6 +691,16 @@ protocolVersion = "1.3.0"   profile = "jcs-v1"      opt-in   (RFC 8785, standard
         createSnapshot({'{ protocolVersion: "1.3.0" }'})
       </code>{" "}
       or the CLI flag <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">--protocol-version 1.3.0</code>
+      .
+    </p>
+    <p>
+      <strong>1.3.1 → jcs-v1</strong> is the confidential-execution protocol and is now the node's advertised default
+      (<code>/version</code> exposes <code>protocol.default: "1.3.1"</code>). Canonicalization is identical to 1.3.0;
+      the difference is server-side sealing of the input/output commitments. Confidential bundles return{" "}
+      <strong>VERIFIED_CONFIDENTIAL</strong> rather than <strong>VERIFIED</strong>. See{" "}
+      <Link to="/docs/confidential-mode" className="text-primary hover:underline">
+        Confidential Execution Mode
+      </Link>
       .
     </p>
     <p>
