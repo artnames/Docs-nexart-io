@@ -115,7 +115,7 @@ const TechnicalTruth = () => {
           <dd className="text-foreground/90 mt-1 space-y-2">
             <p>
               <strong>Local sealing</strong> — produced by the SDK (
-              <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">@nexart/ai-execution@1.0.0</code> via{" "}
+              <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">@nexart/ai-execution@1.2.0</code> via{" "}
               <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">sealCer()</code>) or the CLI (
               <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">@nexart/cli@1.0.0</code> via{" "}
               <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">nexart ai seal</code>). Builds a

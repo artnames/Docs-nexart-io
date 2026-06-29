@@ -86,7 +86,7 @@ const Architecture = () => (
     <ul>
       <li>
         <strong>SDK</strong> (
-        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@1.0.0</code>) owns:
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/ai-execution@1.2.0</code>) owns:
         snapshot creation (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">createSnapshot</code>),
         local sealing (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">sealCer</code>), protocol-bound
         canonicalization (nexart-v1 / jcs-v1), SHA-256 hashing, and verification logic (

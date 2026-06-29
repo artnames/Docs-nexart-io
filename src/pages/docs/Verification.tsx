@@ -298,7 +298,7 @@ const Verification = () => (
       </li>
       <li>
         <strong>v0.16.0 signals payload alignment bug.</strong> Bundles created with
-        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono ml-1">@nexart/ai-execution@1.0.0</code> that
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono ml-1">@nexart/ai-execution@1.2.0</code> that
         include signals MAY fail envelope verification due to a payload alignment issue fixed in{" "}
         <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">v0.16.1</code>. Operators SHOULD re-certify
         affected executions via{" "}
@@ -369,7 +369,7 @@ const Verification = () => (
       <div className="text-sm font-medium text-foreground mb-1">v0.16.0 → v0.16.1 compatibility</div>
       <div className="text-sm text-muted-foreground">
         Bundles created with{" "}
-        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">@nexart/ai-execution@1.0.0</code> that include
+        <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">@nexart/ai-execution@1.2.0</code> that include
         signals may fail envelope verification due to a payload alignment issue.{" "}
         <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">v0.16.1</code> fixes this. Re-certification may
         be required. Operators can use{" "}
