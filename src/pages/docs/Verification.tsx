@@ -38,19 +38,20 @@ Each check returns PASS, FAIL, or SKIPPED.
 
 ## Verification statuses (per CER Protocol)
 VERIFIED: all applicable checks pass
+VERIFIED_CONFIDENTIAL: returned by the node for protocolVersion 1.3.1 (confidential) bundles whose commitments verify
 FAILED: one or more checks fail
-NOT_FOUND: record not located
+NOT_FOUND: lookup result; the certificateHash is not registered on the node (distinct from a verification check failure)
 
 ## Verification layers
 AI CER bundles support up to three layers: Bundle Integrity, Signed Attestation Receipt, and Verification Envelope.
-- Layer 1 (Integrity): SHA-256 over JCS-canonicalized whitelist projection (bundleType, version, createdAt, snapshot, context?, contextSummary?). Recomputes certificateHash.
+- Layer 1 (Integrity): SHA-256 over the canonicalized whitelist projection (bundleType, version, createdAt, snapshot, context?, contextSummary?, policyEvaluation?). Canonicalization is protocol-bound: nexart-v1 for snapshot.protocolVersion = 1.2.0; jcs-v1 (RFC 8785) for 1.3.0 and 1.3.1. Recomputes certificateHash.
 - Layer 2 (Receipt): validates Ed25519 receipt over certificateHash. Independent of envelope.
-- Layer 3 (Envelope, v0.16.1): Ed25519 over { attestation projection (attestationId, attestedAt, kid, nodeRuntimeHash, protocolVersion), bundle projection (bundleType, version, createdAt, snapshot, context?, contextSummary?) }. certificateHash, meta, and receipt are NOT signed by the envelope.
+- Layer 3 (Envelope, v0.16.1): Ed25519 over { attestation, bundle } where attestation = { attestationId, attestedAt, kid, nodeRuntimeHash, protocolVersion } and bundle = { bundleType, version, createdAt, snapshot, context?, contextSummary? } (the whitelist projection used by Layer 1, minus policyEvaluation). certificateHash, meta, and receipt are NOT signed by the envelope.
 
 ## Why envelope verification may fail
-- Envelope FAIL with Integrity PASS: the bundle's hashed content is intact, but a signed-but-unhashed attestation field (attestationId, attestedAt, kid, nodeRuntimeHash, protocolVersion) was modified.
+- Envelope FAIL with Integrity PASS: the bundle's hashed content is intact, but a signed field was modified. Both the attestation projection (attestationId, attestedAt, kid, nodeRuntimeHash, protocolVersion) AND any signed bundle field (bundleType, version, createdAt, snapshot, context, contextSummary) are covered by the envelope signature.
 - Envelope SKIPPED: bundle does not include verificationEnvelope/verificationEnvelopeSignature, or the projection cannot be reconstructed (e.g. redacted public bundle).
-- Re-serialization that breaks JCS canonicalization invalidates the envelope even when content is semantically equivalent.
+- Re-serialization that breaks the bundle's canonicalization profile (nexart-v1 for 1.2.0; jcs-v1 for 1.3.x) invalidates the envelope even when content is semantically equivalent.
 - kid mismatch: the node key referenced by kid is not in the published key set at node.nexart.io/.well-known/nexart-node.json.
 - v0.16.0 signals alignment bug: fixed in v0.16.1; affected executions can be re-certified via POST /v1/admin/recertify-batch.
 - Pre-envelope artifacts predate v0.16.1; Layer 3 returns SKIPPED by compatibility fallback.
