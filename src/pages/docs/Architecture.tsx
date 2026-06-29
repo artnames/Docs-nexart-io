@@ -184,18 +184,19 @@ const Architecture = () => (
     <p>
       The <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code> is computed as
       SHA-256 over the canonicalized projection of the bundle to a strict whitelist. The canonicalization profile is
-      selected by <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">protocolVersion</code>(
+      selected by <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">snapshot.protocolVersion</code> (
       <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">1.2.0</code> →{" "}
-      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">nexart-v1</code> (default);{" "}
-      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">1.3.0</code> →{" "}
-      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">jcs-v1</code> (RFC 8785, opt-in)). The result is
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">nexart-v1</code> (legacy default);{" "}
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">1.3.0</code> and{" "}
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">1.3.1</code> →{" "}
+      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">jcs-v1</code> (RFC 8785)). The result is
       written into the bundle as
       <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono ml-1">certificateHash</code>. The hash field
       itself is excluded from its own input.
     </p>
     <p>
-      Producers and verifiers MUST use identical canonicalization. Implementations MUST NOT reconstruct, normalize,
-      strip, or add fields beyond the whitelist projection and JCS.
+      Producers and verifiers MUST use identical canonicalization for the bundle's protocol profile. Implementations
+      MUST NOT reconstruct, normalize, strip, or add fields beyond the whitelist projection.
     </p>
 
     <h3 id="stage-4">4. Node certification (optional)</h3>
