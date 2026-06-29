@@ -315,8 +315,9 @@ const Architecture = () => (
     <h2 id="hash-whitelist">Hash whitelist (normative)</h2>
     <p>
       The certificateHash input is the canonicalization (profile selected by{" "}
-      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">protocolVersion</code>: <code>nexart-v1</code>{" "}
-      for 1.2.0, <code>jcs-v1</code> / RFC 8785 for 1.3.0) of an object containing only:
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">snapshot.protocolVersion</code>:{" "}
+      <code>nexart-v1</code> for 1.2.0; <code>jcs-v1</code> / RFC 8785 for 1.3.0 and 1.3.1) of an object containing
+      only:
     </p>
     <ul>
       <li>
