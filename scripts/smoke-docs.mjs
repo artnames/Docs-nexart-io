@@ -83,8 +83,13 @@ function stripTags(html) {
     .replace(/<script[\s\S]*?<\/script>/gi, "")
     .replace(/<style[\s\S]*?<\/style>/gi, "")
     .replace(/<[^>]+>/g, " ")
+    .replace(/&amp;/g, "&")
     .replace(/\s+/g, " ")
     .trim();
+}
+
+function decodeEntities(s) {
+  return s ? s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&quot;/g, '"') : s;
 }
 
 function extract(re, s) {
