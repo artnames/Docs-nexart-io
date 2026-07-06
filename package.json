@@ -10,6 +10,7 @@
     "prerender": "node scripts/prerender.mjs",
     "verify:crawl": "node scripts/verify-crawlability.mjs",
     "verify:crawl:remote": "node scripts/verify-crawlability.mjs --remote=https://docs.nexart.io",
+    "smoke:docs": "node scripts/smoke-docs.mjs",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
