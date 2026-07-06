@@ -145,6 +145,27 @@ async function checkLocal() {
     if (!/<title>[^<]+<\/title>/i.test(html)) {
       warnings.push(`NO <title>: ${routeTitle(route)}`);
     }
+    // Duplicated DOCTYPE breaks strict HTML parsers (LLM crawlers report
+    // the page as empty). Must appear exactly once.
+    const doctypeCount = (html.match(/<!doctype\s+html/gi) || []).length;
+    if (doctypeCount !== 1) {
+      errors.push(
+        `DUPLICATE DOCTYPE (${doctypeCount}): ${routeTitle(route)}`,
+      );
+      continue;
+    }
+    // Per-route markdown alternate must be advertised and resolvable.
+    if (!/<link[^>]+type=["']text\/markdown["']/i.test(html)) {
+      errors.push(`NO markdown alternate <link>: ${routeTitle(route)}`);
+      continue;
+    }
+    const mdRel =
+      route === "/" ? "index.md" : route.replace(/^\/+/, "") + ".md";
+    const mdFile = join(distDir, mdRel);
+    if (!existsSync(mdFile)) {
+      errors.push(`MISSING .md shadow: ${routeTitle(route)} -> ${mdFile}`);
+      continue;
+    }
     routesOk++;
   }
 
