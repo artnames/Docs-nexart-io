@@ -96,10 +96,8 @@ const MAX_LLMS_FULL_AGE_MS = 24 * 3600 * 1000; // freshness window for local che
 
 function routeToFilePath(route) {
   if (route === "/") return join(distDir, "index.html");
-  if (PARENT_ROUTES.has(route)) {
-    return join(distDir, route.replace(/^\/+/, ""), "index.html");
-  }
-  return join(distDir, route.replace(/^\/+/, ""));
+  // Prerender always writes <route>/index.html so hosts serve it as text/html.
+  return join(distDir, route.replace(/^\/+/, ""), "index.html");
 }
 
 function routeTitle(route) {
@@ -144,6 +142,27 @@ async function checkLocal() {
     }
     if (!/<title>[^<]+<\/title>/i.test(html)) {
       warnings.push(`NO <title>: ${routeTitle(route)}`);
+    }
+    // Duplicated DOCTYPE breaks strict HTML parsers (LLM crawlers report
+    // the page as empty). Must appear exactly once.
+    const doctypeCount = (html.match(/<!doctype\s+html/gi) || []).length;
+    if (doctypeCount !== 1) {
+      errors.push(
+        `DUPLICATE DOCTYPE (${doctypeCount}): ${routeTitle(route)}`,
+      );
+      continue;
+    }
+    // Per-route markdown alternate must be advertised and resolvable.
+    if (!/<link[^>]+type=["']text\/markdown["']/i.test(html)) {
+      errors.push(`NO markdown alternate <link>: ${routeTitle(route)}`);
+      continue;
+    }
+    const mdRel =
+      route === "/" ? "index.md" : route.replace(/^\/+/, "") + ".md";
+    const mdFile = join(distDir, mdRel);
+    if (!existsSync(mdFile)) {
+      errors.push(`MISSING .md shadow: ${routeTitle(route)} -> ${mdFile}`);
+      continue;
     }
     routesOk++;
   }

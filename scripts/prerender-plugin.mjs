@@ -99,15 +99,37 @@ function routeToFilePath(distDir, route) {
   return join(distDir, route.replace(/^\/+/, ""), "index.html");
 }
 
+function markdownAlternateHref(route) {
+  if (route === "/") return "/index.md";
+  return `${route}.md`;
+}
+
 async function snapshot(page, baseUrl, distDir, route) {
   const url = baseUrl + route;
   await page.goto(url, { waitUntil: "networkidle0", timeout: 60_000 });
   await waitForRouteContent(page);
-  const html = "<!doctype html>\n" + (await page.content());
+  // page.content() already returns a full document starting with
+  // <!DOCTYPE html>. Do NOT prepend another doctype — a duplicated DOCTYPE
+  // trips strict HTML parsers (some LLM crawlers report the page as empty
+  // or fall back to the SPA shell), which is exactly the failure the docs
+  // audit surfaced. Also inject a <link rel="alternate" type="text/markdown">
+  // pointing at the per-route .md shadow so LLM ingesters can grab clean
+  // plaintext instead of re-parsing the hydrated React HTML.
+  let html = await page.content();
+  const mdHref = markdownAlternateHref(route);
+  const alt = `<link rel="alternate" type="text/markdown" href="${mdHref}">`;
+  if (!html.includes('type="text/markdown"')) {
+    html = html.replace(/<\/head>/i, `    ${alt}\n  </head>`);
+  }
   const filePath = routeToFilePath(distDir, route);
   await mkdir(dirname(filePath), { recursive: true });
   await writeFile(filePath, html, "utf8");
   return filePath;
+}
+
+function routeToMarkdownPath(distDir, route) {
+  if (route === "/") return join(distDir, "index.md");
+  return join(distDir, route.replace(/^\/+/, "") + ".md");
 }
 
 export default function prerenderPlugin(options = {}) {
@@ -277,9 +299,21 @@ export default function prerenderPlugin(options = {}) {
                 return { title: pageTitle, md };
               });
               const url = `https://docs.nexart.io${route === "/" ? "" : route}`;
-              llmsFullSections.push(
-                `# ${extracted.title}\n\nURL: ${url}\n\n${extracted.md}`,
-              );
+              const pageMarkdown = `# ${extracted.title}\n\nURL: ${url}\n\n${extracted.md}\n`;
+              llmsFullSections.push(pageMarkdown.trimEnd());
+              // Per-route .md shadow file. LLM ingesters that respect the
+              // <link rel="alternate" type="text/markdown"> in <head> (or
+              // just probe /path.md) get clean plaintext instead of parsing
+              // hydrated React HTML.
+              try {
+                const mdPath = routeToMarkdownPath(resolvedDistDir, route);
+                await mkdir(dirname(mdPath), { recursive: true });
+                await writeFile(mdPath, pageMarkdown, "utf8");
+              } catch (mdErr) {
+                console.warn(
+                  `[prerender]   (markdown shadow write failed for ${route}: ${mdErr.message})`,
+                );
+              }
             } catch (err) {
               console.warn(
                 `[prerender]   (llms-full extract failed for ${route}: ${err.message})`,
