@@ -169,8 +169,52 @@ async function main() {
     }
   }
 
+  // llms.txt: must reference the canonical high-level docs.
+  const llmsRequired = [
+    "/docs/what-is-nexart",
+    "/docs/getting-started",
+    "/docs/quickstart",
+    "/docs/architecture",
+    "/docs/sdk",
+    "/docs/verification",
+    "/docs/faq",
+  ];
+  const llmsRes = await fetch(BASE + "/llms.txt");
+  const llmsBody = llmsRes.ok ? await llmsRes.text() : "";
+  if (!llmsRes.ok) {
+    failed++;
+    console.log(`  ✗ /llms.txt  HTTP ${llmsRes.status}`);
+  } else {
+    const missing = llmsRequired.filter((p) => !llmsBody.includes(p));
+    if (missing.length) {
+      failed++;
+      console.log(`  ✗ /llms.txt  missing links: ${missing.join(", ")}`);
+    } else {
+      console.log(`  ✓ /llms.txt  (${llmsBody.length} chars)`);
+    }
+  }
+
+  // llms-full.txt: must contain or link to every docs route.
+  const fullRes = await fetch(BASE + "/llms-full.txt");
+  const fullBody = fullRes.ok ? await fullRes.text() : "";
+  if (!fullRes.ok) {
+    failed++;
+    console.log(`  ✗ /llms-full.txt  HTTP ${fullRes.status}`);
+  } else {
+    const routes = Object.keys(ROUTES);
+    const missing = routes.filter((p) => !fullBody.includes(p));
+    if (missing.length) {
+      failed++;
+      console.log(
+        `  ✗ /llms-full.txt  missing ${missing.length}/${routes.length} routes: ${missing.slice(0, 5).join(", ")}${missing.length > 5 ? "…" : ""}`,
+      );
+    } else {
+      console.log(`  ✓ /llms-full.txt  (${fullBody.length} chars, ${routes.length} routes referenced)`);
+    }
+  }
+
   console.log(
-    `\n${failed === 0 ? "OK" : "FAIL"}: ${Object.keys(ROUTES).length - failed}/${Object.keys(ROUTES).length} routes passed`,
+    `\n${failed === 0 ? "OK" : "FAIL"}: smoke test ${failed === 0 ? "passed" : "failed"}`,
   );
   process.exit(failed === 0 ? 0 : 1);
 }
