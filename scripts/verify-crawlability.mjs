@@ -85,11 +85,67 @@ const ROUTES = [
   "/docs/builder-integration-guide",
 ];
 
-const PARENT_ROUTES = new Set(
-  ROUTES.filter((r) => r !== "/").filter((r) =>
-    ROUTES.some((c) => c !== r && c.startsWith(`${r}/`)),
-  ),
-);
+const ROUTE_TITLES = {
+  "/": "Getting Started",
+  "/docs/what-is-nexart": "What is NexArt",
+  "/docs/getting-started": "Getting Started",
+  "/docs/quickstart": "Quickstart",
+  "/docs/architecture": "NexArt Architecture",
+  "/docs/cer-protocol": "Certified Execution Record (CER) Protocol",
+  "/docs/cer-record-management": "CER Record Management",
+  "/docs/protocol-overview": "Protocol Overview",
+  "/docs/concepts/cer": "Certified Execution Records",
+  "/docs/concepts/project-bundles": "Project Bundles",
+  "/docs/concepts/hashes": "Certificate Hash vs Project Hash",
+  "/docs/concepts/signed-receipts": "Signed Receipts",
+  "/docs/concepts/hash-timestamping": "Hash-Only Timestamping",
+  "/docs/concepts/verification-reports": "Verification Reports",
+  "/docs/concepts/context-signals": "Context Signals",
+  "/docs/concepts/execution-context": "Execution Context and Signals",
+  "/docs/sdk": "AI Execution SDK",
+  "/docs/signals-sdk": "Signals SDK",
+  "/docs/cli": "NexArt CLI",
+  "/docs/codemode-sdk": "CodeMode SDK",
+  "/docs/ui-renderer-sdk": "UI Renderer SDK",
+  "/docs/attestation-node": "Attestation Node",
+  "/docs/end-to-end-verification": "From Execution to Public Verification",
+  "/docs/ai-execution": "AI Execution CER",
+  "/docs/verification-semantics": "Verification Semantics",
+  "/docs/project-bundle-registration": "Project Bundle Registration",
+  "/docs/verification-statuses-and-errors": "Verification Statuses and Errors",
+  "/docs/multi-step-and-multi-agent-workflows": "Multi-step and Multi-agent Workflows",
+  "/docs/public-reseals-and-redacted-verification": "Public Reseals and Redacted Verification",
+  "/docs/certifying-llm-conversations": "Certifying LLM Conversations",
+  "/docs/verification": "Verification",
+  "/docs/verification-model": "Verification Model",
+  "/docs/external-verification": "External Verification",
+  "/docs/independent-verification": "Independent Verification",
+  "/docs/verify-nexart": "verify.nexart.io",
+  "/docs/browser-verification": "Browser Verification",
+  "/docs/ai-cer-verification-layers": "AI CER Verification Layers",
+  "/docs/ai-cer-package-format": "AI CER Package Format",
+  "/docs/trust-model": "Trust Model",
+  "/docs/integration-surfaces": "Integration Surfaces",
+  "/docs/cer-audit-workflows": "CER Audit Workflows",
+  "/docs/integrations": "Integrations",
+  "/docs/dashboard/projects": "Projects",
+  "/docs/dashboard/apps": "Apps",
+  "/docs/dashboard/auto-stamp": "Auto-stamp",
+  "/docs/dashboard/retention": "Retention Policy",
+  "/docs/dashboard/audit-exports": "Audit Exports",
+  "/docs/privacy": "Privacy and Data Handling",
+  "/docs/examples": "Examples",
+  "/docs/integrations/n8n": "n8n Integration",
+  "/docs/integrations/langchain": "LangChain Integration",
+  "/docs/agent-kit": "Agent Kit",
+  "/docs/agent-kit-instructions": "Agent-Kit Setup Instructions for AI Coding Agents",
+  "/docs/python-bridge": "Python Bridge",
+  "/docs/guides": "Builder Guides",
+  "/docs/faq": "FAQ",
+  "/docs/security/key-management": "Key Management and Rotation (NexArt Node)",
+  "/docs/confidential-mode": "Confidential Execution Mode",
+  "/docs/builder-integration-guide": "Builder Integration Guide (NexArt Canonical Node)",
+};
 
 const MIN_HTML_BYTES = 2_000;          // anything smaller is the SPA shell
 const MAX_LLMS_FULL_AGE_MS = 24 * 3600 * 1000; // freshness window for local check
@@ -103,6 +159,26 @@ function routeToFilePath(route) {
 function routeTitle(route) {
   if (route === "/") return "/";
   return route;
+}
+
+function expectedMarkdownHref(route) {
+  return route === "/" ? "/index.md" : `${route}.md`;
+}
+
+function expectedMarkdownRel(route) {
+  return route === "/" ? "index.md" : route.replace(/^\/+/, "") + ".md";
+}
+
+function getH1(html) {
+  return html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i)?.[1]
+    ?.replace(/<[^>]+>/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function hasExpectedMarkdownAlternate(html, route) {
+  const href = expectedMarkdownHref(route).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp(`<link[^>]+rel=["']alternate["'][^>]+type=["']text/markdown["'][^>]+href=["']${href}["']`, "i").test(html);
 }
 
 async function checkLocal() {
@@ -136,8 +212,14 @@ async function checkLocal() {
       continue;
     }
     const html = buf.toString("utf8");
-    if (!/<h1[\s>]/i.test(html)) {
+    const h1 = getH1(html);
+    if (!h1) {
       errors.push(`NO <h1>: ${routeTitle(route)}`);
+      continue;
+    }
+    const expectedTitle = ROUTE_TITLES[route];
+    if (expectedTitle && h1 !== expectedTitle) {
+      errors.push(`WRONG <h1>: ${routeTitle(route)} expected "${expectedTitle}", got "${h1}"`);
       continue;
     }
     if (!/<title>[^<]+<\/title>/i.test(html)) {
@@ -153,15 +235,19 @@ async function checkLocal() {
       continue;
     }
     // Per-route markdown alternate must be advertised and resolvable.
-    if (!/<link[^>]+type=["']text\/markdown["']/i.test(html)) {
+    if (!hasExpectedMarkdownAlternate(html, route)) {
       errors.push(`NO markdown alternate <link>: ${routeTitle(route)}`);
       continue;
     }
-    const mdRel =
-      route === "/" ? "index.md" : route.replace(/^\/+/, "") + ".md";
+    const mdRel = expectedMarkdownRel(route);
     const mdFile = join(distDir, mdRel);
     if (!existsSync(mdFile)) {
       errors.push(`MISSING .md shadow: ${routeTitle(route)} -> ${mdFile}`);
+      continue;
+    }
+    const md = await readFile(mdFile, "utf8");
+    if (expectedTitle && !md.startsWith(`# ${expectedTitle}\n`)) {
+      errors.push(`WRONG .md shadow title: ${routeTitle(route)}`);
       continue;
     }
     routesOk++;
@@ -243,8 +329,33 @@ async function checkRemote(base) {
         errors.push(`TOO SMALL: ${url} (${html.length} bytes)`);
         continue;
       }
-      if (!/<h1[\s>]/i.test(html)) {
+      const h1 = getH1(html);
+      if (!h1) {
         errors.push(`NO <h1> in served HTML: ${url}`);
+        continue;
+      }
+      const doctypeCount = (html.match(/<!doctype\s+html/gi) || []).length;
+      if (doctypeCount !== 1) {
+        errors.push(`DUPLICATE DOCTYPE (${doctypeCount}): ${url}`);
+        continue;
+      }
+      const expectedTitle = ROUTE_TITLES[route];
+      if (expectedTitle && h1 !== expectedTitle) {
+        errors.push(`WRONG <h1>: ${url} expected "${expectedTitle}", got "${h1}"`);
+        continue;
+      }
+      if (!hasExpectedMarkdownAlternate(html, route)) {
+        errors.push(`NO route-specific markdown alternate <link>: ${url}`);
+        continue;
+      }
+      const mdRes = await fetch(`${root}${expectedMarkdownHref(route)}`, { redirect: "follow" });
+      if (!mdRes.ok) {
+        errors.push(`Markdown shadow HTTP ${mdRes.status}: ${root}${expectedMarkdownHref(route)}`);
+        continue;
+      }
+      const md = await mdRes.text();
+      if (expectedTitle && !md.startsWith(`# ${expectedTitle}\n`)) {
+        errors.push(`WRONG remote .md title: ${root}${expectedMarkdownHref(route)}`);
         continue;
       }
       routesOk++;

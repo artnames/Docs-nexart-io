@@ -30,12 +30,25 @@ const routes = [
   "/docs/concepts/hash-timestamping",
   "/docs/concepts/verification-reports",
   "/docs/concepts/context-signals",
+  "/docs/concepts/execution-context",
   "/docs/sdk",
+  "/docs/signals-sdk",
   "/docs/cli",
   "/docs/codemode-sdk",
   "/docs/ui-renderer-sdk",
   "/docs/attestation-node",
+  "/docs/end-to-end-verification",
+  "/docs/ai-execution",
+  "/docs/verification-semantics",
+  "/docs/project-bundle-registration",
+  "/docs/verification-statuses-and-errors",
+  "/docs/multi-step-and-multi-agent-workflows",
+  "/docs/public-reseals-and-redacted-verification",
+  "/docs/certifying-llm-conversations",
   "/docs/verification",
+  "/docs/verification-model",
+  "/docs/external-verification",
+  "/docs/independent-verification",
   "/docs/verify-nexart",
   "/docs/browser-verification",
   "/docs/ai-cer-verification-layers",
@@ -54,13 +67,22 @@ const routes = [
   "/docs/integrations/n8n",
   "/docs/integrations/langchain",
   "/docs/agent-kit",
+  "/docs/agent-kit-instructions",
+  "/docs/python-bridge",
   "/docs/guides",
   "/docs/faq",
+  "/docs/security/key-management",
+  "/docs/confidential-mode",
+  "/docs/builder-integration-guide",
 ];
 
 function routeToFilePath(route) {
   if (route === "/") return join(distDir, "index.html");
   return join(distDir, route.replace(/^\/+/, ""), "index.html");
+}
+
+function markdownAlternateHref(route) {
+  return route === "/" ? "/index.md" : `${route}.md`;
 }
 
 async function snapshot(page, baseUrl, route) {
@@ -70,7 +92,11 @@ async function snapshot(page, baseUrl, route) {
   await page.evaluate(
     () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))),
   );
-  const html = await page.content();
+  let html = await page.content();
+  const alt = `<link rel="alternate" type="text/markdown" href="${markdownAlternateHref(route)}">`;
+  if (!html.includes('type="text/markdown"')) {
+    html = html.replace(/<\/head>/i, `    ${alt}\n  </head>`);
+  }
   const filePath = routeToFilePath(route);
   await mkdir(dirname(filePath), { recursive: true });
   await writeFile(filePath, html, "utf8");
