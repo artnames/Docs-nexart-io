@@ -104,8 +104,8 @@ async function check(route, expectedH1, gettingStartedFingerprint) {
   if (res.status !== 200) errors.push(`HTTP ${res.status}`);
   const html = await res.text();
 
-  const title = extract(/<title>([^<]+)<\/title>/i, html);
-  const h1 = extract(/<h1[^>]*>([^<]+)<\/h1>/i, html);
+  const title = decodeEntities(extract(/<title>([^<]+)<\/title>/i, html));
+  const h1 = decodeEntities(extract(/<h1[^>]*>([^<]+)<\/h1>/i, html));
   const bodyText = stripTags(html);
 
   if (bodyText.length < MIN_BODY_CHARS)
