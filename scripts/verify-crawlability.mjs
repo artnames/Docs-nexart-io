@@ -96,10 +96,8 @@ const MAX_LLMS_FULL_AGE_MS = 24 * 3600 * 1000; // freshness window for local che
 
 function routeToFilePath(route) {
   if (route === "/") return join(distDir, "index.html");
-  if (PARENT_ROUTES.has(route)) {
-    return join(distDir, route.replace(/^\/+/, ""), "index.html");
-  }
-  return join(distDir, route.replace(/^\/+/, ""));
+  // Prerender always writes <route>/index.html so hosts serve it as text/html.
+  return join(distDir, route.replace(/^\/+/, ""), "index.html");
 }
 
 function routeTitle(route) {
