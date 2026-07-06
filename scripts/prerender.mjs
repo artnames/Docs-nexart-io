@@ -70,7 +70,7 @@ async function snapshot(page, baseUrl, route) {
   await page.evaluate(
     () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))),
   );
-  const html = await page.evaluate(() => "<!doctype html>\n" + document.documentElement.outerHTML);
+  const html = await page.content();
   const filePath = routeToFilePath(route);
   await mkdir(dirname(filePath), { recursive: true });
   await writeFile(filePath, html, "utf8");
