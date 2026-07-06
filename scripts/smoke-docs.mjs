@@ -115,6 +115,25 @@ async function check(route, expectedH1, gettingStartedFingerprint) {
   if (h1 !== expectedH1)
     errors.push(`h1 mismatch: got "${h1}", expected "${expectedH1}"`);
 
+  // Markdown alternate guard: if present, its href must match this route
+  // (i.e. <route>.md, or /index.md only for "/") — never point elsewhere.
+  const mdAlt = html.match(
+    /<link[^>]+rel=["']alternate["'][^>]+type=["']text\/markdown["'][^>]*>/gi,
+  );
+  if (mdAlt) {
+    const expectedHref = route === "/" ? "/index.md" : `${route}.md`;
+    for (const tag of mdAlt) {
+      const href = (tag.match(/href=["']([^"']+)["']/i) || [])[1];
+      if (!href) {
+        errors.push(`markdown alternate present without href: ${tag}`);
+      } else if (href !== expectedHref) {
+        errors.push(
+          `wrong markdown alternate: got "${href}", expected "${expectedHref}"`,
+        );
+      }
+    }
+  }
+
   // Duplicate-of-getting-started guard.
   if (
     route !== "/docs/getting-started" &&
