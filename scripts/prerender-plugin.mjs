@@ -72,12 +72,6 @@ const ROUTES = [
   "/docs/builder-integration-guide",
 ];
 
-const PARENT_ROUTES = new Set(
-  ROUTES.filter((route) => route !== "/").filter((route) =>
-    ROUTES.some((candidate) => candidate !== route && candidate.startsWith(`${route}/`)),
-  ),
-);
-
 async function waitForRouteContent(page) {
   // Tolerant readiness: wait for any H1 inside the docs main/prose container,
   // then give React Router + Helmet a brief settle window. Avoid strict
