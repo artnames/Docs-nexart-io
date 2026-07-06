@@ -1,0 +1,98 @@
+{
+  "version": 1,
+  "sdk_version": "0.20.0",
+  "path": "/functions/v1/mcp",
+  "auth": {
+    "type": "none"
+  },
+  "mcp": {
+    "server": {
+      "name": "nexart-docs-mcp",
+      "version": "0.1.0",
+      "title": "NexArt Docs"
+    },
+    "tools": [
+      {
+        "name": "list_docs",
+        "title": "List NexArt Docs",
+        "description": "List all pages of the NexArt documentation (docs.nexart.io) grouped by section. Use this to discover what topics exist before fetching a specific page.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": true
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "section": {
+              "type": "string",
+              "description": "Optional case-insensitive section filter, e.g. 'Verification', 'Integrations'."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "search_docs",
+        "title": "Search NexArt Docs",
+        "description": "Keyword search across NexArt documentation page titles and URLs (docs.nexart.io). Returns the best matching pages. Use fetch_doc to read a specific page.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": true
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Keywords to search for, e.g. 'certificate hash verification'."
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 25,
+              "default": 10,
+              "description": "Maximum number of results."
+            }
+          },
+          "required": [
+            "query"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "fetch_doc",
+        "title": "Fetch NexArt Doc Page",
+        "description": "Fetch the readable text of a NexArt documentation page. Accepts a full https://docs.nexart.io/... URL or a path like /docs/verification.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": true
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Doc page URL or path, e.g. '/docs/verification'."
+            }
+          },
+          "required": [
+            "url"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
