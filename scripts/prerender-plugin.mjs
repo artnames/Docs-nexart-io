@@ -112,9 +112,14 @@ async function snapshot(page, baseUrl, distDir, route) {
   let html = await page.content();
   const mdHref = markdownAlternateHref(route);
   const alt = `<link rel="alternate" type="text/markdown" href="${mdHref}">`;
-  if (!html.includes('type="text/markdown"')) {
-    html = html.replace(/<\/head>/i, `    ${alt}\n  </head>`);
-  }
+  // Strip any pre-existing text/markdown alternate — the SPA fallback shell
+  // (dist/index.html) may already carry the "/" route's alternate, which
+  // would otherwise leak into every subsequent route snapshot.
+  html = html.replace(
+    /\s*<link[^>]+rel=["']alternate["'][^>]+type=["']text\/markdown["'][^>]*>/gi,
+    "",
+  );
+  html = html.replace(/<\/head>/i, `    ${alt}\n  </head>`);
   const filePath = routeToFilePath(distDir, route);
   await mkdir(dirname(filePath), { recursive: true });
   await writeFile(filePath, html, "utf8");
