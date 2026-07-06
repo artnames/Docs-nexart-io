@@ -299,9 +299,21 @@ export default function prerenderPlugin(options = {}) {
                 return { title: pageTitle, md };
               });
               const url = `https://docs.nexart.io${route === "/" ? "" : route}`;
-              llmsFullSections.push(
-                `# ${extracted.title}\n\nURL: ${url}\n\n${extracted.md}`,
-              );
+              const pageMarkdown = `# ${extracted.title}\n\nURL: ${url}\n\n${extracted.md}\n`;
+              llmsFullSections.push(pageMarkdown.trimEnd());
+              // Per-route .md shadow file. LLM ingesters that respect the
+              // <link rel="alternate" type="text/markdown"> in <head> (or
+              // just probe /path.md) get clean plaintext instead of parsing
+              // hydrated React HTML.
+              try {
+                const mdPath = routeToMarkdownPath(resolvedDistDir, route);
+                await mkdir(dirname(mdPath), { recursive: true });
+                await writeFile(mdPath, pageMarkdown, "utf8");
+              } catch (mdErr) {
+                console.warn(
+                  `[prerender]   (markdown shadow write failed for ${route}: ${mdErr.message})`,
+                );
+              }
             } catch (err) {
               console.warn(
                 `[prerender]   (llms-full extract failed for ${route}: ${err.message})`,
