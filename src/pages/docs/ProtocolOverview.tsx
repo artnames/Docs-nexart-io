@@ -41,7 +41,7 @@ const ProtocolOverview = () => (
     <p>The protocol separates three concerns:</p>
     <ul>
       <li><strong>Execution.</strong> A system performs an operation and records what happened.</li>
-      <li><strong>Attestation.</strong> An independent node signs the record to prove it existed at a specific time.</li>
+      <li><strong>Attestation.</strong> The NexArt attestation node signs the record to prove it existed at a specific time.</li>
       <li><strong>Verification.</strong> Anyone can check the record's integrity and the node's signature.</li>
     </ul>
 

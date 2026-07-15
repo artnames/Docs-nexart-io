@@ -41,7 +41,7 @@ Both paths are first-class. Project Bundles are NOT required for single-executio
 
 ## Versions
 - @nexart/ai-execution@1.2.0
-- @nexart/cli@1.0.0
+- @nexart/cli@1.1.0
 - Bundle version "0.1"
 - Protocol 1.2.0 (legacy default, nexart-v1) · Protocol 1.3.0 (jcs-v1 / RFC 8785, opt-in) · Protocol 1.3.1 (jcs-v1 / RFC 8785, confidential execution, node's advertised default)
 
