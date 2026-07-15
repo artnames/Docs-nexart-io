@@ -123,7 +123,7 @@ Receipt   (Layer 2) : SKIPPED
 Envelope  (Layer 3) : SKIPPED`}
         />
         <p className="text-sm text-foreground mt-3">
-          Local sealing proves integrity. Certification adds an independent node attestation.
+          Local sealing proves integrity. Certification adds a NexArt attestation node signature.
         </p>
         <p className="text-xs text-muted-foreground mt-2">
           <strong>SKIPPED</strong> for Receipt and Envelope is expected. Those layers only apply after a node certifies
