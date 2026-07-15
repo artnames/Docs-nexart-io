@@ -106,7 +106,7 @@ const CertifyingLlmConversations = () => (
         <ul className="m-0">
           <li>The exact prompt, model identity, parameters, and response existed at the recorded time.</li>
           <li>Nothing in the certified payload has been modified since sealing.</li>
-          <li>An independent attestation node witnessed and signed the record.</li>
+          <li>The NexArt attestation node witnessed and signed the record.</li>
           <li>The ordered sequence of turns in the conversation is fixed.</li>
         </ul>
       </div>
