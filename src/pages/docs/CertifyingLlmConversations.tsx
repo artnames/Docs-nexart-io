@@ -18,7 +18,7 @@ verifiable execution record.
 ## What this proves
 - The exact prompt, model parameters, and response existed at a given time.
 - The conversation has not been modified since sealing.
-- An independent node witnessed and signed the record.
+- The NexArt attestation node witnessed and signed the record.
 
 ## What this does NOT prove
 - That the model's answer is correct, safe, or non-hallucinated.
