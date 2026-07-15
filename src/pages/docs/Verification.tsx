@@ -84,6 +84,31 @@ const Verification = () => (
     />
 
     <FailureModes />
+
+    <div className="my-6 rounded-lg border border-border bg-card p-4 space-y-3">
+      <p className="text-sm font-semibold">The three trust states of a CER</p>
+      <ul className="text-sm text-muted-foreground space-y-2 list-disc pl-5">
+        <li>
+          <strong>Locally sealed</strong> — a <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">certificateHash</code> exists;
+          integrity is checkable. No node signature is implied.
+        </li>
+        <li>
+          <strong>Node-attested</strong> — node signature or attestation material is present and verifies under the
+          published node public key (matched by <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">kid</code>).
+        </li>
+        <li>
+          <strong>Externally timestamped</strong> — a valid external timestamp token (e.g. RFC 3161 TSA) is present and
+          provides third-party time evidence for the signed record. This is an additional evidence layer, not an
+          automatic property of every CER.
+        </li>
+      </ul>
+      <p className="text-sm text-muted-foreground">
+        Verification confirms integrity and applicable trust material. It does <strong>not</strong> establish that the
+        AI output was correct, fair, lawful, or complete. The completeness and truthfulness of the recorded execution
+        data depend on the integration and capture boundary.
+      </p>
+    </div>
+
     <div className="mb-6 rounded-lg border border-destructive/40 bg-destructive/5 p-4">
       <p className="text-sm font-medium mb-1">Local verification is not public verification.</p>
       <p className="text-sm text-muted-foreground">
