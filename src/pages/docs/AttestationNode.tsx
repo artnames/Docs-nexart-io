@@ -262,7 +262,7 @@ const AttestationNode = () => (
       <li><strong>Client sends:</strong> <code>prompt</code>, raw <code>input</code>, raw <code>output</code>, and full <code>parameters</code>.</li>
       <li><strong>Node seals:</strong> <code>input</code> and <code>output</code> into commitment envelopes via <code>sealConfidential</code> (HMAC-SHA256) using deterministically derived per-field salts.</li>
       <li><strong>Node builds the CER</strong> with envelopes in place of plaintext, computes <code>certificateHash</code>, and returns the attested bundle.</li>
-      <li><strong>Raw <code>input</code>/<code>output</code> are never stored, never included in the certified record, and never persisted in <code>proof_json</code>.</strong></li>
+      <li><strong>Raw <code>input</code> and <code>output</code> are transmitted over TLS and processed transiently by the node. They are excluded from the certified snapshot and from <code>proof_json</code>, and the documented confidential flow is designed not to persist them.</strong></li>
     </ul>
     <p>Canonical request body:</p>
     <CodeBlock

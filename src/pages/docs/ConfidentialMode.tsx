@@ -12,14 +12,16 @@ Model:
   HMAC-SHA256 (sealConfidential) with deterministically derived per-field
   salts. Raw input and output are processed transiently on the node for
   the sole purpose of sealing.
-- Raw input and output are NEVER persisted by the node, NEVER included in
-  the certified snapshot, and NEVER present in proof_json.
+- Raw input and output are transmitted over TLS and processed transiently.
+  They are excluded from the certified snapshot and from proof_json, and
+  the documented confidential flow is designed not to persist them.
 - The certified CER contains only commitments and hashes.
 - Verification operates on commitments, not plaintext.
 
 This flow does NOT claim that raw input/output never leaves the customer
-environment; it MUST cross TLS to the node. It DOES guarantee that the
-node does not persist or certify those raw values.
+environment; it MUST cross TLS to the node. The operational guarantee is
+scoped: the certification flow is designed to exclude raw values from the
+snapshot, from proof_json, and from intentional persistence.
 
 Envelope shape:
 { "_redacted": true, "scheme": "hmac-sha256-v1", "commitment": "sha256:..." }
@@ -38,7 +40,7 @@ const ConfidentialMode = () => (
   <>
     <PageHeader
       title="Confidential Execution (Protocol 1.3.1)"
-      summary="Node-side commitment envelopes for input and output. Raw plaintext is never stored, never certified, never persisted."
+      summary="Node-side commitment envelopes for input and output. Raw plaintext is transmitted over TLS and processed transiently; it is excluded from the certified snapshot and from proof_json, and the documented flow is designed not to persist it."
       llmBlock={llmBlock}
     />
 
@@ -59,20 +61,23 @@ const ConfidentialMode = () => (
       <li>Raw <code>input</code> and <code>output</code> are transmitted to the node over TLS during certification.</li>
       <li>The node seals them into commitment envelopes using <code>sealConfidential</code> (HMAC-SHA256).</li>
       <li>Per-field salts are derived deterministically inside the node and are not exposed.</li>
-      <li>Raw <code>input</code> and <code>output</code> are, on the node:
+      <li>On the node, raw <code>input</code> and <code>output</code> are:
         <ul>
-          <li>NEVER persisted,</li>
-          <li>NEVER included in the certified snapshot,</li>
-          <li>NEVER present in <code>proof_json</code>.</li>
+          <li>processed transiently for the sole purpose of sealing,</li>
+          <li>excluded from the certified snapshot,</li>
+          <li>excluded from <code>proof_json</code>,</li>
+          <li>not intentionally persisted by the certification flow.</li>
         </ul>
       </li>
       <li>The resulting CER contains only commitments and hashes.</li>
       <li>Verification operates on commitments, not plaintext.</li>
     </ul>
     <p className="rounded-md border border-amber-500/40 bg-amber-500/5 p-3 text-sm">
-      This flow does <strong>not</strong> claim raw <code>input</code>/<code>output</code> never leaves the customer
-      environment. They MUST cross TLS to the node in order to be sealed. The guarantee is that the node does not
-      persist or certify those raw values &mdash; only their commitments.
+      Scope of the guarantee. Raw <code>input</code>/<code>output</code> MUST cross TLS to the node in order to be
+      sealed, so this flow does <strong>not</strong> claim they never leave the customer environment. The documented
+      guarantee is scoped to the certification path: raw values are excluded from the certified snapshot and from{" "}
+      <code>proof_json</code>, and the flow is designed not to persist them. A blanket claim of absence from all
+      logs, traces, crash reports, caches, and backups is not asserted here.
     </p>
 
     <h2 id="envelope">Commitment Envelope</h2>
@@ -204,8 +209,8 @@ const ConfidentialMode = () => (
     <h2 id="security-model">Security Model</h2>
     <p>Confidential mode guarantees:</p>
     <ul>
-      <li>The node does not store raw <code>input</code> or <code>output</code>.</li>
-      <li>The certified record and <code>proof_json</code> contain only commitments.</li>
+      <li>The certified record and <code>proof_json</code> contain only commitments for <code>input</code> and <code>output</code>.</li>
+      <li>The certification flow is designed not to persist raw <code>input</code>/<code>output</code>.</li>
       <li>Third parties cannot reconstruct plaintext from commitments alone.</li>
     </ul>
     <p>It does NOT guarantee:</p>
