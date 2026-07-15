@@ -94,7 +94,7 @@ const Architecture = () => (
       </li>
       <li>
         <strong>CLI</strong> (
-        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/cli@1.0.0</code>) owns: the command
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">@nexart/cli@1.1.0</code>) owns: the command
         surface (<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">ai seal</code>,{" "}
         <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">ai certify</code>,{" "}
         <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">ai verify</code>), file I/O, argument parsing,

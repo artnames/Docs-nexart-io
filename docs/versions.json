@@ -6,7 +6,11 @@
   "lastReviewed": "2026-07-15",
   "protocol": {
     "supportedProtocolVersions": {
-      "value": ["1.2.0", "1.3.0", "1.3.1"],
+      "value": [
+        "1.2.0",
+        "1.3.0",
+        "1.3.1"
+      ],
       "source": "NexArt Protocol Specification (governed by NexArt engineering; mirrored in the node build). Reconcile against the deployed node's /v1/protocol/versions when available.",
       "verifiedAt": "2026-07-15",
       "sync": "manual"
@@ -76,7 +80,7 @@
       "sync": "manual"
     },
     "@nexart/cli": {
-      "value": "1.0.0",
+      "value": "1.1.0",
       "source": "npm registry: https://registry.npmjs.org/@nexart/cli/latest",
       "verifiedAt": "2026-07-15",
       "sync": "manual"
