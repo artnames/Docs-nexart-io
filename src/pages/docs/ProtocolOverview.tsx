@@ -90,9 +90,10 @@ const ProtocolOverview = () => (
       <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">output</code> into HMAC-SHA256
       commitment envelopes (<code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">sealConfidential</code>),
       derives per-field salts internally, and builds the CER. Raw{" "}
-      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">input</code>/<code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">output</code>{" "}
-      are never stored, never included in the certified record, and never persisted in{" "}
-      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">proof_json</code>. See{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">input</code> and{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">output</code>{" "}
+      are transmitted over TLS and processed transiently. They are excluded from the certified snapshot and from{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">proof_json</code>, and the documented confidential flow is designed not to persist them. See{" "}
       <a className="text-primary hover:underline" href="/docs/confidential-mode">Confidential Execution</a>.
     </p>
 

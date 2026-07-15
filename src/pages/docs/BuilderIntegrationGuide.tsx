@@ -45,7 +45,7 @@ Preview endpoint: POST /v1/cer/ai/create returns the bundle and certificateHash 
 Endpoint: POST /v1/cer/ai/certify.
 Required: protocolVersion "1.3.1", provider, model, raw input, raw output, prompt (non-empty), parameters object with { temperature, maxTokens, topP, seed } (topP and seed may be null, others must be finite numbers).
 Forbidden: inputHash, outputHash. Submitting either -> 400.
-Behaviour: node seals raw input/output into commitment envelopes (HMAC-SHA256, scheme "hmac-sha256-v1"). Salts are derived deterministically from executionId so retries are idempotent and produce the same commitments and certificateHash. Raw input/output are never stored, never included in the certified record, never persisted in proof_json, and stripped from any failure-path logging.
+Behaviour: node seals raw input/output into commitment envelopes (HMAC-SHA256, scheme "hmac-sha256-v1"). Salts are derived deterministically from executionId so retries are idempotent and produce the same commitments and certificateHash. Raw input and output are transmitted over TLS and processed transiently. They are excluded from the certified snapshot and from proof_json, and the documented confidential flow is designed not to persist them and to strip them from failure-path logging.
 Code Mode rejects 1.3.1 explicitly. There is no raw AI I/O to seal there.
 Verification verdict for a 1.3.1 record: SDK verdict VERIFIED_CONFIDENTIAL, classification VERIFIED, content-mode HASH_BOUND.
 
