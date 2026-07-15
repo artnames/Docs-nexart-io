@@ -76,7 +76,7 @@ const AIExecution = () => (
     <h2 id="what-it-proves">What an AI Execution CER Proves</h2>
     <ul>
       <li><strong>Integrity.</strong> The recorded execution metadata has not been modified since it was certified.</li>
-      <li><strong>Witness (when attested).</strong> An independent attestation node observed the artifact at a specific point in time.</li>
+      <li><strong>Witness (when attested).</strong> The NexArt attestation node observed the artifact at a specific point in time.</li>
     </ul>
     <p>
       It does <strong>not</strong> prove that the model output was correct, that the
