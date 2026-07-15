@@ -109,7 +109,7 @@ const WhatIsNexArt = () => {
           <li>Not model evaluation</li>
           <li>Not correctness validation</li>
         </ul>
-        <p className="font-semibold mt-4">NexArt does not tell you if something is correct. It proves what happened.</p>
+        <p className="font-semibold mt-4">NexArt confirms the integrity of what was recorded and, when applicable trust material is present, that it was attested by the node. It does not establish that an AI output was correct, fair, lawful, or complete. The completeness and truthfulness of the recorded execution data depend on the integration and capture boundary.</p>
       </section>
 
       <section>
