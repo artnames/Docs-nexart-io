@@ -6,13 +6,20 @@ Protocol 1.3.1 introduces commitment-based confidentiality, replacing the
 hash-bound omission model used in 1.2.0.
 
 Model:
-- The client sends raw prompt, input, output, and parameters to the node.
+- The client transmits raw prompt, input, output, and parameters to the
+  attestation node over TLS during certification.
 - The node converts input and output into commitment envelopes using
-  HMAC-SHA256 (sealConfidential) with deterministically derived per-field salts.
-- Raw input and output are NEVER stored, NEVER included in the certified
-  record, and NEVER persisted in proof_json.
+  HMAC-SHA256 (sealConfidential) with deterministically derived per-field
+  salts. Raw input and output are processed transiently on the node for
+  the sole purpose of sealing.
+- Raw input and output are NEVER persisted by the node, NEVER included in
+  the certified snapshot, and NEVER present in proof_json.
 - The certified CER contains only commitments and hashes.
 - Verification operates on commitments, not plaintext.
+
+This flow does NOT claim that raw input/output never leaves the customer
+environment; it MUST cross TLS to the node. It DOES guarantee that the
+node does not persist or certify those raw values.
 
 Envelope shape:
 { "_redacted": true, "scheme": "hmac-sha256-v1", "commitment": "sha256:..." }
@@ -43,24 +50,30 @@ const ConfidentialMode = () => (
 
     <h2 id="overview">Overview</h2>
     <p>
-      In protocol <code>1.3.1</code> the client sends raw execution data to the
-      attestation node during certification. The node converts the sensitive
-      fields into <strong>commitment envelopes</strong> before building the CER.
+      In protocol <code>1.3.1</code> the client transmits raw execution data to
+      the attestation node <strong>over TLS</strong> during certification. The
+      node processes it transiently to convert the sensitive fields into{" "}
+      <strong>commitment envelopes</strong> before building the CER.
     </p>
     <ul>
-      <li>Raw <code>input</code> and <code>output</code> are sent to the node over TLS during certification.</li>
+      <li>Raw <code>input</code> and <code>output</code> are transmitted to the node over TLS during certification.</li>
       <li>The node seals them into commitment envelopes using <code>sealConfidential</code> (HMAC-SHA256).</li>
       <li>Per-field salts are derived deterministically inside the node and are not exposed.</li>
-      <li>Raw <code>input</code> and <code>output</code> are NEVER:
+      <li>Raw <code>input</code> and <code>output</code> are, on the node:
         <ul>
-          <li>stored,</li>
-          <li>included in the certified record,</li>
-          <li>persisted in <code>proof_json</code>.</li>
+          <li>NEVER persisted,</li>
+          <li>NEVER included in the certified snapshot,</li>
+          <li>NEVER present in <code>proof_json</code>.</li>
         </ul>
       </li>
       <li>The resulting CER contains only commitments and hashes.</li>
       <li>Verification operates on commitments, not plaintext.</li>
     </ul>
+    <p className="rounded-md border border-amber-500/40 bg-amber-500/5 p-3 text-sm">
+      This flow does <strong>not</strong> claim raw <code>input</code>/<code>output</code> never leaves the customer
+      environment. They MUST cross TLS to the node in order to be sealed. The guarantee is that the node does not
+      persist or certify those raw values &mdash; only their commitments.
+    </p>
 
     <h2 id="envelope">Commitment Envelope</h2>
     <p>Each committed field is replaced in the snapshot by an envelope:</p>

@@ -81,7 +81,7 @@ Package helpers are additive only. They do not change CER hashing, attestation, 
 
 ## Certify response
 {
-  verificationUrl: "https://verify.nexart.io/e/exec_abc123",
+  verificationUrl: "https://verify.nexart.io/c/sha256:<certificateHash>",
   certificateHash: "sha256:...",
   receipt: { certificateHash, timestamp, nodeId, kid },
   signatureB64Url: "MEUCIQD..."
@@ -229,7 +229,7 @@ Authorization: Bearer NEXART_API_KEY
 
     <CodeBlock
       code={`{
-  "verificationUrl": "https://verify.nexart.io/e/exec_abc123",
+  "verificationUrl": "https://verify.nexart.io/c/sha256:<certificateHash>",
   "certificateHash": "sha256:9e8d7c6b5a4f3210...",
   "receipt": {
     "certificateHash": "sha256:9e8d7c6b5a4f3210...",

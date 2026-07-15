@@ -8,7 +8,8 @@ POST /v1/cer/ai/create: create a CER bundle without attestation
 Authentication: Bearer NEXART_API_KEY
 
 ## Public Verifier
-verify.nexart.io: verify records by executionId or certificateHash
+verify.nexart.io: verify records by certificateHash (cryptographic identity).
+Execution ID is an application-level identifier and MUST NOT be used as the cryptographic identity of a CER; it may be used to LOOK UP a record but verification is always keyed on certificateHash.
 Uses redacted/public-safe representation. Raw inputs/outputs not exposed.
 
 ## Attestation Node
@@ -50,11 +51,12 @@ const IntegrationSurfaces = () => (
     <p><Link to="/docs/sdk" className="text-primary hover:underline">See the API reference</Link></p>
 
     <h2 id="verifier">Public Verifier</h2>
-    <p><a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a> is the public verification portal. Anyone can verify a record by:</p>
+    <p><a href="https://verify.nexart.io" target="_blank" rel="noopener noreferrer">verify.nexart.io</a> is the public verification portal. Verification is always keyed on the certificate hash (the cryptographic identity of the CER):</p>
     <ul>
-      <li>Execution ID: <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">https://verify.nexart.io/e/exec_abc123</code></li>
-      <li>Certificate hash: <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">https://verify.nexart.io/c/sha256%3A7f83...</code></li>
+      <li>Certificate hash: <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">https://verify.nexart.io/c/sha256%3A7f83...</code> (illustrative)</li>
+      <li>Project hash: <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">https://verify.nexart.io/p/&#123;projectHash&#125;</code></li>
     </ul>
+    <p>Execution ID is an application-level identifier used to <em>locate</em> or group records; it MUST NOT be treated as the cryptographic identity of a CER, and public verification URLs are not keyed on it.</p>
     <p>The verifier uses a redacted, public-safe representation of the record. Sensitive input and output content is not exposed. Verification checks bundle integrity, node signature, and receipt consistency.</p>
     <p><Link to="/docs/verification" className="text-primary hover:underline">Learn about verification</Link></p>
 

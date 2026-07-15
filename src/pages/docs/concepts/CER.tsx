@@ -266,7 +266,7 @@ const CER = () => (
 
     <h2 id="guarantees">What NexArt Guarantees (and Does Not)</h2>
     <p><strong>Guaranteed:</strong> integrity of the recorded execution (tamper-evidence via certificateHash), independent verification without trusting NexArt infrastructure.</p>
-    <p><strong>Not guaranteed:</strong> correctness of the execution result, completeness of recorded steps. NexArt proves what happened. It does not evaluate whether the result was correct or whether all steps were recorded.</p>
+    <p><strong>Not guaranteed:</strong> correctness of the execution result, completeness of recorded steps. Verification confirms integrity and applicable trust material. It does not establish that the AI output was correct, fair, lawful, or complete. The completeness and truthfulness of the recorded execution data depend on the integration and capture boundary.</p>
 
     <h2 id="multi-step">Multi-Step Workflows</h2>
     <p>For workflows with multiple steps, CERs can be collected into a <Link to="/docs/concepts/project-bundles" className="text-primary hover:underline">Project Bundle</Link> with its own <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">projectHash</code> covering the entire sequence. Use <Link to="/docs/agent-kit" className="text-primary hover:underline">agent-kit</Link> for simplified workflow orchestration.</p>

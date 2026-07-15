@@ -363,7 +363,7 @@ import { verifyProjectBundle } from '@nexart/ai-execution';`}
     <h2 id="related">Related</h2>
     <ul>
       <li><Link to="/docs/agent-kit" className="text-primary hover:underline">Agent Kit</Link>: full API reference</li>
-      <li><Link to="/docs/quickstart" className="text-primary hover:underline">Quickstart</Link>: 5-minute human walkthrough</li>
+      <li><Link to="/docs/quickstart" className="text-primary hover:underline">Quickstart</Link>: human walkthrough</li>
       <li><Link to="/docs/verification" className="text-primary hover:underline">Verification</Link>: how CER verification works</li>
       <li><Link to="/docs/concepts/project-bundles" className="text-primary hover:underline">Project Bundles</Link>: multi-step workflow concept</li>
     </ul>
