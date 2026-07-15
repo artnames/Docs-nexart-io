@@ -115,14 +115,11 @@ const SignedReceipts = () => (
     <p>The API response also includes <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">signatureB64Url</code> (base64url encoding) for transport convenience.</p>
 
     <h2 id="verification-url">Verification URLs</h2>
-    <p>When you certify a record via the API, the response includes a <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verificationUrl</code>. This URL points to the public verifier where anyone can independently check the record:</p>
+    <p>When you certify a record via the API, the response includes a <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">verificationUrl</code>. This URL points to the public verifier where anyone can independently check the record. Public verification is keyed on the certificate hash (the cryptographic identity of the CER); Execution ID is an application-level identifier for lookup only and is not a valid verification identity.</p>
     <CodeBlock
-      code={`// By execution ID
-https://verify.nexart.io/e/exec_abc123
-
-// By certificate hash
+      code={`// By certificate hash (cryptographic identity)
 https://verify.nexart.io/c/sha256%3A7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069`}
-      title="Verification URL Formats"
+      title="Verification URL Format"
     />
     <p>The verification URL is safe to share. The public verifier shows only a redacted, public-safe representation of the record.</p>
 

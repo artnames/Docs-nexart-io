@@ -130,7 +130,7 @@ const N8n = () => {
       <h3>3. Execute and verify</h3>
       <p>Run the workflow. The API returns a CER with a verification link:</p>
       <CodeBlock language="json" code={`{
-  "verificationUrl": "https://verify.nexart.io/e/n8n-demo-001",
+  "verificationUrl": "https://verify.nexart.io/c/sha256:<certificateHash>",
   "certificateHash": "sha256:...",
   "receipt": { ... },
   "signatureB64Url": "..."

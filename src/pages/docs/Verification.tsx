@@ -15,10 +15,10 @@ Verification confirms up to four things about a CER:
 4. The verification envelope has not been altered (Verification Envelope - when present)
 
 ## How to verify
-Three ways to verify a record:
-1. By executionId: https://verify.nexart.io/e/exec_abc123
-2. By certificateHash: https://verify.nexart.io/c/sha256%3A7f83...
-3. By uploading a CER bundle: drag and drop or paste the JSON bundle at verify.nexart.io
+Verification is always keyed on certificateHash (the cryptographic identity of the CER).
+1. By certificateHash: https://verify.nexart.io/c/sha256%3A7f83... (illustrative)
+2. By uploading a CER bundle: drag and drop or paste the JSON bundle at verify.nexart.io
+Execution ID is an application-level identifier for LOOKUP only and is NOT the cryptographic identity of a CER.
 
 ## Public verifier
 verify.nexart.io is the public verification portal.
@@ -407,13 +407,14 @@ const Verification = () => (
       title="Verify by Certificate Hash"
     />
 
-    <h3 id="by-execution-id">2. By Execution ID (convenience only)</h3>
+    <h3 id="by-execution-id">2. By Execution ID (lookup only, NOT verification identity)</h3>
     <p>
-      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">executionId</code> is a convenience identifier
-      returned by the certify API. It MUST NOT be used as a primary key for storage or deduplication. Use it for ad-hoc
-      lookup only:
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">executionId</code> is an
+      application-level identifier used to <em>locate</em> or group records. It MAY be repeated depending on the
+      application design and MUST NOT be treated as the cryptographic identity of a CER. Do not use it as a
+      primary key for storage, deduplication, or as the verification URL. Public verification is keyed on{" "}
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">certificateHash</code>.
     </p>
-    <CodeBlock code={`https://verify.nexart.io/e/exec_abc123`} title="Verify by Execution ID" />
 
     <h3 id="by-bundle-upload">3. By Uploading a CER Bundle</h3>
     <p>
