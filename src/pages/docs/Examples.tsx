@@ -42,7 +42,7 @@ Fields: nodeId, activeKid, keys[] (kid, algorithm, publicKey)`;
 const Examples = () => (
   <>
     <PageHeader
-      title="Examples"
+      title="Examples — Copy-Ready API Requests"
       summary="Copy-ready examples for API requests, responses, verification URLs, and data structures."
       llmBlock={llmBlock}
     />

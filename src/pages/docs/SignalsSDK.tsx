@@ -42,7 +42,7 @@ NexArtSignal[] is structurally identical to CerContextSignal[]. Pass collector.e
 const SignalsSDK = () => (
   <div className="prose prose-invert max-w-none">
     <PageHeader
-      title="Signals SDK"
+      title="Signals SDK Reference (@nexart/signals)"
       summary="@nexart/signals v0.8.2 — protocol-agnostic structured execution context with deterministic capture, integrity hashing, replay-safe diffing, and a builder API."
       llmBlock={llmBlock}
     />

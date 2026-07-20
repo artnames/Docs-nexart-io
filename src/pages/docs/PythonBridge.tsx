@@ -63,8 +63,8 @@ bridge itself - all paths agree.`;
 const PythonBridge = () => (
   <>
     <PageHeader
-      title="Python Bridge"
-      summary="Use NexArt from Python via a thin bridge to the canonical JavaScript SDK. Shipped inside @nexart/agent-kit (>=0.5.2). All hashing and signing stay in the canonical implementation; Python gets ergonomic access without forking the trust surface."
+      title="Python Bridge — Use NexArt from Python"
+      summary="Use NexArt from Python via a thin bridge to the canonical JavaScript SDK, shipped inside @nexart/agent-kit (>=0.5.2)."
       llmBlock={llmBlock}
     />
 

@@ -51,7 +51,7 @@ const EndToEndVerification = () => (
   <>
     <PageHeader
       title="From Execution to Public Verification"
-      summary="The complete end-to-end flow. Local verification proves integrity. Node registration anchors trust. Public verification is an independent witness. They are not interchangeable."
+      summary="The complete lifecycle from local integrity to node attestation to public verification. Three trust states, not interchangeable."
       llmBlock={llmBlock}
     />
 

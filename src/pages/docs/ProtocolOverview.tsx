@@ -32,7 +32,7 @@ const ProtocolOverview = () => (
   <>
     <PageHeader
       title="Protocol Overview"
-      summary="How NexArt produces, attests, and verifies execution records."
+      summary="How NexArt produces, attests, and verifies execution records: capture, canonicalize, hash, sign, and independently verify."
       llmBlock={llmBlock}
     />
 

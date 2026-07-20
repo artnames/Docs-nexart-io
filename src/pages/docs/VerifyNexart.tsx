@@ -28,8 +28,8 @@ The node provides data (bundles, receipts, keys). Trust comes from cryptographic
 const VerifyNexart = () => (
   <>
     <PageHeader
-      title="verify.nexart.io"
-      summary="The public verification portal for CERs and Project Bundles."
+      title="verify.nexart.io — Public Verification Portal"
+      summary="The public verification portal for CERs and Project Bundles at verify.nexart.io — no NexArt SDK required."
       llmBlock={llmBlock}
     />
 

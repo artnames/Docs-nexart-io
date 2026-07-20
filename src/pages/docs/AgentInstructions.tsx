@@ -91,8 +91,8 @@ Full reference: https://docs.nexart.io/agent-kit-instructions.md`;
 const AgentInstructions = () => (
   <>
     <PageHeader
-      title="Agent-Kit Setup Instructions for AI Coding Agents"
-      summary="A prescriptive runbook written for AI coding agents. Paste it into your AI assistant (Cursor, Claude Code, Lovable, Windsurf, Cline) and it will install @nexart/agent-kit, certify at least one AI decision, and verify the resulting bundle."
+      title="Agent-Kit Setup Runbook for AI Coding Agents"
+      summary="A prescriptive runbook AI coding agents can follow to install @nexart/agent-kit, certify an AI decision, and verify the resulting bundle."
       llmBlock={llmBlock}
     />
 

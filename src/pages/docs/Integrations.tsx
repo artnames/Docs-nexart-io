@@ -86,7 +86,7 @@ const comparisonRows = [
 const Integrations = () => (
   <>
     <PageHeader
-      title="Integrations"
+      title="Integrations — Connect NexArt to Your Stack"
       summary="Connect NexArt to your execution environment. Single-CER and Project Bundle paths are both supported."
       llmBlock={llmBlock}
     />

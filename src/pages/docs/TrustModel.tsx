@@ -37,8 +37,8 @@ Verification requires no NexArt API access:
 const TrustModel = () => (
   <>
     <PageHeader
-      title="Trust Model"
-      summary="How NexArt establishes and verifies execution integrity."
+      title="Trust Model and Verification Boundaries"
+      summary="How NexArt establishes and verifies execution integrity across local sealing, node attestation, and public verification."
       llmBlock={llmBlock}
     />
 

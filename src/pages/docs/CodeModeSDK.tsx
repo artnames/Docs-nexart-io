@@ -46,7 +46,7 @@ snapshot is reproducible. CodeMode snapshots can be wrapped in a CER via
 const CodeModeSDK = () => (
   <>
     <PageHeader
-      title="CodeMode SDK"
+      title="CodeMode SDK — Deterministic Rendering"
       summary="@nexart/codemode-sdk v1.10.2 — deterministic generative execution environment for verifiable visual outputs."
       llmBlock={llmBlock}
     />

@@ -24,7 +24,7 @@ const Guides = () => (
   <>
     <PageHeader
       title="Builder Guides"
-      summary="Quick-start paths for common NexArt tasks."
+      summary="Quick-start paths for common NexArt tasks: verify a CER, verify a Project Bundle, register with the node, browser-safe flows."
       llmBlock={llmBlock}
     />
 

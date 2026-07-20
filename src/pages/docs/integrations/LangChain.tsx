@@ -29,7 +29,7 @@ const LangChain = () => {
     <div className="prose prose-invert max-w-none">
       <PageHeader
         title="LangChain Integration"
-        summary="Generate Certified Execution Records (CERs) from LangChain workflows."
+        summary="Generate Certified Execution Records (CERs) from LangChain workflows using local sealing or NexArt node attestation."
         llmBlock={llmBlock}
       />
 

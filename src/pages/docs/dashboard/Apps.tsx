@@ -27,7 +27,7 @@ This associates the record with the correct app in the dashboard.
 const Apps = () => (
   <>
     <PageHeader
-      title="Apps"
+      title="Apps — Group CERs by Application"
       summary="Organizational units within a project for grouping CER records by application or service."
       llmBlock={llmBlock}
     />
