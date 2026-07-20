@@ -26,7 +26,7 @@ const N8n = () => {
   return (
     <div className="prose prose-invert max-w-none">
       <PageHeader
-        title="n8n"
+        title="n8n Integration — Certify AI Executions"
         summary="Certify AI execution results inside n8n workflows using the NexArt certification API."
         llmBlock={llmBlock}
       />

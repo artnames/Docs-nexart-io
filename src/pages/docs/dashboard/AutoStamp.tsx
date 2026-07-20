@@ -25,7 +25,7 @@ Even with auto-stamp disabled, records can be manually stamped later:
 const AutoStamp = () => (
   <>
     <PageHeader
-      title="Auto-stamp"
+      title="Auto-stamp — Automatic CER Attestation"
       summary="Project-level setting that controls automatic attestation during CER ingestion."
       llmBlock={llmBlock}
     />

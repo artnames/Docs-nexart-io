@@ -28,7 +28,7 @@ Bundles produced by @nexart/agent-kit are standard cer.ai.execution.v1 artifacts
 const AgentKit = () => (
   <>
     <PageHeader
-      title="Agent Kit"
+      title="Agent Kit — Certify Agent Tool Calls"
       summary="A thin convenience layer for producing verifiable execution records from agent tool calls and decisions."
       llmBlock={llmBlock}
     />

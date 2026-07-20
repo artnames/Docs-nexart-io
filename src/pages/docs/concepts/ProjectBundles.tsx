@@ -29,7 +29,7 @@ const ProjectBundles = () => (
   <>
     <PageHeader
       title="Project Bundles"
-      summary="Structured collections of CERs for multi-step workflows."
+      summary="Structured, cryptographically linked collections of CERs for multi-step and multi-agent workflows, verified as a single bundle."
       llmBlock={llmBlock}
     />
 

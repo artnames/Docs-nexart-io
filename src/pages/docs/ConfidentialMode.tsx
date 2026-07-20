@@ -40,7 +40,7 @@ const ConfidentialMode = () => (
   <>
     <PageHeader
       title="Confidential Execution (Protocol 1.3.1)"
-      summary="Node-side commitment envelopes for input and output. Raw plaintext is transmitted over TLS and processed transiently; it is excluded from the certified snapshot and from proof_json, and the documented flow is designed not to persist it."
+      summary="Node-side commitment envelopes for input and output under Protocol 1.3.1. Raw plaintext is excluded from the certified snapshot and proof_json."
       llmBlock={llmBlock}
     />
 

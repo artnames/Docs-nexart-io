@@ -25,7 +25,7 @@ verification_status, stamp_status, protocol_version, sdk_version`;
 const AuditExports = () => (
   <>
     <PageHeader
-      title="Audit Exports"
+      title="Audit Exports — Export CER Evidence Packs"
       summary="Export verification and attestation information for audit review, analysis, and reporting."
       llmBlock={llmBlock}
     />

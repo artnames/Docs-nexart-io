@@ -67,8 +67,8 @@ Verification can be performed without NexArt API access using the CER bundle (in
 const Verification = () => (
   <>
     <PageHeader
-      title="Verification"
-      summary="How to verify any NexArt record, with or without API access."
+      title="Verification Guide for NexArt Records"
+      summary="How to verify any NexArt record locally, with the SDK, the CLI, or the public verify.nexart.io portal."
       llmBlock={llmBlock}
     />
     <CanonicalFlow context="All verification results derive from this model." />

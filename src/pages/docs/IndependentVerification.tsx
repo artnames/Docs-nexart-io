@@ -113,7 +113,7 @@ const IndependentVerification = () => (
   <>
     <PageHeader
       title="Independent Verification"
-      summary="Reproduce the full verification of a NexArt CER using only the bundle, the node's public keys, SHA-256, Ed25519, and a protocol-matched JSON canonicalizer. No NexArt runtime required."
+      summary="Reproduce the full verification of a NexArt CER using only the bundle, node public keys, SHA-256, Ed25519, and a protocol-matched canonicalizer."
       llmBlock={llmBlock}
     />
 

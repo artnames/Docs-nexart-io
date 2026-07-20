@@ -23,8 +23,8 @@ Projects are for organization, filtering, and configuration - they do not affect
 const Projects = () => (
   <>
     <PageHeader
-      title="Projects"
-      summary="The primary organizational container in the NexArt dashboard."
+      title="Projects — Dashboard Organizational Unit"
+      summary="The primary organizational container in the NexArt dashboard, grouping apps, CERs, and project-level configuration in one view."
       llmBlock={llmBlock}
     />
 

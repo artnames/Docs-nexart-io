@@ -73,7 +73,7 @@ SKIPPED is not a failure. It means the layer is not applicable to the bundle.
 const NexArtCLI = () => (
   <>
     <PageHeader
-      title="NexArt CLI"
+      title="NexArt CLI — Command Line Reference"
       summary="Command-line surface over the AI Execution SDK. Seal locally, certify optionally, verify anywhere."
       llmBlock={llmBlock}
     />

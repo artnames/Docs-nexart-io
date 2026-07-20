@@ -44,7 +44,7 @@ certificateHash is the canonical identity. Always verify by certificateHash, nev
 const Quickstart = () => (
   <div className="prose prose-invert max-w-none">
     <PageHeader
-      title="Quickstart"
+      title="Quickstart — Certify Your First CER"
       summary="Two integration paths: single execution CER, or multi-step Project Bundle. Pick one."
       llmBlock={llmBlock}
     />

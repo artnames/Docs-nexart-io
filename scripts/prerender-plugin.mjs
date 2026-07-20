@@ -119,6 +119,24 @@ async function snapshot(page, baseUrl, distDir, route) {
     /\s*<link[^>]+rel=["']alternate["'][^>]+type=["']text\/markdown["'][^>]*>/gi,
     "",
   );
+  // Dedupe head tags where Helmet has injected a per-route variant
+  // (data-rh="true"). The static index.html carries sitewide fallbacks
+  // for <title>, description, og:title, og:description, twitter:title,
+  // twitter:description, og:url — after hydration both copies remain in
+  // the DOM, which SEO audits flag as duplicate meta. Remove the static
+  // (non-data-rh) copies whenever a data-rh sibling exists in the snapshot.
+  const dedupePairs = [
+    { rh: /<title[^>]*data-rh=["']true["'][^>]*>[\s\S]*?<\/title>/i, staticRe: /\s*<title(?![^>]*data-rh)[^>]*>[\s\S]*?<\/title>/i },
+    { rh: /<meta[^>]+name=["']description["'][^>]+data-rh=["']true["'][^>]*>/i, staticRe: /\s*<meta(?![^>]*data-rh)[^>]+name=["']description["'][^>]*>/gi },
+    { rh: /<meta[^>]+property=["']og:title["'][^>]+data-rh=["']true["'][^>]*>/i, staticRe: /\s*<meta(?![^>]*data-rh)[^>]+property=["']og:title["'][^>]*>/gi },
+    { rh: /<meta[^>]+property=["']og:description["'][^>]+data-rh=["']true["'][^>]*>/i, staticRe: /\s*<meta(?![^>]*data-rh)[^>]+property=["']og:description["'][^>]*>/gi },
+    { rh: /<meta[^>]+property=["']og:url["'][^>]+data-rh=["']true["'][^>]*>/i, staticRe: /\s*<meta(?![^>]*data-rh)[^>]+property=["']og:url["'][^>]*>/gi },
+    { rh: /<meta[^>]+name=["']twitter:title["'][^>]+data-rh=["']true["'][^>]*>/i, staticRe: /\s*<meta(?![^>]*data-rh)[^>]+name=["']twitter:title["'][^>]*>/gi },
+    { rh: /<meta[^>]+name=["']twitter:description["'][^>]+data-rh=["']true["'][^>]*>/i, staticRe: /\s*<meta(?![^>]*data-rh)[^>]+name=["']twitter:description["'][^>]*>/gi },
+  ];
+  for (const { rh, staticRe } of dedupePairs) {
+    if (rh.test(html)) html = html.replace(staticRe, "");
+  }
   html = html.replace(/<\/head>/i, `    ${alt}\n  </head>`);
   const filePath = routeToFilePath(distDir, route);
   await mkdir(dirname(filePath), { recursive: true });

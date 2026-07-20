@@ -24,7 +24,7 @@ const VerificationReports = () => (
   <>
     <PageHeader
       title="Verification Reports"
-      summary="The result of validating a CER bundle and its attestation data."
+      summary="The result of validating a CER bundle and its attestation data, expressed as per-check pass/fail with an overall status and reason codes."
       llmBlock={llmBlock}
     />
 

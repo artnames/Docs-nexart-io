@@ -80,8 +80,8 @@ const FAQ = () => (
       <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
     </Helmet>
     <PageHeader
-      title="FAQ"
-      summary="Common questions from builders integrating NexArt."
+      title="FAQ — Frequently Asked Questions"
+      summary="Common questions from builders integrating NexArt: protocol versions, verification, canonicalization, confidential mode, and more."
       llmBlock={llmBlock}
     />
 

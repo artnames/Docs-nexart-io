@@ -69,7 +69,7 @@ const AttestationNode = () => (
   <>
     <PageHeader
       title="Attestation Node"
-      summary="The server-side component that signs CERs and issues receipts."
+      summary="The server-side component that signs CERs, issues signed receipts, and anchors NexArt's independent-witness trust boundary."
       llmBlock={llmBlock}
     />
 
